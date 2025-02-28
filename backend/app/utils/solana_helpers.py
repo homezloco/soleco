@@ -6,11 +6,15 @@ from typing import Dict, List, Any, Union, Optional
 import base64
 import json
 import logging
+import time
+import asyncio
+import inspect
 from .solana_types import (
     RPCError,
     RetryableError,
     RateLimitError,
-    SlotSkippedError
+    SlotSkippedError,
+    NodeUnhealthyError
 )
 
 # Configure logging
@@ -24,6 +28,184 @@ DEFAULT_BLOCK_OPTIONS = {
 
 DEFAULT_BATCH_SIZE = 10
 DEFAULT_COMMITMENT = "finalized"
+
+def serialize_solana_object(obj):
+    """
+    Serialize Solana objects to JSON-compatible formats.
+    
+    This function handles various Solana object types including:
+    - Pubkey objects
+    - Coroutines
+    - Objects with __dict__ attribute
+    - Objects with to_json or to_dict methods
+    - Basic Python types
+    
+    Args:
+        obj: The object to serialize
+        
+    Returns:
+        A JSON-serializable representation of the object
+    """
+    try:
+        # Handle None
+        if obj is None:
+            return None
+            
+        # Handle coroutines
+        if asyncio.iscoroutine(obj):
+            logger.warning(f"Attempted to serialize a coroutine: {obj}")
+            return str(obj)
+            
+        # Handle Pubkey objects which have a special __str__ method
+        if hasattr(obj, '__class__') and obj.__class__.__name__ == 'Pubkey':
+            logger.debug(f"Serializing Pubkey object: {obj}")
+            return str(obj)
+            
+        # Handle basic types that are JSON serializable
+        if isinstance(obj, (str, int, float, bool, type(None))):
+            return obj
+            
+        # Handle dictionaries
+        if isinstance(obj, dict):
+            logger.debug(f"Serializing dictionary with keys: {list(obj.keys())}")
+            return {k: serialize_solana_object(v) for k, v in obj.items()}
+            
+        # Handle lists and tuples
+        if isinstance(obj, (list, tuple)):
+            logger.debug(f"Serializing list/tuple of length: {len(obj)}")
+            return [serialize_solana_object(item) for item in obj]
+            
+        # Handle objects with to_json or to_dict methods
+        if hasattr(obj, 'to_json') and callable(obj.to_json):
+            try:
+                logger.debug(f"Serializing object with to_json: {obj}")
+                return obj.to_json()
+            except Exception as e:
+                logger.error(f"Error calling to_json: {e}")
+                # Continue with other serialization methods
+            
+        if hasattr(obj, 'to_dict') and callable(obj.to_dict):
+            try:
+                logger.debug(f"Serializing object with to_dict: {obj}")
+                return obj.to_dict()
+            except Exception as e:
+                logger.error(f"Error calling to_dict: {e}")
+                # Continue with other serialization methods
+            
+        # Handle objects with custom __str__ method (like PubkeyLike)
+        # Check for custom __str__ method before checking __dict__
+        if hasattr(obj, '__str__') and obj.__str__ is not object.__str__:
+            # For objects that primarily exist to be represented as strings (like Pubkey-like objects)
+            # or objects with empty __dict__, use their string representation
+            if not hasattr(obj, '__dict__') or not obj.__dict__:
+                logger.debug(f"Serializing object with custom __str__ and no/empty __dict__: {obj}")
+                return str(obj)
+                
+        # Handle objects with __dict__ attribute (convert to dict)
+        if hasattr(obj, '__dict__'):
+            try:
+                if obj.__dict__ is not None and isinstance(obj.__dict__, dict):
+                    # If __dict__ is empty but object has a custom __str__, use string representation
+                    if not obj.__dict__ and hasattr(obj, '__str__') and obj.__str__ is not object.__str__:
+                        logger.debug(f"Serializing object with empty __dict__ and custom __str__: {obj}")
+                        return str(obj)
+                    
+                    logger.debug(f"Serializing object with __dict__: {obj}")
+                    serialized_dict = {k: serialize_solana_object(v) for k, v in obj.__dict__.items() 
+                                    if not k.startswith('_') and not inspect.ismethod(v)}
+                    
+                    # If serialized dict is empty but object has a custom __str__, use string representation
+                    if not serialized_dict and hasattr(obj, '__str__') and obj.__str__ is not object.__str__:
+                        logger.debug(f"Serializing object with empty serialized __dict__ and custom __str__: {obj}")
+                        return str(obj)
+                    
+                    return serialized_dict
+            except (AttributeError, TypeError) as e:
+                logger.error(f"Error accessing __dict__: {e}")
+                # Continue with other serialization methods
+        
+        # Final fallback for custom __str__ method
+        if hasattr(obj, '__str__') and obj.__str__ is not object.__str__:
+            logger.debug(f"Falling back to custom __str__ serialization for: {obj}")
+            return str(obj)
+                   
+        # Default: convert to string
+        logger.debug(f"Falling back to string serialization for: {obj}")
+        return str(obj)
+        
+    except Exception as e:
+        logger.error(f"Error serializing object: {e}")
+        return f"<Error serializing object: {str(e)}>"
+
+async def safe_rpc_call_async(coro_or_func, method_name, timeout=30.0):
+    """
+    Safely execute an RPC call with proper error handling and logging.
+    
+    Args:
+        coro_or_func: A coroutine or function that returns a coroutine
+        method_name: Name of the RPC method for logging
+        timeout: Timeout in seconds
+        
+    Returns:
+        The result of the RPC call
+        
+    Raises:
+        RPCError: For general RPC errors
+        RateLimitError: When rate limit is exceeded
+        NodeUnhealthyError: When node is unhealthy
+        TimeoutError: When the call times out
+    """
+    start_time = time.time()
+    logger.debug(f"Executing {method_name}")
+    
+    try:
+        # Handle both coroutines and functions that return coroutines
+        if asyncio.iscoroutine(coro_or_func):
+            coro = coro_or_func
+        elif callable(coro_or_func):
+            coro = coro_or_func()
+        else:
+            raise RPCError(f"Invalid input: {coro_or_func} is not a coroutine or callable")
+            
+        # Execute with timeout
+        response = await asyncio.wait_for(coro, timeout=timeout)
+        
+        # Check response format
+        if not isinstance(response, dict):
+            raise RPCError(f"Invalid response from {method_name}: {response}")
+            
+        # Check for error in response
+        if "error" in response:
+            error = response["error"]
+            code = error.get("code", 0)
+            message = error.get("message", "Unknown error")
+            
+            # Handle specific error codes
+            if code == -32005:
+                raise RateLimitError(f"Rate limit exceeded in {method_name}: {message}")
+            elif code == -32015 or "behind by" in message.lower():
+                raise NodeUnhealthyError(f"Node is unhealthy in {method_name}: {message}")
+            else:
+                raise RPCError(f"RPC error in {method_name}: {code} - {message}")
+                
+        # Check for missing result
+        if "result" not in response:
+            raise RPCError(f"Missing result in response from {method_name}")
+            
+        # Return the result
+        execution_time = time.time() - start_time
+        logger.debug(f"{method_name} completed in {execution_time:.2f} seconds")
+        return response["result"]
+        
+    except asyncio.TimeoutError:
+        execution_time = time.time() - start_time
+        logger.error(f"{method_name} timed out after {execution_time:.2f} seconds")
+        raise
+        
+    except Exception as e:
+        execution_time = time.time() - start_time
+        logger.error(f"{method_name} failed after {execution_time:.2f} seconds: {str(e)}")
+        raise
 
 def handle_rpc_error(error: Exception, context: str) -> None:
     """Standardized error handling for RPC calls."""
@@ -215,7 +397,7 @@ def transform_instruction(instr: Any, account_keys: List[str], idx: int) -> Dict
             'programId': account_keys[0] if account_keys else '',
             'accounts': account_keys[1:] if len(account_keys) > 1 else [],
             'data': {
-                'raw': str(instr),
+                'raw': '',
                 'parsed': None
             }
         }

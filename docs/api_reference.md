@@ -49,8 +49,66 @@ The API implements rate limiting to prevent abuse. Current limits are:
 Rate limit headers are included in responses:
 
 - `X-RateLimit-Limit`: Maximum requests per minute
-- `X-RateLimit-Remaining`: Remaining requests in the current window
-- `X-RateLimit-Reset`: Time when the rate limit resets (Unix timestamp)
+- `X-RateLimit-Remaining`: Remaining requests for the current minute
+- `X-RateLimit-Reset`: Time (in seconds) until the rate limit resets
+
+## Error Handling
+
+### Error Response Format
+
+All error responses include:
+
+1. HTTP status code appropriate for the error
+2. JSON response body with detailed error information
+
+```json
+{
+  "status": "error",
+  "error": "Detailed error message",
+  "error_code": "ERROR_CODE",
+  "timestamp": "2023-04-15T12:34:56Z"
+}
+```
+
+### Common Error Codes
+
+| Error Code | HTTP Status | Description |
+|------------|-------------|-------------|
+| `INVALID_REQUEST` | 400 | Invalid request parameters |
+| `NOT_FOUND` | 404 | Requested resource not found |
+| `RPC_ERROR` | 502 | Error communicating with Solana RPC |
+| `RATE_LIMITED` | 429 | Rate limit exceeded |
+| `NODE_UNHEALTHY` | 503 | Solana node is unhealthy |
+| `TIMEOUT` | 504 | Request timed out |
+| `INTERNAL_ERROR` | 500 | Internal server error |
+
+### Enhanced RPC Error Handling
+
+The API implements sophisticated error handling for Solana RPC interactions:
+
+1. **Comprehensive Error Classification**
+   - Hierarchical error types for precise handling
+   - Specialized error types for specific scenarios
+
+2. **Coroutine Handling**
+   - Proper awaiting of coroutines to prevent asyncio issues
+   - Timeout management to prevent hanging
+   - Execution time tracking for performance monitoring
+
+3. **Response Processing**
+   - Structured response handling to extract relevant data
+   - Recursive search for data in complex nested structures
+   - Graceful handling of missing or malformed data
+
+4. **Serialization**
+   - Type-specific handling for different Solana object types
+   - Proper serialization of Pubkey objects and other special types
+   - Fallback mechanisms for complex objects
+
+5. **Graceful Degradation**
+   - Fallback to cached data when live data is unavailable
+   - Return of partial results when complete data cannot be obtained
+   - Detailed error logging for debugging
 
 ## API Endpoints
 
@@ -62,7 +120,7 @@ Rate limit headers are included in responses:
 GET /solana/network/status
 ```
 
-Retrieves comprehensive status information about the Solana network.
+Retrieves comprehensive information about the Solana network status.
 
 **Query Parameters:**
 

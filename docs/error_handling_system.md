@@ -17,12 +17,18 @@ The Solana RPC Error Handling System is a critical component of the Soleco platf
 - **Proper Awaiting**: Ensures coroutines are properly awaited to prevent asyncio issues
 - **Timeout Management**: Implements timeout handling for coroutines to prevent hanging
 - **Execution Tracking**: Tracks coroutine execution time for performance monitoring
+- **Type Detection**: Automatically detects if input is a coroutine or callable and handles appropriately
+- **Detailed Logging**: Provides comprehensive logging of coroutine execution and response handling
+- **Fallback Mechanisms**: Uses cached data as fallback when coroutines timeout or fail
 
 ### 3. Response Processing
 
 - **Structured Response Handling**: Processes responses in a structured way to extract relevant data
 - **Nested Structure Navigation**: Handles complex nested structures in RPC responses
 - **Recursive Search**: Implements recursive search for data in complex response structures
+- **Response Validation**: Validates response format and structure before processing
+- **Response Type Logging**: Logs response types and structures for debugging
+- **Graceful Degradation**: Handles missing or malformed data with appropriate fallbacks
 
 ### 4. Rate Limiting and Backoff
 
@@ -35,6 +41,16 @@ The Solana RPC Error Handling System is a critical component of the Soleco platf
 - **Execution Time Tracking**: Logs execution time for RPC calls to identify slow endpoints
 - **Error Context**: Provides detailed context for errors to aid debugging
 - **Statistical Logging**: Maintains statistics on error types and frequencies
+- **Response Structure Logging**: Logs details about response structure and content
+- **Performance Metrics**: Tracks and logs performance metrics for RPC calls
+
+### 6. Enhanced Serialization
+
+- **Type-Specific Handling**: Specialized handling for different Solana object types
+- **Pubkey Object Handling**: Proper serialization of Solana Pubkey objects
+- **Coroutine Detection**: Identifies and safely handles coroutines during serialization
+- **Fallback Mechanisms**: Multiple fallback strategies for complex objects
+- **Error Recovery**: Graceful error handling during serialization process
 
 ## Implementation Details
 
@@ -56,29 +72,26 @@ The `safe_rpc_call_async` function is the core of the error handling system:
 
 ```python
 async def safe_rpc_call_async(
-    client,
-    method: str,
-    params: List[Any] = None,
-    max_retries: int = 3,
-    retry_delay: float = 1.0,
-    timeout: float = 30.0
+    coro_or_func,
+    method_name,
+    timeout=30.0
 ) -> Dict[str, Any]:
     """
-    Make an RPC call with robust error handling and retries.
+    Safely execute an RPC call with proper error handling and logging.
     
     Args:
-        client: The RPC client to use
-        method: The RPC method to call
-        params: Parameters for the RPC method
-        max_retries: Maximum number of retry attempts
-        retry_delay: Base delay between retries (will be exponentially increased)
-        timeout: Timeout for the RPC call
+        coro_or_func: A coroutine or function that returns a coroutine
+        method_name: Name of the RPC method for logging
+        timeout: Timeout in seconds
         
     Returns:
-        The RPC response
+        The result of the RPC call
         
     Raises:
-        RPCError: If the call fails after all retries
+        RPCError: For general RPC errors
+        RateLimitError: When rate limit is exceeded
+        NodeUnhealthyError: When node is unhealthy
+        TimeoutError: When the call times out
     """
     # Implementation details...
 ```
@@ -88,48 +101,78 @@ async def safe_rpc_call_async(
 The system includes specialized handling for coroutines:
 
 ```python
-async def _get_data_with_timeout(data, timeout):
+async def _get_data_with_timeout(self, coro, name: str) -> Tuple[str, Any]:
     """
-    Get data from a coroutine or return the data directly, with timeout.
+    Run coroutine with timeout and caching.
     
     Args:
-        data: The data or coroutine to get data from
-        timeout: Timeout in seconds
+        coro: The coroutine or callable to execute
+        name: Name of the operation for logging and caching
         
     Returns:
-        The resolved data
+        A tuple of (name, result)
     """
-    if asyncio.iscoroutine(data):
-        try:
-            return await asyncio.wait_for(data, timeout=timeout)
-        except asyncio.TimeoutError:
-            # Handle timeout
-            raise TimeoutError(f"Operation timed out after {timeout} seconds")
-    return data
+    try:
+        # Check cache first
+        cached_data = self._get_cached_data(name)
+        if cached_data is not None:
+            return name, cached_data
+            
+        # Ensure we're dealing with a coroutine object
+        if not asyncio.iscoroutine(coro):
+            if callable(coro):
+                coro = coro()
+            else:
+                return name, None
+        
+        # Await the coroutine with timeout
+        result = await asyncio.wait_for(coro, timeout=self.timeout)
+        
+        # Update cache and return result
+        self._update_cache(name, result)
+        return name, result
+        
+    except asyncio.TimeoutError:
+        # Try to use expired cache data as fallback
+        if name in self.cache:
+            return name, self.cache[name]['data']
+        return name, None
+        
+    except Exception as e:
+        # Try to use expired cache data as fallback
+        if name in self.cache:
+            return name, self.cache[name]['data']
+        return name, None
 ```
 
-### Response Processing
+### Serialization
 
-The system includes specialized handlers for different response types:
+The `serialize_solana_object` function handles complex Solana objects:
 
 ```python
-def _process_stake_info(stake_info, validator_pubkey):
+def serialize_solana_object(obj):
     """
-    Process stake info to find validator data.
+    Serialize Solana objects to JSON-compatible formats.
+    
+    This function handles various Solana object types including:
+    - Pubkey objects
+    - Coroutines
+    - Objects with to_json or to_dict methods
+    - Objects with __dict__ attribute
+    - Basic Python types
     
     Args:
-        stake_info: The stake info to process
-        validator_pubkey: The validator public key to search for
+        obj: The object to serialize
         
     Returns:
-        The validator data if found, None otherwise
+        A JSON-serializable representation of the object
     """
     # Implementation details...
 ```
 
-### Rate Limiting
+### Rate Limits
 
-The system implements a sophisticated rate limiting mechanism:
+The `RateLimits` class tracks rate limit information:
 
 ```python
 class RateLimits:
@@ -137,26 +180,7 @@ class RateLimits:
     
     def __init__(self):
         self.method_limit = 0
-        self.method_remaining = 0
-        self.rps_limit = 0
-        self.rps_remaining = 0
-        self.endpoint_limit = 0
-        self.endpoint_remaining = 0
-        self.last_update = time.time()
-        self.consecutive_failures = 0
-        self.cooldown_until = 0
-        
-    def update_from_headers(self, headers: Dict[str, str]):
-        """Update rate limit info from response headers"""
-        # Implementation details...
-        
-    def should_throttle(self):
-        """Check if we should throttle requests based on rate limits"""
-        # Implementation details...
-        
-    def get_backoff_time(self):
-        """Get the time to back off in seconds"""
-        # Implementation details...
+        # Additional implementation details...
 ```
 
 ## Best Practices
@@ -209,4 +233,3 @@ async def get_block_safely(slot: int):
     except Exception as e:
         logger.exception(f"Unexpected error when getting block {slot}: {str(e)}")
         # Handle unexpected errors
-```

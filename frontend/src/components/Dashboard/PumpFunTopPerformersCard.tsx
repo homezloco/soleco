@@ -23,7 +23,6 @@ import {
   Tooltip,
   Icon
 } from '@chakra-ui/react';
-import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { ExternalLinkIcon, RepeatIcon } from '@chakra-ui/icons';
 import { FaTwitter, FaTelegram, FaGlobe } from 'react-icons/fa';

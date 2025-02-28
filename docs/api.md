@@ -23,6 +23,13 @@ The Soleco API is built on a modular architecture with the following key compone
    - Data aggregation
    - Real-time monitoring
 
+4. **Enhanced Error Handling**
+   - Comprehensive error classification
+   - Coroutine handling with timeouts
+   - Recursive response processing
+   - Solana object serialization
+   - Graceful degradation with fallbacks
+
 ## API Reference
 
 ### Mint Analytics API
@@ -367,3 +374,145 @@ async def validate_api_key(api_key: str) -> bool:
     
     return is_valid
 ```
+
+## Enhanced RPC Error Handling
+
+The API implements sophisticated error handling for Solana RPC interactions:
+
+1. **Automatic Retries**: Automatically retries failed RPC calls with exponential backoff
+2. **Fallback Mechanisms**: Falls back to alternative RPC nodes when primary node fails
+3. **Coroutine Management**: Properly handles asynchronous operations with timeouts
+4. **Response Validation**: Validates RPC responses before processing
+5. **Graceful Degradation**: Returns partial data when complete data is unavailable
+
+Example implementation:
+
+```python
+@app.get("/solana/analytics/mints/{mint_address}")
+async def get_mint_info(
+    mint_address: str = Path(description="The mint address to get information for")
+) -> Dict[str, Any]:
+    try:
+        # Validate mint address
+        if not is_valid_mint_address(mint_address):
+            raise ValidationError("Invalid mint address")
+            
+        # Get mint info with enhanced error handling
+        mint_info = await safe_rpc_call_async(
+            lambda: solana_client.get_account_info(mint_address),
+            method_name="get_account_info",
+            timeout=10.0
+        )
+        
+        # Process and return the result
+        return {
+            "status": "success",
+            "data": process_mint_info(mint_info),
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        
+    except ValidationError as e:
+        return JSONResponse(
+            status_code=400,
+            content={
+                "status": "error",
+                "error": str(e),
+                "error_code": "INVALID_REQUEST",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        )
+        
+    except RateLimitError as e:
+        return JSONResponse(
+            status_code=429,
+            content={
+                "status": "error",
+                "error": str(e),
+                "error_code": "RATE_LIMITED",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        )
+        
+    except NodeUnhealthyError as e:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "error",
+                "error": str(e),
+                "error_code": "NODE_UNHEALTHY",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        )
+        
+    except asyncio.TimeoutError:
+        return JSONResponse(
+            status_code=504,
+            content={
+                "status": "error",
+                "error": "Request timed out",
+                "error_code": "TIMEOUT",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        )
+        
+    except RPCError as e:
+        return JSONResponse(
+            status_code=502,
+            content={
+                "status": "error",
+                "error": str(e),
+                "error_code": "RPC_ERROR",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        )
+        
+    except Exception as e:
+        logger.exception(f"Unexpected error in get_mint_info: {str(e)}")
+        return JSONResponse(
+            status_code=500,
+            content={
+                "status": "error",
+                "error": "Internal server error",
+                "error_code": "INTERNAL_ERROR",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        )
+```
+
+## Client Usage
+
+### Python Client
+
+```python
+import requests
+import json
+
+def get_mint_info(mint_address):
+    response = requests.get(f"https://api.soleco.io/solana/analytics/mints/{mint_address}")
+    if response.status_code == 200:
+        return response.json()["data"]
+    else:
+        error_data = response.json()
+        print(f"Error: {error_data['error']} (Code: {error_data['error_code']})")
+        return None
+```
+
+### JavaScript Client
+
+```javascript
+async function getMintInfo(mintAddress) {
+    try {
+        const response = await fetch(`https://api.soleco.io/solana/analytics/mints/${mintAddress}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            return data.data;
+        } else {
+            console.error(`Error: ${data.error} (Code: ${data.error_code})`);
+            return null;
+        }
+    } catch (error) {
+        console.error('Failed to fetch mint info:', error);
+        return null;
+    }
+}
