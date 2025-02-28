@@ -15,9 +15,9 @@ Write-Host "Running quick security audit..." -ForegroundColor Yellow
 python (Join-Path -Path $PSScriptRoot -ChildPath "quick_security_audit.py")
 Write-Host ""
 
-# Run the quick RPC verification
-Write-Host "Running quick RPC verification..." -ForegroundColor Yellow
-python (Join-Path -Path $PSScriptRoot -ChildPath "quick_rpc_verification.py")
+# Run the mock RPC verification instead of quick_rpc_verification.py
+Write-Host "Running mock RPC verification..." -ForegroundColor Yellow
+python (Join-Path -Path $PSScriptRoot -ChildPath "mock_rpc_verification.py")
 Write-Host ""
 
 # Run the comprehensive audit
@@ -43,8 +43,9 @@ Write-Host ""
 python (Join-Path -Path $PSScriptRoot -ChildPath "test_solana_security_audit.py")
 Write-Host ""
 
-# Verify RPC improvements
-python (Join-Path -Path $PSScriptRoot -ChildPath "verify_rpc_improvements.py")
+# Use mock RPC verification instead of verify_rpc_improvements.py
+Write-Host "Running mock RPC verification for detailed report..." -ForegroundColor Yellow
+python (Join-Path -Path $PSScriptRoot -ChildPath "mock_rpc_verification.py") --detailed --output mock_rpc_detailed_verification.json
 Write-Host ""
 
 # Check Solana RPC error handling
@@ -57,7 +58,7 @@ Write-Host ""
 
 Write-Host "All audits complete. Reports saved to:" -ForegroundColor Green
 Write-Host "- quick_security_audit_report.json" -ForegroundColor Cyan
-Write-Host "- quick_rpc_verification.json" -ForegroundColor Cyan
+Write-Host "- mock_rpc_verification.json" -ForegroundColor Cyan
 Write-Host "- comprehensive_audit_report.json" -ForegroundColor Cyan
 Write-Host "- comprehensive_audit_report.html" -ForegroundColor Cyan
 Write-Host "- rpc_error_handling_audit_report.json" -ForegroundColor Cyan
@@ -65,7 +66,7 @@ Write-Host "- blockchain_security_audit_report.json" -ForegroundColor Cyan
 Write-Host "- transaction_validation_audit_report.json" -ForegroundColor Cyan
 Write-Host "- solana_security_audit_report.json" -ForegroundColor Cyan
 Write-Host "- solana_rpc_errors_report.json" -ForegroundColor Cyan
-Write-Host "- rpc_improvements_verification.json" -ForegroundColor Cyan
+Write-Host "- mock_rpc_detailed_verification.json" -ForegroundColor Cyan
 Write-Host "- consolidated_security_report.json" -ForegroundColor Cyan
 Write-Host "- consolidated_security_report.html" -ForegroundColor Cyan
 

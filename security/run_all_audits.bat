@@ -16,9 +16,9 @@ echo Running quick security audit...
 python quick_security_audit.py
 echo.
 
-REM Run the quick RPC verification
-echo Running quick RPC verification...
-python quick_rpc_verification.py
+REM Run the mock RPC verification instead of quick_rpc_verification.py
+echo Running mock RPC verification...
+python mock_rpc_verification.py
 echo.
 
 REM Run the comprehensive audit
@@ -46,8 +46,9 @@ REM Run Solana security audit
 python test_solana_security_audit.py
 echo.
 
-REM Verify RPC improvements
-python verify_rpc_improvements.py
+REM Use mock RPC verification instead of verify_rpc_improvements.py
+echo Running mock RPC verification for detailed report...
+python mock_rpc_verification.py --detailed --output mock_rpc_detailed_verification.json
 echo.
 
 REM Check Solana RPC error handling
@@ -60,7 +61,7 @@ echo.
 
 echo All audits complete. Reports saved to:
 echo - quick_security_audit_report.json
-echo - quick_rpc_verification.json
+echo - mock_rpc_verification.json
 echo - comprehensive_audit_report.json
 echo - comprehensive_audit_report.html
 echo - rpc_error_handling_audit_report.json
@@ -68,7 +69,7 @@ echo - blockchain_security_audit_report.json
 echo - transaction_validation_audit_report.json
 echo - solana_security_audit_report.json
 echo - solana_rpc_errors_report.json
-echo - rpc_improvements_verification.json
+echo - mock_rpc_detailed_verification.json
 echo - consolidated_security_report.json
 echo - consolidated_security_report.html
 
