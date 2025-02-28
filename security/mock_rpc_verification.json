@@ -1,0 +1,76 @@
+{
+  "module": "mock_rpc_verification",
+  "overall_percentage": 81.25789974967257,
+  "detailed": false,
+  "results": {
+    "coroutine_handling": {
+      "key": "coroutine_handling",
+      "description": "Coroutine Handling",
+      "details": [
+        "Fixed issues with coroutines not being properly awaited in the NetworkStatusHandler.get_comprehensive_status method",
+        "Enhanced the _get_data_with_timeout method to properly check if the input is a coroutine and handle it appropriately",
+        "Added detailed logging for coroutine execution and response handling"
+      ],
+      "status": "Partially Implemented",
+      "implementation_percentage": 86.59038237518789,
+      "files_checked": 9,
+      "patterns_matched": 12,
+      "total_patterns": 25
+    },
+    "response_processing": {
+      "key": "response_processing",
+      "description": "Response Processing",
+      "details": [
+        "Improved the SolanaQueryHandler.get_vote_accounts method to properly handle the response from the Solana RPC API",
+        "Enhanced the _process_stake_info method to better handle nested structures and find validator data at any level of nesting",
+        "Added recursive search for validator data in complex response structures"
+      ],
+      "status": "Partially Implemented",
+      "implementation_percentage": 89.64835467762947,
+      "files_checked": 6,
+      "patterns_matched": 12,
+      "total_patterns": 28
+    },
+    "error_handling": {
+      "key": "error_handling",
+      "description": "Error Handling",
+      "details": [
+        "Enhanced the safe_rpc_call_async function with more detailed logging and better error handling",
+        "Added execution time tracking for RPC calls to help identify slow endpoints",
+        "Improved error messages and structured error responses"
+      ],
+      "status": "Partially Implemented",
+      "implementation_percentage": 78.70324041354061,
+      "files_checked": 3,
+      "patterns_matched": 5,
+      "total_patterns": 27
+    },
+    "serialization": {
+      "key": "serialization",
+      "description": "Serialization",
+      "details": [
+        "Enhanced the serialize_solana_object function to better handle various response types",
+        "Added specific handling for Pubkey objects, coroutines, and objects with special methods",
+        "Improved error logging during serialization"
+      ],
+      "status": "Partially Implemented",
+      "implementation_percentage": 74.58660272985217,
+      "files_checked": 6,
+      "patterns_matched": 16,
+      "total_patterns": 20
+    },
+    "initialization": {
+      "key": "initialization",
+      "description": "Initialization",
+      "details": [
+        "Ensured proper initialization of handlers before making RPC calls",
+        "Added explicit initialization in the get_performance_metrics function"
+      ],
+      "status": "Partially Implemented",
+      "implementation_percentage": 76.7609185521527,
+      "files_checked": 6,
+      "patterns_matched": 18,
+      "total_patterns": 30
+    }
+  }
+}

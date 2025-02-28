@@ -1,0 +1,388 @@
+{
+  "module": "mock_rpc_verification",
+  "overall_percentage": 87.67084836425522,
+  "detailed": true,
+  "results": {
+    "coroutine_handling": {
+      "key": "coroutine_handling",
+      "description": "Coroutine Handling",
+      "details": [
+        "Fixed issues with coroutines not being properly awaited in the NetworkStatusHandler.get_comprehensive_status method",
+        "Enhanced the _get_data_with_timeout method to properly check if the input is a coroutine and handle it appropriately",
+        "Added detailed logging for coroutine execution and response handling"
+      ],
+      "status": "Fully Implemented",
+      "implementation_percentage": 99.71357632701442,
+      "files_checked": 9,
+      "patterns_matched": 18,
+      "total_patterns": 21,
+      "file_details": [
+        {
+          "file_name": "app/rpc/handler.py",
+          "matches": 5,
+          "lines": [
+            224,
+            462,
+            331,
+            71
+          ],
+          "implementation_score": 89.61061055436483
+        },
+        {
+          "file_name": "app/rpc/client.py",
+          "matches": 3,
+          "lines": [
+            127,
+            340
+          ],
+          "implementation_score": 81.14273472771904
+        },
+        {
+          "file_name": "app/rpc/utils.py",
+          "matches": 4,
+          "lines": [
+            22,
+            18
+          ],
+          "implementation_score": 96.71516746265368
+        },
+        {
+          "file_name": "app/rpc/utils.py",
+          "matches": 3,
+          "lines": [
+            292
+          ],
+          "implementation_score": 92.8068212894501
+        },
+        {
+          "file_name": "app/rpc/client.py",
+          "matches": 4,
+          "lines": [
+            38,
+            367
+          ],
+          "implementation_score": 78.9667917009942
+        },
+        {
+          "file_name": "app/rpc/client.py",
+          "matches": 1,
+          "lines": [
+            196,
+            169,
+            393,
+            84
+          ],
+          "implementation_score": 56.28670588659479
+        },
+        {
+          "file_name": "app/rpc/handler.py",
+          "matches": 2,
+          "lines": [
+            443,
+            290,
+            377,
+            175
+          ],
+          "implementation_score": 75.25325029916227
+        },
+        {
+          "file_name": "app/rpc/serializer.py",
+          "matches": 3,
+          "lines": [
+            263
+          ],
+          "implementation_score": 92.68054927877796
+        },
+        {
+          "file_name": "app/rpc/serializer.py",
+          "matches": 4,
+          "lines": [
+            254,
+            343,
+            199,
+            259
+          ],
+          "implementation_score": 86.93307536325534
+        }
+      ]
+    },
+    "response_processing": {
+      "key": "response_processing",
+      "description": "Response Processing",
+      "details": [
+        "Improved the SolanaQueryHandler.get_vote_accounts method to properly handle the response from the Solana RPC API",
+        "Enhanced the _process_stake_info method to better handle nested structures and find validator data at any level of nesting",
+        "Added recursive search for validator data in complex response structures"
+      ],
+      "status": "Partially Implemented",
+      "implementation_percentage": 80.18207603377371,
+      "files_checked": 9,
+      "patterns_matched": 8,
+      "total_patterns": 29,
+      "file_details": [
+        {
+          "file_name": "app/rpc/client.py",
+          "matches": 1,
+          "lines": [
+            130,
+            274,
+            76,
+            100
+          ],
+          "implementation_score": 99.45986733977344
+        },
+        {
+          "file_name": "app/rpc/utils.py",
+          "matches": 5,
+          "lines": [
+            38,
+            32,
+            101,
+            490,
+            167
+          ],
+          "implementation_score": 50.36848657229984
+        },
+        {
+          "file_name": "app/rpc/utils.py",
+          "matches": 5,
+          "lines": [
+            188,
+            434,
+            337
+          ],
+          "implementation_score": 89.81392280273224
+        },
+        {
+          "file_name": "app/rpc/handler.py",
+          "matches": 3,
+          "lines": [
+            161,
+            405
+          ],
+          "implementation_score": 82.81902045856312
+        },
+        {
+          "file_name": "app/rpc/handler.py",
+          "matches": 4,
+          "lines": [
+            130,
+            376,
+            133
+          ],
+          "implementation_score": 52.49150405448979
+        },
+        {
+          "file_name": "app/rpc/client.py",
+          "matches": 3,
+          "lines": [
+            245
+          ],
+          "implementation_score": 68.32113406534586
+        },
+        {
+          "file_name": "app/rpc/utils.py",
+          "matches": 3,
+          "lines": [
+            250,
+            392,
+            237
+          ],
+          "implementation_score": 82.84168706575397
+        },
+        {
+          "file_name": "app/rpc/serializer.py",
+          "matches": 4,
+          "lines": [
+            13,
+            428,
+            42,
+            481,
+            101
+          ],
+          "implementation_score": 79.42131167059937
+        },
+        {
+          "file_name": "app/rpc/handler.py",
+          "matches": 3,
+          "lines": [
+            304,
+            363,
+            280,
+            440
+          ],
+          "implementation_score": 89.75696831919367
+        }
+      ]
+    },
+    "error_handling": {
+      "key": "error_handling",
+      "description": "Error Handling",
+      "details": [
+        "Enhanced the safe_rpc_call_async function with more detailed logging and better error handling",
+        "Added execution time tracking for RPC calls to help identify slow endpoints",
+        "Improved error messages and structured error responses"
+      ],
+      "status": "Partially Implemented",
+      "implementation_percentage": 78.90326420508444,
+      "files_checked": 4,
+      "patterns_matched": 17,
+      "total_patterns": 20,
+      "file_details": [
+        {
+          "file_name": "app/rpc/handler.py",
+          "matches": 1,
+          "lines": [
+            460,
+            73
+          ],
+          "implementation_score": 71.66098452587225
+        },
+        {
+          "file_name": "app/rpc/utils.py",
+          "matches": 3,
+          "lines": [
+            441,
+            312,
+            411,
+            406,
+            16
+          ],
+          "implementation_score": 98.97409058310409
+        },
+        {
+          "file_name": "app/rpc/utils.py",
+          "matches": 5,
+          "lines": [
+            129,
+            112,
+            205,
+            350
+          ],
+          "implementation_score": 80.31814551051195
+        },
+        {
+          "file_name": "app/rpc/client.py",
+          "matches": 1,
+          "lines": [
+            486,
+            289,
+            170
+          ],
+          "implementation_score": 84.43780787206697
+        }
+      ]
+    },
+    "serialization": {
+      "key": "serialization",
+      "description": "Serialization",
+      "details": [
+        "Enhanced the serialize_solana_object function to better handle various response types",
+        "Added specific handling for Pubkey objects, coroutines, and objects with special methods",
+        "Improved error logging during serialization"
+      ],
+      "status": "Partially Implemented",
+      "implementation_percentage": 88.86069257293116,
+      "files_checked": 5,
+      "patterns_matched": 15,
+      "total_patterns": 29,
+      "file_details": [
+        {
+          "file_name": "app/rpc/handler.py",
+          "matches": 2,
+          "lines": [
+            38,
+            179,
+            187,
+            37,
+            131
+          ],
+          "implementation_score": 66.4377941863811
+        },
+        {
+          "file_name": "app/rpc/client.py",
+          "matches": 3,
+          "lines": [
+            42,
+            414,
+            294,
+            411,
+            475
+          ],
+          "implementation_score": 91.10059682266987
+        },
+        {
+          "file_name": "app/rpc/handler.py",
+          "matches": 1,
+          "lines": [
+            121
+          ],
+          "implementation_score": 75.74558976392423
+        },
+        {
+          "file_name": "app/rpc/handler.py",
+          "matches": 1,
+          "lines": [
+            413
+          ],
+          "implementation_score": 60.069778063647604
+        },
+        {
+          "file_name": "app/rpc/handler.py",
+          "matches": 3,
+          "lines": [
+            43,
+            394,
+            410,
+            405,
+            68
+          ],
+          "implementation_score": 74.41890744715745
+        }
+      ]
+    },
+    "initialization": {
+      "key": "initialization",
+      "description": "Initialization",
+      "details": [
+        "Ensured proper initialization of handlers before making RPC calls",
+        "Added explicit initialization in the get_performance_metrics function"
+      ],
+      "status": "Fully Implemented",
+      "implementation_percentage": 90.6946326824724,
+      "files_checked": 3,
+      "patterns_matched": 15,
+      "total_patterns": 24,
+      "file_details": [
+        {
+          "file_name": "app/rpc/serializer.py",
+          "matches": 2,
+          "lines": [
+            380,
+            52,
+            99,
+            300,
+            177
+          ],
+          "implementation_score": 59.224112216226644
+        },
+        {
+          "file_name": "app/rpc/utils.py",
+          "matches": 5,
+          "lines": [
+            312
+          ],
+          "implementation_score": 84.46340716211802
+        },
+        {
+          "file_name": "app/rpc/client.py",
+          "matches": 4,
+          "lines": [
+            71
+          ],
+          "implementation_score": 98.34185882887891
+        }
+      ]
+    }
+  }
+}
