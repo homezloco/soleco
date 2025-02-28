@@ -1,0 +1,13 @@
+2025-02-25 23:56:05 - solana.analytics.programid - ERROR - Error discovering programs: 'SolanaQueryHandler' object has no attribute 'get_recent_blocks'
+2025-02-26 00:38:09 - solana.analytics.programid - ERROR - Error discovering programs: 'SolanaQueryHandler' object has no attribute 'get_recent_blocks'
+2025-02-26 00:43:00 - solana.analytics.programid - ERROR - Error discovering programs: 'memo'
+2025-02-26 00:43:28 - solana.analytics.programid - ERROR - Error discovering programs: 'memo'
+2025-02-26 00:44:04 - solana.analytics.programid - ERROR - Error discovering programs: 'memo'
+2025-02-26 00:44:55 - solana.analytics.programid - WARNING - No active programs found
+2025-02-26 00:46:45 - solana.analytics.programid - ERROR - Error discovering programs: 'memo'
+2025-02-26 00:50:23 - solana.analytics.programid - ERROR - Error discovering programs: 'memo'
+2025-02-26 00:51:45 - solana.analytics.programid - ERROR - Error discovering programs: 'memo'
+2025-02-26 00:52:02 - solana.analytics.programid - ERROR - Error discovering programs: 'oracle'
+2025-02-26 00:52:50 - solana.analytics.programid - ERROR - Error discovering programs: 'memo'
+2025-02-26 00:53:12 - solana.analytics.programid - ERROR - Error discovering programs: 'memo'
+2025-02-26 00:54:45 - solana.analytics.programid - ERROR - Error discovering programs: 'memo'

@@ -1,0 +1,2226 @@
+{
+  "successful": [
+    {
+      "endpoint": "http://145.40.126.95:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 1.237
+    },
+    {
+      "endpoint": "http://145.40.88.77:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 1.591
+    },
+    {
+      "endpoint": "http://145.40.126.143:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 1.651
+    },
+    {
+      "endpoint": "http://38.29.227.126:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 1.978
+    },
+    {
+      "endpoint": "http://192.64.85.242:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 2.328
+    },
+    {
+      "endpoint": "http://147.28.180.247:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 3.301
+    },
+    {
+      "endpoint": "http://64.176.11.113:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 4.391
+    },
+    {
+      "endpoint": "http://185.189.44.139:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 5.715
+    },
+    {
+      "endpoint": "http://84.32.186.43:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 5.852
+    },
+    {
+      "endpoint": "http://67.213.115.17:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 6.809
+    },
+    {
+      "endpoint": "http://65.20.105.6:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 7.904
+    },
+    {
+      "endpoint": "http://147.75.92.227:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 8.912
+    },
+    {
+      "endpoint": "http://208.85.17.92:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 9.307
+    },
+    {
+      "endpoint": "http://145.40.64.255:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 11.377
+    },
+    {
+      "endpoint": "http://69.67.150.19:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 11.556
+    },
+    {
+      "endpoint": "http://88.216.198.205:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 14.66
+    },
+    {
+      "endpoint": "http://147.75.49.123:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 14.961
+    },
+    {
+      "endpoint": "http://104.37.190.98:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 15.215
+    },
+    {
+      "endpoint": "http://103.219.170.217:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 16.631
+    },
+    {
+      "endpoint": "http://103.219.170.217:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 23.026
+    },
+    {
+      "endpoint": "http://207.148.14.220:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 23.15
+    },
+    {
+      "endpoint": "http://88.216.198.210:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 23.239
+    },
+    {
+      "endpoint": "http://145.40.126.95:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 24.335
+    }
+  ],
+  "failed": [
+    {
+      "endpoint": "https://84.32.186.145:8899",
+      "status": "error",
+      "error": "Failed to connect to https://84.32.186.145:8899: Request timed out: ",
+      "response_time": 33.24
+    },
+    {
+      "endpoint": "https://66.135.11.69:8899",
+      "status": "error",
+      "error": "Failed to connect to https://66.135.11.69:8899: Request timed out: ",
+      "response_time": 33.203
+    },
+    {
+      "endpoint": "https://70.34.245.172:8899",
+      "status": "error",
+      "error": "Failed to connect to https://70.34.245.172:8899: Request timed out: ",
+      "response_time": 46.588
+    },
+    {
+      "endpoint": "https://199.254.199.127:21611",
+      "status": "error",
+      "error": "Failed to connect to https://199.254.199.127:21611: Request timed out: ",
+      "response_time": 33.111
+    },
+    {
+      "endpoint": "https://149.248.62.208:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.248.62.208:8899: Request timed out: ",
+      "response_time": 31.635
+    },
+    {
+      "endpoint": "https://207.148.14.220:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.148.14.220:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 27.31
+    },
+    {
+      "endpoint": "https://23.111.240.97:7211",
+      "status": "error",
+      "error": "Failed to connect to https://23.111.240.97:7211: Request timed out: ",
+      "response_time": 32.985
+    },
+    {
+      "endpoint": "https://80.239.223.72:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80.239.223.72:8899: Request timed out: ",
+      "response_time": 32.87
+    },
+    {
+      "endpoint": "https://103.106.58.75:8899",
+      "status": "error",
+      "error": "Failed to connect to https://103.106.58.75:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 30.569
+    },
+    {
+      "endpoint": "https://5.199.172.140:8899",
+      "status": "error",
+      "error": "Failed to connect to https://5.199.172.140:8899: Request timed out: ",
+      "response_time": 32.816
+    },
+    {
+      "endpoint": "https://37.27.229.67:8899",
+      "status": "error",
+      "error": "Failed to connect to https://37.27.229.67:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 31.812
+    },
+    {
+      "endpoint": "https://149.255.37.170:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.255.37.170:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 31.994
+    },
+    {
+      "endpoint": "https://64.130.52.199:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.130.52.199:8899: Request timed out: ",
+      "response_time": 32.735
+    },
+    {
+      "endpoint": "https://177.54.146.61:8899",
+      "status": "error",
+      "error": "Failed to connect to https://177.54.146.61:8899: Request timed out: ",
+      "response_time": 32.756
+    },
+    {
+      "endpoint": "https://209.250.237.140:8899",
+      "status": "error",
+      "error": "Failed to connect to https://209.250.237.140:8899: Request timed out: ",
+      "response_time": 32.772
+    },
+    {
+      "endpoint": "https://62.197.45.130:8899",
+      "status": "error",
+      "error": "Failed to connect to https://62.197.45.130:8899: HTTP error: All connection attempts failed",
+      "response_time": 25.154
+    },
+    {
+      "endpoint": "https://149.255.37.154:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.255.37.154:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 29.068
+    },
+    {
+      "endpoint": "https://45.250.253.111:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.253.111:8899: Request timed out: ",
+      "response_time": 32.707
+    },
+    {
+      "endpoint": "https://80.77.161.201:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80.77.161.201:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 29.685
+    },
+    {
+      "endpoint": "https://162.19.103.100:8899",
+      "status": "error",
+      "error": "Failed to connect to https://162.19.103.100:8899: Request timed out: ",
+      "response_time": 32.685
+    },
+    {
+      "endpoint": "https://185.135.82.142:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.135.82.142:8899: Request timed out: ",
+      "response_time": 32.665
+    },
+    {
+      "endpoint": "https://204.13.239.42:8899",
+      "status": "error",
+      "error": "Failed to connect to https://204.13.239.42:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 28.021
+    },
+    {
+      "endpoint": "https://173.224.127.6:8899",
+      "status": "error",
+      "error": "Failed to connect to https://173.224.127.6:8899: Request timed out: ",
+      "response_time": 32.509
+    },
+    {
+      "endpoint": "https://207.246.119.26:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.246.119.26:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 28.201
+    },
+    {
+      "endpoint": "https://185.135.82.243:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.135.82.243:8899: Request timed out: ",
+      "response_time": 32.431
+    },
+    {
+      "endpoint": "https://147.75.92.135:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.75.92.135:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 25.654
+    },
+    {
+      "endpoint": "https://149.255.37.190:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.255.37.190:8899: Request timed out: ",
+      "response_time": 32.285
+    },
+    {
+      "endpoint": "https://185.26.11.109:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.11.109:8899: Request timed out: ",
+      "response_time": 32.265
+    },
+    {
+      "endpoint": "https://37.61.212.219:8899",
+      "status": "error",
+      "error": "Failed to connect to https://37.61.212.219:8899: Request timed out: ",
+      "response_time": 30.931
+    },
+    {
+      "endpoint": "https://162.19.222.39:8899",
+      "status": "error",
+      "error": "Failed to connect to https://162.19.222.39:8899: Request timed out: ",
+      "response_time": 32.173
+    },
+    {
+      "endpoint": "https://145.40.91.45:8899",
+      "status": "error",
+      "error": "Failed to connect to https://145.40.91.45:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 27.024
+    },
+    {
+      "endpoint": "https://185.191.116.181:7211",
+      "status": "error",
+      "error": "Failed to connect to https://185.191.116.181:7211: Request timed out: ",
+      "response_time": 32.101
+    },
+    {
+      "endpoint": "https://108.171.216.114:8899",
+      "status": "error",
+      "error": "Failed to connect to https://108.171.216.114:8899: Request timed out: ",
+      "response_time": 32.088
+    },
+    {
+      "endpoint": "https://23.88.30.138:8899",
+      "status": "error",
+      "error": "Failed to connect to https://23.88.30.138:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 28.071
+    },
+    {
+      "endpoint": "https://147.28.175.189:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.28.175.189:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 28.974
+    },
+    {
+      "endpoint": "https://185.26.11.115:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.11.115:8899: Request timed out: ",
+      "response_time": 31.952
+    },
+    {
+      "endpoint": "https://173.231.14.98:8899",
+      "status": "error",
+      "error": "Failed to connect to https://173.231.14.98:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 44.597
+    },
+    {
+      "endpoint": "https://185.26.11.111:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.11.111:8899: Request timed out: ",
+      "response_time": 31.906
+    },
+    {
+      "endpoint": "https://57.129.76.97:9899",
+      "status": "error",
+      "error": "Failed to connect to https://57.129.76.97:9899: Request timed out: ",
+      "response_time": 31.905
+    },
+    {
+      "endpoint": "https://95.179.216.39:8899",
+      "status": "error",
+      "error": "Failed to connect to https://95.179.216.39:8899: Request timed out: ",
+      "response_time": 31.905
+    },
+    {
+      "endpoint": "https://195.14.6.38:8899",
+      "status": "error",
+      "error": "Failed to connect to https://195.14.6.38:8899: Request timed out: ",
+      "response_time": 31.903
+    },
+    {
+      "endpoint": "https://45.250.255.163:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.255.163:8899: Request timed out: ",
+      "response_time": 31.894
+    },
+    {
+      "endpoint": "https://67.213.119.41:8899",
+      "status": "error",
+      "error": "Failed to connect to https://67.213.119.41:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 28.498
+    },
+    {
+      "endpoint": "https://103.219.171.8:21611",
+      "status": "error",
+      "error": "Failed to connect to https://103.219.171.8:21611: Request timed out: ",
+      "response_time": 31.793
+    },
+    {
+      "endpoint": "https://64.176.65.109:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.176.65.109:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 28.956
+    },
+    {
+      "endpoint": "https://88.216.198.210:8899",
+      "status": "error",
+      "error": "Failed to connect to https://88.216.198.210:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 29.567
+    },
+    {
+      "endpoint": "https://13.115.69.197:8899",
+      "status": "error",
+      "error": "Failed to connect to https://13.115.69.197:8899: HTTP error: All connection attempts failed",
+      "response_time": 22.355
+    },
+    {
+      "endpoint": "https://3.79.229.25:8899",
+      "status": "error",
+      "error": "Failed to connect to https://3.79.229.25:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 24.282
+    },
+    {
+      "endpoint": "https://103.88.233.29:8899",
+      "status": "error",
+      "error": "Failed to connect to https://103.88.233.29:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 27.704
+    },
+    {
+      "endpoint": "https://192.241.120.42:8899",
+      "status": "error",
+      "error": "Failed to connect to https://192.241.120.42:8899: Request timed out: ",
+      "response_time": 31.503
+    },
+    {
+      "endpoint": "https://146.19.127.34:8899",
+      "status": "error",
+      "error": "Failed to connect to https://146.19.127.34:8899: Request timed out: ",
+      "response_time": 31.528
+    },
+    {
+      "endpoint": "https://149.255.37.218:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.255.37.218:8899: Request timed out: ",
+      "response_time": 31.531
+    },
+    {
+      "endpoint": "https://137.220.59.111:8899",
+      "status": "error",
+      "error": "Failed to connect to https://137.220.59.111:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 27.358
+    },
+    {
+      "endpoint": "https://216.128.145.225:8899",
+      "status": "error",
+      "error": "Failed to connect to https://216.128.145.225:8899: Request timed out: ",
+      "response_time": 31.432
+    },
+    {
+      "endpoint": "https://141.94.3.139:8899",
+      "status": "error",
+      "error": "Failed to connect to https://141.94.3.139:8899: Request timed out: ",
+      "response_time": 31.46
+    },
+    {
+      "endpoint": "https://91.242.214.51:8899",
+      "status": "error",
+      "error": "Failed to connect to https://91.242.214.51:8899: HTTP error: All connection attempts failed",
+      "response_time": 24.09
+    },
+    {
+      "endpoint": "https://62.197.45.158:8899",
+      "status": "error",
+      "error": "Failed to connect to https://62.197.45.158:8899: HTTP error: All connection attempts failed",
+      "response_time": 21.924
+    },
+    {
+      "endpoint": "https://45.45.156.250:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.45.156.250:8899: Request timed out: ",
+      "response_time": 31.303
+    },
+    {
+      "endpoint": "https://185.26.8.225:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.8.225:8899: Request timed out: ",
+      "response_time": 31.292
+    },
+    {
+      "endpoint": "https://80.77.161.197:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80.77.161.197:8899: Request timed out: ",
+      "response_time": 31.333
+    },
+    {
+      "endpoint": "https://109.94.96.173:8899",
+      "status": "error",
+      "error": "Failed to connect to https://109.94.96.173:8899: HTTP error: All connection attempts failed",
+      "response_time": 21.586
+    },
+    {
+      "endpoint": "https://72.46.84.185:8899",
+      "status": "error",
+      "error": "Failed to connect to https://72.46.84.185:8899: Request timed out: ",
+      "response_time": 31.285
+    },
+    {
+      "endpoint": "https://103.109.101.10:8899",
+      "status": "error",
+      "error": "Failed to connect to https://103.109.101.10:8899: Request timed out: ",
+      "response_time": 31.291
+    },
+    {
+      "endpoint": "https://80.77.175.84:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80.77.175.84:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 26.48
+    },
+    {
+      "endpoint": "https://107.182.162.210:8899",
+      "status": "error",
+      "error": "Failed to connect to https://107.182.162.210:8899: Request timed out: ",
+      "response_time": 31.247
+    },
+    {
+      "endpoint": "https://107.182.163.194:8899",
+      "status": "error",
+      "error": "Failed to connect to https://107.182.163.194:8899: Request timed out: ",
+      "response_time": 27.286
+    },
+    {
+      "endpoint": "https://135.125.160.253:8666",
+      "status": "error",
+      "error": "Failed to connect to https://135.125.160.253:8666: Request timed out: ",
+      "response_time": 31.203
+    },
+    {
+      "endpoint": "https://64.176.65.114:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.176.65.114:8899: Request timed out: ",
+      "response_time": 31.184
+    },
+    {
+      "endpoint": "https://185.26.11.113:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.11.113:8899: Request timed out: ",
+      "response_time": 31.162
+    },
+    {
+      "endpoint": "https://147.75.193.169:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.75.193.169:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 42.549
+    },
+    {
+      "endpoint": "https://2.57.215.75:8899",
+      "status": "error",
+      "error": "Failed to connect to https://2.57.215.75:8899: Request timed out: ",
+      "response_time": 31.156
+    },
+    {
+      "endpoint": "https://154.51.14.145:8899",
+      "status": "error",
+      "error": "Failed to connect to https://154.51.14.145:8899: Request timed out: ",
+      "response_time": 31.157
+    },
+    {
+      "endpoint": "https://64.130.57.216:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.130.57.216:8899: Request timed out: ",
+      "response_time": 31.172
+    },
+    {
+      "endpoint": "https://47.76.169.204:8899",
+      "status": "error",
+      "error": "Failed to connect to https://47.76.169.204:8899: Request timed out: ",
+      "response_time": 31.192
+    },
+    {
+      "endpoint": "https://207.90.225.250:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.90.225.250:8899: Request timed out: ",
+      "response_time": 31.24
+    },
+    {
+      "endpoint": "https://45.250.253.159:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.253.159:8899: Request timed out: ",
+      "response_time": 31.256
+    },
+    {
+      "endpoint": "https://185.86.135.71:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.86.135.71:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 25.441
+    },
+    {
+      "endpoint": "https://91.242.214.213:8899",
+      "status": "error",
+      "error": "Failed to connect to https://91.242.214.213:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 23.524
+    },
+    {
+      "endpoint": "https://162.19.102.192:8899",
+      "status": "error",
+      "error": "Failed to connect to https://162.19.102.192:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 25.95
+    },
+    {
+      "endpoint": "https://185.209.179.15:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.209.179.15:8899: Request timed out: ",
+      "response_time": 31.094
+    },
+    {
+      "endpoint": "https://45.250.253.89:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.253.89:8899: Request timed out: ",
+      "response_time": 31.101
+    },
+    {
+      "endpoint": "https://108.171.216.194:8899",
+      "status": "error",
+      "error": "Failed to connect to https://108.171.216.194:8899: Request timed out: ",
+      "response_time": 31.097
+    },
+    {
+      "endpoint": "https://147.75.32.229:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.75.32.229:8899: Request timed out: ",
+      "response_time": 31.097
+    },
+    {
+      "endpoint": "https://66.165.244.226:8899",
+      "status": "error",
+      "error": "Failed to connect to https://66.165.244.226:8899: Request timed out: ",
+      "response_time": 31.101
+    },
+    {
+      "endpoint": "https://185.86.135.78:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.86.135.78:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 25.059
+    },
+    {
+      "endpoint": "https://208.91.110.116:7211",
+      "status": "error",
+      "error": "Failed to connect to https://208.91.110.116:7211: Request timed out: ",
+      "response_time": 31.057
+    },
+    {
+      "endpoint": "https://160.202.131.107:8899",
+      "status": "error",
+      "error": "Failed to connect to https://160.202.131.107:8899: Request timed out: ",
+      "response_time": 31.077
+    },
+    {
+      "endpoint": "https://80.77.175.93:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80.77.175.93:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 24.95
+    },
+    {
+      "endpoint": "https://103.252.91.228:8899",
+      "status": "error",
+      "error": "Failed to connect to https://103.252.91.228:8899: Request timed out: ",
+      "response_time": 31.022
+    },
+    {
+      "endpoint": "https://185.26.11.107:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.11.107:8899: Request timed out: ",
+      "response_time": 31.028
+    },
+    {
+      "endpoint": "https://31.184.193.251:8899",
+      "status": "error",
+      "error": "Failed to connect to https://31.184.193.251:8899: HTTP error: All connection attempts failed",
+      "response_time": 20.564
+    },
+    {
+      "endpoint": "https://147.28.171.31:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.28.171.31:8899: HTTP error: All connection attempts failed",
+      "response_time": 19.935
+    },
+    {
+      "endpoint": "https://139.84.238.57:8899",
+      "status": "error",
+      "error": "Failed to connect to https://139.84.238.57:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 24.945
+    },
+    {
+      "endpoint": "https://103.219.168.159:21611",
+      "status": "error",
+      "error": "Failed to connect to https://103.219.168.159:21611: Request timed out: ",
+      "response_time": 30.786
+    },
+    {
+      "endpoint": "https://45.45.156.252:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.45.156.252:8899: Request timed out: ",
+      "response_time": 30.776
+    },
+    {
+      "endpoint": "https://170.39.119.202:8899",
+      "status": "error",
+      "error": "Failed to connect to https://170.39.119.202:8899: HTTP error: All connection attempts failed",
+      "response_time": 19.516
+    },
+    {
+      "endpoint": "https://205.209.107.186:8899",
+      "status": "error",
+      "error": "Failed to connect to https://205.209.107.186:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 23.496
+    },
+    {
+      "endpoint": "https://45.135.201.155:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.135.201.155:8899: HTTP error: All connection attempts failed",
+      "response_time": 19.069
+    },
+    {
+      "endpoint": "https://91.199.149.16:8899",
+      "status": "error",
+      "error": "Failed to connect to https://91.199.149.16:8899: HTTP error: All connection attempts failed",
+      "response_time": 19.858
+    },
+    {
+      "endpoint": "https://185.221.164.118:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.221.164.118:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 23.685
+    },
+    {
+      "endpoint": "https://144.202.50.238:8899",
+      "status": "error",
+      "error": "Failed to connect to https://144.202.50.238:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 21.312
+    },
+    {
+      "endpoint": "https://147.75.198.219:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.75.198.219:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 22.088
+    },
+    {
+      "endpoint": "https://45.250.253.87:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.253.87:8899: Request timed out: ",
+      "response_time": 30.387
+    },
+    {
+      "endpoint": "https://173.231.22.242:8899",
+      "status": "error",
+      "error": "Failed to connect to https://173.231.22.242:8899: Request timed out: ",
+      "response_time": 30.408
+    },
+    {
+      "endpoint": "https://3.74.162.208:8899",
+      "status": "error",
+      "error": "Failed to connect to https://3.74.162.208:8899: Request timed out: ",
+      "response_time": 30.419
+    },
+    {
+      "endpoint": "https://149.51.224.84:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.51.224.84:8899: Request timed out: ",
+      "response_time": 30.46
+    },
+    {
+      "endpoint": "https://64.130.34.49:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.130.34.49:8899: Request timed out: ",
+      "response_time": 30.464
+    },
+    {
+      "endpoint": "https://15.235.80.19:8899",
+      "status": "error",
+      "error": "Failed to connect to https://15.235.80.19:8899: Request timed out: ",
+      "response_time": 30.458
+    },
+    {
+      "endpoint": "https://160.202.128.5:8899",
+      "status": "error",
+      "error": "Failed to connect to https://160.202.128.5:8899: Request timed out: ",
+      "response_time": 30.452
+    },
+    {
+      "endpoint": "https://72.46.84.195:8899",
+      "status": "error",
+      "error": "Failed to connect to https://72.46.84.195:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 22.599
+    },
+    {
+      "endpoint": "https://66.45.229.34:8899",
+      "status": "error",
+      "error": "Failed to connect to https://66.45.229.34:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 22.199
+    },
+    {
+      "endpoint": "https://145.40.126.135:8899",
+      "status": "error",
+      "error": "Failed to connect to https://145.40.126.135:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 19.651
+    },
+    {
+      "endpoint": "https://212.7.207.1:8899",
+      "status": "error",
+      "error": "Failed to connect to https://212.7.207.1:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 24.882
+    },
+    {
+      "endpoint": "https://162.19.222.23:8899",
+      "status": "error",
+      "error": "Failed to connect to https://162.19.222.23:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 22.705
+    },
+    {
+      "endpoint": "https://147.28.198.67:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.28.198.67:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 19.565
+    },
+    {
+      "endpoint": "https://50.115.47.106:8899",
+      "status": "error",
+      "error": "Failed to connect to https://50.115.47.106:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 23.591
+    },
+    {
+      "endpoint": "https://23.92.177.79:21611",
+      "status": "error",
+      "error": "Failed to connect to https://23.92.177.79:21611: Request timed out: ",
+      "response_time": 29.957
+    },
+    {
+      "endpoint": "https://64.20.50.226:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.20.50.226:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 21.168
+    },
+    {
+      "endpoint": "https://149.255.37.174:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.255.37.174:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 22.577
+    },
+    {
+      "endpoint": "https://3.121.218.7:8899",
+      "status": "error",
+      "error": "Failed to connect to https://3.121.218.7:8899: HTTP error: All connection attempts failed",
+      "response_time": 18.017
+    },
+    {
+      "endpoint": "https://217.170.192.6:8899",
+      "status": "error",
+      "error": "Failed to connect to https://217.170.192.6:8899: Request timed out: ",
+      "response_time": 29.799
+    },
+    {
+      "endpoint": "https://2.57.215.182:8899",
+      "status": "error",
+      "error": "Failed to connect to https://2.57.215.182:8899: Request timed out: ",
+      "response_time": 29.81
+    },
+    {
+      "endpoint": "https://111.119.218.11:8899",
+      "status": "error",
+      "error": "Failed to connect to https://111.119.218.11:8899: Request timed out: ",
+      "response_time": 29.826
+    },
+    {
+      "endpoint": "https://195.162.83.18:8899",
+      "status": "error",
+      "error": "Failed to connect to https://195.162.83.18:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 21.628
+    },
+    {
+      "endpoint": "https://80.77.161.202:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80.77.161.202:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 22.345
+    },
+    {
+      "endpoint": "https://86.109.14.143:8899",
+      "status": "error",
+      "error": "Failed to connect to https://86.109.14.143:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 19.107
+    },
+    {
+      "endpoint": "https://45.250.255.167:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.255.167:8899: Request timed out: ",
+      "response_time": 29.62
+    },
+    {
+      "endpoint": "https://162.19.136.122:8666",
+      "status": "error",
+      "error": "Failed to connect to https://162.19.136.122:8666: Request timed out: ",
+      "response_time": 29.597
+    },
+    {
+      "endpoint": "https://207.90.224.251:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.90.224.251:8899: Request timed out: ",
+      "response_time": 29.636
+    },
+    {
+      "endpoint": "https://149.28.232.189:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.28.232.189:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 21.376
+    },
+    {
+      "endpoint": "https://149.255.37.186:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.255.37.186:8899: Request timed out: ",
+      "response_time": 29.577
+    },
+    {
+      "endpoint": "https://207.90.226.250:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.90.226.250:8899: Request timed out: ",
+      "response_time": 29.593
+    },
+    {
+      "endpoint": "https://141.95.97.47:8899",
+      "status": "error",
+      "error": "Failed to connect to https://141.95.97.47:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 23.624
+    },
+    {
+      "endpoint": "https://185.26.9.215:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.9.215:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 19.77
+    },
+    {
+      "endpoint": "https://149.255.37.130:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.255.37.130:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 23.895
+    },
+    {
+      "endpoint": "https://145.40.95.83:8899",
+      "status": "error",
+      "error": "Failed to connect to https://145.40.95.83:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 21.142
+    },
+    {
+      "endpoint": "https://208.91.109.81:8666",
+      "status": "error",
+      "error": "Failed to connect to https://208.91.109.81:8666: Request timed out: ",
+      "response_time": 29.344
+    },
+    {
+      "endpoint": "https://207.90.224.252:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.90.224.252:8899: Request timed out: ",
+      "response_time": 29.338
+    },
+    {
+      "endpoint": "https://172.96.172.242:8899",
+      "status": "error",
+      "error": "Failed to connect to https://172.96.172.242:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 20.307
+    },
+    {
+      "endpoint": "https://192.158.239.143:8899",
+      "status": "error",
+      "error": "Failed to connect to https://192.158.239.143:8899: Request timed out: ",
+      "response_time": 29.275
+    },
+    {
+      "endpoint": "https://185.177.74.241:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.177.74.241:8899: Request timed out: ",
+      "response_time": 29.263
+    },
+    {
+      "endpoint": "https://145.40.91.41:8899",
+      "status": "error",
+      "error": "Failed to connect to https://145.40.91.41:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 19.922
+    },
+    {
+      "endpoint": "https://198.178.224.134:8899",
+      "status": "error",
+      "error": "Failed to connect to https://198.178.224.134:8899: Request timed out: ",
+      "response_time": 29.191
+    },
+    {
+      "endpoint": "https://185.209.179.183:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.209.179.183:8899: Request timed out: ",
+      "response_time": 29.182
+    },
+    {
+      "endpoint": "https://69.67.150.141:8899",
+      "status": "error",
+      "error": "Failed to connect to https://69.67.150.141:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 18.817
+    },
+    {
+      "endpoint": "https://193.200.64.48:8899",
+      "status": "error",
+      "error": "Failed to connect to https://193.200.64.48:8899: Request timed out: ",
+      "response_time": 29.093
+    },
+    {
+      "endpoint": "https://216.238.102.89:8899",
+      "status": "error",
+      "error": "Failed to connect to https://216.238.102.89:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 22.197
+    },
+    {
+      "endpoint": "https://185.26.10.213:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.10.213:8899: Request timed out: ",
+      "response_time": 29.057
+    },
+    {
+      "endpoint": "https://147.28.173.107:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.28.173.107:8899: Request timed out: ",
+      "response_time": 29.063
+    },
+    {
+      "endpoint": "https://57.129.36.243:8899",
+      "status": "error",
+      "error": "Failed to connect to https://57.129.36.243:8899: Request timed out: ",
+      "response_time": 29.095
+    },
+    {
+      "endpoint": "https://45.43.11.14:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.43.11.14:8899: Request timed out: ",
+      "response_time": 29.206
+    },
+    {
+      "endpoint": "https://185.26.10.179:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.10.179:8899: Request timed out: ",
+      "response_time": 29.214
+    },
+    {
+      "endpoint": "https://85.195.97.187:8899",
+      "status": "error",
+      "error": "Failed to connect to https://85.195.97.187:8899: Request timed out: ",
+      "response_time": 29.229
+    },
+    {
+      "endpoint": "https://64.176.228.107:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.176.228.107:8899: Request timed out: ",
+      "response_time": 29.223
+    },
+    {
+      "endpoint": "https://147.28.184.21:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.28.184.21:8899: Request timed out: ",
+      "response_time": 29.219
+    },
+    {
+      "endpoint": "https://147.28.169.15:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.28.169.15:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 20.737
+    },
+    {
+      "endpoint": "https://45.77.156.249:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.77.156.249:8899: Request timed out: ",
+      "response_time": 29.142
+    },
+    {
+      "endpoint": "https://45.76.3.216:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.76.3.216:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 18.054
+    },
+    {
+      "endpoint": "https://91.134.58.46:8899",
+      "status": "error",
+      "error": "Failed to connect to https://91.134.58.46:8899: Request timed out: ",
+      "response_time": 29.078
+    },
+    {
+      "endpoint": "https://3.236.229.191:8899",
+      "status": "error",
+      "error": "Failed to connect to https://3.236.229.191:8899: HTTP error: All connection attempts failed",
+      "response_time": 15.133
+    },
+    {
+      "endpoint": "https://145.239.161.5:8899",
+      "status": "error",
+      "error": "Failed to connect to https://145.239.161.5:8899: Request timed out: ",
+      "response_time": 29.019
+    },
+    {
+      "endpoint": "https://193.200.65.18:8899",
+      "status": "error",
+      "error": "Failed to connect to https://193.200.65.18:8899: Request timed out: ",
+      "response_time": 29.02
+    },
+    {
+      "endpoint": "https://70.34.245.161:8899",
+      "status": "error",
+      "error": "Failed to connect to https://70.34.245.161:8899: Request timed out: ",
+      "response_time": 29.03
+    },
+    {
+      "endpoint": "https://77.244.246.86:8899",
+      "status": "error",
+      "error": "Failed to connect to https://77.244.246.86:8899: Request timed out: ",
+      "response_time": 29.032
+    },
+    {
+      "endpoint": "https://103.28.89.173:8899",
+      "status": "error",
+      "error": "Failed to connect to https://103.28.89.173:8899: Request timed out: ",
+      "response_time": 29.042
+    },
+    {
+      "endpoint": "https://162.19.103.253:8899",
+      "status": "error",
+      "error": "Failed to connect to https://162.19.103.253:8899: Request timed out: ",
+      "response_time": 29.041
+    },
+    {
+      "endpoint": "https://178.236.136.149:8899",
+      "status": "error",
+      "error": "Failed to connect to https://178.236.136.149:8899: Request timed out: ",
+      "response_time": 28.991
+    },
+    {
+      "endpoint": "https://108.181.93.162:8899",
+      "status": "error",
+      "error": "Failed to connect to https://108.181.93.162:8899: HTTP error: All connection attempts failed",
+      "response_time": 15.134
+    },
+    {
+      "endpoint": "https://23.92.177.75:21611",
+      "status": "error",
+      "error": "Failed to connect to https://23.92.177.75:21611: Request timed out: ",
+      "response_time": 28.928
+    },
+    {
+      "endpoint": "https://74.50.65.194:8899",
+      "status": "error",
+      "error": "Failed to connect to https://74.50.65.194:8899: Request timed out: ",
+      "response_time": 28.924
+    },
+    {
+      "endpoint": "https://177.54.154.27:8899",
+      "status": "error",
+      "error": "Failed to connect to https://177.54.154.27:8899: Request timed out: ",
+      "response_time": 28.954
+    },
+    {
+      "endpoint": "https://147.28.171.53:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.28.171.53:8899: Request timed out: ",
+      "response_time": 35.596
+    },
+    {
+      "endpoint": "https://38.97.61.158:8899",
+      "status": "error",
+      "error": "Failed to connect to https://38.97.61.158:8899: Request timed out: ",
+      "response_time": 28.893
+    },
+    {
+      "endpoint": "https://45.45.156.251:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.45.156.251:8899: Request timed out: ",
+      "response_time": 28.888
+    },
+    {
+      "endpoint": "https://185.26.10.211:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.10.211:8899: Request timed out: ",
+      "response_time": 28.9
+    },
+    {
+      "endpoint": "https://18.195.65.66:8899",
+      "status": "error",
+      "error": "Failed to connect to https://18.195.65.66:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 20.684
+    },
+    {
+      "endpoint": "https://207.90.225.251:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.90.225.251:8899: Request timed out: ",
+      "response_time": 28.828
+    },
+    {
+      "endpoint": "https://38.58.176.230:8899",
+      "status": "error",
+      "error": "Failed to connect to https://38.58.176.230:8899: Request timed out: ",
+      "response_time": 28.824
+    },
+    {
+      "endpoint": "https://77.244.246.82:8899",
+      "status": "error",
+      "error": "Failed to connect to https://77.244.246.82:8899: Request timed out: ",
+      "response_time": 28.832
+    },
+    {
+      "endpoint": "https://217.65.3.42:8899",
+      "status": "error",
+      "error": "Failed to connect to https://217.65.3.42:8899: Request timed out: ",
+      "response_time": 28.842
+    },
+    {
+      "endpoint": "https://62.197.45.33:8899",
+      "status": "error",
+      "error": "Failed to connect to https://62.197.45.33:8899: Request timed out: ",
+      "response_time": 28.837
+    },
+    {
+      "endpoint": "https://178.237.58.196:8899",
+      "status": "error",
+      "error": "Failed to connect to https://178.237.58.196:8899: Request timed out: ",
+      "response_time": 28.89
+    },
+    {
+      "endpoint": "https://91.199.149.203:8899",
+      "status": "error",
+      "error": "Failed to connect to https://91.199.149.203:8899: HTTP error: All connection attempts failed",
+      "response_time": 15.745
+    },
+    {
+      "endpoint": "https://212.83.42.33:8899",
+      "status": "error",
+      "error": "Failed to connect to https://212.83.42.33:8899: Request timed out: ",
+      "response_time": 28.855
+    },
+    {
+      "endpoint": "https://185.209.179.175:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.209.179.175:8899: Request timed out: ",
+      "response_time": 28.869
+    },
+    {
+      "endpoint": "https://206.72.196.138:8899",
+      "status": "error",
+      "error": "Failed to connect to https://206.72.196.138:8899: Request timed out: ",
+      "response_time": 28.862
+    },
+    {
+      "endpoint": "https://177.54.154.7:8899",
+      "status": "error",
+      "error": "Failed to connect to https://177.54.154.7:8899: Request timed out: ",
+      "response_time": 28.868
+    },
+    {
+      "endpoint": "https://162.19.77.136:8899",
+      "status": "error",
+      "error": "Failed to connect to https://162.19.77.136:8899: Request timed out: ",
+      "response_time": 28.859
+    },
+    {
+      "endpoint": "https://148.113.190.5:8899",
+      "status": "error",
+      "error": "Failed to connect to https://148.113.190.5:8899: Request timed out: ",
+      "response_time": 28.858
+    },
+    {
+      "endpoint": "https://72.46.84.207:8899",
+      "status": "error",
+      "error": "Failed to connect to https://72.46.84.207:8899: Request timed out: ",
+      "response_time": 28.852
+    },
+    {
+      "endpoint": "https://84.32.186.52:8899",
+      "status": "error",
+      "error": "Failed to connect to https://84.32.186.52:8899: Request timed out: ",
+      "response_time": 28.873
+    },
+    {
+      "endpoint": "https://45.250.254.65:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.254.65:8899: Request timed out: ",
+      "response_time": 28.867
+    },
+    {
+      "endpoint": "https://157.90.6.123:2024",
+      "status": "error",
+      "error": "Failed to connect to https://157.90.6.123:2024: Request timed out: ",
+      "response_time": 28.835
+    },
+    {
+      "endpoint": "https://84.32.71.81:7211",
+      "status": "error",
+      "error": "Failed to connect to https://84.32.71.81:7211: Request timed out: ",
+      "response_time": 28.801
+    },
+    {
+      "endpoint": "https://160.202.131.117:8899",
+      "status": "error",
+      "error": "Failed to connect to https://160.202.131.117:8899: Request timed out: ",
+      "response_time": 28.779
+    },
+    {
+      "endpoint": "https://108.160.136.181:8899",
+      "status": "error",
+      "error": "Failed to connect to https://108.160.136.181:8899: Request timed out: ",
+      "response_time": 28.77
+    },
+    {
+      "endpoint": "https://88.216.198.202:8899",
+      "status": "error",
+      "error": "Failed to connect to https://88.216.198.202:8899: Request timed out: ",
+      "response_time": 28.759
+    },
+    {
+      "endpoint": "https://74.50.77.122:8899",
+      "status": "error",
+      "error": "Failed to connect to https://74.50.77.122:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 19.111
+    },
+    {
+      "endpoint": "https://80.77.161.207:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80.77.161.207:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 18.589
+    },
+    {
+      "endpoint": "https://207.90.224.250:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.90.224.250:8899: Request timed out: ",
+      "response_time": 28.64
+    },
+    {
+      "endpoint": "https://15.235.117.193:8666",
+      "status": "error",
+      "error": "Failed to connect to https://15.235.117.193:8666: Request timed out: ",
+      "response_time": 28.639
+    },
+    {
+      "endpoint": "https://185.26.11.119:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.11.119:8899: Request timed out: ",
+      "response_time": 28.559
+    },
+    {
+      "endpoint": "https://204.16.242.229:8899",
+      "status": "error",
+      "error": "Failed to connect to https://204.16.242.229:8899: Request timed out: ",
+      "response_time": 28.585
+    },
+    {
+      "endpoint": "https://185.26.9.159:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.9.159:8899: Request timed out: ",
+      "response_time": 28.581
+    },
+    {
+      "endpoint": "https://35.178.207.182:8899",
+      "status": "error",
+      "error": "Failed to connect to https://35.178.207.182:8899: HTTP error: All connection attempts failed",
+      "response_time": 12.625
+    },
+    {
+      "endpoint": "https://178.237.58.173:8899",
+      "status": "error",
+      "error": "Failed to connect to https://178.237.58.173:8899: Request timed out: ",
+      "response_time": 28.513
+    },
+    {
+      "endpoint": "https://64.130.32.231:2024",
+      "status": "error",
+      "error": "Failed to connect to https://64.130.32.231:2024: Request timed out: ",
+      "response_time": 28.509
+    },
+    {
+      "endpoint": "https://15.235.219.100:9899",
+      "status": "error",
+      "error": "Failed to connect to https://15.235.219.100:9899: Request timed out: ",
+      "response_time": 28.517
+    },
+    {
+      "endpoint": "https://64.130.59.190:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.130.59.190:8899: Request timed out: ",
+      "response_time": 28.482
+    },
+    {
+      "endpoint": "https://57.129.84.164:8899",
+      "status": "error",
+      "error": "Failed to connect to https://57.129.84.164:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 16.546
+    },
+    {
+      "endpoint": "https://45.250.254.191:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.254.191:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 18.249
+    },
+    {
+      "endpoint": "https://84.32.71.77:8899",
+      "status": "error",
+      "error": "Failed to connect to https://84.32.71.77:8899: Request timed out: ",
+      "response_time": 28.347
+    },
+    {
+      "endpoint": "https://103.167.235.142:8899",
+      "status": "error",
+      "error": "Failed to connect to https://103.167.235.142:8899: HTTP error: All connection attempts failed",
+      "response_time": 12.074
+    },
+    {
+      "endpoint": "https://67.213.113.133:7211",
+      "status": "error",
+      "error": "Failed to connect to https://67.213.113.133:7211: Request timed out: ",
+      "response_time": 28.289
+    },
+    {
+      "endpoint": "https://84.32.71.73:7211",
+      "status": "error",
+      "error": "Failed to connect to https://84.32.71.73:7211: Request timed out: ",
+      "response_time": 28.273
+    },
+    {
+      "endpoint": "https://207.188.6.104:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.188.6.104:8899: Request timed out: ",
+      "response_time": 28.256
+    },
+    {
+      "endpoint": "https://23.92.177.77:21611",
+      "status": "error",
+      "error": "Failed to connect to https://23.92.177.77:21611: Request timed out: ",
+      "response_time": 28.189
+    },
+    {
+      "endpoint": "https://86.109.8.203:8899",
+      "status": "error",
+      "error": "Failed to connect to https://86.109.8.203:8899: Request timed out: ",
+      "response_time": 28.169
+    },
+    {
+      "endpoint": "https://185.188.42.43:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.188.42.43:8899: Request timed out: ",
+      "response_time": 28.147
+    },
+    {
+      "endpoint": "https://84.32.71.206:8899",
+      "status": "error",
+      "error": "Failed to connect to https://84.32.71.206:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 17.911
+    },
+    {
+      "endpoint": "https://103.219.171.221:8899",
+      "status": "error",
+      "error": "Failed to connect to https://103.219.171.221:8899: Request timed out: ",
+      "response_time": 28.087
+    },
+    {
+      "endpoint": "https://63.251.232.230:21611",
+      "status": "error",
+      "error": "Failed to connect to https://63.251.232.230:21611: Request timed out: ",
+      "response_time": 28.129
+    },
+    {
+      "endpoint": "https://103.219.171.9:21611",
+      "status": "error",
+      "error": "Failed to connect to https://103.219.171.9:21611: Request timed out: ",
+      "response_time": 28.174
+    },
+    {
+      "endpoint": "https://37.114.51.68:2024",
+      "status": "error",
+      "error": "Failed to connect to https://37.114.51.68:2024: Request timed out: ",
+      "response_time": 28.297
+    },
+    {
+      "endpoint": "https://23.92.177.76:21611",
+      "status": "error",
+      "error": "Failed to connect to https://23.92.177.76:21611: Request timed out: ",
+      "response_time": 28.419
+    },
+    {
+      "endpoint": "https://47.76.196.113:8899",
+      "status": "error",
+      "error": "Failed to connect to https://47.76.196.113:8899: Request timed out: ",
+      "response_time": 28.474
+    },
+    {
+      "endpoint": "https://37.122.252.21:8899",
+      "status": "error",
+      "error": "Failed to connect to https://37.122.252.21:8899: Request timed out: ",
+      "response_time": 28.536
+    },
+    {
+      "endpoint": "https://149.28.44.187:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.28.44.187:8899: Request timed out: ",
+      "response_time": 28.595
+    },
+    {
+      "endpoint": "https://207.90.226.252:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.90.226.252:8899: Request timed out: ",
+      "response_time": 28.654
+    },
+    {
+      "endpoint": "https://176.99.142.182:8899",
+      "status": "error",
+      "error": "Failed to connect to https://176.99.142.182:8899: HTTP error: All connection attempts failed",
+      "response_time": 11.64
+    },
+    {
+      "endpoint": "https://3.137.201.103:8899",
+      "status": "error",
+      "error": "Failed to connect to https://3.137.201.103:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 31.776
+    },
+    {
+      "endpoint": "https://91.211.83.252:8899",
+      "status": "error",
+      "error": "Failed to connect to https://91.211.83.252:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 14.666
+    },
+    {
+      "endpoint": "https://91.199.149.216:8899",
+      "status": "error",
+      "error": "Failed to connect to https://91.199.149.216:8899: HTTP error: All connection attempts failed",
+      "response_time": 11.019
+    },
+    {
+      "endpoint": "https://147.28.133.107:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.28.133.107:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 13.815
+    },
+    {
+      "endpoint": "https://207.90.225.252:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.90.225.252:8899: Request timed out: ",
+      "response_time": 28.103
+    },
+    {
+      "endpoint": "https://37.27.227.59:8899",
+      "status": "error",
+      "error": "Failed to connect to https://37.27.227.59:8899: HTTP error: All connection attempts failed",
+      "response_time": 10.265
+    },
+    {
+      "endpoint": "https://148.113.208.162:8899",
+      "status": "error",
+      "error": "Failed to connect to https://148.113.208.162:8899: Request timed out: ",
+      "response_time": 28.066
+    },
+    {
+      "endpoint": "https://193.222.57.21:8899",
+      "status": "error",
+      "error": "Failed to connect to https://193.222.57.21:8899: Request timed out: ",
+      "response_time": 28.086
+    },
+    {
+      "endpoint": "https://79.137.101.96:8899",
+      "status": "error",
+      "error": "Failed to connect to https://79.137.101.96:8899: Request timed out: ",
+      "response_time": 16.709
+    },
+    {
+      "endpoint": "https://207.90.226.251:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.90.226.251:8899: Request timed out: ",
+      "response_time": 28.013
+    },
+    {
+      "endpoint": "https://64.130.58.18:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.130.58.18:8899: Request timed out: ",
+      "response_time": 28.07
+    },
+    {
+      "endpoint": "https://185.133.42.6:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.133.42.6:8899: Request timed out: ",
+      "response_time": 28.035
+    },
+    {
+      "endpoint": "https://45.77.136.52:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.77.136.52:8899: Request timed out: ",
+      "response_time": 28.043
+    },
+    {
+      "endpoint": "https://185.209.176.160:21611",
+      "status": "error",
+      "error": "Failed to connect to https://185.209.176.160:21611: Request timed out: ",
+      "response_time": 28.063
+    },
+    {
+      "endpoint": "https://15.235.225.244:22222",
+      "status": "error",
+      "error": "Failed to connect to https://15.235.225.244:22222: Request timed out: ",
+      "response_time": 28.077
+    },
+    {
+      "endpoint": "https://103.219.168.187:7799",
+      "status": "error",
+      "error": "Failed to connect to https://103.219.168.187:7799: Request timed out: ",
+      "response_time": 28.155
+    },
+    {
+      "endpoint": "https://72.46.86.113:8899",
+      "status": "error",
+      "error": "Failed to connect to https://72.46.86.113:8899: Request timed out: ",
+      "response_time": 28.166
+    },
+    {
+      "endpoint": "https://15.235.225.141:9899",
+      "status": "error",
+      "error": "Failed to connect to https://15.235.225.141:9899: Request timed out: ",
+      "response_time": 28.14
+    },
+    {
+      "endpoint": "https://83.143.83.234:8899",
+      "status": "error",
+      "error": "Failed to connect to https://83.143.83.234:8899: Request timed out: ",
+      "response_time": 28.156
+    },
+    {
+      "endpoint": "https://74.50.65.226:8899",
+      "status": "error",
+      "error": "Failed to connect to https://74.50.65.226:8899: Request timed out: ",
+      "response_time": 28.166
+    },
+    {
+      "endpoint": "https://64.130.50.131:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.130.50.131:8899: Request timed out: ",
+      "response_time": 28.197
+    },
+    {
+      "endpoint": "https://51.210.194.40:8899",
+      "status": "error",
+      "error": "Failed to connect to https://51.210.194.40:8899: Request timed out: ",
+      "response_time": 28.188
+    },
+    {
+      "endpoint": "https://185.135.82.174:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.135.82.174:8899: Request timed out: ",
+      "response_time": 28.089
+    },
+    {
+      "endpoint": "https://195.189.97.55:8899",
+      "status": "error",
+      "error": "Failed to connect to https://195.189.97.55:8899: Request timed out: ",
+      "response_time": 28.065
+    },
+    {
+      "endpoint": "https://185.187.154.161:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.187.154.161:8899: Request timed out: ",
+      "response_time": 28.06
+    },
+    {
+      "endpoint": "https://84.32.186.110:8899",
+      "status": "error",
+      "error": "Failed to connect to https://84.32.186.110:8899: Request timed out: ",
+      "response_time": 28.064
+    },
+    {
+      "endpoint": "https://38.29.227.125:8899",
+      "status": "error",
+      "error": "Failed to connect to https://38.29.227.125:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 10.461
+    },
+    {
+      "endpoint": "https://109.94.96.59:8899",
+      "status": "error",
+      "error": "Failed to connect to https://109.94.96.59:8899: Request timed out: ",
+      "response_time": 27.964
+    },
+    {
+      "endpoint": "https://57.129.36.136:8666",
+      "status": "error",
+      "error": "Failed to connect to https://57.129.36.136:8666: Request timed out: ",
+      "response_time": 27.926
+    },
+    {
+      "endpoint": "https://62.113.194.29:8899",
+      "status": "error",
+      "error": "Failed to connect to https://62.113.194.29:8899: Request timed out: ",
+      "response_time": 27.948
+    },
+    {
+      "endpoint": "https://45.158.38.46:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.158.38.46:8899: Request timed out: ",
+      "response_time": 27.961
+    },
+    {
+      "endpoint": "https://147.28.171.15:8899",
+      "status": "error",
+      "error": "Failed to connect to https://147.28.171.15:8899: HTTP error: All connection attempts failed",
+      "response_time": 8.332
+    },
+    {
+      "endpoint": "https://57.129.37.153:8899",
+      "status": "error",
+      "error": "Failed to connect to https://57.129.37.153:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 13.305
+    },
+    {
+      "endpoint": "https://67.213.119.31:8899",
+      "status": "error",
+      "error": "Failed to connect to https://67.213.119.31:8899: Request timed out: ",
+      "response_time": 27.814
+    },
+    {
+      "endpoint": "https://219.78.4.74:8899",
+      "status": "error",
+      "error": "Failed to connect to https://219.78.4.74:8899: Request timed out: ",
+      "response_time": 27.82
+    },
+    {
+      "endpoint": "https://45.250.253.6:21611",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.253.6:21611: Request timed out: ",
+      "response_time": 27.827
+    },
+    {
+      "endpoint": "https://139.178.73.255:8899",
+      "status": "error",
+      "error": "Failed to connect to https://139.178.73.255:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 13.531
+    },
+    {
+      "endpoint": "https://185.26.9.5:8899",
+      "status": "error",
+      "error": "Failed to connect to https://185.26.9.5:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 13.593
+    },
+    {
+      "endpoint": "https://176.99.142.188:8899",
+      "status": "error",
+      "error": "Failed to connect to https://176.99.142.188:8899: HTTP error: All connection attempts failed",
+      "response_time": 8.962
+    },
+    {
+      "endpoint": "https://64.130.63.23:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.130.63.23:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 11.127
+    },
+    {
+      "endpoint": "https://145.40.125.27:8899",
+      "status": "error",
+      "error": "Failed to connect to https://145.40.125.27:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 9.287
+    },
+    {
+      "endpoint": "https://45.250.253.235:7799",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.253.235:7799: Request timed out: ",
+      "response_time": 27.528
+    },
+    {
+      "endpoint": "https://45.250.253.157:8899",
+      "status": "error",
+      "error": "Failed to connect to https://45.250.253.157:8899: Request timed out: ",
+      "response_time": 27.527
+    },
+    {
+      "endpoint": "https://66-135-11-69.constant.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://66-135-11-69.constant.com:8899: HTTP error: [Errno -5] No address associated with hostname",
+      "response_time": 6.611
+    },
+    {
+      "endpoint": "https://70.34.245.172.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://70.34.245.172.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 7.537
+    },
+    {
+      "endpoint": "https://149.248.62.208.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149.248.62.208.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 8.814
+    },
+    {
+      "endpoint": "https://207.148.14.220.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.148.14.220.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 8.762
+    },
+    {
+      "endpoint": "https://anza-staked-node-hk-1:8899",
+      "status": "error",
+      "error": "Failed to connect to https://anza-staked-node-hk-1:8899: Request timed out: ",
+      "response_time": 12.436
+    },
+    {
+      "endpoint": "https://static.67.229.27.37.clients.your-server.de:8899",
+      "status": "error",
+      "error": "Failed to connect to https://static.67.229.27.37.clients.your-server.de:8899: Request timed out: ",
+      "response_time": 27.675
+    },
+    {
+      "endpoint": "https://149-255-37-170.static.hvvc.us:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149-255-37-170.static.hvvc.us:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 27.625
+    },
+    {
+      "endpoint": "https://177-54-146-61.rev.hostzone.com.br:8899",
+      "status": "error",
+      "error": "Failed to connect to https://177-54-146-61.rev.hostzone.com.br:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 6.126
+    },
+    {
+      "endpoint": "https://209.250.237.140.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://209.250.237.140.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 6.909
+    },
+    {
+      "endpoint": "https://149-255-37-154.static.hvvc.us:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149-255-37-154.static.hvvc.us:8899: Request timed out: ",
+      "response_time": 12.097
+    },
+    {
+      "endpoint": "https://80-77-161-201.as51369.ru:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80-77-161-201.as51369.ru:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 8.27
+    },
+    {
+      "endpoint": "https://ns31722394.ip-162-19-103.eu:8899",
+      "status": "error",
+      "error": "Failed to connect to https://ns31722394.ip-162-19-103.eu:8899: Request timed out: ",
+      "response_time": 26.721
+    },
+    {
+      "endpoint": "https://208.85.17.92.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://208.85.17.92.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 6.767
+    },
+    {
+      "endpoint": "https://207.246.119.26.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://207.246.119.26.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 5.695
+    },
+    {
+      "endpoint": "https://anza-dev-staked-tokyo:8899",
+      "status": "error",
+      "error": "Failed to connect to https://anza-dev-staked-tokyo:8899: Request timed out: ",
+      "response_time": 11.717
+    },
+    {
+      "endpoint": "https://149-255-37-190.static.hvvc.us:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149-255-37-190.static.hvvc.us:8899: Request timed out: ",
+      "response_time": 26.429
+    },
+    {
+      "endpoint": "https://ns3031780.ip-162-19-222.eu:8899",
+      "status": "error",
+      "error": "Failed to connect to https://ns3031780.ip-162-19-222.eu:8899: Request timed out: ",
+      "response_time": 26.352
+    },
+    {
+      "endpoint": "https://scb2:8899",
+      "status": "error",
+      "error": "Failed to connect to https://scb2:8899: Request timed out: ",
+      "response_time": 11.502
+    },
+    {
+      "endpoint": "https://108.171.216.114.static.webnx.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://108.171.216.114.static.webnx.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 7.68
+    },
+    {
+      "endpoint": "https://sol.planetgov.org:8899",
+      "status": "error",
+      "error": "Failed to connect to https://sol.planetgov.org:8899: HTTP error: [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)",
+      "response_time": 27.034
+    },
+    {
+      "endpoint": "https://host21073.edgevanaservers.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://host21073.edgevanaservers.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 7.521
+    },
+    {
+      "endpoint": "https://ns3245847.ip-57-129-76.eu:9899",
+      "status": "error",
+      "error": "Failed to connect to https://ns3245847.ip-57-129-76.eu:9899: Request timed out: ",
+      "response_time": 25.993
+    },
+    {
+      "endpoint": "https://95.179.216.39.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://95.179.216.39.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 6.051
+    },
+    {
+      "endpoint": "https://scb1:8899",
+      "status": "error",
+      "error": "Failed to connect to https://scb1:8899: Request timed out: ",
+      "response_time": 11.087
+    },
+    {
+      "endpoint": "https://64.176.65.109.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.176.65.109.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 5.923
+    },
+    {
+      "endpoint": "https://ec2-13-115-69-197.ap-northeast-1.compute.amazonaws.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://ec2-13-115-69-197.ap-northeast-1.compute.amazonaws.com:8899: HTTP error: All connection attempts failed",
+      "response_time": 7.107
+    },
+    {
+      "endpoint": "https://ec2-3-79-229-25.eu-central-1.compute.amazonaws.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://ec2-3-79-229-25.eu-central-1.compute.amazonaws.com:8899: Request timed out: ",
+      "response_time": 10.895
+    },
+    {
+      "endpoint": "https://applaud.canyonsfretsaw.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://applaud.canyonsfretsaw.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 5.721
+    },
+    {
+      "endpoint": "https://149-255-37-218.static.hvvc.us:8899",
+      "status": "error",
+      "error": "Failed to connect to https://149-255-37-218.static.hvvc.us:8899: Request timed out: ",
+      "response_time": 25.538
+    },
+    {
+      "endpoint": "https://137.220.59.111.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://137.220.59.111.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 5.595
+    },
+    {
+      "endpoint": "https://mail.promotionsonnline.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://mail.promotionsonnline.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 6.889
+    },
+    {
+      "endpoint": "https://216.128.145.225.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://216.128.145.225.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 5.503
+    },
+    {
+      "endpoint": "https://ns3046060.ip-141-94-3.eu:8899",
+      "status": "error",
+      "error": "Failed to connect to https://ns3046060.ip-141-94-3.eu:8899: Request timed out: ",
+      "response_time": 25.306
+    },
+    {
+      "endpoint": "https://80-77-161-197.as51369.ru:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80-77-161-197.as51369.ru:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 5.369
+    },
+    {
+      "endpoint": "https://dev-equinix-silicon-valley-3:8899",
+      "status": "error",
+      "error": "Failed to connect to https://dev-equinix-silicon-valley-3:8899: Request timed out: ",
+      "response_time": 10.411
+    },
+    {
+      "endpoint": "https://80-77-175-84.colo.fiord.ru:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80-77-175-84.colo.fiord.ru:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 5.279
+    },
+    {
+      "endpoint": "https://107-182-163-194.static.webnx.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://107-182-163-194.static.webnx.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 6.568
+    },
+    {
+      "endpoint": "https://ns3234978.ip-135-125-160.eu:8666",
+      "status": "error",
+      "error": "Failed to connect to https://ns3234978.ip-135-125-160.eu:8666: Request timed out: ",
+      "response_time": 25.036
+    },
+    {
+      "endpoint": "https://64.176.11.113.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.176.11.113.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 5.087
+    },
+    {
+      "endpoint": "https://64.176.65.114.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://64.176.65.114.vultrusercontent.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 5.026
+    },
+    {
+      "endpoint": "https://anza-dev-staked-ny-1:8899",
+      "status": "error",
+      "error": "Failed to connect to https://anza-dev-staked-ny-1:8899: Request timed out: ",
+      "response_time": 10.062
+    },
+    {
+      "endpoint": "https://anza-staked-node-ny-1:8899",
+      "status": "error",
+      "error": "Failed to connect to https://anza-staked-node-ny-1:8899: Request timed out: ",
+      "response_time": 10.003
+    },
+    {
+      "endpoint": "https://ns3237175.ip-162-19-102.eu:8899",
+      "status": "error",
+      "error": "Failed to connect to https://ns3237175.ip-162-19-102.eu:8899: Request timed out: ",
+      "response_time": 9.945
+    },
+    {
+      "endpoint": "https://108.171.216.194.static.webnx.com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://108.171.216.194.static.webnx.com:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 9.868
+    },
+    {
+      "endpoint": "https://emam-ccn-solana-mainnet-api20:8899",
+      "status": "error",
+      "error": "Failed to connect to https://emam-ccn-solana-mainnet-api20:8899: Request timed out: ",
+      "response_time": 9.828
+    },
+    {
+      "endpoint": "https://66-165-244-226.static.hvvc.us:8899",
+      "status": "error",
+      "error": "Failed to connect to https://66-165-244-226.static.hvvc.us:8899: Request timed out: ",
+      "response_time": 24.547
+    },
+    {
+      "endpoint": "https://80-77-175-93.colo.fiord.ru:8899",
+      "status": "error",
+      "error": "Failed to connect to https://80-77-175-93.colo.fiord.ru:8899: HTTP error: [Errno -2] Name or service not known",
+      "response_time": 5.948
+    },
+    {
+      "endpoint": "https://SunucumFix.Com:8899",
+      "status": "error",
+      "error": "Failed to connect to https://SunucumFix.Com:8899: Request timed out: ",
+      "response_time": 24.605
+    },
+    {
+      "endpoint": "https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70",
+      "status": "error",
+      "error": "Failed to connect to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70: Request timed out: ",
+      "response_time": 24.376
+    },
+    {
+      "endpoint": "https://rpc.ankr.com/solana",
+      "status": "error",
+      "error": "Failed to connect to https://rpc.ankr.com/solana: Request timed out: ",
+      "response_time": 24.311
+    },
+    {
+      "endpoint": "https://solana.public-rpc.com",
+      "status": "error",
+      "error": "Failed to connect to https://solana.public-rpc.com: Request timed out: ",
+      "response_time": 9.453
+    },
+    {
+      "endpoint": "https://api.mainnet-beta.solana.com",
+      "status": "error",
+      "error": "Failed to connect to https://api.mainnet-beta.solana.com: Request timed out: ",
+      "response_time": 24.115
+    },
+    {
+      "endpoint": "https://api.devnet.solana.com",
+      "status": "error",
+      "error": "Failed to connect to https://api.devnet.solana.com: Request timed out: ",
+      "response_time": 10.411
+    },
+    {
+      "endpoint": "https://api.testnet.solana.com",
+      "status": "error",
+      "error": "Failed to connect to https://api.testnet.solana.com: Request timed out: ",
+      "response_time": 9.202
+    },
+    {
+      "endpoint": "https://solana-api.projectserum.com",
+      "status": "error",
+      "error": "Failed to connect to https://solana-api.projectserum.com: Request timed out: ",
+      "response_time": 10.472
+    },
+    {
+      "endpoint": "http://149-255-37-154.static.hvvc.us:8899",
+      "status": "error",
+      "error": "Failed to connect to http://149-255-37-154.static.hvvc.us:8899: Request timed out: ",
+      "response_time": 10.082
+    },
+    {
+      "endpoint": "http://149-255-37-170.static.hvvc.us:8899",
+      "status": "error",
+      "error": "Failed to connect to http://149-255-37-170.static.hvvc.us:8899: Request timed out: ",
+      "response_time": 9.959
+    },
+    {
+      "endpoint": "http://38.58.176.230:8899",
+      "status": "error",
+      "error": "Failed to connect to http://38.58.176.230:8899: Request timed out: ",
+      "response_time": 23.475
+    },
+    {
+      "endpoint": "http://74.50.65.226:8899",
+      "status": "error",
+      "error": "Failed to connect to http://74.50.65.226:8899: Request timed out: ",
+      "response_time": 23.352
+    },
+    {
+      "endpoint": "http://147.28.171.53:8899",
+      "status": "error",
+      "error": "Failed to connect to http://147.28.171.53:8899: Request timed out: ",
+      "response_time": 8.606
+    },
+    {
+      "endpoint": "http://67.213.115.207:8899",
+      "status": "error",
+      "error": "Failed to connect to http://67.213.115.207:8899: HTTP error: All connection attempts failed",
+      "response_time": 3.082
+    },
+    {
+      "endpoint": "http://208.85.17.92:8899",
+      "status": "error",
+      "error": "Failed to connect to http://208.85.17.92:8899: Request timed out: ",
+      "response_time": 23.566
+    },
+    {
+      "endpoint": "http://74.50.65.194:8899",
+      "status": "error",
+      "error": "Failed to connect to http://74.50.65.194:8899: Request timed out: ",
+      "response_time": 22.939
+    },
+    {
+      "endpoint": "http://185.189.44.139:8899",
+      "status": "error",
+      "error": "Request timed out: ",
+      "response_time": 28.754
+    },
+    {
+      "endpoint": "http://173.231.22.242:8899",
+      "status": "error",
+      "error": "Failed to connect to http://173.231.22.242:8899: Request timed out: ",
+      "response_time": 22.356
+    },
+    {
+      "endpoint": "http://66.45.229.34:8899",
+      "status": "error",
+      "error": "Failed to connect to http://66.45.229.34:8899: Request timed out: ",
+      "response_time": 22.25
+    },
+    {
+      "endpoint": "http://147.75.198.219:8899",
+      "status": "error",
+      "error": "Failed to connect to http://147.75.198.219:8899: Request timed out: ",
+      "response_time": 22.119
+    },
+    {
+      "endpoint": "http://107.182.163.194:8899",
+      "status": "error",
+      "error": "Failed to connect to http://107.182.163.194:8899: Request timed out: ",
+      "response_time": 22.063
+    },
+    {
+      "endpoint": "http://145.40.88.77:8899",
+      "status": "error",
+      "error": "Failed to connect to http://145.40.88.77:8899: Request timed out: ",
+      "response_time": 22.006
+    },
+    {
+      "endpoint": "http://173.231.14.98:8899",
+      "status": "error",
+      "error": "Failed to connect to http://173.231.14.98:8899: Request timed out: ",
+      "response_time": 21.739
+    }
+  ],
+  "success_rate": 6.284153005464481
+}

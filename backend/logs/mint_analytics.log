@@ -1,0 +1,243 @@
+2025-02-22 00:25:24 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 00:25:24 - ERROR: Error analyzing new mints: Connection pool is required
+2025-02-22 00:25:38 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 00:25:38 - ERROR: Error analyzing new mints: Connection pool is required
+2025-02-22 00:26:03 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 00:26:03 - ERROR: Error analyzing new mints: Connection pool is required
+2025-02-22 00:26:40 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 00:26:40 - ERROR: Error analyzing new mints: Connection pool is required
+2025-02-22 00:26:55 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 00:26:58 - ERROR: Error analyzing new mints: 'SolanaQueryHandler' object has no attribute 'get_block'
+2025-02-22 00:28:22 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 00:28:26 - ERROR: Error analyzing new mints: 'SolanaQueryHandler' object has no attribute 'get_block'
+2025-02-22 00:29:26 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 00:29:29 - ERROR: Error analyzing new mints: 'SolanaQueryHandler' object has no attribute 'get_block'
+2025-02-22 00:30:43 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 00:31:11 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 00:31:11 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 00:31:23 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:08:26 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:08:32 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:11:05 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:11:11 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:14:52 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:15:04 - INFO: Analysis complete. Found 1414 mint addresses and 29 pump tokens
+2025-02-22 07:21:04 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:21:12 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:22:44 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:22:52 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:23:05 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:23:12 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:23:35 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:23:44 - INFO: Analysis complete. Found 3 mint addresses and 0 pump tokens
+2025-02-22 07:39:01 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:39:18 - INFO: Analysis complete. Found 3 mint addresses and 0 pump tokens
+2025-02-22 07:40:49 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:41:00 - INFO: Analysis complete. Found 17 mint addresses and 0 pump tokens
+2025-02-22 07:43:38 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:43:44 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:44:58 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:45:04 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:45:52 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:45:59 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:46:13 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:46:22 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:47:49 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:47:59 - INFO: Analysis complete. Found 1 mint addresses and 0 pump tokens
+2025-02-22 07:49:27 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:49:41 - INFO: Analysis complete. Found 1 mint addresses and 0 pump tokens
+2025-02-22 07:52:38 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:52:46 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:52:59 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:53:04 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:53:23 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:53:29 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:54:14 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:54:20 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:54:33 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:54:44 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 07:55:41 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 07:55:51 - INFO: Analysis complete. Found 21 mint addresses and 0 pump tokens
+2025-02-22 08:00:49 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:00:57 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 08:01:06 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:01:13 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 08:01:41 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:01:48 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 08:01:54 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:01:59 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 08:04:35 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:04:44 - INFO: Analysis complete. Found 11 mint addresses and 0 pump tokens
+2025-02-22 08:28:08 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:28:41 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:30:29 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:34:49 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:35:09 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:36:03 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:37:36 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:38:34 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:38:42 - ERROR: Error analyzing new mints: unsupported operand type(s) for -: 'dict' and 'int'
+2025-02-22 08:40:12 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:40:19 - ERROR: Error analyzing new mints: unsupported operand type(s) for -: 'dict' and 'int'
+2025-02-22 08:42:46 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 08:42:58 - INFO: Analysis complete. Found 3 mint addresses and 0 pump tokens
+2025-02-22 16:12:12 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:12:23 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:18:48 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:18:56 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:19:02 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:19:13 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:23:06 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:23:14 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:24:22 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:24:30 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:30:54 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:31:01 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:47:30 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:47:38 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:48:48 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:48:56 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:49:36 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:49:41 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:51:05 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:51:12 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:51:29 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:51:35 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:53:02 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:53:18 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:54:03 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:54:10 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:54:33 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:54:38 - INFO: Analyzing blocks from 322309712 to 322309712
+2025-02-22 16:54:42 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:57:43 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:57:48 - INFO: Analyzing blocks from 322310190 to 322310190
+2025-02-22 16:57:50 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:58:11 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:58:16 - INFO: Analyzing blocks from 322310262 to 322310262
+2025-02-22 16:58:19 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:59:22 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:59:27 - INFO: Analyzing blocks from 322310444 to 322310444
+2025-02-22 16:59:30 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 16:59:51 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 16:59:56 - INFO: Analyzing blocks from 322310517 to 322310517
+2025-02-22 16:59:59 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 17:00:45 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:00:50 - INFO: Analyzing blocks from 322310657 to 322310657
+2025-02-22 17:00:53 - INFO: Analysis complete. Found 0 mint addresses and 0 pump tokens
+2025-02-22 17:01:13 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:02:19 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:03:51 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:05:20 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:07:05 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:07:52 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:09:40 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:12:10 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:14:15 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:15:26 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:16:05 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:18:30 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:18:40 - ERROR: Error analyzing new mints: unsupported operand type(s) for -: 'dict' and 'int'
+2025-02-22 17:19:57 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:20:20 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:20:22 - INFO: Analyzing blocks from 322313604 to 322313604
+2025-02-22 17:20:22 - ERROR: Error analyzing new mints: SolanaQueryHandler.process_blocks() got an unexpected keyword argument 'start_block'
+2025-02-22 17:21:28 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:21:30 - INFO: Analyzing blocks from 322313786 to 322313786
+2025-02-22 17:21:30 - ERROR: Error analyzing new mints: SolanaQueryHandler.process_blocks() got an unexpected keyword argument 'start_block'
+2025-02-22 17:21:55 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:21:57 - INFO: Analyzing blocks from 322313853 to 322313853
+2025-02-22 17:22:02 - ERROR: Failed to process blocks
+2025-02-22 17:23:40 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:23:42 - INFO: Analyzing blocks from 322314120 to 322314120
+2025-02-22 17:23:47 - INFO: Analysis complete. Found 92 mint addresses and 0 pump tokens
+2025-02-22 17:29:00 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:29:02 - INFO: Analyzing blocks from 322314927 to 322314927
+2025-02-22 17:29:09 - INFO: Analysis complete. Found 92 mint addresses
+2025-02-22 17:33:38 - INFO: Analyzing new mints in last 1 blocks
+2025-02-22 17:33:40 - INFO: Analyzing blocks from 322315638 to 322315638
+2025-02-22 17:33:48 - INFO: Analysis complete. Found 137 mint addresses
+2025-02-22 17:34:20 - INFO: Analyzing new fungible token mints in last 1 blocks
+2025-02-22 17:34:23 - INFO: Analyzing blocks from 322315746 to 322315746
+2025-02-22 17:34:26 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 17:35:48 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 17:35:50 - INFO: Analyzing blocks from 322315958 to 322315967
+2025-02-22 17:35:59 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 17:36:23 - INFO: Analyzing new fungible token mints in last 100 blocks
+2025-02-22 17:36:25 - INFO: Analyzing blocks from 322315955 to 322316054
+2025-02-22 17:37:44 - INFO: Analyzing new fungible token mints in last 20 blocks
+2025-02-22 17:37:46 - INFO: Analyzing blocks from 322316242 to 322316261
+2025-02-22 17:38:05 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 17:39:31 - INFO: Analyzing new fungible token mints in last 20 blocks
+2025-02-22 17:39:34 - INFO: Analyzing blocks from 322316515 to 322316534
+2025-02-22 17:39:48 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 17:40:20 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 17:40:22 - INFO: Analyzing blocks from 322316647 to 322316656
+2025-02-22 17:40:37 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 17:42:04 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 17:42:06 - INFO: Analyzing blocks from 322316916 to 322316925
+2025-02-22 17:42:14 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 17:42:47 - INFO: Analyzing new fungible token mints in last 1 blocks
+2025-02-22 17:42:49 - INFO: Analyzing blocks from 322317032 to 322317032
+2025-02-22 17:42:55 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 17:45:57 - INFO: Analyzing new fungible token mints in last 1 blocks
+2025-02-22 17:45:59 - INFO: Analyzing blocks from 322317514 to 322317514
+2025-02-22 17:46:03 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 17:47:01 - INFO: Analyzing new fungible token mints in last 1 blocks
+2025-02-22 17:47:03 - INFO: Analyzing blocks from 322317669 to 322317669
+2025-02-22 17:47:07 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:01:36 - INFO: Analyzing new fungible token mints in last 1 blocks
+2025-02-22 18:01:39 - INFO: Analyzing blocks from 322319888 to 322319888
+2025-02-22 18:01:43 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:01:54 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:01:56 - INFO: Analyzing blocks from 322319922 to 322319931
+2025-02-22 18:02:19 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:03:25 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:03:27 - INFO: Analyzing blocks from 322320153 to 322320162
+2025-02-22 18:03:43 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:04:08 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:04:10 - INFO: Analyzing blocks from 322320261 to 322320270
+2025-02-22 18:04:26 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:05:39 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:05:41 - INFO: Analyzing blocks from 322320491 to 322320500
+2025-02-22 18:05:54 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:07:45 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:07:48 - INFO: Analyzing blocks from 322320811 to 322320820
+2025-02-22 18:08:02 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:08:27 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:08:29 - INFO: Analyzing blocks from 322320916 to 322320925
+2025-02-22 18:08:29 - ERROR: Error analyzing new fungible token mints: SolanaQueryHandler.process_blocks() got an unexpected keyword argument 'batch_size'
+2025-02-22 18:10:02 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:10:04 - INFO: Analyzing blocks from 322321157 to 322321166
+2025-02-22 18:10:04 - ERROR: Error analyzing new fungible token mints: SolanaQueryHandler.process_blocks() got an unexpected keyword argument 'batch_size'
+2025-02-22 18:10:32 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:10:35 - INFO: Analyzing blocks from 322321234 to 322321243
+2025-02-22 18:10:40 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:11:53 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:11:55 - INFO: Analyzing blocks from 322321438 to 322321447
+2025-02-22 18:12:53 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:12:55 - INFO: Analyzing blocks from 322321590 to 322321599
+2025-02-22 18:13:11 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:14:49 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:14:51 - INFO: Analyzing blocks from 322321878 to 322321887
+2025-02-22 18:15:17 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:15:19 - INFO: Analyzing blocks from 322321950 to 322321959
+2025-02-22 18:15:34 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:15:50 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:15:52 - INFO: Analyzing blocks from 322322032 to 322322041
+2025-02-22 18:16:33 - INFO: Analyzing new fungible token mints in last 10 blocks
+2025-02-22 18:16:35 - INFO: Analyzing blocks from 322322142 to 322322151
+2025-02-22 18:18:07 - INFO: Analyzing new fungible token mints in last 1 blocks
+2025-02-22 18:18:09 - INFO: Analyzing blocks from 322322385 to 322322385
+2025-02-22 18:18:15 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:20:14 - INFO: Analyzing new fungible token mints in last 1 blocks
+2025-02-22 18:20:16 - INFO: Analyzing blocks from 322322705 to 322322705
+2025-02-22 18:20:30 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:20:43 - INFO: Analyzing new fungible token mints in last 1 blocks
+2025-02-22 18:20:48 - INFO: Analyzing blocks from 322322790 to 322322790
+2025-02-22 18:20:51 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 18:22:15 - INFO: Analyzing new fungible token mints in last 1 blocks
+2025-02-22 18:22:17 - INFO: Analyzing blocks from 322323013 to 322323013
+2025-02-22 18:22:21 - INFO: Analysis complete. Found 0 new fungible token addresses
+2025-02-22 22:46:44 - INFO: Analyzing new NFT mints in last 1 blocks
+2025-02-22 22:46:47 - ERROR: Error analyzing new NFT mints: name 'result' is not defined

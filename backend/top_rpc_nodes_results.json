@@ -1,0 +1,87 @@
+{
+  "successful": [
+    {
+      "endpoint": "http://145.40.126.95:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 1.278
+    },
+    {
+      "endpoint": "http://74.50.65.226:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 1.767
+    },
+    {
+      "endpoint": "http://38.58.176.230:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 2.246
+    },
+    {
+      "endpoint": "http://185.189.44.139:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 5.071
+    },
+    {
+      "endpoint": "http://208.85.17.92:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 16.633
+    },
+    {
+      "endpoint": "http://173.231.22.242:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 16.791
+    },
+    {
+      "endpoint": "http://74.50.65.194:8899",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 17.154
+    },
+    {
+      "endpoint": "https://api.mainnet-beta.solana.com",
+      "status": "success",
+      "version": "unknown",
+      "slot": 0,
+      "response_time": 18.564
+    }
+  ],
+  "failed": [
+    {
+      "endpoint": "http://147.28.171.53:8899",
+      "status": "error",
+      "error": "Request timed out: ",
+      "response_time": 44.333
+    },
+    {
+      "endpoint": "http://67.213.115.207:8899",
+      "status": "error",
+      "error": "Failed to connect to http://67.213.115.207:8899: HTTP error: All connection attempts failed",
+      "response_time": 0.529
+    },
+    {
+      "endpoint": "http://66.45.229.34:8899",
+      "status": "error",
+      "error": "Failed to connect to http://66.45.229.34:8899: Request timed out: ",
+      "response_time": 20.097
+    },
+    {
+      "endpoint": "https://solana-api.projectserum.com",
+      "status": "error",
+      "error": "Failed to connect to https://solana-api.projectserum.com: Request timed out: ",
+      "response_time": 20.037
+    }
+  ],
+  "success_rate": 66.66666666666666
+}

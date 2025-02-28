@@ -1,0 +1,18 @@
+[Unit]
+Description=Solana RPC Endpoint Health Monitor
+After=network.target
+
+[Service]
+Type=simple
+User=soleco
+WorkingDirectory=/path/to/soleco/backend
+ExecStart=/path/to/soleco/backend/venv/bin/python -m app.scripts.monitor_rpc_health --interval 300 --daemon
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=solana-rpc-monitor
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

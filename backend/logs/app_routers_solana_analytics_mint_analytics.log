@@ -1,0 +1,4 @@
+2025-02-24 13:07:23 - app.routers.solana_analytics.mint_analytics - ERROR - Error in analyze_new_mints: 'SolanaQueryHandler' object has no attribute 'process_blocks'
+2025-02-24 14:52:43 - app.routers.solana_analytics.mint_analytics - ERROR - Error in analyze_new_mints: RPC error in get_latest_block: 'SolanaConnectionPool' object has no attribute 'get'
+2025-02-24 22:51:06 - app.routers.solana_analytics.mint_analytics - ERROR - Error in analyze_recent_mints: SolanaQueryHandler.process_blocks() got an unexpected keyword argument 'batch_delay'
+2025-02-25 23:55:32 - app.routers.solana_analytics.mint_analytics - ERROR - Error in analyze_recent_mints: 'SolanaClient' object has no attribute 'get_block_height'

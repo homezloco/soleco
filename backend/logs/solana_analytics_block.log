@@ -1,0 +1,1 @@
+2025-02-24 22:51:19 - solana.analytics.block - ERROR - Error getting recent blocks: 'SolanaQueryHandler' object has no attribute 'get_recent_blocks'

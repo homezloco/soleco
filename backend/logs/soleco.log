@@ -1,0 +1,1333 @@
+2025-02-22 00:01:43 - soleco - INFO: Solana connection pool initialized successfully
+2025-02-22 00:02:31 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=20&min_calls=5
+2025-02-22 00:03:08 - soleco - INFO: Solana connection pool initialized successfully
+2025-02-22 00:03:21 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=20&min_calls=5
+2025-02-22 00:04:26 - soleco - INFO: Solana connection pool initialized successfully
+2025-02-22 00:04:37 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=20&min_calls=5
+2025-02-22 00:05:11 - soleco - INFO: Response status: 200
+2025-02-22 00:05:27 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=20&min_calls=5
+2025-02-22 00:05:55 - soleco - INFO: Response status: 200
+2025-02-22 00:06:53 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=20&min_calls=5
+2025-02-22 00:07:29 - soleco - INFO: Starting Soleco API server...
+2025-02-22 00:07:33 - soleco - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 00:07:37 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=20&min_calls=5
+2025-02-22 00:08:49 - soleco - INFO: Response status: 200
+2025-02-22 00:09:58 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=20&min_calls=5
+2025-02-22 00:10:58 - soleco - INFO: Starting Soleco API server...
+2025-02-22 00:11:03 - soleco - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 00:11:06 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=20&min_calls=5
+2025-02-22 00:12:55 - soleco - INFO: Response status: 500
+2025-02-22 00:14:04 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=20&min_calls=5
+2025-02-22 00:14:21 - soleco - INFO: Starting Soleco API server...
+2025-02-22 00:14:25 - soleco - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 00:14:31 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=1&min_calls=5
+2025-02-22 00:14:37 - soleco - INFO: Response status: 200
+2025-02-22 00:14:46 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=10&min_calls=5
+2025-02-22 00:15:12 - soleco - INFO: Response status: 200
+2025-02-22 00:16:41 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/programid/analytics/programid/discover?blocks=10&min_calls=5
+2025-02-22 00:17:10 - soleco - INFO: Response status: 200
+2025-02-22 00:17:33 - soleco - INFO: Shutting down Soleco API server...
+2025-02-22 00:17:33 - soleco - INFO: Solana connection pool cleaned up
+2025-02-22 00:17:36 - soleco - INFO: Starting Soleco API server...
+2025-02-22 00:17:42 - soleco - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 00:19:29 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/block/analytics/block/recent?limit=1
+2025-02-22 00:19:29 - soleco - ERROR: Error processing request: No response returned.
+2025-02-22 00:19:42 - soleco - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:19:55 - soleco - INFO: Response status: 200
+2025-02-22 00:21:05 - soleco - INFO: Shutting down Soleco API server...
+2025-02-22 00:21:05 - soleco - INFO: Solana connection pool cleaned up
+2025-02-22 00:21:11 - INFO: Starting Soleco API server...
+2025-02-22 00:21:16 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 00:22:40 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:22:51 - INFO: Response status: 200
+2025-02-22 00:25:16 - INFO: Shutting down Soleco API server...
+2025-02-22 00:25:16 - INFO: Solana connection pool cleaned up
+2025-02-22 00:25:21 - INFO: Starting Soleco API server...
+2025-02-22 00:25:24 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 00:25:24 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:25:24 - INFO: Response status: 200
+2025-02-22 00:25:38 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:25:38 - INFO: Response status: 200
+2025-02-22 00:25:51 - INFO: Starting Soleco API server...
+2025-02-22 00:25:55 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 00:26:03 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:26:03 - INFO: Response status: 200
+2025-02-22 00:26:40 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:26:40 - INFO: Response status: 200
+2025-02-22 00:26:49 - INFO: Starting Soleco API server...
+2025-02-22 00:26:53 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 00:26:55 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:26:58 - INFO: Response status: 200
+2025-02-22 00:28:21 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:28:26 - INFO: Response status: 200
+2025-02-22 00:29:26 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:29:29 - INFO: Response status: 200
+2025-02-22 00:30:07 - INFO: Shutting down Soleco API server...
+2025-02-22 00:30:07 - INFO: Solana connection pool cleaned up
+2025-02-22 00:30:12 - INFO: Starting Soleco API server...
+2025-02-22 00:30:17 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 00:30:42 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:31:11 - INFO: Response status: 200
+2025-02-22 00:31:11 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 00:31:23 - INFO: Response status: 200
+2025-02-22 00:34:05 - INFO: Shutting down Soleco API server...
+2025-02-22 00:34:05 - INFO: Solana connection pool cleaned up
+2025-02-22 00:34:09 - INFO: Starting Soleco API server...
+2025-02-22 00:34:12 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 07:08:26 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:08:32 - INFO: Response status: 200
+2025-02-22 07:11:05 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:11:11 - INFO: Response status: 200
+2025-02-22 07:12:56 - INFO: Shutting down Soleco API server...
+2025-02-22 07:12:56 - INFO: Solana connection pool cleaned up
+2025-02-22 07:13:04 - INFO: Starting Soleco API server...
+2025-02-22 07:13:08 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 07:14:52 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:15:04 - INFO: Response status: 200
+2025-02-22 07:16:32 - INFO: Shutting down Soleco API server...
+2025-02-22 07:16:32 - INFO: Solana connection pool cleaned up
+2025-02-22 07:16:41 - INFO: Starting Soleco API server...
+2025-02-22 07:16:45 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 07:21:04 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:21:12 - INFO: Response status: 200
+2025-02-22 07:22:44 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:22:52 - INFO: Response status: 200
+2025-02-22 07:23:05 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:23:12 - INFO: Response status: 200
+2025-02-22 07:23:24 - INFO: Shutting down Soleco API server...
+2025-02-22 07:23:24 - INFO: Solana connection pool cleaned up
+2025-02-22 07:23:27 - INFO: Starting Soleco API server...
+2025-02-22 07:23:33 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 07:23:35 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:23:44 - INFO: Response status: 200
+2025-02-22 07:30:28 - INFO: Shutting down Soleco API server...
+2025-02-22 07:30:28 - INFO: Solana connection pool cleaned up
+2025-02-22 07:38:53 - INFO: Starting Soleco API server...
+2025-02-22 07:38:57 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 07:39:01 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:39:18 - INFO: Response status: 200
+2025-02-22 07:40:49 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:41:00 - INFO: Response status: 200
+2025-02-22 07:42:19 - INFO: Shutting down Soleco API server...
+2025-02-22 07:42:19 - INFO: Solana connection pool cleaned up
+2025-02-22 07:43:31 - INFO: Starting Soleco API server...
+2025-02-22 07:43:35 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 07:43:38 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:43:44 - INFO: Response status: 200
+2025-02-22 07:44:58 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:45:04 - INFO: Response status: 200
+2025-02-22 07:45:52 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:45:59 - INFO: Response status: 200
+2025-02-22 07:45:59 - INFO: Shutting down Soleco API server...
+2025-02-22 07:45:59 - INFO: Solana connection pool cleaned up
+2025-02-22 07:46:07 - INFO: Starting Soleco API server...
+2025-02-22 07:46:11 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 07:46:13 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:46:22 - INFO: Response status: 200
+2025-02-22 07:47:49 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:47:59 - INFO: Response status: 200
+2025-02-22 07:48:51 - INFO: Shutting down Soleco API server...
+2025-02-22 07:48:51 - INFO: Solana connection pool cleaned up
+2025-02-22 07:48:59 - INFO: Starting Soleco API server...
+2025-02-22 07:49:02 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 07:49:27 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:49:41 - INFO: Response status: 200
+2025-02-22 07:51:39 - INFO: Shutting down Soleco API server...
+2025-02-22 07:51:39 - INFO: Solana connection pool cleaned up
+2025-02-22 07:51:46 - INFO: Starting Soleco API server...
+2025-02-22 07:51:53 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 07:52:38 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:52:46 - INFO: Response status: 200
+2025-02-22 07:52:59 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:53:04 - INFO: Response status: 200
+2025-02-22 07:53:23 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:53:29 - INFO: Response status: 200
+2025-02-22 07:54:14 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:54:20 - INFO: Response status: 200
+2025-02-22 07:54:20 - INFO: Shutting down Soleco API server...
+2025-02-22 07:54:20 - INFO: Solana connection pool cleaned up
+2025-02-22 07:54:28 - INFO: Starting Soleco API server...
+2025-02-22 07:54:31 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 07:54:33 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:54:44 - INFO: Response status: 200
+2025-02-22 07:55:41 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 07:55:51 - INFO: Response status: 200
+2025-02-22 07:56:42 - INFO: Shutting down Soleco API server...
+2025-02-22 07:56:42 - INFO: Solana connection pool cleaned up
+2025-02-22 07:56:47 - INFO: Starting Soleco API server...
+2025-02-22 07:56:50 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 08:00:30 - INFO: Shutting down Soleco API server...
+2025-02-22 08:00:30 - INFO: Solana connection pool cleaned up
+2025-02-22 08:00:34 - INFO: Starting Soleco API server...
+2025-02-22 08:00:39 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 08:00:49 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:00:57 - INFO: Response status: 200
+2025-02-22 08:01:06 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:01:13 - INFO: Response status: 200
+2025-02-22 08:01:41 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:01:48 - INFO: Response status: 200
+2025-02-22 08:01:54 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:01:59 - INFO: Response status: 200
+2025-02-22 08:04:28 - INFO: Starting Soleco API server...
+2025-02-22 08:04:33 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 08:04:35 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:04:44 - INFO: Response status: 200
+2025-02-22 08:10:57 - INFO: Shutting down Soleco API server...
+2025-02-22 08:10:57 - INFO: Solana connection pool cleaned up
+2025-02-22 08:11:02 - INFO: Starting Soleco API server...
+2025-02-22 08:11:06 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 08:14:04 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/recent?limit=10&include_transactions=true
+2025-02-22 08:14:18 - INFO: Response status: 503
+2025-02-22 08:14:48 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 08:14:48 - INFO: Response status: 200
+2025-02-22 08:14:49 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 08:14:49 - INFO: Response status: 200
+2025-02-22 08:14:56 - INFO: Shutting down Soleco API server...
+2025-02-22 08:14:56 - INFO: Solana connection pool cleaned up
+2025-02-22 08:19:49 - INFO: Starting Soleco API server...
+2025-02-22 08:19:53 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 08:19:58 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 08:19:58 - INFO: Response status: 200
+2025-02-22 08:19:59 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 08:19:59 - INFO: Response status: 200
+2025-02-22 08:20:21 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new?time_window=24&exclude_zero_volume=true
+2025-02-22 08:20:21 - INFO: Response status: 500
+2025-02-22 08:20:23 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new?time_window=24&exclude_zero_volume=true
+2025-02-22 08:20:23 - INFO: Response status: 500
+2025-02-22 08:20:28 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new?time_window=24&min_holder_count=1&exclude_zero_volume=true
+2025-02-22 08:20:28 - INFO: Response status: 500
+2025-02-22 08:21:49 - INFO: Shutting down Soleco API server...
+2025-02-22 08:21:49 - INFO: Solana connection pool cleaned up
+2025-02-22 08:22:51 - INFO: Starting Soleco API server...
+2025-02-22 08:22:55 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 08:23:05 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new?time_window=24&min_holder_count=1&exclude_zero_volume=true
+2025-02-22 08:23:10 - INFO: Response status: 500
+2025-02-22 08:24:17 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new?time_window=24&min_holder_count=1&exclude_zero_volume=true
+2025-02-22 08:24:17 - INFO: Response status: 500
+2025-02-22 08:24:29 - INFO: Starting Soleco API server...
+2025-02-22 08:24:34 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 08:24:47 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new?time_window=24&min_holder_count=1&exclude_zero_volume=true
+2025-02-22 08:24:51 - ERROR: Error processing request: No response returned.
+2025-02-22 08:26:12 - INFO: Starting Soleco API server...
+2025-02-22 08:26:17 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 08:26:20 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new?time_window=24&min_holder_count=1&exclude_zero_volume=true
+2025-02-22 08:26:22 - ERROR: Error processing request: No response returned.
+2025-02-22 08:28:08 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:28:13 - ERROR: Error processing request: No response returned.
+2025-02-22 08:28:33 - INFO: Starting Soleco API server...
+2025-02-22 08:28:38 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 08:28:41 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:28:45 - ERROR: Error processing request: No response returned.
+2025-02-22 08:30:20 - INFO: Starting Soleco API server...
+2025-02-22 08:30:23 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 08:30:29 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:30:34 - ERROR: Error processing request: No response returned.
+2025-02-22 08:34:43 - INFO: Starting Soleco API server...
+2025-02-22 08:34:46 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 08:34:49 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:34:54 - ERROR: Error processing request: No response returned.
+2025-02-22 08:35:03 - INFO: Starting Soleco API server...
+2025-02-22 08:35:07 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 08:35:09 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:35:15 - ERROR: Error processing request: No response returned.
+2025-02-22 08:35:56 - INFO: Starting Soleco API server...
+2025-02-22 08:36:02 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 08:36:03 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:36:15 - ERROR: Error processing request: No response returned.
+2025-02-22 08:37:27 - INFO: Starting Soleco API server...
+2025-02-22 08:37:33 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 08:37:36 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:37:51 - ERROR: Error processing request: No response returned.
+2025-02-22 08:38:27 - INFO: Starting Soleco API server...
+2025-02-22 08:38:31 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 08:38:34 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:38:42 - INFO: Response status: 200
+2025-02-22 08:39:37 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 08:39:37 - INFO: Response status: 200
+2025-02-22 08:40:12 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:40:19 - INFO: Response status: 200
+2025-02-22 08:41:24 - INFO: Shutting down Soleco API server...
+2025-02-22 08:41:24 - INFO: Solana connection pool cleaned up
+2025-02-22 08:41:29 - INFO: Starting Soleco API server...
+2025-02-22 08:41:33 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 08:41:39 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 08:41:39 - INFO: Response status: 200
+2025-02-22 08:42:20 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 08:42:20 - INFO: Response status: 200
+2025-02-22 08:42:39 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 08:42:39 - INFO: Response status: 200
+2025-02-22 08:42:39 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 08:42:39 - INFO: Response status: 200
+2025-02-22 08:42:46 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 08:42:58 - INFO: Response status: 200
+2025-02-22 08:44:20 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new?time_window=24&min_holder_count=1&exclude_zero_volume=true
+2025-02-22 08:44:45 - INFO: Starting Soleco API server...
+2025-02-22 08:44:48 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 08:44:55 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new?time_window=1&min_holder_count=1&exclude_zero_volume=true
+2025-02-22 08:46:46 - INFO: Starting Soleco API server...
+2025-02-22 08:46:50 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 08:48:03 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new?time_window=1&min_holder_count=1&exclude_zero_volume=true
+2025-02-22 08:48:55 - INFO: Starting Soleco API server...
+2025-02-22 08:49:01 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 08:49:02 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 08:49:02 - INFO: Response status: 200
+2025-02-22 08:49:02 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 08:49:02 - INFO: Response status: 200
+2025-02-22 08:49:19 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/recent_pump_tokens?blocks=1
+2025-02-22 08:49:19 - ERROR: Error processing request: No response returned.
+2025-02-22 08:49:29 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 08:49:29 - ERROR: Error processing request: No response returned.
+2025-02-22 08:51:14 - INFO: Shutting down Soleco API server...
+2025-02-22 08:51:14 - INFO: Solana connection pool cleaned up
+2025-02-22 08:51:19 - INFO: Starting Soleco API server...
+2025-02-22 08:51:22 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 08:51:25 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 08:51:37 - INFO: Response status: 200
+2025-02-22 08:53:39 - INFO: Shutting down Soleco API server...
+2025-02-22 08:53:39 - INFO: Solana connection pool cleaned up
+2025-02-22 08:53:45 - INFO: Starting Soleco API server...
+2025-02-22 08:53:51 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 08:55:32 - INFO: Shutting down Soleco API server...
+2025-02-22 08:55:32 - INFO: Solana connection pool cleaned up
+2025-02-22 08:55:35 - INFO: Starting Soleco API server...
+2025-02-22 08:55:37 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 09:00:42 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:00:54 - INFO: Response status: 200
+2025-02-22 09:02:09 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:02:18 - INFO: Response status: 200
+2025-02-22 09:02:29 - INFO: Starting Soleco API server...
+2025-02-22 09:02:31 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 09:02:37 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:02:48 - INFO: Response status: 200
+2025-02-22 09:06:24 - INFO: Shutting down Soleco API server...
+2025-02-22 09:06:24 - INFO: Solana connection pool cleaned up
+2025-02-22 09:06:27 - INFO: Starting Soleco API server...
+2025-02-22 09:06:31 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 09:07:56 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:08:08 - INFO: Response status: 200
+2025-02-22 09:14:15 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:14:27 - INFO: Response status: 200
+2025-02-22 09:14:27 - INFO: Shutting down Soleco API server...
+2025-02-22 09:14:27 - INFO: Solana connection pool cleaned up
+2025-02-22 09:14:32 - INFO: Starting Soleco API server...
+2025-02-22 09:14:36 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 09:16:12 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:16:23 - INFO: Response status: 200
+2025-02-22 09:19:21 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:19:26 - INFO: Response status: 200
+2025-02-22 09:19:49 - INFO: Shutting down Soleco API server...
+2025-02-22 09:19:49 - INFO: Solana connection pool cleaned up
+2025-02-22 09:19:56 - INFO: Starting Soleco API server...
+2025-02-22 09:20:01 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 09:21:34 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:21:51 - INFO: Response status: 200
+2025-02-22 09:22:51 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:23:00 - INFO: Response status: 200
+2025-02-22 09:23:00 - INFO: Shutting down Soleco API server...
+2025-02-22 09:23:00 - INFO: Solana connection pool cleaned up
+2025-02-22 09:23:03 - INFO: Starting Soleco API server...
+2025-02-22 09:23:07 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 09:23:11 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:23:22 - INFO: Response status: 200
+2025-02-22 09:29:57 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:30:11 - INFO: Starting Soleco API server...
+2025-02-22 09:30:15 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 09:30:20 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:30:37 - INFO: Response status: 200
+2025-02-22 09:34:33 - INFO: Starting Soleco API server...
+2025-02-22 09:34:37 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 09:34:49 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 09:35:00 - INFO: Response status: 200
+2025-02-22 09:42:33 - INFO: Shutting down Soleco API server...
+2025-02-22 09:42:33 - INFO: Solana connection pool cleaned up
+2025-02-22 13:07:31 - INFO: Starting Soleco API server...
+2025-02-22 13:07:36 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 13:13:16 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 13:13:31 - INFO: Response status: 200
+2025-02-22 13:42:41 - INFO: Shutting down Soleco API server...
+2025-02-22 13:42:41 - INFO: Solana connection pool cleaned up
+2025-02-22 13:42:46 - INFO: Starting Soleco API server...
+2025-02-22 13:42:52 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 13:48:01 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 13:48:13 - INFO: Response status: 200
+2025-02-22 13:49:52 - INFO: Shutting down Soleco API server...
+2025-02-22 13:49:52 - INFO: Solana connection pool cleaned up
+2025-02-22 13:49:56 - INFO: Starting Soleco API server...
+2025-02-22 13:49:58 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 13:51:58 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 13:52:06 - INFO: Response status: 200
+2025-02-22 13:56:03 - INFO: Shutting down Soleco API server...
+2025-02-22 13:56:03 - INFO: Solana connection pool cleaned up
+2025-02-22 13:56:09 - INFO: Starting Soleco API server...
+2025-02-22 13:56:16 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 13:56:25 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 13:56:40 - INFO: Response status: 200
+2025-02-22 15:24:48 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 15:24:54 - INFO: Response status: 200
+2025-02-22 15:25:11 - INFO: Shutting down Soleco API server...
+2025-02-22 15:25:11 - INFO: Solana connection pool cleaned up
+2025-02-22 15:29:57 - INFO: Starting Soleco API server...
+2025-02-22 15:30:02 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 15:30:06 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 15:30:16 - INFO: Response status: 200
+2025-02-22 15:31:22 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 15:31:29 - INFO: Response status: 200
+2025-02-22 15:31:43 - INFO: Starting Soleco API server...
+2025-02-22 15:31:46 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 15:31:59 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 15:32:06 - INFO: Response status: 200
+2025-02-22 15:40:41 - INFO: Shutting down Soleco API server...
+2025-02-22 15:40:41 - INFO: Solana connection pool cleaned up
+2025-02-22 15:57:45 - INFO: Starting Soleco API server...
+2025-02-22 15:57:49 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 15:57:53 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 15:57:53 - INFO: Response status: 404
+2025-02-22 15:58:56 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 15:58:56 - INFO: Response status: 404
+2025-02-22 15:59:07 - INFO: Starting Soleco API server...
+2025-02-22 15:59:13 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 15:59:20 - INFO: Request: GET http://localhost:8001/api/analytics/pump/pump/new_pump_tokens?blocks=1
+2025-02-22 15:59:20 - INFO: Response status: 404
+2025-02-22 15:59:50 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 15:59:50 - INFO: Response status: 200
+2025-02-22 15:59:50 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 15:59:50 - INFO: Response status: 200
+2025-02-22 16:00:24 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:00:30 - INFO: Response status: 200
+2025-02-22 16:01:31 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:01:36 - INFO: Response status: 200
+2025-02-22 16:01:47 - INFO: Starting Soleco API server...
+2025-02-22 16:01:51 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 16:03:21 - INFO: Starting Soleco API server...
+2025-02-22 16:03:24 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 16:03:27 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:03:32 - INFO: Response status: 200
+2025-02-22 16:05:50 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:05:56 - INFO: Response status: 200
+2025-02-22 16:06:09 - INFO: Starting Soleco API server...
+2025-02-22 16:06:12 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 16:06:16 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:06:21 - INFO: Response status: 200
+2025-02-22 16:07:20 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:07:27 - INFO: Response status: 200
+2025-02-22 16:07:37 - INFO: Starting Soleco API server...
+2025-02-22 16:07:40 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x
+2025-02-22 16:07:53 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:07:58 - INFO: Response status: 200
+2025-02-22 16:10:19 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:10:25 - INFO: Response status: 200
+2025-02-22 16:12:12 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:12:23 - INFO: Response status: 200
+2025-02-22 16:13:41 - INFO: Shutting down Soleco API server...
+2025-02-22 16:13:41 - INFO: Solana connection pool cleaned up
+2025-02-22 16:13:52 - INFO: Starting Soleco API server...
+2025-02-22 16:13:55 - INFO: Successfully connected to Solana RPC at https://rpc.helius.xyz/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-02-22 16:17:46 - INFO: Shutting down Soleco API server...
+2025-02-22 16:17:46 - INFO: Solana connection pool cleaned up
+2025-02-22 16:17:53 - INFO: Starting Soleco API server...
+2025-02-22 16:17:59 - INFO: Successfully connected to Solana RPC at https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6
+2025-02-22 16:18:48 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:18:56 - INFO: Response status: 200
+2025-02-22 16:19:02 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:19:13 - INFO: Response status: 200
+2025-02-22 16:20:02 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:20:08 - INFO: Response status: 200
+2025-02-22 16:20:48 - INFO: Starting Soleco API server...
+2025-02-22 16:20:51 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:22:36 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:22:38 - INFO: Response status: 200
+2025-02-22 16:23:06 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:23:14 - INFO: Response status: 200
+2025-02-22 16:24:22 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:24:30 - INFO: Response status: 200
+2025-02-22 16:24:51 - INFO: Shutting down Soleco API server...
+2025-02-22 16:24:51 - INFO: Solana connection pool cleaned up
+2025-02-22 16:24:58 - INFO: Starting Soleco API server...
+2025-02-22 16:25:02 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:29:35 - INFO: Shutting down Soleco API server...
+2025-02-22 16:29:35 - INFO: Solana connection pool cleaned up
+2025-02-22 16:29:41 - INFO: Starting Soleco API server...
+2025-02-22 16:29:44 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:30:46 - INFO: Starting Soleco API server...
+2025-02-22 16:30:50 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:30:54 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:31:01 - INFO: Response status: 200
+2025-02-22 16:35:02 - INFO: Shutting down Soleco API server...
+2025-02-22 16:35:02 - INFO: Solana connection pool cleaned up
+2025-02-22 16:47:23 - INFO: Starting Soleco API server...
+2025-02-22 16:47:27 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:47:30 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:47:38 - INFO: Response status: 200
+2025-02-22 16:48:48 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:48:56 - INFO: Response status: 200
+2025-02-22 16:49:29 - INFO: Starting Soleco API server...
+2025-02-22 16:49:32 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:49:36 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:49:41 - INFO: Response status: 200
+2025-02-22 16:51:05 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:51:12 - INFO: Response status: 200
+2025-02-22 16:51:24 - INFO: Starting Soleco API server...
+2025-02-22 16:51:27 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:51:29 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:51:35 - INFO: Response status: 200
+2025-02-22 16:53:02 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:53:18 - INFO: Response status: 200
+2025-02-22 16:54:03 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:54:10 - INFO: Response status: 200
+2025-02-22 16:54:27 - INFO: Starting Soleco API server...
+2025-02-22 16:54:30 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:54:33 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:54:42 - INFO: Response status: 200
+2025-02-22 16:55:38 - INFO: Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-22 16:55:42 - INFO: Response status: 200
+2025-02-22 16:57:28 - INFO: Request: GET http://localhost:8001/api/analytics/pump/analytics/new_pump_tokens?blocks=1
+2025-02-22 16:57:30 - INFO: Response status: 200
+2025-02-22 16:57:43 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:57:50 - INFO: Response status: 200
+2025-02-22 16:58:05 - INFO: Starting Soleco API server...
+2025-02-22 16:58:08 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:58:11 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:58:19 - INFO: Response status: 200
+2025-02-22 16:59:06 - INFO: Starting Soleco API server...
+2025-02-22 16:59:09 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:59:22 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:59:30 - INFO: Response status: 200
+2025-02-22 16:59:45 - INFO: Starting Soleco API server...
+2025-02-22 16:59:49 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 16:59:51 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 16:59:59 - INFO: Response status: 200
+2025-02-22 17:00:45 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:00:53 - INFO: Response status: 200
+2025-02-22 17:01:08 - INFO: Starting Soleco API server...
+2025-02-22 17:01:11 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:01:13 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:01:15 - ERROR: Error processing request: No response returned.
+2025-02-22 17:02:14 - INFO: Starting Soleco API server...
+2025-02-22 17:02:17 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:02:19 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:02:22 - ERROR: Error processing request: No response returned.
+2025-02-22 17:03:42 - INFO: Starting Soleco API server...
+2025-02-22 17:03:45 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:03:51 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:03:53 - ERROR: Error processing request: No response returned.
+2025-02-22 17:05:14 - INFO: Starting Soleco API server...
+2025-02-22 17:05:18 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:05:20 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:06:32 - ERROR: Error processing request: No response returned.
+2025-02-22 17:06:44 - INFO: Starting Soleco API server...
+2025-02-22 17:06:47 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:07:05 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:07:34 - INFO: Starting Soleco API server...
+2025-02-22 17:07:38 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:07:52 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:08:39 - INFO: Starting Soleco API server...
+2025-02-22 17:08:43 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:09:40 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:11:21 - INFO: Starting Soleco API server...
+2025-02-22 17:11:25 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:11:29 - INFO: Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-22 17:11:33 - INFO: Response status: 200
+2025-02-22 17:12:10 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:14:09 - INFO: Starting Soleco API server...
+2025-02-22 17:14:12 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:14:15 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:15:19 - INFO: Starting Soleco API server...
+2025-02-22 17:15:22 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:15:26 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:15:59 - INFO: Starting Soleco API server...
+2025-02-22 17:16:02 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:16:05 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:18:18 - INFO: Starting Soleco API server...
+2025-02-22 17:18:21 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:18:30 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:18:40 - INFO: Response status: 200
+2025-02-22 17:19:57 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:20:14 - INFO: Starting Soleco API server...
+2025-02-22 17:20:17 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:20:20 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:20:22 - INFO: Response status: 200
+2025-02-22 17:21:28 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:21:30 - INFO: Response status: 200
+2025-02-22 17:21:48 - INFO: Starting Soleco API server...
+2025-02-22 17:21:50 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:21:55 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:22:02 - INFO: Response status: 200
+2025-02-22 17:23:17 - INFO: Starting Soleco API server...
+2025-02-22 17:23:21 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:23:40 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:23:47 - INFO: Response status: 200
+2025-02-22 17:27:31 - INFO: Shutting down Soleco API server...
+2025-02-22 17:27:31 - INFO: Solana connection pool cleaned up
+2025-02-22 17:27:38 - INFO: Starting Soleco API server...
+2025-02-22 17:27:41 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:29:00 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:29:09 - INFO: Response status: 200
+2025-02-22 17:33:28 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 17:33:28 - INFO: Response status: 200
+2025-02-22 17:33:29 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 17:33:29 - INFO: Response status: 200
+2025-02-22 17:33:38 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:33:48 - INFO: Response status: 200
+2025-02-22 17:33:51 - INFO: Shutting down Soleco API server...
+2025-02-22 17:33:51 - INFO: Solana connection pool cleaned up
+2025-02-22 17:33:57 - INFO: Starting Soleco API server...
+2025-02-22 17:34:01 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:34:20 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:34:26 - INFO: Response status: 200
+2025-02-22 17:35:48 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 17:35:59 - INFO: Response status: 200
+2025-02-22 17:36:23 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=100
+2025-02-22 17:37:31 - INFO: Starting Soleco API server...
+2025-02-22 17:37:34 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:37:44 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=20
+2025-02-22 17:38:05 - INFO: Response status: 200
+2025-02-22 17:39:31 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=20
+2025-02-22 17:39:48 - INFO: Response status: 200
+2025-02-22 17:40:09 - INFO: Starting Soleco API server...
+2025-02-22 17:40:13 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:40:20 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 17:40:37 - INFO: Response status: 200
+2025-02-22 17:42:04 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 17:42:14 - INFO: Response status: 200
+2025-02-22 17:42:33 - INFO: Starting Soleco API server...
+2025-02-22 17:42:37 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:42:41 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 17:42:41 - INFO: Response status: 200
+2025-02-22 17:42:42 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 17:42:42 - INFO: Response status: 200
+2025-02-22 17:42:47 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:42:55 - INFO: Response status: 200
+2025-02-22 17:45:57 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:46:03 - INFO: Response status: 200
+2025-02-22 17:46:36 - INFO: Shutting down Soleco API server...
+2025-02-22 17:46:36 - INFO: Solana connection pool cleaned up
+2025-02-22 17:46:41 - INFO: Starting Soleco API server...
+2025-02-22 17:46:45 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 17:47:01 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 17:47:07 - INFO: Response status: 200
+2025-02-22 17:47:25 - INFO: Starting Soleco API server...
+2025-02-22 17:47:27 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:01:36 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:01:43 - INFO: Response status: 200
+2025-02-22 18:01:54 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:02:19 - INFO: Response status: 200
+2025-02-22 18:03:25 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:03:43 - INFO: Response status: 200
+2025-02-22 18:03:55 - INFO: Starting Soleco API server...
+2025-02-22 18:03:59 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:04:08 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:04:26 - INFO: Response status: 200
+2025-02-22 18:05:39 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:05:54 - INFO: Response status: 200
+2025-02-22 18:07:45 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:08:02 - INFO: Response status: 200
+2025-02-22 18:08:02 - INFO: Shutting down Soleco API server...
+2025-02-22 18:08:02 - INFO: Solana connection pool cleaned up
+2025-02-22 18:08:18 - INFO: Starting Soleco API server...
+2025-02-22 18:08:22 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:08:27 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:08:29 - INFO: Response status: 200
+2025-02-22 18:10:02 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:10:04 - INFO: Response status: 200
+2025-02-22 18:10:25 - INFO: Starting Soleco API server...
+2025-02-22 18:10:28 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:10:32 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:10:40 - INFO: Response status: 200
+2025-02-22 18:11:53 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:12:14 - INFO: Starting Soleco API server...
+2025-02-22 18:12:17 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:12:53 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:13:11 - INFO: Response status: 200
+2025-02-22 18:14:49 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:15:09 - INFO: Starting Soleco API server...
+2025-02-22 18:15:13 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:15:17 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:15:34 - INFO: Response status: 200
+2025-02-22 18:15:49 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:16:14 - INFO: Starting Soleco API server...
+2025-02-22 18:16:21 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:16:33 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=10
+2025-02-22 18:18:01 - INFO: Starting Soleco API server...
+2025-02-22 18:18:04 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:18:07 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:18:15 - INFO: Response status: 200
+2025-02-22 18:20:09 - INFO: Starting Soleco API server...
+2025-02-22 18:20:13 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:20:14 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:20:30 - INFO: Response status: 200
+2025-02-22 18:20:43 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:20:51 - INFO: Response status: 200
+2025-02-22 18:22:15 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:22:21 - INFO: Response status: 200
+2025-02-22 18:27:00 - INFO: Starting Soleco API server...
+2025-02-22 18:27:04 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:27:08 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:27:11 - INFO: Response status: 200
+2025-02-22 18:28:31 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:28:32 - INFO: Response status: 200
+2025-02-22 18:28:48 - INFO: Starting Soleco API server...
+2025-02-22 18:28:50 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:28:57 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:29:00 - INFO: Response status: 200
+2025-02-22 18:30:07 - INFO: Starting Soleco API server...
+2025-02-22 18:30:10 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:30:20 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:30:25 - ERROR: Error processing request: No response returned.
+2025-02-22 18:32:06 - INFO: Starting Soleco API server...
+2025-02-22 18:32:08 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:32:12 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:32:15 - INFO: Response status: 200
+2025-02-22 18:34:20 - INFO: Starting Soleco API server...
+2025-02-22 18:34:23 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:34:27 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:34:30 - INFO: Response status: 200
+2025-02-22 18:35:21 - INFO: Starting Soleco API server...
+2025-02-22 18:35:24 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:35:30 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:35:58 - ERROR: Error processing request: No response returned.
+2025-02-22 18:36:11 - INFO: Starting Soleco API server...
+2025-02-22 18:36:14 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:36:40 - INFO: Starting Soleco API server...
+2025-02-22 18:36:42 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:37:42 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:37:45 - INFO: Response status: 200
+2025-02-22 18:39:08 - INFO: Starting Soleco API server...
+2025-02-22 18:39:12 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:39:22 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:39:25 - INFO: Response status: 200
+2025-02-22 18:41:27 - INFO: Starting Soleco API server...
+2025-02-22 18:41:30 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:41:35 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:41:37 - INFO: Response status: 200
+2025-02-22 18:42:44 - INFO: Starting Soleco API server...
+2025-02-22 18:42:46 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 18:43:07 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 18:43:10 - INFO: Response status: 200
+2025-02-22 20:54:23 - INFO: Shutting down Soleco API server...
+2025-02-22 20:54:23 - INFO: Solana connection pool cleaned up
+2025-02-22 20:54:28 - INFO: Starting Soleco API server...
+2025-02-22 20:54:34 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 20:57:21 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 20:57:24 - INFO: Response status: 200
+2025-02-22 20:57:41 - INFO: Starting Soleco API server...
+2025-02-22 20:57:44 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 20:57:48 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 20:57:51 - INFO: Response status: 200
+2025-02-22 20:58:58 - INFO: Starting Soleco API server...
+2025-02-22 20:59:01 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 20:59:34 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 20:59:42 - INFO: Response status: 200
+2025-02-22 21:00:32 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:00:37 - INFO: Response status: 200
+2025-02-22 21:00:44 - INFO: Starting Soleco API server...
+2025-02-22 21:00:48 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:00:55 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:01:22 - ERROR: Error processing request: No response returned.
+2025-02-22 21:02:26 - INFO: Shutting down Soleco API server...
+2025-02-22 21:02:26 - INFO: Solana connection pool cleaned up
+2025-02-22 21:02:30 - INFO: Starting Soleco API server...
+2025-02-22 21:02:32 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:03:01 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:03:04 - INFO: Response status: 200
+2025-02-22 21:05:13 - INFO: Shutting down Soleco API server...
+2025-02-22 21:05:13 - INFO: Solana connection pool cleaned up
+2025-02-22 21:05:17 - INFO: Starting Soleco API server...
+2025-02-22 21:05:20 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:05:31 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:05:34 - INFO: Response status: 200
+2025-02-22 21:07:05 - INFO: Shutting down Soleco API server...
+2025-02-22 21:07:05 - INFO: Solana connection pool cleaned up
+2025-02-22 21:07:52 - INFO: Starting Soleco API server...
+2025-02-22 21:07:55 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:07:57 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:08:00 - INFO: Response status: 200
+2025-02-22 21:09:14 - INFO: Starting Soleco API server...
+2025-02-22 21:09:17 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:09:19 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:09:41 - INFO: Response status: 200
+2025-02-22 21:11:00 - INFO: Shutting down Soleco API server...
+2025-02-22 21:11:00 - INFO: Solana connection pool cleaned up
+2025-02-22 21:11:05 - INFO: Starting Soleco API server...
+2025-02-22 21:11:08 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:11:10 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:11:33 - INFO: Response status: 200
+2025-02-22 21:13:08 - INFO: Starting Soleco API server...
+2025-02-22 21:13:11 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:13:18 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:13:29 - INFO: Response status: 200
+2025-02-22 21:14:58 - INFO: Shutting down Soleco API server...
+2025-02-22 21:14:58 - INFO: Solana connection pool cleaned up
+2025-02-22 21:15:02 - INFO: Starting Soleco API server...
+2025-02-22 21:15:04 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:15:54 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:16:19 - INFO: Response status: 200
+2025-02-22 21:16:46 - INFO: Shutting down Soleco API server...
+2025-02-22 21:16:46 - INFO: Solana connection pool cleaned up
+2025-02-22 21:16:50 - INFO: Starting Soleco API server...
+2025-02-22 21:16:54 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:16:54 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:17:18 - INFO: Response status: 200
+2025-02-22 21:17:32 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:17:46 - INFO: Response status: 200
+2025-02-22 21:19:54 - INFO: Shutting down Soleco API server...
+2025-02-22 21:19:54 - INFO: Solana connection pool cleaned up
+2025-02-22 21:19:59 - INFO: Starting Soleco API server...
+2025-02-22 21:20:01 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:20:08 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:20:12 - INFO: Response status: 200
+2025-02-22 21:20:59 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:21:00 - INFO: Response status: 200
+2025-02-22 21:21:11 - INFO: Starting Soleco API server...
+2025-02-22 21:21:15 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:21:18 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:21:22 - INFO: Response status: 200
+2025-02-22 21:22:41 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:26:31 - INFO: Starting Soleco API server...
+2025-02-22 21:26:34 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:26:35 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:26:38 - INFO: Response status: 200
+2025-02-22 21:27:14 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:27:14 - INFO: Response status: 200
+2025-02-22 21:27:24 - INFO: Starting Soleco API server...
+2025-02-22 21:27:26 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:27:28 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:27:30 - INFO: Response status: 200
+2025-02-22 21:28:07 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:28:07 - INFO: Response status: 200
+2025-02-22 21:28:15 - INFO: Starting Soleco API server...
+2025-02-22 21:28:17 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:28:31 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:28:55 - INFO: Response status: 200
+2025-02-22 21:30:02 - INFO: Starting Soleco API server...
+2025-02-22 21:30:05 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:30:06 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:30:11 - INFO: Response status: 200
+2025-02-22 21:31:02 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:31:04 - INFO: Response status: 200
+2025-02-22 21:31:23 - INFO: Starting Soleco API server...
+2025-02-22 21:31:25 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:31:28 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:31:33 - INFO: Response status: 200
+2025-02-22 21:32:20 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:32:22 - INFO: Response status: 200
+2025-02-22 21:32:31 - INFO: Starting Soleco API server...
+2025-02-22 21:32:33 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:32:48 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:32:53 - INFO: Response status: 200
+2025-02-22 21:34:23 - INFO: Shutting down Soleco API server...
+2025-02-22 21:34:23 - INFO: Solana connection pool cleaned up
+2025-02-22 21:34:28 - INFO: Starting Soleco API server...
+2025-02-22 21:34:30 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:34:40 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:34:44 - INFO: Response status: 200
+2025-02-22 21:35:53 - INFO: Starting Soleco API server...
+2025-02-22 21:35:56 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:35:59 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:36:02 - INFO: Response status: 200
+2025-02-22 21:36:55 - INFO: Starting Soleco API server...
+2025-02-22 21:36:58 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:38:12 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:38:16 - INFO: Response status: 200
+2025-02-22 21:38:28 - INFO: Starting Soleco API server...
+2025-02-22 21:38:32 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:38:33 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:38:37 - INFO: Response status: 200
+2025-02-22 21:40:18 - INFO: Starting Soleco API server...
+2025-02-22 21:40:22 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:40:25 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:40:29 - INFO: Response status: 200
+2025-02-22 21:42:05 - INFO: Starting Soleco API server...
+2025-02-22 21:42:09 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:42:11 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:42:16 - INFO: Response status: 200
+2025-02-22 21:43:24 - INFO: Starting Soleco API server...
+2025-02-22 21:43:26 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:43:29 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:43:33 - INFO: Response status: 200
+2025-02-22 21:44:55 - INFO: Starting Soleco API server...
+2025-02-22 21:44:58 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:45:00 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:45:05 - INFO: Response status: 200
+2025-02-22 21:45:22 - INFO: Starting Soleco API server...
+2025-02-22 21:45:24 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:45:27 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:45:32 - INFO: Response status: 200
+2025-02-22 21:47:18 - INFO: Shutting down Soleco API server...
+2025-02-22 21:47:18 - INFO: Solana connection pool cleaned up
+2025-02-22 21:47:22 - INFO: Starting Soleco API server...
+2025-02-22 21:47:25 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:47:27 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:47:31 - INFO: Response status: 200
+2025-02-22 21:49:38 - INFO: Starting Soleco API server...
+2025-02-22 21:49:41 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:49:43 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:49:47 - INFO: Response status: 200
+2025-02-22 21:50:33 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:50:34 - INFO: Response status: 200
+2025-02-22 21:50:54 - INFO: Starting Soleco API server...
+2025-02-22 21:50:57 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:51:00 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:51:20 - INFO: Response status: 200
+2025-02-22 21:51:38 - INFO: Starting Soleco API server...
+2025-02-22 21:51:41 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:52:17 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:52:37 - INFO: Response status: 200
+2025-02-22 21:53:37 - INFO: Starting Soleco API server...
+2025-02-22 21:53:40 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:53:42 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:54:13 - INFO: Response status: 200
+2025-02-22 21:55:50 - INFO: Shutting down Soleco API server...
+2025-02-22 21:55:50 - INFO: Solana connection pool cleaned up
+2025-02-22 21:55:59 - INFO: Starting Soleco API server...
+2025-02-22 21:56:04 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 21:58:42 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 21:59:08 - INFO: Starting Soleco API server...
+2025-02-22 21:59:19 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:00:13 - INFO: Starting Soleco API server...
+2025-02-22 22:00:18 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:00:36 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:01:03 - INFO: Response status: 200
+2025-02-22 22:03:24 - INFO: Shutting down Soleco API server...
+2025-02-22 22:03:24 - INFO: Solana connection pool cleaned up
+2025-02-22 22:03:28 - INFO: Starting Soleco API server...
+2025-02-22 22:03:32 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:03:39 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:03:55 - INFO: Response status: 200
+2025-02-22 22:04:04 - INFO: Starting Soleco API server...
+2025-02-22 22:04:09 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:09:18 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:09:33 - INFO: Response status: 200
+2025-02-22 22:10:04 - INFO: Shutting down Soleco API server...
+2025-02-22 22:10:04 - INFO: Solana connection pool cleaned up
+2025-02-22 22:10:08 - INFO: Starting Soleco API server...
+2025-02-22 22:10:11 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:10:13 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:10:32 - INFO: Response status: 200
+2025-02-22 22:12:55 - INFO: Shutting down Soleco API server...
+2025-02-22 22:12:55 - INFO: Solana connection pool cleaned up
+2025-02-22 22:13:01 - INFO: Starting Soleco API server...
+2025-02-22 22:13:07 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:15:07 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:15:23 - INFO: Response status: 200
+2025-02-22 22:15:52 - INFO: Starting Soleco API server...
+2025-02-22 22:15:57 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:16:59 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:17:16 - INFO: Response status: 200
+2025-02-22 22:17:40 - INFO: Shutting down Soleco API server...
+2025-02-22 22:17:40 - INFO: Solana connection pool cleaned up
+2025-02-22 22:17:45 - INFO: Starting Soleco API server...
+2025-02-22 22:17:49 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:19:26 - INFO: Shutting down Soleco API server...
+2025-02-22 22:19:26 - INFO: Solana connection pool cleaned up
+2025-02-22 22:19:29 - INFO: Starting Soleco API server...
+2025-02-22 22:19:32 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:20:30 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:20:48 - INFO: Response status: 200
+2025-02-22 22:20:54 - INFO: Starting Soleco API server...
+2025-02-22 22:20:57 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:21:00 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:21:16 - INFO: Response status: 200
+2025-02-22 22:22:26 - INFO: Starting Soleco API server...
+2025-02-22 22:22:29 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:22:31 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:22:49 - INFO: Response status: 200
+2025-02-22 22:27:43 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:27:52 - INFO: Starting Soleco API server...
+2025-02-22 22:27:57 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:28:01 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:28:14 - INFO: Response status: 200
+2025-02-22 22:29:49 - INFO: Shutting down Soleco API server...
+2025-02-22 22:29:49 - INFO: Solana connection pool cleaned up
+2025-02-22 22:29:53 - INFO: Starting Soleco API server...
+2025-02-22 22:30:00 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:31:02 - INFO: Starting Soleco API server...
+2025-02-22 22:31:08 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:31:13 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:31:27 - INFO: Response status: 200
+2025-02-22 22:31:41 - INFO: Starting Soleco API server...
+2025-02-22 22:31:45 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:31:47 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:32:02 - INFO: Response status: 200
+2025-02-22 22:32:39 - INFO: Starting Soleco API server...
+2025-02-22 22:32:42 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:32:50 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:33:10 - INFO: Response status: 200
+2025-02-22 22:33:39 - INFO: Starting Soleco API server...
+2025-02-22 22:33:46 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:34:00 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:34:13 - INFO: Response status: 200
+2025-02-22 22:34:34 - INFO: Starting Soleco API server...
+2025-02-22 22:34:37 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:34:39 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:34:52 - INFO: Response status: 200
+2025-02-22 22:35:00 - INFO: Starting Soleco API server...
+2025-02-22 22:35:04 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:35:06 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:35:31 - INFO: Response status: 200
+2025-02-22 22:37:34 - INFO: Shutting down Soleco API server...
+2025-02-22 22:37:34 - INFO: Solana connection pool cleaned up
+2025-02-22 22:37:40 - INFO: Starting Soleco API server...
+2025-02-22 22:37:43 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:38:34 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:38:47 - INFO: Response status: 200
+2025-02-22 22:38:59 - INFO: Starting Soleco API server...
+2025-02-22 22:39:04 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:39:12 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:39:24 - INFO: Response status: 200
+2025-02-22 22:40:51 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:41:02 - INFO: Response status: 200
+2025-02-22 22:41:02 - INFO: Shutting down Soleco API server...
+2025-02-22 22:41:02 - INFO: Solana connection pool cleaned up
+2025-02-22 22:41:07 - INFO: Starting Soleco API server...
+2025-02-22 22:41:11 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:41:13 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:41:13 - INFO: Response status: 404
+2025-02-22 22:41:25 - INFO: Starting Soleco API server...
+2025-02-22 22:41:29 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:41:31 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:41:31 - INFO: Response status: 404
+2025-02-22 22:42:30 - INFO: Starting Soleco API server...
+2025-02-22 22:42:33 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:42:35 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mints/new?blocks=1
+2025-02-22 22:42:35 - INFO: Response status: 404
+2025-02-22 22:42:55 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 22:42:55 - INFO: Response status: 200
+2025-02-22 22:42:55 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 22:42:55 - INFO: Response status: 200
+2025-02-22 22:43:03 - INFO: Request: GET http://localhost:8001/api/analytics/mint/analytics/mint/solana/new?blocks=1
+2025-02-22 22:43:15 - INFO: Response status: 200
+2025-02-22 22:44:23 - INFO: Shutting down Soleco API server...
+2025-02-22 22:44:23 - INFO: Solana connection pool cleaned up
+2025-02-22 22:44:27 - INFO: Starting Soleco API server...
+2025-02-22 22:44:30 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:45:43 - INFO: Request: GET http://localhost:8001/api/analytics/mint/analytics/mint/solana/new/nft?blocks=1
+2025-02-22 22:45:43 - INFO: Response status: 404
+2025-02-22 22:46:37 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 22:46:37 - INFO: Response status: 200
+2025-02-22 22:46:38 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 22:46:38 - INFO: Response status: 200
+2025-02-22 22:46:44 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mint/new/nft?blocks=1
+2025-02-22 22:46:47 - INFO: Response status: 200
+2025-02-22 22:47:03 - INFO: Shutting down Soleco API server...
+2025-02-22 22:47:03 - INFO: Solana connection pool cleaned up
+2025-02-22 22:47:06 - INFO: Starting Soleco API server...
+2025-02-22 22:47:09 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:47:27 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mint/new/nft?blocks=1
+2025-02-22 22:47:27 - INFO: Response status: 404
+2025-02-22 22:47:44 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mint/new/nft?blocks=1
+2025-02-22 22:47:44 - INFO: Response status: 404
+2025-02-22 22:47:46 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/analytics/mint/new/nft?blocks=1
+2025-02-22 22:47:46 - INFO: Response status: 404
+2025-02-22 22:47:55 - INFO: Starting Soleco API server...
+2025-02-22 22:47:58 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:49:40 - INFO: Shutting down Soleco API server...
+2025-02-22 22:49:40 - INFO: Solana connection pool cleaned up
+2025-02-22 22:49:45 - INFO: Starting Soleco API server...
+2025-02-22 22:49:49 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:51:06 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 22:51:06 - INFO: Response status: 200
+2025-02-22 22:51:06 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 22:51:06 - INFO: Response status: 200
+2025-02-22 22:51:30 - INFO: Shutting down Soleco API server...
+2025-02-22 22:51:30 - INFO: Solana connection pool cleaned up
+2025-02-22 22:51:34 - INFO: Starting Soleco API server...
+2025-02-22 22:51:37 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 22:51:40 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 22:51:40 - INFO: Response status: 200
+2025-02-22 22:51:40 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 22:51:40 - INFO: Response status: 200
+2025-02-22 22:53:09 - INFO: Shutting down Soleco API server...
+2025-02-22 22:53:09 - INFO: Solana connection pool cleaned up
+2025-02-22 23:00:04 - INFO: Starting Soleco API server...
+2025-02-22 23:00:07 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:00:09 - INFO: Request: GET http://localhost:8001/docs
+2025-02-22 23:00:09 - INFO: Response status: 200
+2025-02-22 23:00:10 - INFO: Request: GET http://localhost:8001/openapi.json
+2025-02-22 23:00:10 - INFO: Response status: 200
+2025-02-22 23:00:20 - INFO: Request: GET http://localhost:8001/api/analytics/nft/new?blocks=1
+2025-02-22 23:00:20 - INFO: Response status: 500
+2025-02-22 23:02:10 - INFO: Shutting down Soleco API server...
+2025-02-22 23:02:10 - INFO: Solana connection pool cleaned up
+2025-02-22 23:02:15 - INFO: Starting Soleco API server...
+2025-02-22 23:02:18 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:15:25 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-22 23:15:34 - INFO: Response status: 200
+2025-02-22 23:18:17 - INFO: Shutting down Soleco API server...
+2025-02-22 23:18:17 - INFO: Solana connection pool cleaned up
+2025-02-22 23:18:21 - INFO: Starting Soleco API server...
+2025-02-22 23:18:25 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:19:21 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-22 23:19:26 - INFO: Response status: 200
+2025-02-22 23:20:52 - INFO: Shutting down Soleco API server...
+2025-02-22 23:20:52 - INFO: Solana connection pool cleaned up
+2025-02-22 23:20:57 - INFO: Starting Soleco API server...
+2025-02-22 23:21:00 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:21:00 - INFO: Request: GET http://localhost:8001/api/analytics/nft/new?blocks=1
+2025-02-22 23:21:07 - INFO: Response status: 200
+2025-02-22 23:24:10 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-22 23:24:14 - INFO: Response status: 200
+2025-02-22 23:24:15 - INFO: Shutting down Soleco API server...
+2025-02-22 23:24:15 - INFO: Solana connection pool cleaned up
+2025-02-22 23:24:18 - INFO: Starting Soleco API server...
+2025-02-22 23:24:23 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:24:25 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-22 23:24:32 - INFO: Response status: 200
+2025-02-22 23:25:58 - INFO: Shutting down Soleco API server...
+2025-02-22 23:25:58 - INFO: Solana connection pool cleaned up
+2025-02-22 23:26:02 - INFO: Starting Soleco API server...
+2025-02-22 23:26:06 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:26:28 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-22 23:26:33 - INFO: Response status: 200
+2025-02-22 23:26:41 - INFO: Starting Soleco API server...
+2025-02-22 23:26:45 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:26:47 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-22 23:26:53 - INFO: Response status: 200
+2025-02-22 23:27:41 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/recent?limit=1&include_transactions=true
+2025-02-22 23:27:42 - INFO: Response status: 503
+2025-02-22 23:28:21 - INFO: Shutting down Soleco API server...
+2025-02-22 23:28:21 - INFO: Solana connection pool cleaned up
+2025-02-22 23:28:25 - INFO: Starting Soleco API server...
+2025-02-22 23:28:29 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:29:46 - INFO: Starting Soleco API server...
+2025-02-22 23:29:50 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:29:53 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-22 23:29:58 - INFO: Response status: 200
+2025-02-22 23:31:40 - INFO: Shutting down Soleco API server...
+2025-02-22 23:31:40 - INFO: Solana connection pool cleaned up
+2025-02-22 23:31:47 - INFO: Starting Soleco API server...
+2025-02-22 23:31:51 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:32:53 - INFO: Starting Soleco API server...
+2025-02-22 23:32:55 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:32:57 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-22 23:33:02 - INFO: Response status: 200
+2025-02-22 23:34:54 - INFO: Shutting down Soleco API server...
+2025-02-22 23:34:54 - INFO: Solana connection pool cleaned up
+2025-02-22 23:35:00 - INFO: Starting Soleco API server...
+2025-02-22 23:35:05 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:36:38 - INFO: Starting Soleco API server...
+2025-02-22 23:36:42 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-22 23:36:59 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-22 23:37:06 - INFO: Response status: 200
+2025-02-22 23:43:26 - INFO: Shutting down Soleco API server...
+2025-02-22 23:43:26 - INFO: Solana connection pool cleaned up
+2025-02-22 23:43:31 - INFO: Starting Soleco API server...
+2025-02-22 23:43:35 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:00:25 - INFO: Starting Soleco API server...
+2025-02-23 00:00:30 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:01:21 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:01:30 - INFO: Response status: 200
+2025-02-23 00:03:27 - INFO: Shutting down Soleco API server...
+2025-02-23 00:03:27 - INFO: Solana connection pool cleaned up
+2025-02-23 00:03:32 - INFO: Starting Soleco API server...
+2025-02-23 00:03:36 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:06:41 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:06:49 - INFO: Response status: 200
+2025-02-23 00:09:08 - INFO: Shutting down Soleco API server...
+2025-02-23 00:09:08 - INFO: Solana connection pool cleaned up
+2025-02-23 00:09:15 - INFO: Starting Soleco API server...
+2025-02-23 00:09:19 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:11:42 - INFO: Starting Soleco API server...
+2025-02-23 00:11:47 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:11:48 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:11:54 - INFO: Response status: 200
+2025-02-23 00:12:28 - INFO: Starting Soleco API server...
+2025-02-23 00:12:32 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:12:38 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:12:48 - INFO: Response status: 200
+2025-02-23 00:14:42 - INFO: Starting Soleco API server...
+2025-02-23 00:14:46 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:14:48 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:14:52 - INFO: Response status: 200
+2025-02-23 00:15:13 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:15:16 - INFO: Response status: 200
+2025-02-23 00:17:33 - INFO: Shutting down Soleco API server...
+2025-02-23 00:17:33 - INFO: Solana connection pool cleaned up
+2025-02-23 00:17:37 - INFO: Starting Soleco API server...
+2025-02-23 00:17:41 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:17:43 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:18:07 - INFO: Response status: 200
+2025-02-23 00:22:03 - INFO: Shutting down Soleco API server...
+2025-02-23 00:22:03 - INFO: Solana connection pool cleaned up
+2025-02-23 00:22:09 - INFO: Starting Soleco API server...
+2025-02-23 00:22:21 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:22:50 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:23:06 - INFO: Response status: 200
+2025-02-23 00:25:27 - INFO: Shutting down Soleco API server...
+2025-02-23 00:25:27 - INFO: Solana connection pool cleaned up
+2025-02-23 00:25:31 - INFO: Starting Soleco API server...
+2025-02-23 00:25:42 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:27:09 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:27:21 - INFO: Response status: 200
+2025-02-23 00:29:33 - INFO: Shutting down Soleco API server...
+2025-02-23 00:29:33 - INFO: Solana connection pool cleaned up
+2025-02-23 00:29:38 - INFO: Starting Soleco API server...
+2025-02-23 00:29:43 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:32:51 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:32:58 - INFO: Response status: 200
+2025-02-23 00:34:29 - INFO: Shutting down Soleco API server...
+2025-02-23 00:34:29 - INFO: Solana connection pool cleaned up
+2025-02-23 00:34:33 - INFO: Starting Soleco API server...
+2025-02-23 00:34:36 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:35:26 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:35:33 - INFO: Response status: 200
+2025-02-23 00:38:38 - INFO: Shutting down Soleco API server...
+2025-02-23 00:38:38 - INFO: Solana connection pool cleaned up
+2025-02-23 00:38:42 - INFO: Starting Soleco API server...
+2025-02-23 00:38:44 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:39:34 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:39:42 - INFO: Response status: 200
+2025-02-23 00:43:21 - INFO: Shutting down Soleco API server...
+2025-02-23 00:43:21 - INFO: Solana connection pool cleaned up
+2025-02-23 00:43:27 - INFO: Starting Soleco API server...
+2025-02-23 00:43:33 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:45:01 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:45:09 - INFO: Response status: 200
+2025-02-23 00:47:39 - INFO: Shutting down Soleco API server...
+2025-02-23 00:47:39 - INFO: Solana connection pool cleaned up
+2025-02-23 00:47:43 - INFO: Starting Soleco API server...
+2025-02-23 00:47:47 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:49:28 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:49:48 - INFO: Response status: 200
+2025-02-23 00:50:40 - INFO: Shutting down Soleco API server...
+2025-02-23 00:50:40 - INFO: Solana connection pool cleaned up
+2025-02-23 00:50:45 - INFO: Starting Soleco API server...
+2025-02-23 00:50:49 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:51:19 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:51:36 - INFO: Response status: 200
+2025-02-23 00:52:59 - INFO: Shutting down Soleco API server...
+2025-02-23 00:52:59 - INFO: Solana connection pool cleaned up
+2025-02-23 00:53:04 - INFO: Starting Soleco API server...
+2025-02-23 00:53:08 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:53:53 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:55:00 - INFO: Starting Soleco API server...
+2025-02-23 00:55:03 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:55:22 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:55:38 - INFO: Response status: 200
+2025-02-23 00:57:06 - INFO: Shutting down Soleco API server...
+2025-02-23 00:57:06 - INFO: Solana connection pool cleaned up
+2025-02-23 00:57:12 - INFO: Starting Soleco API server...
+2025-02-23 00:57:15 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 00:58:30 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 00:58:40 - INFO: Response status: 200
+2025-02-23 01:00:35 - INFO: Shutting down Soleco API server...
+2025-02-23 01:00:35 - INFO: Solana connection pool cleaned up
+2025-02-23 01:00:41 - INFO: Starting Soleco API server...
+2025-02-23 01:00:45 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 01:01:16 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 01:01:22 - INFO: Response status: 200
+2025-02-23 01:03:34 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 01:03:38 - INFO: Response status: 200
+2025-02-23 01:03:48 - INFO: Starting Soleco API server...
+2025-02-23 01:03:52 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 01:03:53 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 01:04:09 - INFO: Response status: 200
+2025-02-23 01:05:40 - INFO: Starting Soleco API server...
+2025-02-23 01:05:43 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 01:06:32 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 01:06:37 - INFO: Response status: 200
+2025-02-23 01:09:52 - INFO: Shutting down Soleco API server...
+2025-02-23 01:09:52 - INFO: Solana connection pool cleaned up
+2025-02-23 01:09:56 - INFO: Starting Soleco API server...
+2025-02-23 01:10:00 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 01:10:24 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 01:10:29 - INFO: Response status: 200
+2025-02-23 01:11:58 - INFO: Shutting down Soleco API server...
+2025-02-23 01:11:58 - INFO: Solana connection pool cleaned up
+2025-02-23 01:12:03 - INFO: Starting Soleco API server...
+2025-02-23 01:12:07 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 07:22:30 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 07:24:06 - INFO: Response status: 500
+2025-02-23 07:24:44 - INFO: Shutting down Soleco API server...
+2025-02-23 07:24:44 - INFO: Solana connection pool cleaned up
+2025-02-23 07:25:00 - INFO: Starting Soleco API server...
+2025-02-23 07:25:08 - INFO: Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 07:26:55 - INFO: Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 07:28:24 - INFO: Response status: 500
+2025-02-23 07:31:19 - soleco - INFO - Starting Soleco API server...
+2025-02-23 07:31:23 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 07:35:31 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 07:35:34 - soleco - INFO - Response status: 500
+2025-02-23 07:35:53 - soleco - INFO - Starting Soleco API server...
+2025-02-23 07:35:56 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 07:35:59 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 07:36:05 - soleco - INFO - Response status: 500
+2025-02-23 07:49:45 - soleco - INFO - Starting Soleco API server...
+2025-02-23 07:49:53 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 07:50:24 - soleco - INFO - Request: GET http://localhost:8001/docs
+2025-02-23 07:50:24 - soleco - INFO - Response status: 200
+2025-02-23 07:50:27 - soleco - INFO - Request: GET http://localhost:8001/openapi.json
+2025-02-23 07:50:27 - soleco - INFO - Response status: 200
+2025-02-23 07:50:38 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 07:52:19 - soleco - INFO - Response status: 500
+2025-02-23 07:54:08 - soleco - INFO - Starting Soleco API server...
+2025-02-23 07:54:13 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 07:54:17 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 07:54:20 - soleco - INFO - Response status: 500
+2025-02-23 07:57:01 - soleco - INFO - Starting Soleco API server...
+2025-02-23 07:57:05 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 07:57:16 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 07:58:19 - soleco - INFO - Starting Soleco API server...
+2025-02-23 07:58:22 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 07:58:31 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:16:44 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:16:49 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 08:16:53 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:16:57 - soleco - INFO - Response status: 500
+2025-02-23 08:17:47 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:17:53 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 08:18:16 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:18:20 - soleco - INFO - Response status: 500
+2025-02-23 08:18:31 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:18:35 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 08:18:37 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:19:57 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:20:01 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 08:20:33 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:20:50 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:20:54 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 08:21:06 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:22:45 - soleco - INFO - Response status: 500
+2025-02-23 08:23:40 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:23:44 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 08:23:49 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:23:53 - soleco - INFO - Response status: 500
+2025-02-23 08:27:28 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:27:32 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 08:27:36 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:28:00 - soleco - INFO - Response status: 500
+2025-02-23 08:35:17 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:35:21 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 08:35:25 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:35:53 - soleco - INFO - Response status: 500
+2025-02-23 08:38:16 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:38:20 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 08:38:23 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:40:06 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:40:11 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 08:53:56 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 08:54:24 - soleco - INFO - Response status: 500
+2025-02-23 08:57:04 - soleco - INFO - Shutting down Soleco API server...
+2025-02-23 08:57:04 - soleco - INFO - Solana connection pool cleaned up
+2025-02-23 08:57:12 - soleco - INFO - Starting Soleco API server...
+2025-02-23 08:57:18 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 09:01:49 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 09:03:43 - soleco - INFO - Starting Soleco API server...
+2025-02-23 09:03:48 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 09:05:46 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 09:05:53 - soleco - INFO - Response status: 200
+2025-02-23 09:09:45 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 09:09:50 - soleco - INFO - Response status: 200
+2025-02-23 09:10:04 - soleco - INFO - Starting Soleco API server...
+2025-02-23 09:10:09 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 09:12:52 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 09:13:00 - soleco - INFO - Response status: 200
+2025-02-23 09:17:52 - soleco - INFO - Starting Soleco API server...
+2025-02-23 09:17:57 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 09:17:59 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 09:18:48 - soleco - INFO - Response status: 200
+2025-02-23 09:21:23 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 09:21:26 - soleco - INFO - Response status: 200
+2025-02-23 09:22:35 - soleco - INFO - Starting Soleco API server...
+2025-02-23 09:22:39 - soleco - INFO - Successfully connected to Solana RPC at https://api.mainnet-beta.solana.com
+2025-02-23 09:22:46 - soleco - INFO - Request: GET http://localhost:8001/api/analytics/mint/solana/mint/new?blocks=1
+2025-02-23 09:22:52 - soleco - INFO - Response status: 200

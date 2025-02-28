@@ -1,0 +1,1483 @@
+2025-02-18 11:44:47,691 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:44:47,692 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:44:48,839 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:44:48,878 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:46:26,071 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:46:26,075 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:46:26,327 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:46:26,366 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:49:25,283 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:49:25,286 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:49:25,645 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:49:25,689 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:50:31,012 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:50:31,012 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:50:31,110 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:50:31,111 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:50:51,072 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:50:51,073 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:50:51,171 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:50:51,172 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:51:56,630 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:51:56,631 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:51:56,768 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:51:56,804 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:53:29,565 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:53:29,570 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:53:29,668 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:53:29,670 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:53:37,108 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:53:37,109 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:53:37,193 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:53:37,196 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:53:38,185 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:53:38,186 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:53:38,260 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:53:38,262 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:54:49,361 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:54:49,364 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:54:49,481 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:54:49,518 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:55:31,799 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:55:31,800 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:55:31,918 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:55:31,920 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:56:06,911 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:56:06,912 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:56:07,046 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:56:07,085 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:56:32,011 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:56:32,012 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:56:32,110 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:56:32,112 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:56:35,257 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:56:35,258 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:56:35,345 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:56:35,346 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:57:42,005 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:57:42,006 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:57:42,113 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:57:42,115 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:57:58,787 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:57:58,788 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:57:58,883 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:57:58,922 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:58:14,186 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:58:14,192 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:58:14,292 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:58:14,293 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:58:18,775 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:58:18,776 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:58:18,858 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:58:18,860 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:58:22,549 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:58:22,562 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:58:22,650 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:58:22,652 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:58:36,739 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:58:36,740 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:58:36,825 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:58:36,827 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:59:28,353 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 11:59:28,356 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 11:59:28,454 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 11:59:28,489 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:00:05,468 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/system/resources
+2025-02-18 12:00:05,477 - soleco - ERROR - main.py:170 - Error processing request: AsyncClient.__init__() got an unexpected keyword argument 'proxy'
+2025-02-18 12:00:05,482 - soleco - ERROR - main.py:145 - Unhandled exception: AsyncClient.__init__() got an unexpected keyword argument 'proxy'
+2025-02-18 12:00:05,509 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 159, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/streams/memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/streams/memory.py", line 91, in receive_nowait
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 299, in app
+    raise e
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 294, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/routers/solana.py", line 172, in get_system_resources
+    async with AsyncClient(RPC_ENDPOINT) as client:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/solana/rpc/async_api.py", line 96, in __init__
+    self._provider = async_http.AsyncHTTPProvider(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/solana/rpc/providers/async_http.py", line 52, in __init__
+    self.session = httpx.AsyncClient(timeout=timeout, proxy=proxy)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxy'
+
+2025-02-18 12:02:55,892 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/system/resources
+2025-02-18 12:02:55,893 - soleco - ERROR - main.py:170 - Error processing request: AsyncClient.__init__() got an unexpected keyword argument 'proxy'
+2025-02-18 12:02:55,894 - soleco - ERROR - main.py:145 - Unhandled exception: AsyncClient.__init__() got an unexpected keyword argument 'proxy'
+2025-02-18 12:02:55,907 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 159, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/streams/memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/streams/memory.py", line 91, in receive_nowait
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 299, in app
+    raise e
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 294, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/routers/solana.py", line 172, in get_system_resources
+    async with AsyncClient(RPC_ENDPOINT, commitment=None, timeout=10) as client:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/solana/rpc/async_api.py", line 96, in __init__
+    self._provider = async_http.AsyncHTTPProvider(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/solana/rpc/providers/async_http.py", line 52, in __init__
+    self.session = httpx.AsyncClient(timeout=timeout, proxy=proxy)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxy'
+
+2025-02-18 12:04:56,680 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/system/resources
+2025-02-18 12:04:56,681 - soleco - ERROR - main.py:170 - Error processing request: AsyncClient.__init__() got an unexpected keyword argument 'proxy'
+2025-02-18 12:04:56,682 - soleco - ERROR - main.py:145 - Unhandled exception: AsyncClient.__init__() got an unexpected keyword argument 'proxy'
+2025-02-18 12:04:56,698 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 159, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/streams/memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/streams/memory.py", line 91, in receive_nowait
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 299, in app
+    raise e
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 294, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/routers/solana.py", line 294, in get_system_resources
+    async with AsyncClient(RPC_ENDPOINT, commitment=None, timeout=10) as client:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/solana/rpc/async_api.py", line 96, in __init__
+    self._provider = async_http.AsyncHTTPProvider(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/solana/rpc/providers/async_http.py", line 52, in __init__
+    self.session = httpx.AsyncClient(timeout=timeout, proxy=proxy)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxy'
+
+2025-02-18 12:06:26,055 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:06:27,415 - soleco - ERROR - main.py:170 - Error processing request: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:06:27,416 - soleco - ERROR - main.py:145 - Unhandled exception: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:06:27,420 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 322, in jsonable_encoder
+    data = dict(obj)
+           ^^^^^^^^^
+TypeError: 'solders.rpc.responses.GetClusterNodesResp' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 327, in jsonable_encoder
+    data = vars(obj)
+           ^^^^^^^^^
+TypeError: vars() argument must have __dict__ attribute
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 315, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 180, in serialize_response
+    return jsonable_encoder(response_content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 330, in jsonable_encoder
+    raise ValueError(errors) from e
+ValueError: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+
+2025-02-18 12:07:29,295 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:07:32,021 - soleco - ERROR - main.py:170 - Error processing request: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:07:32,022 - soleco - ERROR - main.py:145 - Unhandled exception: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:07:32,028 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 322, in jsonable_encoder
+    data = dict(obj)
+           ^^^^^^^^^
+TypeError: 'solders.rpc.responses.GetClusterNodesResp' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 327, in jsonable_encoder
+    data = vars(obj)
+           ^^^^^^^^^
+TypeError: vars() argument must have __dict__ attribute
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 315, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 180, in serialize_response
+    return jsonable_encoder(response_content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 330, in jsonable_encoder
+    raise ValueError(errors) from e
+ValueError: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+
+2025-02-18 12:07:34,083 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:07:35,074 - soleco - ERROR - main.py:170 - Error processing request: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:07:35,074 - soleco - ERROR - main.py:145 - Unhandled exception: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:07:35,077 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 322, in jsonable_encoder
+    data = dict(obj)
+           ^^^^^^^^^
+TypeError: 'solders.rpc.responses.GetClusterNodesResp' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 327, in jsonable_encoder
+    data = vars(obj)
+           ^^^^^^^^^
+TypeError: vars() argument must have __dict__ attribute
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 315, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 180, in serialize_response
+    return jsonable_encoder(response_content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 330, in jsonable_encoder
+    raise ValueError(errors) from e
+ValueError: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+
+2025-02-18 12:08:30,794 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/pump/coins/latest?qty=1
+2025-02-18 12:08:31,765 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:08:45,516 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:08:47,861 - soleco - ERROR - main.py:170 - Error processing request: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:08:47,863 - soleco - ERROR - main.py:145 - Unhandled exception: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:08:47,874 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 322, in jsonable_encoder
+    data = dict(obj)
+           ^^^^^^^^^
+TypeError: 'solders.rpc.responses.GetClusterNodesResp' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 327, in jsonable_encoder
+    data = vars(obj)
+           ^^^^^^^^^
+TypeError: vars() argument must have __dict__ attribute
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 315, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 180, in serialize_response
+    return jsonable_encoder(response_content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 330, in jsonable_encoder
+    raise ValueError(errors) from e
+ValueError: [TypeError("'solders.rpc.responses.GetClusterNodesResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+
+2025-02-18 12:13:22,121 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:13:22,132 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:14:21,936 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:14:21,967 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:14:23,455 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:14:23,466 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:15:20,456 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:15:21,482 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:17:11,611 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/system/resources
+2025-02-18 12:17:11,641 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:18:22,132 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:18:24,274 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:18:35,930 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/system/resources
+2025-02-18 12:18:35,962 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:18:49,980 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/system/resources
+2025-02-18 12:18:50,015 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:19:10,659 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/system/resources
+2025-02-18 12:19:10,680 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:19:18,294 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/validators/analysis
+2025-02-18 12:19:20,294 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:19:40,370 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/program/registry
+2025-02-18 12:19:40,371 - soleco - ERROR - main.py:170 - Error processing request: module 'solders.system_program' has no attribute 'PROGRAM_ID'
+2025-02-18 12:19:40,371 - soleco - ERROR - main.py:145 - Unhandled exception: module 'solders.system_program' has no attribute 'PROGRAM_ID'
+2025-02-18 12:19:40,405 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/streams/memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/streams/memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 159, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/streams/memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 299, in app
+    raise e
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 294, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 193, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/concurrency.py", line 40, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/to_thread.py", line 33, in run_sync
+    return await get_asynclib().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 877, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 807, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/routers/solana.py", line 430, in get_program_registry
+    def get_program_registry():
+                              ^^
+AttributeError: module 'solders.system_program' has no attribute 'PROGRAM_ID'
+
+2025-02-18 12:19:57,732 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/performance/metrics
+2025-02-18 12:19:59,133 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:20:19,499 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/cryptography/capabilities
+2025-02-18 12:20:19,502 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:21:25,479 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/program/registry
+2025-02-18 12:21:25,537 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:21:32,044 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/system/resources
+2025-02-18 12:21:33,730 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:22:13,528 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/system/resources
+2025-02-18 12:22:13,864 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:22:32,925 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/validators/analysis
+2025-02-18 12:22:35,049 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:22:45,023 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/program/registry
+2025-02-18 12:22:45,051 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:23:52,561 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:23:54,646 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:24:24,241 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/program/registry
+2025-02-18 12:24:25,900 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:24:45,117 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/system/resources
+2025-02-18 12:24:45,948 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:27:16,843 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 12:27:16,845 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:27:17,142 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 12:27:17,180 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:27:30,730 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:27:30,986 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:28:07,795 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:28:08,052 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:28:44,983 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:28:45,246 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:29:23,632 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:29:23,907 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:29:24,995 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:29:25,343 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:29:49,318 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:29:49,696 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:30:10,484 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:30:10,932 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:30:58,847 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:31:00,227 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:31:55,992 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:31:56,473 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:32:55,805 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:32:55,817 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:32:55,906 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:32:55,924 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:32:56,962 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:32:56,972 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:33:35,447 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:33:35,499 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:33:51,792 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:33:51,804 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:34:28,470 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:34:28,489 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:35:06,077 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:35:06,097 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:35:13,830 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:35:13,840 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:37:45,728 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:37:45,741 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:38:25,574 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:38:25,596 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:38:38,287 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:38:38,293 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:39:13,628 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:39:13,691 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:39:45,080 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:39:45,152 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:39:45,503 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:39:45,570 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:39:46,694 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:39:46,753 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:39:51,242 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:39:51,298 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:40:42,368 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:40:42,380 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:41:23,924 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:41:23,957 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:42:02,472 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:42:02,485 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:42:11,523 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:42:11,525 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:42:59,093 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:42:59,117 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:43:51,008 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:43:52,263 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:44:03,795 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:44:08,038 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:45:09,121 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:45:11,849 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:45:19,020 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:45:21,407 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:45:51,161 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:45:52,719 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:48:44,560 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:48:45,187 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:48:50,403 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 12:48:50,404 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:48:50,670 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 12:48:50,708 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:49:09,921 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 12:49:11,449 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:50:40,540 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 12:50:40,541 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:50:40,886 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 12:50:40,888 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:50:49,662 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=10
+2025-02-18 12:50:55,557 - soleco - ERROR - main.py:170 - Error processing request: [TypeError("'solders.rpc.responses.GetBlockResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:50:55,558 - soleco - ERROR - main.py:145 - Unhandled exception: [TypeError("'solders.rpc.responses.GetBlockResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:50:55,563 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 322, in jsonable_encoder
+    data = dict(obj)
+           ^^^^^^^^^
+TypeError: 'solders.rpc.responses.GetBlockResp' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 327, in jsonable_encoder
+    data = vars(obj)
+           ^^^^^^^^^
+TypeError: vars() argument must have __dict__ attribute
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 315, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 180, in serialize_response
+    return jsonable_encoder(response_content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 301, in jsonable_encoder
+    jsonable_encoder(
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 330, in jsonable_encoder
+    raise ValueError(errors) from e
+ValueError: [TypeError("'solders.rpc.responses.GetBlockResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+
+2025-02-18 12:51:02,331 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 12:51:04,647 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:51:35,131 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 12:51:36,556 - soleco - ERROR - main.py:170 - Error processing request: [TypeError("'solders.rpc.responses.GetBlockResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:51:36,557 - soleco - ERROR - main.py:145 - Unhandled exception: [TypeError("'solders.rpc.responses.GetBlockResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:51:36,560 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 322, in jsonable_encoder
+    data = dict(obj)
+           ^^^^^^^^^
+TypeError: 'solders.rpc.responses.GetBlockResp' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 327, in jsonable_encoder
+    data = vars(obj)
+           ^^^^^^^^^
+TypeError: vars() argument must have __dict__ attribute
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 315, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 180, in serialize_response
+    return jsonable_encoder(response_content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 301, in jsonable_encoder
+    jsonable_encoder(
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 330, in jsonable_encoder
+    raise ValueError(errors) from e
+ValueError: [TypeError("'solders.rpc.responses.GetBlockResp' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+
+2025-02-18 12:52:48,824 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 12:52:51,196 - soleco - ERROR - main.py:170 - Error processing request: [TypeError("'solders.hash.Hash' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:52:51,205 - soleco - ERROR - main.py:145 - Unhandled exception: [TypeError("'solders.hash.Hash' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:52:51,213 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 322, in jsonable_encoder
+    data = dict(obj)
+           ^^^^^^^^^
+TypeError: 'solders.hash.Hash' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 327, in jsonable_encoder
+    data = vars(obj)
+           ^^^^^^^^^
+TypeError: vars() argument must have __dict__ attribute
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 315, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 180, in serialize_response
+    return jsonable_encoder(response_content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 301, in jsonable_encoder
+    jsonable_encoder(
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 330, in jsonable_encoder
+    raise ValueError(errors) from e
+ValueError: [TypeError("'solders.hash.Hash' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+
+2025-02-18 12:53:50,673 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 12:53:51,896 - soleco - ERROR - main.py:170 - Error processing request: [TypeError("'solders.hash.Hash' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:53:51,897 - soleco - ERROR - main.py:145 - Unhandled exception: [TypeError("'solders.hash.Hash' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+2025-02-18 12:53:51,899 - soleco - ERROR - main.py:146 - Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 322, in jsonable_encoder
+    data = dict(obj)
+           ^^^^^^^^^
+TypeError: 'solders.hash.Hash' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 327, in jsonable_encoder
+    data = vars(obj)
+           ^^^^^^^^^
+TypeError: vars() argument must have __dict__ attribute
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/main.py", line 166, in log_requests
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 83, in __call__
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 762, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 782, in app
+    await route.handle(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 315, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/routing.py", line 180, in serialize_response
+    return jsonable_encoder(response_content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 301, in jsonable_encoder
+    jsonable_encoder(
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 287, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/homezloco/python_venvs/soleco_venv/lib/python3.12/site-packages/fastapi/encoders.py", line 330, in jsonable_encoder
+    raise ValueError(errors) from e
+ValueError: [TypeError("'solders.hash.Hash' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+
+2025-02-18 12:54:33,228 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 12:54:35,690 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:56:44,812 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 12:56:46,999 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:57:39,491 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=5
+2025-02-18 12:57:43,181 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 12:58:41,857 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=5
+2025-02-18 12:58:45,626 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:00:52,623 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=5
+2025-02-18 13:00:56,721 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:01:29,762 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=5
+2025-02-18 13:01:44,580 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:02:41,532 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:02:45,839 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:03:48,245 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:03:50,695 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:03:57,247 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:04:00,538 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:05:03,192 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:05:06,336 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:06:17,565 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:06:18,780 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:09:39,789 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:09:40,837 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:09:46,731 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:09:48,234 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:13:52,076 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:13:52,082 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:14:37,742 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:14:37,745 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:15:12,829 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:15:12,831 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:16:10,661 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:16:10,664 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:16:41,358 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:16:41,390 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:16:51,116 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:16:51,118 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:16:51,948 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:16:51,950 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:16:58,043 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:16:58,045 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:16:58,863 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:16:58,865 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:18:17,498 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:18:17,502 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:20:09,958 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:20:09,962 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:20:44,708 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:20:44,711 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:20:45,888 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:20:45,890 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:20:56,780 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 13:20:56,793 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:20:58,678 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 13:20:58,685 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:22:55,243 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 13:22:57,826 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:23:09,798 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:23:11,194 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:24:02,326 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:24:02,664 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:24:14,052 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:24:14,528 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:24:55,140 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:24:55,498 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:25:14,138 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:25:14,575 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:25:26,714 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 13:25:29,149 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:25:51,399 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:25:51,778 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:26:49,908 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:26:51,307 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:27:00,499 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:27:01,037 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:27:51,645 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:27:52,959 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:28:26,404 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:28:26,729 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:29:42,018 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:29:43,460 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:30:20,723 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 13:30:21,810 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:30:43,736 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:30:45,429 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:30:51,932 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 13:30:53,147 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:34:15,952 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:34:15,957 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:34:27,583 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 13:34:27,623 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:35:31,109 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 13:35:31,128 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:35:32,339 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 13:35:32,350 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:37:05,599 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 13:37:06,699 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:37:18,805 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:37:20,279 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:38:29,229 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:38:31,064 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:39:15,051 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:39:15,382 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:42:04,794 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:42:06,218 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:44:23,530 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:44:23,934 - soleco - INFO - main.py:167 - Response status: 500
+2025-02-18 13:44:50,589 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=1
+2025-02-18 13:44:52,069 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 13:45:17,073 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/api/solana/blocks/recent?limit=5
+2025-02-18 13:45:22,857 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 14:12:08,872 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 14:12:08,873 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 14:12:09,207 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 14:12:09,250 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 14:12:35,149 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 14:12:35,150 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 14:12:35,258 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 14:12:35,260 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 14:16:19,845 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 14:16:19,845 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 14:16:19,952 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 14:16:19,954 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 14:16:35,564 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/docs
+2025-02-18 14:16:35,566 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 14:16:35,691 - soleco - INFO - main.py:163 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 14:16:35,693 - soleco - INFO - main.py:167 - Response status: 200
+2025-02-18 14:52:34,829 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/docs
+2025-02-18 14:52:34,831 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 14:52:35,128 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 14:52:35,180 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 14:52:48,232 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 14:52:48,644 - soleco - INFO - main.py:171 - Response status: 500
+2025-02-18 14:54:32,182 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 14:54:33,679 - soleco - INFO - main.py:171 - Response status: 500
+2025-02-18 14:55:20,688 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 14:55:21,903 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 14:56:32,242 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 14:56:34,485 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 15:01:00,947 - soleco - INFO - main.py:167 - Request: GET http://localhost:8004/docs
+2025-02-18 15:01:00,948 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 15:01:02,101 - soleco - INFO - main.py:167 - Request: GET http://localhost:8004/openapi.json
+2025-02-18 15:01:02,151 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 15:01:15,117 - soleco - INFO - main.py:167 - Request: GET http://localhost:8004/api/solana/mints/solana/mints?limit=1
+2025-02-18 15:01:25,184 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 15:03:17,050 - soleco - INFO - main.py:167 - Request: GET http://localhost:8004/api/solana/mints/solana/mints?limit=1
+2025-02-18 15:03:27,248 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 15:03:42,096 - soleco - INFO - main.py:167 - Request: GET http://localhost:8004/api/solana/mints/solana/mints?limit=1
+2025-02-18 15:03:52,144 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 15:04:01,167 - soleco - INFO - main.py:167 - Request: GET http://localhost:8004/api/solana/mints/solana/mints?limit=1
+2025-02-18 15:04:02,042 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 15:04:51,871 - soleco - INFO - main.py:167 - Request: GET http://localhost:8004/api/solana/mints/solana/mints?limit=1
+2025-02-18 15:04:52,163 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 15:04:55,340 - soleco - INFO - main.py:167 - Request: GET http://localhost:8004/api/solana/mints/solana/mints?limit=1
+2025-02-18 15:04:55,595 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 15:07:29,016 - soleco - INFO - main.py:167 - Request: GET http://localhost:8004/api/solana/mints/solana/mints?limit=1
+2025-02-18 15:07:31,506 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 15:07:46,409 - soleco - INFO - main.py:167 - Request: GET http://localhost:8004/api/solana/mints/solana/mints?limit=1
+2025-02-18 15:07:46,929 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:16:23,402 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/docs
+2025-02-18 16:16:23,403 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:16:23,675 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/openapi.json
+2025-02-18 16:16:23,721 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:16:44,577 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:16:45,052 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:16:49,322 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=2
+2025-02-18 16:16:49,769 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:17:52,639 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=2
+2025-02-18 16:17:53,093 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:18:06,567 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=2
+2025-02-18 16:18:07,363 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:19:23,916 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=2
+2025-02-18 16:19:25,477 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:20:51,130 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:20:51,245 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:22:43,253 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/network/status
+2025-02-18 16:22:44,212 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:23:10,685 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:23:10,784 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:24:05,382 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:24:05,461 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:25:25,580 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:25:25,999 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:27:03,615 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:27:03,971 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:27:46,761 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:31:36,892 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:32:08,030 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:32:10,095 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:33:13,607 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:33:15,455 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:33:54,404 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:33:55,696 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:34:33,602 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:34:35,921 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:35:49,082 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:35:52,703 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:36:21,883 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:36:25,599 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:36:49,282 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:36:50,815 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:38:32,043 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:38:33,633 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:41:37,300 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:41:40,374 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:44:23,474 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:44:26,194 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 16:47:55,292 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 16:47:58,961 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:22:47,390 - soleco - INFO - main.py:167 - Request: GET http://localhost:8005/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:22:50,796 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:32:52,527 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/docs
+2025-02-18 17:32:52,528 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:32:53,680 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 17:32:53,740 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:32:58,831 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/network/status
+2025-02-18 17:33:01,491 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:33:29,999 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:33:37,799 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:33:54,838 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:33:56,819 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:34:50,058 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:34:51,956 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:35:14,769 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:35:17,137 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:36:13,782 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:36:16,228 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:36:47,596 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/performance/metrics
+2025-02-18 17:36:48,006 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:37:02,496 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:37:05,390 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:38:26,440 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:38:29,732 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:39:21,222 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:39:24,325 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:39:43,205 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:39:47,097 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:40:13,090 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:40:15,942 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:52:04,121 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:52:06,115 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:53:43,546 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:53:46,502 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:54:01,194 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:54:04,754 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:55:09,831 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:55:12,386 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:55:30,090 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:55:35,133 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:58:47,058 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:58:50,256 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 17:59:46,886 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 17:59:48,918 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 18:00:49,815 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 18:00:51,854 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 18:02:46,630 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 18:02:50,043 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 18:06:02,268 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 18:06:05,195 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 18:07:46,782 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 18:07:49,960 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 18:12:40,905 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 18:12:43,985 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 18:14:06,202 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/docs
+2025-02-18 18:14:06,203 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 18:14:06,464 - soleco - INFO - main.py:167 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 18:14:06,517 - soleco - INFO - main.py:171 - Response status: 200
+2025-02-18 18:20:03,462 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/docs
+2025-02-18 18:20:03,463 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:20:05,191 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/docs
+2025-02-18 18:20:05,192 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:20:05,261 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 18:20:05,311 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:20:22,398 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:20:23,919 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:22:42,925 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:22:45,709 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:23:00,361 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:23:03,404 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:25:41,707 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:25:44,229 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:26:13,398 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:26:13,400 - soleco - INFO - main.py:170 - Response status: 404
+2025-02-18 18:27:02,715 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:27:02,715 - soleco - INFO - main.py:170 - Response status: 404
+2025-02-18 18:27:03,428 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:27:03,428 - soleco - INFO - main.py:170 - Response status: 404
+2025-02-18 18:27:03,987 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:27:03,988 - soleco - INFO - main.py:170 - Response status: 404
+2025-02-18 18:27:05,569 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:27:05,569 - soleco - INFO - main.py:170 - Response status: 404
+2025-02-18 18:27:06,378 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:27:06,379 - soleco - INFO - main.py:170 - Response status: 404
+2025-02-18 18:27:17,073 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:27:17,075 - soleco - INFO - main.py:170 - Response status: 404
+2025-02-18 18:27:21,538 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:27:21,539 - soleco - INFO - main.py:170 - Response status: 404
+2025-02-18 18:28:02,762 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:28:04,393 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:30:46,826 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:30:48,575 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:30:59,522 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:31:00,904 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:31:13,574 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:31:16,231 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:32:24,531 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:32:26,436 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:32:46,817 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:32:49,331 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:33:13,347 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:33:15,301 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:40:10,403 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:40:10,403 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/docs
+2025-02-18 18:40:12,353 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:40:12,680 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:40:14,308 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 18:40:14,362 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:40:24,069 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:40:26,479 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:44:12,966 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/docs
+2025-02-18 18:44:12,968 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:44:14,085 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/openapi.json
+2025-02-18 18:44:14,130 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:44:20,615 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:44:22,881 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:45:13,342 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:45:15,999 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:45:35,576 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:45:37,543 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:46:09,326 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:46:11,493 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:48:41,088 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:48:43,060 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:49:50,655 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:49:52,781 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:51:11,601 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:51:14,846 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:51:42,821 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:51:46,018 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:53:02,628 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:53:06,410 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:53:28,736 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:53:32,274 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:54:03,082 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:54:06,303 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:54:26,609 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:54:29,140 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:54:37,648 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:54:40,450 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:55:02,404 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:55:03,900 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:55:47,121 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:55:49,677 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:56:49,962 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:56:52,840 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:58:14,454 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:58:17,595 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:58:39,465 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:58:41,024 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 18:58:58,768 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 18:59:00,555 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:00:15,619 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 19:00:18,919 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:01:28,858 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 19:01:31,058 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:02:47,054 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 19:02:49,350 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:04:12,680 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 19:04:16,360 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:04:42,050 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 19:04:45,567 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:06:32,891 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/comparison/solana/mints?limit=1
+2025-02-18 19:06:36,500 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:09:35,254 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 19:09:37,952 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:12:02,914 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 19:12:06,279 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:23:05,485 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 19:23:08,517 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:32:04,935 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 19:32:09,509 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:34:14,999 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=1
+2025-02-18 19:34:17,383 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:35:25,543 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=2
+2025-02-18 19:35:28,080 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:49:40,325 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=2
+2025-02-18 19:49:44,970 - soleco - INFO - main.py:170 - Response status: 200
+2025-02-18 19:50:18,554 - soleco - INFO - main.py:166 - Request: GET http://localhost:8001/api/solana/mints/solana/mints?limit=2
+2025-02-18 19:50:21,780 - soleco - INFO - main.py:170 - Response status: 200

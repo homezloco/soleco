@@ -1,0 +1,7 @@
+2025-02-22 16:00:30 - ERROR: Error analyzing new pump tokens: 'MintHandler' object has no attribute 'get_pump_tokens'
+2025-02-22 16:01:36 - ERROR: Error analyzing new pump tokens: 'MintHandler' object has no attribute 'get_pump_tokens'
+2025-02-22 16:07:58 - INFO: Analysis complete: Found 0 pump tokens
+2025-02-22 16:10:25 - INFO: Analysis complete: Found 0 pump tokens
+2025-02-22 16:20:08 - INFO: Analysis complete: Found 0 pump tokens
+2025-02-22 16:22:38 - INFO: Analysis complete: Found 0 pump tokens
+2025-02-22 16:57:30 - INFO: Analysis complete: Found 0 pump tokens

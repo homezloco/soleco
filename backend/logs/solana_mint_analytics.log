@@ -1,0 +1,64 @@
+2025-02-22 08:14:18 - ERROR: Unexpected error analyzing recent mints: 'block_results'
+2025-02-22 18:27:11 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 18:28:32 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 18:29:00 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 18:32:15 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 18:34:30 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 18:37:45 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 18:39:25 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 18:41:37 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 18:43:10 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 20:57:24 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 20:57:51 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 20:59:42 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:00:37 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:03:04 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:05:34 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:08:00 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:09:41 - ERROR: Failed to analyze new mints: 'SolanaQueryHandler' object has no attribute 'find_available_block'
+2025-02-22 21:11:33 - ERROR: Failed to analyze new mints: argument of type 'RPCError' is not iterable
+2025-02-22 21:13:29 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:16:19 - ERROR: Failed to analyze new mints: argument of type 'RPCError' is not iterable
+2025-02-22 21:20:12 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:21:00 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:21:22 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:26:38 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:27:14 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:27:30 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:28:07 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:28:55 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:30:11 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:31:04 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:31:33 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:32:22 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:32:53 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:34:44 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:36:02 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:38:16 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:38:37 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:40:29 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:42:16 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:43:33 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:45:05 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:45:32 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:47:31 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:49:47 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:50:34 - ERROR: Failed to analyze new mints: 'slot'
+2025-02-22 21:51:20 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 21:52:37 - ERROR: Failed to analyze new mints: Failed to get latest block
+2025-02-22 23:27:42 - ERROR: Unexpected error analyzing recent mints: SolanaQueryHandler.process_blocks() got an unexpected keyword argument 'start_block'
+2025-02-23 07:24:06 - ERROR: Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 07:28:24 - ERROR: Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 07:35:34 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 07:36:05 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 07:52:19 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 07:54:20 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 08:16:57 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 08:18:20 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 08:22:45 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 08:23:53 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 08:28:00 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 08:35:53 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-23 08:54:24 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-24 07:47:42 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'
+2025-02-24 07:50:31 - solana.mint_analytics - ERROR - Error analyzing new mints: 'NoneType' object has no attribute 'get'

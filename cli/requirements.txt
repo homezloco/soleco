@@ -1,0 +1,18 @@
+# Core dependencies
+click>=8.0.0
+requests>=2.25.0
+rich>=10.0.0
+pyyaml>=6.0
+python-dateutil>=2.8.2
+
+# Output formatting
+tabulate>=0.8.9
+colorama>=0.4.4
+
+# Development dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=23.0.0
+isort>=5.10.0
+flake8>=6.0.0
+pre-commit>=3.0.0

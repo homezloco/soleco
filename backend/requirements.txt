@@ -1,0 +1,33 @@
+fastapi==0.109.0
+uvicorn==0.25.0
+pydantic==2.6.1
+aiohttp==3.9.2
+python-dotenv==1.0.0
+email-validator==2.1.0
+
+# Solana and Blockchain Dependencies
+solana==0.36.1
+solders==0.23.0
+base58==2.1.1
+pynacl==1.5.0  # Updated from nacl for signature verification
+
+# Existing dependencies
+requests
+web3
+python-jose
+cryptography
+
+# Retry and Resilience
+tenacity==8.2.3
+
+# Scheduling
+APScheduler==3.10.4
+
+# Monitoring and Metrics
+prometheus-client==0.19.0
+
+# Enhanced Key Management
+cryptography==42.0.2
+
+# Async Database Support
+sqlalchemy[asyncio]==2.0.25  # Added for async database operations

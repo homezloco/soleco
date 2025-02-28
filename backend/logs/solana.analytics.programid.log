@@ -1,0 +1,10 @@
+2025-02-22 00:05:11 - solana.analytics.programid - INFO: Retrieved 18 recent blocks
+2025-02-22 00:05:11 - solana.analytics.programid - WARNING: No active programs found
+2025-02-22 00:05:54 - solana.analytics.programid - INFO: Retrieved 20 recent blocks
+2025-02-22 00:05:55 - solana.analytics.programid - WARNING: No active programs found
+2025-02-22 00:08:46 - solana.analytics.programid - INFO: Retrieved 20 recent blocks
+2025-02-22 00:12:52 - solana.analytics.programid - INFO: Retrieved 20 recent blocks
+2025-02-22 00:12:55 - solana.analytics.programid - ERROR: Error discovering programs: 'ProgramIdExtractor' object has no attribute 'TOKEN_PROGRAM_IDS'
+2025-02-22 00:14:37 - solana.analytics.programid - INFO: Retrieved 1 recent blocks
+2025-02-22 00:15:11 - solana.analytics.programid - INFO: Retrieved 10 recent blocks
+2025-02-22 00:17:09 - solana.analytics.programid - INFO: Retrieved 10 recent blocks

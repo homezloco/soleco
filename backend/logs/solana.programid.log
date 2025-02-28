@@ -1,0 +1,42 @@
+2025-02-22 00:08:49 - solana.programid - INFO: Found 125 active programs (min calls: 5)
+2025-02-22 00:08:49 - solana.programid - INFO: Most active program: Vote111111111111111111111111111111111111111 with 27204 calls
+2025-02-22 00:14:37 - solana.programid - INFO: Found 31 active programs (min calls: 5)
+2025-02-22 00:14:37 - solana.programid - INFO: Program categories:
+2025-02-22 00:14:37 - solana.programid - INFO:   - system: 2 programs
+2025-02-22 00:14:37 - solana.programid - INFO:   - token: 2 programs
+2025-02-22 00:14:37 - solana.programid - INFO:   - defi: 1 programs
+2025-02-22 00:14:37 - solana.programid - INFO:   - nft: 0 programs
+2025-02-22 00:14:37 - solana.programid - INFO:   - other: 26 programs
+2025-02-22 00:14:37 - solana.programid - INFO: Most active program: Vote111111111111111111111111111111111111111 (system) with 1272 calls
+2025-02-22 00:14:37 - solana.programid - INFO: Most active program by category:
+2025-02-22 00:14:37 - solana.programid - INFO:   - system: Vote111111111111111111111111111111111111111 with 1272 calls
+2025-02-22 00:14:37 - solana.programid - INFO:   - token: TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA with 177 calls
+2025-02-22 00:14:37 - solana.programid - INFO:   - defi: whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc with 6 calls
+2025-02-22 00:14:37 - solana.programid - INFO:   - other: ComputeBudget111111111111111111111111111111 with 655 calls
+2025-02-22 00:15:12 - solana.programid - INFO: Found 98 active programs (min calls: 5)
+2025-02-22 00:15:12 - solana.programid - INFO: Program categories:
+2025-02-22 00:15:12 - solana.programid - INFO:   - system: 2 programs
+2025-02-22 00:15:12 - solana.programid - INFO:   - token: 2 programs
+2025-02-22 00:15:12 - solana.programid - INFO:   - defi: 1 programs
+2025-02-22 00:15:12 - solana.programid - INFO:   - nft: 1 programs
+2025-02-22 00:15:12 - solana.programid - INFO:   - other: 92 programs
+2025-02-22 00:15:12 - solana.programid - INFO: Most active program: Vote111111111111111111111111111111111111111 (system) with 13056 calls
+2025-02-22 00:15:12 - solana.programid - INFO: Most active program by category:
+2025-02-22 00:15:12 - solana.programid - INFO:   - system: Vote111111111111111111111111111111111111111 with 13056 calls
+2025-02-22 00:15:12 - solana.programid - INFO:   - token: TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA with 2256 calls
+2025-02-22 00:15:12 - solana.programid - INFO:   - defi: whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc with 72 calls
+2025-02-22 00:15:12 - solana.programid - INFO:   - nft: metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s with 5 calls
+2025-02-22 00:15:12 - solana.programid - INFO:   - other: ComputeBudget111111111111111111111111111111 with 7557 calls
+2025-02-22 00:17:10 - solana.programid - INFO: Found 103 active programs (min calls: 5)
+2025-02-22 00:17:10 - solana.programid - INFO: Program categories:
+2025-02-22 00:17:10 - solana.programid - INFO:   - system: 2 programs
+2025-02-22 00:17:10 - solana.programid - INFO:   - token: 2 programs
+2025-02-22 00:17:10 - solana.programid - INFO:   - defi: 1 programs
+2025-02-22 00:17:10 - solana.programid - INFO:   - nft: 0 programs
+2025-02-22 00:17:10 - solana.programid - INFO:   - other: 98 programs
+2025-02-22 00:17:10 - solana.programid - INFO: Most active program: Vote111111111111111111111111111111111111111 (system) with 13190 calls
+2025-02-22 00:17:10 - solana.programid - INFO: Most active program by category:
+2025-02-22 00:17:10 - solana.programid - INFO:   - system: Vote111111111111111111111111111111111111111 with 13190 calls
+2025-02-22 00:17:10 - solana.programid - INFO:   - token: TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA with 1897 calls
+2025-02-22 00:17:10 - solana.programid - INFO:   - defi: whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc with 90 calls
+2025-02-22 00:17:10 - solana.programid - INFO:   - other: ComputeBudget111111111111111111111111111111 with 7828 calls

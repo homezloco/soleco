@@ -1,0 +1,146 @@
+[
+  {
+    "endpoint": "https://api.devnet.solana.com",
+    "status": "good",
+    "response_times": {
+      "getHealth": 0.39664435386657715,
+      "getVersion": 0.03668856620788574,
+      "getSlot": 0.0355832576751709,
+      "getBlockHeight": 0.035703182220458984,
+      "getRecentBlockhash": 0.036470651626586914
+    },
+    "errors": [
+      "getRecentBlockhash: No result in response"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": true,
+      "getVersion": true,
+      "getSlot": true,
+      "getBlockHeight": true,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 0.12986160278320313,
+    "api_key_required": false
+  },
+  {
+    "endpoint": "https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70",
+    "status": "good",
+    "response_times": {
+      "getHealth": 0.1646735668182373,
+      "getVersion": 0.6609292030334473,
+      "getSlot": 0.5782499313354492,
+      "getBlockHeight": 0.3124120235443115,
+      "getRecentBlockhash": 0.024040937423706055
+    },
+    "errors": [
+      "getRecentBlockhash: HTTP 410"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": true,
+      "getVersion": true,
+      "getSlot": true,
+      "getBlockHeight": true,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 0.4176733589172363,
+    "api_key_required": false
+  },
+  {
+    "endpoint": "https://api.testnet.solana.com",
+    "status": "good",
+    "response_times": {
+      "getHealth": 0.8231446743011475,
+      "getVersion": 0.22852635383605957,
+      "getSlot": 0.27164292335510254,
+      "getBlockHeight": 0.2779414653778076,
+      "getRecentBlockhash": 0.2559680938720703
+    },
+    "errors": [
+      "getRecentBlockhash: No result in response"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": true,
+      "getVersion": true,
+      "getSlot": true,
+      "getBlockHeight": true,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 0.445733642578125,
+    "api_key_required": false
+  },
+  {
+    "endpoint": "https://rpc.ankr.com/solana",
+    "status": "down",
+    "response_times": {
+      "getSlot": 0.7183499336242676,
+      "getBlockHeight": 0.22248578071594238,
+      "getRecentBlockhash": 0.22654318809509277
+    },
+    "errors": [
+      "getHealth: Timeout",
+      "getVersion: Timeout",
+      "getSlot: No result in response",
+      "getBlockHeight: No result in response",
+      "getRecentBlockhash: No result in response"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": false,
+      "getVersion": false,
+      "getSlot": false,
+      "getBlockHeight": false,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 0.7782526016235352,
+    "api_key_required": false
+  },
+  {
+    "endpoint": "https://api.mainnet-beta.solana.com",
+    "status": "partial",
+    "response_times": {
+      "getBlockHeight": 0.5629892349243164,
+      "getRecentBlockhash": 0.36084747314453125
+    },
+    "errors": [
+      "getHealth: Timeout",
+      "getVersion: Timeout",
+      "getSlot: Timeout",
+      "getRecentBlockhash: No result in response"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": false,
+      "getVersion": false,
+      "getSlot": false,
+      "getBlockHeight": true,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 0.831453037261963,
+    "api_key_required": false
+  },
+  {
+    "endpoint": "https://solana.public-rpc.com",
+    "status": "down",
+    "response_times": {},
+    "errors": [
+      "getHealth: Timeout",
+      "getVersion: Cannot connect to host solana.public-rpc.com:443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1000)')]",
+      "getSlot: Timeout",
+      "getBlockHeight: Cannot connect to host solana.public-rpc.com:443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1000)')]",
+      "getRecentBlockhash: Timeout"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": false,
+      "getVersion": false,
+      "getSlot": false,
+      "getBlockHeight": false,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 1998.0,
+    "api_key_required": false
+  }
+]

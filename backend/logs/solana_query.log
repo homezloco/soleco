@@ -1,0 +1,1645 @@
+2025-02-24 08:00:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:00:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:00:47 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:02:12 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:02:12 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:02:25 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:20:42 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:20:42 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:20:42 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:22:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:22:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:22:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:23:25 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:23:25 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:23:25 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:23:31 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:23:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:25:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:25:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:25:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:25:23 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:26:25 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:26:25 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:26:25 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:26:29 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:26:37 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:26:37 - solana.query - WARNING - Error in getBlock (attempt 1): RPC error: {'code': -32004, 'message': 'Block not available for slot 322669187'}
+2025-02-24 08:26:38 - solana.query - WARNING - Error in getBlock (attempt 2): RPC error: {'code': -32004, 'message': 'Block not available for slot 322669187'}
+2025-02-24 08:26:40 - solana.query - ERROR - Error getting block 322669187: RPC error: {'code': -32004, 'message': 'Block not available for slot 322669187'}
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 662, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 419, in get_block
+    response = await self._make_request(method, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 353, in _make_request
+    raise RPCError(f"RPC error: {error}")
+app.utils.solana_types.RPCError: RPC error: {'code': -32004, 'message': 'Block not available for slot 322669187'}
+2025-02-24 08:26:40 - solana.query - ERROR - Error in get_block for slot 322669187: RPC error: {'code': -32004, 'message': 'Block not available for slot 322669187'}
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 662, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 419, in get_block
+    response = await self._make_request(method, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 353, in _make_request
+    raise RPCError(f"RPC error: {error}")
+app.utils.solana_types.RPCError: RPC error: {'code': -32004, 'message': 'Block not available for slot 322669187'}
+2025-02-24 08:26:40 - solana.query - WARNING - Failed to get block at slot 322669187: RPC error: {'code': -32004, 'message': 'Block not available for slot 322669187'}
+2025-02-24 08:26:41 - solana.query - WARNING - Error in getBlock (attempt 1): RPC error: {'code': -32004, 'message': 'Block not available for slot 322669188'}
+2025-02-24 08:26:43 - solana.query - INFO - Successfully retrieved block at slot 322669188
+2025-02-24 08:26:46 - solana.query - WARNING - Rate limit hit for block 322669168
+2025-02-24 08:26:46 - solana.query - WARNING - Retrying app.utils.solana_query.SolanaQueryHandler.get_block_with_retry in 4.0 seconds as it raised RateLimitError: Rate limit exceeded for block 322669168.
+2025-02-24 08:26:58 - solana.query - INFO - Block 322669168 Processing Summary:
+2025-02-24 08:26:58 - solana.query - INFO -   Handlers Processed: 0
+2025-02-24 08:30:55 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:30:55 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:30:55 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:30:58 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'system', 'pump']
+2025-02-24 08:33:00 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump']
+2025-02-24 08:33:00 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump']
+2025-02-24 08:33:00 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump']
+2025-02-24 08:33:03 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump']
+2025-02-24 08:34:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump']
+2025-02-24 08:34:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump']
+2025-02-24 08:34:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump']
+2025-02-24 08:34:58 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump']
+2025-02-24 08:36:51 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:36:51 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:36:51 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:36:56 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:44:55 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:44:55 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:44:55 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:44:59 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:45:11 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:45:11 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:45:11 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:45:15 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:46:21 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:46:21 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:46:21 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:46:25 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:46:28 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322672197
+2025-02-24 08:46:32 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322672197
+2025-02-24 08:46:40 - solana.query - INFO - Successfully retrieved block at slot 322672197
+2025-02-24 08:46:53 - solana.query - INFO - mint handler processed block 322672177 successfully
+2025-02-24 08:46:55 - solana.query - INFO - token handler processed block 322672177 successfully
+2025-02-24 08:46:55 - solana.query - INFO - program handler processed block 322672177 successfully
+2025-02-24 08:46:55 - solana.query - INFO - system handler processed block 322672177 successfully
+2025-02-24 08:46:56 - solana.query - INFO - pump handler processed block 322672177 successfully
+2025-02-24 08:46:56 - solana.query - INFO - nft handler processed block 322672177 successfully
+2025-02-24 08:46:56 - solana.query - INFO - Block 322672177 Processing Summary:
+2025-02-24 08:46:56 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 08:50:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:50:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:50:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 08:50:52 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 09:23:43 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322677833
+2025-02-24 09:23:47 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322677833
+2025-02-24 09:23:55 - solana.query - INFO - Successfully retrieved block at slot 322677833
+2025-02-24 09:24:07 - solana.query - INFO - mint handler processed block 322677813 successfully
+2025-02-24 09:24:07 - solana.query - INFO - token handler processed block 322677813 successfully
+2025-02-24 09:24:08 - solana.query - INFO - program handler processed block 322677813 successfully
+2025-02-24 09:24:08 - solana.query - INFO - system handler processed block 322677813 successfully
+2025-02-24 09:24:09 - solana.query - INFO - pump handler processed block 322677813 successfully
+2025-02-24 09:24:09 - solana.query - INFO - nft handler processed block 322677813 successfully
+2025-02-24 09:24:09 - solana.query - INFO - Block 322677813 Processing Summary:
+2025-02-24 09:24:09 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 09:25:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 09:25:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 09:25:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 09:25:57 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 09:27:41 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322678432
+2025-02-24 09:27:45 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322678432
+2025-02-24 09:27:53 - solana.query - INFO - Successfully retrieved block at slot 322678432
+2025-02-24 09:28:04 - solana.query - INFO - mint handler processed block 322678412 successfully
+2025-02-24 09:28:04 - solana.query - INFO - token handler processed block 322678412 successfully
+2025-02-24 09:28:04 - solana.query - INFO - program handler processed block 322678412 successfully
+2025-02-24 09:28:04 - solana.query - INFO - system handler processed block 322678412 successfully
+2025-02-24 09:28:05 - solana.query - INFO - pump handler processed block 322678412 successfully
+2025-02-24 09:28:05 - solana.query - INFO - nft handler processed block 322678412 successfully
+2025-02-24 09:28:05 - solana.query - INFO - Block 322678412 Processing Summary:
+2025-02-24 09:28:05 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 10:22:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:22:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:22:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:26:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:26:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:26:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:26:40 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:27:02 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322687437
+2025-02-24 10:27:05 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322687437
+2025-02-24 10:27:13 - solana.query - INFO - Successfully retrieved block at slot 322687437
+2025-02-24 10:27:25 - solana.query - INFO - mint handler processed block 322687417 successfully
+2025-02-24 10:27:25 - solana.query - INFO - token handler processed block 322687417 successfully
+2025-02-24 10:27:25 - solana.query - INFO - program handler processed block 322687417 successfully
+2025-02-24 10:27:25 - solana.query - INFO - system handler processed block 322687417 successfully
+2025-02-24 10:27:26 - solana.query - INFO - pump handler processed block 322687417 successfully
+2025-02-24 10:27:26 - solana.query - INFO - nft handler processed block 322687417 successfully
+2025-02-24 10:27:26 - solana.query - INFO - Block 322687417 Processing Summary:
+2025-02-24 10:27:26 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 10:28:43 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322687691
+2025-02-24 10:28:47 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322687691
+2025-02-24 10:28:55 - solana.query - INFO - Successfully retrieved block at slot 322687691
+2025-02-24 10:29:07 - solana.query - INFO - mint handler processed block 322687671 successfully
+2025-02-24 10:29:07 - solana.query - INFO - token handler processed block 322687671 successfully
+2025-02-24 10:29:07 - solana.query - INFO - program handler processed block 322687671 successfully
+2025-02-24 10:29:07 - solana.query - INFO - system handler processed block 322687671 successfully
+2025-02-24 10:29:08 - solana.query - INFO - pump handler processed block 322687671 successfully
+2025-02-24 10:29:08 - solana.query - INFO - nft handler processed block 322687671 successfully
+2025-02-24 10:29:08 - solana.query - INFO - Block 322687671 Processing Summary:
+2025-02-24 10:29:08 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 10:30:27 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:30:27 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:30:27 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:30:31 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:30:33 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322687972
+2025-02-24 10:30:37 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322687972
+2025-02-24 10:30:47 - solana.query - INFO - Successfully retrieved block at slot 322687972
+2025-02-24 10:31:01 - solana.query - INFO - mint handler processed block 322687952 successfully
+2025-02-24 10:31:01 - solana.query - INFO - token handler processed block 322687952 successfully
+2025-02-24 10:31:01 - solana.query - INFO - program handler processed block 322687952 successfully
+2025-02-24 10:31:01 - solana.query - INFO - system handler processed block 322687952 successfully
+2025-02-24 10:31:03 - solana.query - INFO - pump handler processed block 322687952 successfully
+2025-02-24 10:31:03 - solana.query - INFO - nft handler processed block 322687952 successfully
+2025-02-24 10:31:03 - solana.query - INFO - Block 322687952 Processing Summary:
+2025-02-24 10:31:03 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 10:32:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:32:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:32:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:32:38 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:33:37 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322688438
+2025-02-24 10:33:40 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322688438
+2025-02-24 10:33:49 - solana.query - INFO - Successfully retrieved block at slot 322688438
+2025-02-24 10:34:00 - solana.query - INFO - mint handler processed block 322688418 successfully
+2025-02-24 10:34:00 - solana.query - INFO - token handler processed block 322688418 successfully
+2025-02-24 10:34:00 - solana.query - INFO - program handler processed block 322688418 successfully
+2025-02-24 10:34:00 - solana.query - INFO - system handler processed block 322688418 successfully
+2025-02-24 10:34:01 - solana.query - INFO - pump handler processed block 322688418 successfully
+2025-02-24 10:34:01 - solana.query - INFO - nft handler processed block 322688418 successfully
+2025-02-24 10:34:01 - solana.query - INFO - Block 322688418 Processing Summary:
+2025-02-24 10:34:01 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 10:36:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:36:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:36:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:36:38 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:36:50 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322688928
+2025-02-24 10:36:53 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322688928
+2025-02-24 10:37:02 - solana.query - INFO - Successfully retrieved block at slot 322688928
+2025-02-24 10:37:14 - solana.query - INFO - mint handler processed block 322688908 successfully
+2025-02-24 10:37:14 - solana.query - INFO - token handler processed block 322688908 successfully
+2025-02-24 10:37:15 - solana.query - INFO - program handler processed block 322688908 successfully
+2025-02-24 10:37:15 - solana.query - INFO - system handler processed block 322688908 successfully
+2025-02-24 10:37:16 - solana.query - INFO - pump handler processed block 322688908 successfully
+2025-02-24 10:37:17 - solana.query - INFO - nft handler processed block 322688908 successfully
+2025-02-24 10:37:17 - solana.query - INFO - Block 322688908 Processing Summary:
+2025-02-24 10:37:17 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 10:38:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:38:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:38:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:38:37 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:39:11 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322689284
+2025-02-24 10:39:14 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322689284
+2025-02-24 10:39:23 - solana.query - INFO - Successfully retrieved block at slot 322689284
+2025-02-24 10:39:36 - solana.query - INFO - mint handler processed block 322689264 successfully
+2025-02-24 10:39:36 - solana.query - INFO - token handler processed block 322689264 successfully
+2025-02-24 10:39:36 - solana.query - INFO - program handler processed block 322689264 successfully
+2025-02-24 10:39:36 - solana.query - INFO - system handler processed block 322689264 successfully
+2025-02-24 10:39:38 - solana.query - INFO - pump handler processed block 322689264 successfully
+2025-02-24 10:39:40 - solana.query - INFO - nft handler processed block 322689264 successfully
+2025-02-24 10:39:40 - solana.query - INFO - Block 322689264 Processing Summary:
+2025-02-24 10:39:40 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 10:42:00 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322689714
+2025-02-24 10:42:04 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322689714
+2025-02-24 10:42:12 - solana.query - INFO - Successfully retrieved block at slot 322689714
+2025-02-24 10:42:23 - solana.query - INFO - mint handler processed block 322689694 successfully
+2025-02-24 10:42:23 - solana.query - INFO - token handler processed block 322689694 successfully
+2025-02-24 10:42:23 - solana.query - INFO - program handler processed block 322689694 successfully
+2025-02-24 10:42:23 - solana.query - INFO - system handler processed block 322689694 successfully
+2025-02-24 10:42:24 - solana.query - INFO - pump handler processed block 322689694 successfully
+2025-02-24 10:42:25 - solana.query - INFO - nft handler processed block 322689694 successfully
+2025-02-24 10:42:25 - solana.query - INFO - Block 322689694 Processing Summary:
+2025-02-24 10:42:25 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 10:44:07 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:44:07 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:44:07 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:44:10 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:44:23 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322690076
+2025-02-24 10:44:26 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322690076
+2025-02-24 10:44:34 - solana.query - INFO - Successfully retrieved block at slot 322690076
+2025-02-24 10:44:45 - solana.query - INFO - mint handler processed block 322690056 successfully
+2025-02-24 10:44:45 - solana.query - INFO - token handler processed block 322690056 successfully
+2025-02-24 10:44:46 - solana.query - INFO - program handler processed block 322690056 successfully
+2025-02-24 10:44:46 - solana.query - INFO - system handler processed block 322690056 successfully
+2025-02-24 10:44:47 - solana.query - INFO - pump handler processed block 322690056 successfully
+2025-02-24 10:44:47 - solana.query - INFO - nft handler processed block 322690056 successfully
+2025-02-24 10:44:47 - solana.query - INFO - Block 322690056 Processing Summary:
+2025-02-24 10:44:47 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 10:46:16 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:46:16 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:46:16 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:46:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:47:57 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322690624
+2025-02-24 10:48:00 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322690624
+2025-02-24 10:48:09 - solana.query - INFO - Successfully retrieved block at slot 322690624
+2025-02-24 10:48:20 - solana.query - INFO - mint handler processed block 322690604 successfully
+2025-02-24 10:48:20 - solana.query - INFO - token handler processed block 322690604 successfully
+2025-02-24 10:48:20 - solana.query - INFO - program handler processed block 322690604 successfully
+2025-02-24 10:48:20 - solana.query - INFO - system handler processed block 322690604 successfully
+2025-02-24 10:48:22 - solana.query - INFO - pump handler processed block 322690604 successfully
+2025-02-24 10:48:22 - solana.query - INFO - nft handler processed block 322690604 successfully
+2025-02-24 10:48:22 - solana.query - INFO - Block 322690604 Processing Summary:
+2025-02-24 10:48:22 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 10:49:50 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:49:50 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:49:50 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:49:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 10:51:24 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322691145
+2025-02-24 10:51:27 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322691145
+2025-02-24 10:51:35 - solana.query - INFO - Successfully retrieved block at slot 322691145
+2025-02-24 10:51:47 - solana.query - INFO - mint handler processed block 322691125 successfully
+2025-02-24 10:51:47 - solana.query - INFO - token handler processed block 322691125 successfully
+2025-02-24 10:51:47 - solana.query - INFO - program handler processed block 322691125 successfully
+2025-02-24 10:51:47 - solana.query - INFO - system handler processed block 322691125 successfully
+2025-02-24 10:51:48 - solana.query - INFO - pump handler processed block 322691125 successfully
+2025-02-24 10:51:49 - solana.query - INFO - nft handler processed block 322691125 successfully
+2025-02-24 10:51:49 - solana.query - INFO - Block 322691125 Processing Summary:
+2025-02-24 10:51:49 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 11:06:32 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:06:32 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:06:33 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:06:37 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:08:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:08:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:08:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:08:08 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:10:13 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:10:13 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:10:13 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:10:17 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:12:20 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:12:20 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:12:21 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:12:24 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:17:06 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:17:06 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:17:06 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:17:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:17:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:17:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:17:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:17:50 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:19:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:19:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:19:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:19:49 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:23:41 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:23:41 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:23:41 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:23:45 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:24:13 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:24:13 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:24:13 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:24:16 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:25:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:25:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:25:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:25:22 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:27:28 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:27:28 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:27:29 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:27:31 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:29:48 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:29:48 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:29:48 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:29:51 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:31:16 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:31:16 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:31:16 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:31:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:33:18 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:33:18 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:33:18 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:33:22 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:34:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:34:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:34:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:34:55 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:36:20 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:36:20 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:36:20 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:36:23 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:39:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:39:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:39:45 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:39:48 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:40:28 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:40:28 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:40:28 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:40:31 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:43:10 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:43:11 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:43:11 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:43:14 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:45:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:45:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:45:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:45:22 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:47:04 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:47:04 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:47:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:47:07 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:49:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:49:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:49:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:49:13 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:49:43 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:49:43 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:49:43 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:49:47 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:50:23 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322700084
+2025-02-24 11:50:26 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322700084
+2025-02-24 11:50:35 - solana.query - INFO - Successfully retrieved block at slot 322700084
+2025-02-24 11:50:47 - solana.query - INFO - mint handler processed block 322700064 successfully
+2025-02-24 11:50:47 - solana.query - INFO - token handler processed block 322700064 successfully
+2025-02-24 11:50:47 - solana.query - INFO - program handler processed block 322700064 successfully
+2025-02-24 11:50:47 - solana.query - INFO - system handler processed block 322700064 successfully
+2025-02-24 11:50:49 - solana.query - INFO - pump handler processed block 322700064 successfully
+2025-02-24 11:50:49 - solana.query - INFO - nft handler processed block 322700064 successfully
+2025-02-24 11:50:49 - solana.query - INFO - Block 322700064 Processing Summary:
+2025-02-24 11:50:49 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 11:52:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:52:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:52:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:52:12 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:52:15 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322700369
+2025-02-24 11:52:19 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322700369
+2025-02-24 11:52:26 - solana.query - INFO - Successfully retrieved block at slot 322700369
+2025-02-24 11:52:38 - solana.query - INFO - mint handler processed block 322700349 successfully
+2025-02-24 11:52:38 - solana.query - INFO - token handler processed block 322700349 successfully
+2025-02-24 11:52:38 - solana.query - INFO - program handler processed block 322700349 successfully
+2025-02-24 11:52:38 - solana.query - INFO - system handler processed block 322700349 successfully
+2025-02-24 11:52:39 - solana.query - INFO - pump handler processed block 322700349 successfully
+2025-02-24 11:52:39 - solana.query - INFO - nft handler processed block 322700349 successfully
+2025-02-24 11:52:39 - solana.query - INFO - Block 322700349 Processing Summary:
+2025-02-24 11:52:39 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 11:53:26 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322700546
+2025-02-24 11:53:30 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322700546
+2025-02-24 11:53:37 - solana.query - INFO - Successfully retrieved block at slot 322700546
+2025-02-24 11:53:49 - solana.query - INFO - mint handler processed block 322700526 successfully
+2025-02-24 11:53:49 - solana.query - INFO - token handler processed block 322700526 successfully
+2025-02-24 11:53:49 - solana.query - INFO - program handler processed block 322700526 successfully
+2025-02-24 11:53:49 - solana.query - INFO - system handler processed block 322700526 successfully
+2025-02-24 11:53:50 - solana.query - INFO - pump handler processed block 322700526 successfully
+2025-02-24 11:53:50 - solana.query - INFO - nft handler processed block 322700526 successfully
+2025-02-24 11:53:50 - solana.query - INFO - Block 322700526 Processing Summary:
+2025-02-24 11:53:50 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 11:53:57 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:53:57 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:53:57 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:54:00 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:54:31 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322700711
+2025-02-24 11:54:34 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322700711
+2025-02-24 11:54:42 - solana.query - INFO - Successfully retrieved block at slot 322700711
+2025-02-24 11:54:53 - solana.query - INFO - mint handler processed block 322700691 successfully
+2025-02-24 11:54:53 - solana.query - INFO - token handler processed block 322700691 successfully
+2025-02-24 11:54:53 - solana.query - INFO - program handler processed block 322700691 successfully
+2025-02-24 11:54:53 - solana.query - INFO - system handler processed block 322700691 successfully
+2025-02-24 11:54:54 - solana.query - INFO - pump handler processed block 322700691 successfully
+2025-02-24 11:54:54 - solana.query - INFO - nft handler processed block 322700691 successfully
+2025-02-24 11:54:54 - solana.query - INFO - Block 322700691 Processing Summary:
+2025-02-24 11:54:54 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 11:56:55 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:56:55 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:56:55 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:56:58 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:58:11 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:58:11 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:58:11 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:58:15 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 11:58:17 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322701285
+2025-02-24 11:58:20 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322701285
+2025-02-24 11:58:28 - solana.query - INFO - Successfully retrieved block at slot 322701285
+2025-02-24 11:58:40 - solana.query - INFO - mint handler processed block 322701265 successfully
+2025-02-24 11:58:40 - solana.query - INFO - token handler processed block 322701265 successfully
+2025-02-24 11:58:40 - solana.query - INFO - program handler processed block 322701265 successfully
+2025-02-24 11:58:40 - solana.query - INFO - system handler processed block 322701265 successfully
+2025-02-24 11:58:41 - solana.query - INFO - pump handler processed block 322701265 successfully
+2025-02-24 11:58:41 - solana.query - INFO - nft handler processed block 322701265 successfully
+2025-02-24 11:58:41 - solana.query - INFO - Block 322701265 Processing Summary:
+2025-02-24 11:58:41 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 12:00:06 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:00:06 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:00:06 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:00:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:00:14 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322701579
+2025-02-24 12:00:17 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322701579
+2025-02-24 12:00:26 - solana.query - INFO - Successfully retrieved block at slot 322701579
+2025-02-24 12:00:38 - solana.query - INFO - mint handler processed block 322701559 successfully
+2025-02-24 12:00:38 - solana.query - INFO - token handler processed block 322701559 successfully
+2025-02-24 12:00:38 - solana.query - INFO - program handler processed block 322701559 successfully
+2025-02-24 12:00:38 - solana.query - INFO - system handler processed block 322701559 successfully
+2025-02-24 12:00:39 - solana.query - INFO - pump handler processed block 322701559 successfully
+2025-02-24 12:00:39 - solana.query - INFO - nft handler processed block 322701559 successfully
+2025-02-24 12:00:39 - solana.query - INFO - Block 322701559 Processing Summary:
+2025-02-24 12:00:39 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 12:01:22 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:01:22 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:01:22 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:01:25 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:04:44 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322702261
+2025-02-24 12:04:47 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322702261
+2025-02-24 12:04:55 - solana.query - INFO - Successfully retrieved block at slot 322702261
+2025-02-24 12:05:07 - solana.query - INFO - mint handler processed block 322702241 successfully
+2025-02-24 12:05:07 - solana.query - INFO - token handler processed block 322702241 successfully
+2025-02-24 12:05:07 - solana.query - INFO - program handler processed block 322702241 successfully
+2025-02-24 12:05:07 - solana.query - INFO - system handler processed block 322702241 successfully
+2025-02-24 12:05:08 - solana.query - INFO - pump handler processed block 322702241 successfully
+2025-02-24 12:05:08 - solana.query - INFO - nft handler processed block 322702241 successfully
+2025-02-24 12:05:08 - solana.query - INFO - Block 322702241 Processing Summary:
+2025-02-24 12:05:08 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 12:06:25 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:06:26 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:06:26 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:06:29 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:06:32 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322702533
+2025-02-24 12:06:35 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322702533
+2025-02-24 12:06:43 - solana.query - INFO - Successfully retrieved block at slot 322702533
+2025-02-24 12:06:55 - solana.query - INFO - mint handler processed block 322702513 successfully
+2025-02-24 12:06:55 - solana.query - INFO - token handler processed block 322702513 successfully
+2025-02-24 12:06:55 - solana.query - INFO - program handler processed block 322702513 successfully
+2025-02-24 12:06:55 - solana.query - INFO - system handler processed block 322702513 successfully
+2025-02-24 12:06:56 - solana.query - INFO - pump handler processed block 322702513 successfully
+2025-02-24 12:06:56 - solana.query - INFO - nft handler processed block 322702513 successfully
+2025-02-24 12:06:56 - solana.query - INFO - Block 322702513 Processing Summary:
+2025-02-24 12:06:56 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 12:07:30 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:07:30 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:07:30 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:07:33 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:08:21 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322702810
+2025-02-24 12:08:25 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322702810
+2025-02-24 12:08:33 - solana.query - INFO - Successfully retrieved block at slot 322702810
+2025-02-24 12:08:44 - solana.query - INFO - mint handler processed block 322702790 successfully
+2025-02-24 12:08:44 - solana.query - INFO - token handler processed block 322702790 successfully
+2025-02-24 12:08:44 - solana.query - INFO - program handler processed block 322702790 successfully
+2025-02-24 12:08:44 - solana.query - INFO - system handler processed block 322702790 successfully
+2025-02-24 12:08:45 - solana.query - INFO - pump handler processed block 322702790 successfully
+2025-02-24 12:08:45 - solana.query - INFO - nft handler processed block 322702790 successfully
+2025-02-24 12:08:45 - solana.query - INFO - Block 322702790 Processing Summary:
+2025-02-24 12:08:45 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 12:10:22 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:10:22 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:10:22 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:10:26 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:10:30 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322703133
+2025-02-24 12:10:33 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322703133
+2025-02-24 12:10:41 - solana.query - INFO - Successfully retrieved block at slot 322703133
+2025-02-24 12:10:53 - solana.query - INFO - mint handler processed block 322703113 successfully
+2025-02-24 12:10:53 - solana.query - INFO - token handler processed block 322703113 successfully
+2025-02-24 12:10:53 - solana.query - INFO - program handler processed block 322703113 successfully
+2025-02-24 12:10:53 - solana.query - INFO - system handler processed block 322703113 successfully
+2025-02-24 12:10:53 - solana.query - INFO - pump handler processed block 322703113 successfully
+2025-02-24 12:10:53 - solana.query - INFO - nft handler processed block 322703113 successfully
+2025-02-24 12:10:53 - solana.query - INFO - Block 322703113 Processing Summary:
+2025-02-24 12:10:53 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 12:11:43 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:11:43 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:11:43 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:11:47 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:11:55 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322703351
+2025-02-24 12:11:58 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322703351
+2025-02-24 12:12:06 - solana.query - INFO - Successfully retrieved block at slot 322703351
+2025-02-24 12:12:18 - solana.query - INFO - mint handler processed block 322703331 successfully
+2025-02-24 12:12:18 - solana.query - INFO - token handler processed block 322703331 successfully
+2025-02-24 12:12:18 - solana.query - INFO - program handler processed block 322703331 successfully
+2025-02-24 12:12:18 - solana.query - INFO - system handler processed block 322703331 successfully
+2025-02-24 12:12:19 - solana.query - INFO - pump handler processed block 322703331 successfully
+2025-02-24 12:12:19 - solana.query - INFO - nft handler processed block 322703331 successfully
+2025-02-24 12:12:19 - solana.query - INFO - Block 322703331 Processing Summary:
+2025-02-24 12:12:19 - solana.query - INFO -   Handlers Processed: 6
+2025-02-24 12:13:21 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:13:21 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:13:21 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:13:24 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:18:08 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:18:08 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:18:08 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:18:12 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:18:26 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322704317
+2025-02-24 12:18:29 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322704317
+2025-02-24 12:18:37 - solana.query - INFO - Successfully retrieved block at slot 322704317
+2025-02-24 12:18:50 - solana.query - INFO - MintHandler handler processed block 322704297 successfully
+2025-02-24 12:18:50 - solana.query - INFO - TokenHandler handler processed block 322704297 successfully
+2025-02-24 12:18:50 - solana.query - INFO - Block 322704297 Processing Summary:
+2025-02-24 12:18:50 - solana.query - INFO -   Handlers Processed: 2
+2025-02-24 12:20:02 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:20:02 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:20:02 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:20:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:21:14 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322704740
+2025-02-24 12:21:17 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322704740
+2025-02-24 12:21:26 - solana.query - INFO - Successfully retrieved block at slot 322704740
+2025-02-24 12:21:38 - solana.query - INFO - MintHandler handler processed block 322704720 successfully
+2025-02-24 12:21:38 - solana.query - INFO - TokenHandler handler processed block 322704720 successfully
+2025-02-24 12:21:38 - solana.query - INFO - Block 322704720 Processing Summary:
+2025-02-24 12:21:38 - solana.query - INFO -   Handlers Processed: 2
+2025-02-24 12:21:51 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:21:51 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:21:51 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:21:54 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:21:57 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322704847
+2025-02-24 12:22:00 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322704847
+2025-02-24 12:22:09 - solana.query - INFO - Successfully retrieved block at slot 322704847
+2025-02-24 12:22:21 - solana.query - INFO - MintHandler handler processed block 322704827 successfully
+2025-02-24 12:22:21 - solana.query - INFO - TokenHandler handler processed block 322704827 successfully
+2025-02-24 12:22:21 - solana.query - INFO - Block 322704827 Processing Summary:
+2025-02-24 12:22:21 - solana.query - INFO -   Handlers Processed: 2
+2025-02-24 12:23:24 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:23:24 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:23:24 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:23:27 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:23:30 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322705084
+2025-02-24 12:23:33 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322705084
+2025-02-24 12:23:41 - solana.query - INFO - Successfully retrieved block at slot 322705084
+2025-02-24 12:23:53 - solana.query - INFO - MintHandler handler processed block 322705064 successfully
+2025-02-24 12:23:53 - solana.query - INFO - TokenHandler handler processed block 322705064 successfully
+2025-02-24 12:23:53 - solana.query - INFO - Block 322705064 Processing Summary:
+2025-02-24 12:23:53 - solana.query - INFO -   Handlers Processed: 2
+2025-02-24 12:25:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:25:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:25:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:25:39 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:25:42 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322705419
+2025-02-24 12:25:46 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322705419
+2025-02-24 12:25:54 - solana.query - INFO - Successfully retrieved block at slot 322705419
+2025-02-24 12:26:06 - solana.query - INFO - MintHandler handler processed block 322705399 successfully
+2025-02-24 12:26:06 - solana.query - INFO - TokenHandler handler processed block 322705399 successfully
+2025-02-24 12:26:06 - solana.query - INFO - Block 322705399 Processing Summary:
+2025-02-24 12:26:06 - solana.query - INFO -   Handlers Processed: 2
+2025-02-24 12:29:57 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:29:57 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:29:57 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:30:01 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:30:53 - solana.query - WARNING - Error in getBlock (attempt 1): Unexpected error: Block not available for slot 322706204
+2025-02-24 12:30:57 - solana.query - WARNING - Error in getBlock (attempt 2): Unexpected error: Block not available for slot 322706204
+2025-02-24 12:31:05 - solana.query - INFO - Successfully retrieved block at slot 322706204
+2025-02-24 12:31:09 - solana.query - ERROR - Error getting block 322706184: SolanaClient.get_block() got an unexpected keyword argument 'encoding'
+2025-02-24 12:31:09 - solana.query - INFO - Retrying app.utils.solana_query.SolanaQueryHandler.get_block_with_retry in 4.0 seconds as it raised TypeError: SolanaClient.get_block() got an unexpected keyword argument 'encoding'.
+2025-02-24 12:31:13 - solana.query - ERROR - Error getting block 322706184: SolanaClient.get_block() got an unexpected keyword argument 'encoding'
+2025-02-24 12:31:13 - solana.query - INFO - Retrying app.utils.solana_query.SolanaQueryHandler.get_block_with_retry in 4.0 seconds as it raised TypeError: SolanaClient.get_block() got an unexpected keyword argument 'encoding'.
+2025-02-24 12:34:42 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:34:43 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:34:43 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:34:47 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:34:50 - solana.query - WARNING - No data returned for block 322706800
+2025-02-24 12:34:50 - solana.query - WARNING - No data returned for block 322706801
+2025-02-24 12:34:51 - solana.query - WARNING - No data returned for block 322706802
+2025-02-24 12:34:51 - solana.query - WARNING - No data returned for block 322706803
+2025-02-24 12:34:51 - solana.query - WARNING - No data returned for block 322706804
+2025-02-24 12:34:58 - solana.query - WARNING - Rate limit hit for block 322706805, backing off...
+2025-02-24 12:35:05 - solana.query - WARNING - Rate limit hit for block 322706805, backing off...
+2025-02-24 12:35:11 - solana.query - ERROR - Error getting block 322706805: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:11 - solana.query - ERROR - Error in get_block for slot 322706805: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:11 - solana.query - WARNING - Failed to get block at slot 322706805: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:18 - solana.query - WARNING - Error in getBlock (attempt 1): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:26 - solana.query - WARNING - Error in getBlock (attempt 2): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:35 - solana.query - ERROR - Error getting block 322706806: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:35 - solana.query - ERROR - Error in get_block for slot 322706806: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:35 - solana.query - WARNING - Failed to get block at slot 322706806: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:42 - solana.query - WARNING - Error in getBlock (attempt 1): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:49 - solana.query - WARNING - Error in getBlock (attempt 2): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:58 - solana.query - ERROR - Error getting block 322706807: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:58 - solana.query - ERROR - Error in get_block for slot 322706807: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:35:58 - solana.query - WARNING - Failed to get block at slot 322706807: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:36:05 - solana.query - WARNING - Error in getBlock (attempt 1): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:36:13 - solana.query - WARNING - Error in getBlock (attempt 2): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:36:22 - solana.query - ERROR - Error getting block 322706808: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:36:22 - solana.query - ERROR - Error in get_block for slot 322706808: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:36:22 - solana.query - WARNING - Failed to get block at slot 322706808: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:36:29 - solana.query - WARNING - Error in getBlock (attempt 1): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:36:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:36:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:36:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:36:39 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:36:42 - solana.query - WARNING - No data returned for block 322707079
+2025-02-24 12:36:42 - solana.query - WARNING - No data returned for block 322707080
+2025-02-24 12:36:42 - solana.query - WARNING - No data returned for block 322707081
+2025-02-24 12:36:43 - solana.query - WARNING - No data returned for block 322707082
+2025-02-24 12:36:43 - solana.query - WARNING - No data returned for block 322707083
+2025-02-24 12:36:49 - solana.query - WARNING - Rate limit hit for block 322707084, backing off...
+2025-02-24 12:36:56 - solana.query - WARNING - Rate limit hit for block 322707084, backing off...
+2025-02-24 12:37:02 - solana.query - ERROR - Error getting block 322707084: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:02 - solana.query - ERROR - Error in get_block for slot 322707084: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:02 - solana.query - WARNING - Failed to get block at slot 322707084: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:10 - solana.query - WARNING - Error in getBlock (attempt 1): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:17 - solana.query - WARNING - Error in getBlock (attempt 2): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:26 - solana.query - ERROR - Error getting block 322707085: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:26 - solana.query - ERROR - Error in get_block for slot 322707085: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 270, in _make_rpc_call
+    response.raise_for_status()
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '429 Too Many Requests' for url 'https://api.mainnet-beta.solana.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    return await self._make_rpc_call("getBlock", params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 319, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:26 - solana.query - WARNING - Failed to get block at slot 322707085: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:33 - solana.query - WARNING - Error in getBlock (attempt 1): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:40 - solana.query - WARNING - Error in getBlock (attempt 2): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:49 - solana.query - ERROR - Error getting block 322707086: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    # Ensure params are in correct order [slot, config]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:49 - solana.query - ERROR - Error in get_block for slot 322707086: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    # Ensure params are in correct order [slot, config]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:49 - solana.query - WARNING - Failed to get block at slot 322707086: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:37:56 - solana.query - WARNING - Error in getBlock (attempt 1): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:38:04 - solana.query - WARNING - Error in getBlock (attempt 2): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:38:12 - solana.query - ERROR - Error getting block 322707087: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    # Ensure params are in correct order [slot, config]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:38:12 - solana.query - ERROR - Error in get_block for slot 322707087: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 299, in _make_rpc_call
+    raise RPCError(f"RPC error {error_code}: {error_msg}")
+app.utils.solana_types.RPCError: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_query.py", line 767, in get_block
+    block_data = await client.get_block(slot, opts)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 483, in get_block
+    # Ensure params are in correct order [slot, config]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 326, in _make_rpc_call
+    return await self._make_rpc_call(method, params, retry_count + 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/Shane Holmes/CascadeProjects/windsurf-project/soleco/backend/app/utils/solana_rpc.py", line 327, in _make_rpc_call
+    raise RetryableError(f"Request failed after {retry_count} retries: {str(e)}")
+app.utils.solana_types.RetryableError: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:38:12 - solana.query - WARNING - Failed to get block at slot 322707087: Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:38:19 - solana.query - WARNING - Error in getBlock (attempt 1): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:38:27 - solana.query - WARNING - Error in getBlock (attempt 2): Request failed after 3 retries: RPC error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
+2025-02-24 12:38:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:38:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:38:37 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:38:40 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:38:50 - solana.query - INFO - Successfully retrieved block at slot 322707397
+2025-02-24 12:38:50 - solana.query - ERROR - Error getting block 322707377: SolanaClient.get_block() got an unexpected keyword argument 'max_supported_transaction_version'
+2025-02-24 12:38:50 - solana.query - INFO - Retrying app.utils.solana_query.SolanaQueryHandler.get_block_with_retry in 4.0 seconds as it raised TypeError: SolanaClient.get_block() got an unexpected keyword argument 'max_supported_transaction_version'.
+2025-02-24 12:38:54 - solana.query - ERROR - Error getting block 322707377: SolanaClient.get_block() got an unexpected keyword argument 'max_supported_transaction_version'
+2025-02-24 12:38:54 - solana.query - INFO - Retrying app.utils.solana_query.SolanaQueryHandler.get_block_with_retry in 4.0 seconds as it raised TypeError: SolanaClient.get_block() got an unexpected keyword argument 'max_supported_transaction_version'.
+2025-02-24 12:38:58 - solana.query - ERROR - Error getting block 322707377: SolanaClient.get_block() got an unexpected keyword argument 'max_supported_transaction_version'
+2025-02-24 12:40:43 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:40:43 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:40:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:40:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:40:50 - solana.query - INFO - Successfully retrieved block at slot 322707700
+2025-02-24 12:40:50 - solana.query - ERROR - Error getting block 322707680: SolanaClient.get_block() got an unexpected keyword argument 'max_supported_transaction_version'
+2025-02-24 12:40:50 - solana.query - INFO - Retrying app.utils.solana_query.SolanaQueryHandler.get_block_with_retry in 4.0 seconds as it raised TypeError: SolanaClient.get_block() got an unexpected keyword argument 'max_supported_transaction_version'.
+2025-02-24 12:40:54 - solana.query - ERROR - Error getting block 322707680: SolanaClient.get_block() got an unexpected keyword argument 'max_supported_transaction_version'
+2025-02-24 12:40:54 - solana.query - INFO - Retrying app.utils.solana_query.SolanaQueryHandler.get_block_with_retry in 4.0 seconds as it raised TypeError: SolanaClient.get_block() got an unexpected keyword argument 'max_supported_transaction_version'.
+2025-02-24 12:40:58 - solana.query - ERROR - Error getting block 322707680: SolanaClient.get_block() got an unexpected keyword argument 'max_supported_transaction_version'
+2025-02-24 12:41:26 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:41:26 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:41:27 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:41:29 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:42:25 - solana.query - ERROR - Error getting block 322707940: SolanaClient.get_block() got an unexpected keyword argument 'maxSupportedTransactionVersion'
+2025-02-24 12:42:26 - solana.query - ERROR - Error getting block 322707940: SolanaClient.get_block() got an unexpected keyword argument 'maxSupportedTransactionVersion'
+2025-02-24 12:42:28 - solana.query - ERROR - Error getting block 322707940: SolanaClient.get_block() got an unexpected keyword argument 'maxSupportedTransactionVersion'
+2025-02-24 12:42:28 - solana.query - ERROR - Error in get_block for slot 322707940: SolanaClient.get_block() got an unexpected keyword argument 'maxSupportedTransactionVersion'
+2025-02-24 12:42:28 - solana.query - WARNING - Failed to get block at slot 322707940: SolanaClient.get_block() got an unexpected keyword argument 'maxSupportedTransactionVersion'
+2025-02-24 12:42:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:42:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:42:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:42:37 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:42:39 - solana.query - WARNING - Failed to get block at slot 322707975: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:39 - solana.query - WARNING - Failed to get block at slot 322707976: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:40 - solana.query - WARNING - Failed to get block at slot 322707977: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:40 - solana.query - WARNING - Failed to get block at slot 322707978: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:41 - solana.query - WARNING - Failed to get block at slot 322707979: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:41 - solana.query - WARNING - Failed to get block at slot 322707980: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:42 - solana.query - WARNING - Failed to get block at slot 322707981: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:42 - solana.query - WARNING - Failed to get block at slot 322707982: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:43 - solana.query - WARNING - Failed to get block at slot 322707983: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:43 - solana.query - WARNING - Failed to get block at slot 322707984: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:44 - solana.query - WARNING - Failed to get block at slot 322707985: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:44 - solana.query - WARNING - Failed to get block at slot 322707986: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:45 - solana.query - WARNING - Failed to get block at slot 322707987: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:45 - solana.query - WARNING - Failed to get block at slot 322707988: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:46 - solana.query - WARNING - Failed to get block at slot 322707989: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:46 - solana.query - WARNING - Failed to get block at slot 322707990: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:47 - solana.query - WARNING - Failed to get block at slot 322707991: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:47 - solana.query - WARNING - Failed to get block at slot 322707992: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:48 - solana.query - WARNING - Failed to get block at slot 322707993: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:48 - solana.query - WARNING - Failed to get block at slot 322707994: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:42:49 - solana.query - ERROR - Failed to get any recent blocks after trying multiple slots
+2025-02-24 12:42:49 - solana.query - ERROR - Error getting latest block: Failed to get latest block data
+2025-02-24 12:44:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:44:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:44:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:44:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:45:23 - solana.query - WARNING - Failed to get block at slot 322708389: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:24 - solana.query - WARNING - Failed to get block at slot 322708390: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:24 - solana.query - WARNING - Failed to get block at slot 322708391: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:25 - solana.query - WARNING - Failed to get block at slot 322708392: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:25 - solana.query - WARNING - Failed to get block at slot 322708393: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:26 - solana.query - WARNING - Failed to get block at slot 322708394: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:26 - solana.query - WARNING - Failed to get block at slot 322708395: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:45:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:45:35 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:45:38 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:45:40 - solana.query - WARNING - Failed to get block at slot 322708433: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:41 - solana.query - WARNING - Failed to get block at slot 322708434: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:41 - solana.query - WARNING - Failed to get block at slot 322708435: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:42 - solana.query - WARNING - Failed to get block at slot 322708436: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:42 - solana.query - WARNING - Failed to get block at slot 322708437: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:43 - solana.query - WARNING - Failed to get block at slot 322708438: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:43 - solana.query - WARNING - Failed to get block at slot 322708439: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:44 - solana.query - WARNING - Failed to get block at slot 322708440: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:44 - solana.query - WARNING - Failed to get block at slot 322708441: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:45 - solana.query - WARNING - Failed to get block at slot 322708442: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:45 - solana.query - WARNING - Failed to get block at slot 322708443: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:46 - solana.query - WARNING - Failed to get block at slot 322708444: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:46 - solana.query - WARNING - Failed to get block at slot 322708445: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:47 - solana.query - WARNING - Failed to get block at slot 322708446: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:47 - solana.query - WARNING - Failed to get block at slot 322708447: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:48 - solana.query - WARNING - Failed to get block at slot 322708448: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:48 - solana.query - WARNING - Failed to get block at slot 322708449: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:49 - solana.query - WARNING - Failed to get block at slot 322708450: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:49 - solana.query - WARNING - Failed to get block at slot 322708451: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:50 - solana.query - WARNING - Failed to get block at slot 322708452: SolanaQueryHandler.get_block() got an unexpected keyword argument 'commitment'
+2025-02-24 12:45:50 - solana.query - ERROR - Failed to get any recent blocks after trying multiple slots
+2025-02-24 12:45:50 - solana.query - ERROR - Error getting latest block: Failed to get latest block data
+2025-02-24 12:47:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:47:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:47:09 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:47:12 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:47:15 - solana.query - INFO - Successfully retrieved block at slot 322708672
+2025-02-24 12:48:32 - solana.query - INFO - Successfully retrieved block at slot 322708865
+2025-02-24 12:48:41 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:48:41 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:48:41 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:48:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:49:37 - solana.query - INFO - Successfully retrieved block at slot 322709028
+2025-02-24 12:51:50 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:51:50 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:51:50 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:51:53 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:52:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:52:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:52:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:52:08 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:52:58 - solana.query - INFO - Successfully retrieved block 322709538 with 1640 transactions
+2025-02-24 12:52:58 - solana.query - INFO - Successfully retrieved block at slot 322709538
+2025-02-24 12:53:00 - solana.query - INFO - Successfully retrieved block 322709518 with 1725 transactions
+2025-02-24 12:54:27 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:54:27 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:54:27 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:54:30 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:54:37 - solana.query - INFO - Successfully retrieved block 322709784 with 1895 transactions
+2025-02-24 12:54:37 - solana.query - INFO - Successfully retrieved block at slot 322709784
+2025-02-24 12:54:39 - solana.query - INFO - Successfully retrieved block 322709764 with 1889 transactions
+2025-02-24 12:56:39 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:56:39 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:56:39 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:56:42 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:57:35 - solana.query - INFO - Successfully retrieved block 322710238 with 1516 transactions
+2025-02-24 12:57:35 - solana.query - INFO - Successfully retrieved block at slot 322710238
+2025-02-24 12:57:39 - solana.query - INFO - Successfully retrieved block 322710218 with 1585 transactions
+2025-02-24 12:58:56 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:58:56 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:58:56 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:58:59 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 12:59:02 - solana.query - INFO - Successfully retrieved block 322710464 with 2010 transactions
+2025-02-24 12:59:02 - solana.query - INFO - Successfully retrieved block at slot 322710464
+2025-02-24 12:59:04 - solana.query - INFO - Successfully retrieved block 322710444 with 2222 transactions
+2025-02-24 13:00:48 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:00:48 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:00:48 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:00:51 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:01:42 - solana.query - INFO - Successfully retrieved block 322710867 with 1560 transactions
+2025-02-24 13:01:42 - solana.query - INFO - Successfully retrieved block at slot 322710867
+2025-02-24 13:01:45 - solana.query - INFO - Successfully retrieved block 322710847 with 1808 transactions
+2025-02-24 13:03:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:03:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:03:05 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:03:08 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:07:17 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:07:17 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:07:17 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:07:21 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:08:14 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:08:14 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:08:15 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:08:19 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 13:08:22 - solana.query - INFO - Processing blocks from 322711900 to 322711900
+2025-02-24 13:08:22 - solana.query - INFO - Analyzing blocks from 322711900 to 322711900
+2025-02-24 13:08:31 - solana.query - ERROR - Handler TokenHandler failed for block 322711900: 'TokenHandler' object has no attribute 'handle_response'
+2025-02-24 14:24:38 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:24:39 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:24:39 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:24:44 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:24:51 - solana.query - INFO - Processing blocks from 322723499 to 322723499
+2025-02-24 14:24:51 - solana.query - INFO - Analyzing blocks from 322723499 to 322723499
+2025-02-24 14:26:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:26:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:26:46 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:26:50 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:27:24 - solana.query - INFO - Processing blocks from 322723877 to 322723877
+2025-02-24 14:27:24 - solana.query - INFO - Analyzing blocks from 322723877 to 322723877
+2025-02-24 14:29:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:29:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:29:34 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:29:39 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:29:42 - solana.query - INFO - Processing blocks from 322724225 to 322724225
+2025-02-24 14:29:42 - solana.query - INFO - Analyzing blocks from 322724225 to 322724225
+2025-02-24 14:31:15 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:31:15 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:31:15 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:31:18 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:31:27 - solana.query - INFO - Processing blocks from 322724493 to 322724493
+2025-02-24 14:31:27 - solana.query - INFO - Analyzing blocks from 322724493 to 322724493
+2025-02-24 14:32:40 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:32:40 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:32:40 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:34:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:34:36 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:34:37 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:34:40 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:40:39 - solana.query - INFO - Processing blocks from 322725900 to 322725900
+2025-02-24 14:40:39 - solana.query - INFO - Analyzing blocks from 322725900 to 322725900
+2025-02-24 14:41:06 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:41:06 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:41:06 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:41:11 - solana.query - INFO - Initialized SolanaQueryHandler with handlers: ['base', 'mint', 'token', 'program', 'system', 'pump', 'nft']
+2025-02-24 14:41:14 - solana.query - INFO - Processing blocks from 322725988 to 322725988
+2025-02-24 14:41:14 - solana.query - INFO - Analyzing blocks from 322725988 to 322725988

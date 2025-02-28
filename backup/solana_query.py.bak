@@ -1,0 +1,2198 @@
+"""
+Solana query module for handling blockchain data queries.
+This module provides query handlers and utilities for fetching and processing Solana blockchain data.
+"""
+
+from typing import Dict, List, Optional, Any, Union
+import logging
+import time
+import asyncio
+from datetime import datetime, timezone
+from httpx import AsyncClient
+from solders.pubkey import Pubkey
+from solders.rpc.responses import *
+from solders.transaction import Transaction
+from solders.commitment_config import CommitmentConfig
+from tenacity import (
+    retry,
+    stop_after_attempt,
+    wait_exponential,
+    retry_if_exception_type,
+    before_sleep_log
+)
+
+from .solana_rpc import SolanaConnectionPool
+from .solana_types import (
+    RPCError,
+    RetryableError,
+    RateLimitError,
+    NodeBehindError,
+    SlotSkippedError,
+    MissingBlocksError,
+    NodeUnhealthyError,
+    SimulationError
+)
+from .handlers.mint_handler import MintHandler
+from .handlers.token_handler import TokenHandler
+from .handlers.program_handler import ProgramHandler
+from .handlers.system_handler import SystemHandler
+from .handlers.pump_handler import PumpHandler
+from .handlers.nft_handler import NFTHandler
+from .logging_config import setup_logging
+
+# Configure logging
+logger = setup_logging('solana.query')
+
+# Configure retry settings
+DEFAULT_RETRY_CONFIG = {
+    'stop': stop_after_attempt(3),
+    'wait': wait_exponential(multiplier=1, min=4, max=10),
+    'retry': retry_if_exception_type((RetryableError, RateLimitError)),
+    'before_sleep': before_sleep_log(logger, logging.WARNING)
+}
+
+class SolanaQueryHandler:
+    """Handler for Solana blockchain queries."""
+    
+    def __init__(self, connection_pool: Optional[SolanaConnectionPool] = None):
+        """Initialize query handler with connection pool."""
+        self.connection_pool = connection_pool or SolanaConnectionPool()
+        
+        # Initialize handlers
+        self.mint_handler = MintHandler()
+        self.token_handler = TokenHandler()
+        self.program_handler = ProgramHandler()
+        self.system_handler = SystemHandler()
+        self.pump_handler = PumpHandler()
+        self.nft_handler = NFTHandler()
+        
+        # Store handlers in dictionary for processing
+        self.handlers = {
+            'base': None,  # Placeholder for base handler
+            'mint': self.mint_handler,
+            'token': self.token_handler,
+            'program': self.program_handler,
+            'system': self.system_handler,
+            'pump': self.pump_handler,
+            'nft': self.nft_handler
+        }
+        
+        # Log initialization
+        logger.info(f"Initialized SolanaQueryHandler with handlers: {list(self.handlers.keys())}")
+        
+    async def initialize(self):
+        """Initialize the connection pool if not already initialized."""
+        if not self.connection_pool._initialized:
+            await self.connection_pool.initialize()
+
+    @retry(**DEFAULT_RETRY_CONFIG)
+    async def get_signatures_for_address(
+        self,
+        address: Union[str, Pubkey],
+        start_slot: Optional[int] = None,
+        end_slot: Optional[int] = None,
+        limit: int = 1000,
+        before: Optional[str] = None,
+        until: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
+        """Get signatures for transactions involving the given address"""
+        try:
+            client = await self.connection_pool.get_client()
+            
+            # Convert address to string if needed
+            if isinstance(address, Pubkey):
+                address = str(address)
+                
+            # Build params
+            params = {
+                "limit": limit
+            }
+            
+            if start_slot is not None:
+                params["minSlot"] = start_slot
+            if end_slot is not None:
+                params["maxSlot"] = end_slot
+            if before:
+                params["before"] = before
+            if until:
+                params["until"] = until
+                
+            logger.debug(f"Getting signatures for address {address} with params: {params}")
+            
+            response = await client.get_signatures_for_address(address, **params)
+            if not response:
+                logger.info(f"No signatures found for address {address}")
+                return []
+                
+            logger.debug(f"Found {len(response)} signatures for address {address}")
+            return response
+            
+        except Exception as e:
+            error_msg = str(e).lower()
+            
+            if "429" in error_msg or "rate limit" in error_msg:
+                logger.warning(f"Rate limit hit for address {address}")
+                raise RateLimitError(f"Rate limit exceeded for address {address}")
+                
+            if "not found" in error_msg:
+                logger.info(f"Address {address} not found")
+                return []
+                
+            if "invalid" in error_msg:
+                logger.error(f"Invalid address format: {address}")
+                return []
+                
+            if "timeout" in error_msg:
+                logger.warning(f"Timeout getting signatures for {address}")
+                raise RetryableError(f"Timeout getting signatures for {address}")
+                
+            # For any other error, log it and retry
+            logger.error(f"Error getting signatures for {address}: {e}")
+            raise RetryableError(f"Failed to get signatures for {address}: {e}")
+
+    @retry(**DEFAULT_RETRY_CONFIG)
+    async def get_program_transactions(
+        self,
+        program_id: Union[str, Pubkey],
+        start_slot: Optional[int] = None,
+        end_slot: Optional[int] = None,
+        limit: int = 1000,
+        batch_size: int = 10,
+        batch_delay: float = 5.0
+    ) -> List[Dict[str, Any]]:
+        """Get transactions for a specific program"""
+        try:
+            # Convert program_id to Pubkey if it's a string
+            if isinstance(program_id, str):
+                program_id = Pubkey.from_string(program_id)
+                
+            logger.info(f"Getting transactions for program {program_id}")
+            
+            # Get signatures for the slot range
+            signatures = await self.get_signatures_for_address(
+                address=program_id,
+                start_slot=start_slot,
+                end_slot=end_slot,
+                limit=limit
+            )
+            
+            if not signatures:
+                logger.info(f"No signatures found for program {program_id}")
+                return []
+                
+            # Get transaction data for each signature in batches
+            transactions = []
+            client = await self.connection_pool.get_client()
+            
+            for i in range(0, len(signatures), batch_size):
+                batch = signatures[i:i + batch_size]
+                logger.debug(f"Processing batch {i//batch_size + 1} of {(len(signatures) + batch_size - 1)//batch_size}")
+                
+                for sig_info in batch:
+                    try:
+                        signature = sig_info['signature']
+                        tx = await client.get_transaction(signature)
+                        if tx:
+                            transactions.append(tx)
+                        else:
+                            logger.warning(f"Transaction not found for signature {signature}")
+                    except Exception as tx_error:
+                        error_msg = str(tx_error).lower()
+                        
+                        if "429" in error_msg or "rate limit" in error_msg:
+                            logger.warning(f"Rate limit hit for signature {signature}")
+                            raise RateLimitError(f"Rate limit exceeded for signature {signature}")
+                            
+                        if "not found" in error_msg:
+                            logger.info(f"Transaction {signature} not found")
+                            continue
+                            
+                        if "timeout" in error_msg:
+                            logger.warning(f"Timeout getting transaction {signature}")
+                            raise RetryableError(f"Timeout getting transaction {signature}")
+                            
+                        logger.error(f"Error getting transaction {signature}: {tx_error}")
+                        continue
+                
+                # Add delay between batches to avoid rate limits
+                if i + batch_size < len(signatures):
+                    await asyncio.sleep(batch_delay)
+            
+            logger.info(f"Successfully retrieved {len(transactions)} transactions for program {program_id}")
+            return transactions
+            
+        except Exception as e:
+            if isinstance(e, (RateLimitError, RetryableError)):
+                raise
+                
+            logger.error(f"Error getting program transactions: {str(e)}")
+            raise RetryableError(f"Failed to get program transactions: {e}")
+
+    async def get_account_info(
+        self,
+        address: Union[str, Pubkey],
+        commitment: Optional[str] = None
+    ) -> Optional[Dict[str, Any]]:
+        """Get account information for a specific address"""
+        try:
+            client = await self.connection_pool.get_client()
+            
+            # Convert address to Pubkey if it's a string
+            if isinstance(address, str):
+                address = Pubkey.from_string(address)
+                
+            response = await client.get_account_info(address, commitment=commitment)
+            if response:
+                return response
+                
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error getting account info for {address}: {str(e)}")
+            return None
+
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=4, max=10),
+        retry=retry_if_exception_type((Exception)),  # Retry on any exception
+        before_sleep=before_sleep_log(logger, logging.INFO)
+    )
+    async def get_block_with_retry(self, client: AsyncClient, slot: int) -> Optional[Dict[str, Any]]:
+        """Get block with retry logic."""
+        try:
+            # Configure block fetch options
+            opts = {
+                "maxSupportedTransactionVersion": 0,
+                "commitment": "confirmed",
+                "transactionDetails": "full",
+                "rewards": False
+            }
+            
+            # Get block with parameters in opts dictionary
+            block = await client.get_block(slot, opts)
+            
+            # Add small delay between requests
+            await asyncio.sleep(0.2)
+            
+            return block
+            
+        except Exception as e:
+            error_msg = str(e)
+            
+            if "429" in error_msg or "Too Many Requests" in error_msg:
+                logger.warning(f"Rate limit hit for block {slot}, backing off...")
+                raise  # Let retry handle the backoff
+                
+            if "block not available" in error_msg:
+                logger.info(f"Block {slot} not available")
+                return None  # Return None instead of raising error
+                
+            # For any other error, log and retry
+            logger.error(f"Error getting block {slot}: {e}")
+            raise
+
+    async def get_latest_block(self) -> Dict[str, Any]:
+        """Get the latest available block."""
+        try:
+            client = await self.connection_pool.get_client()
+            slot = await client.get_slot(commitment="confirmed")
+            
+            # Try getting blocks starting from 20 slots behind latest to ensure availability
+            for offset in range(20, 0, -1):
+                target_slot = slot - offset
+                try:
+                    # Configure block fetch options
+                    opts = {
+                        "maxSupportedTransactionVersion": 0,
+                        "commitment": "confirmed",
+                        "transactionDetails": "full",
+                        "rewards": False
+                    }
+                    block = await self.get_block(target_slot, opts)
+                    if block:
+                        logger.info(f"Successfully retrieved block at slot {target_slot}")
+                        return {
+                            'slot': target_slot,
+                            'block': block
+                        }
+                except Exception as block_error:
+                    logger.warning(f"Failed to get block at slot {target_slot}: {str(block_error)}")
+                    await asyncio.sleep(0.5)
+                    continue
+            
+            logger.error("Failed to get any recent blocks after trying multiple slots")
+            raise RPCError("Failed to get latest block data")
+        except Exception as e:
+            logger.error(f"Error getting latest block: {str(e)}")
+            raise RPCError(f"Failed to get latest block: {e}")
+
+    async def get_block_data(
+        self,
+        slot: int,
+        commitment: str = "finalized"
+    ) -> Optional[Dict[str, Any]]:
+        """Get block data with retries and error handling."""
+        try:
+            # Configure block fetch options
+            opts = {
+                "maxSupportedTransactionVersion": 0,  # Required for newer transactions
+                "commitment": commitment,
+                "transactionDetails": "full",
+                "rewards": False
+            }
+            
+            return await self.get_block(slot, opts)
+            
+        except Exception as e:
+            logger.error(f"Error in get_block_data for slot {slot}: {str(e)}")
+            raise
+
+    async def get_recent_blocks(self, num_blocks: int = 10) -> List[Dict[str, Any]]:
+        """
+        Get recent finalized blocks.
+
+        Args:
+            num_blocks: Number of recent blocks to retrieve
+
+        Returns:
+            List of block data dictionaries
+
+        Raises:
+            RPCError: If there's an error getting block data
+        """
+        try:
+            # Get latest block
+            latest_block = await self.get_latest_block()
+            if not latest_block:
+                logger.error("Failed to get latest block")
+                return []
+                
+            blocks = []
+            
+            # Start from 5 blocks behind latest to ensure finality
+            start_slot = latest_block['slot'] - num_blocks
+            
+            for slot in range(start_slot, start_slot + num_blocks):
+                block = await self.get_block_data(slot)
+                if block:
+                    blocks.append(block)
+                    
+            return blocks
+            
+        except Exception as e:
+            logger.error(f"Error getting recent blocks: {str(e)}")
+            return []
+
+    async def process_blocks(
+        self,
+        num_blocks: int = 10,
+        start_slot: Optional[int] = None,
+        end_slot: Optional[int] = None,
+        commitment: Optional[str] = None,
+        max_supported_transaction_version: Optional[int] = None,
+        batch_size: int = 5,
+        handlers: Optional[List[Any]] = None
+    ) -> Dict[str, Any]:
+        """Process multiple blocks in parallel batches."""
+        logger = logging.getLogger(__name__)
+        
+        try:
+            # Get latest block if start/end not specified
+            if start_slot is None or end_slot is None:
+                latest_block = await self.get_latest_block()
+                if latest_block is None:
+                    logger.error("Failed to get latest block")
+                    return {
+                        "success": False,
+                        "error": "Failed to get latest block",
+                        "result": None
+                    }
+                    
+                # Start from latest block and work backwards
+                latest_slot = latest_block['slot']
+                current_slot = latest_slot - 20  # Start 20 blocks back for better availability
+                available_slot = None
+                
+                # Try up to 20 slots to find an available block
+                for _ in range(20):
+                    client = await self.connection_pool.get_client()
+                    block = await self.get_block_with_retry(client, current_slot)
+                    if block:
+                        available_slot = current_slot
+                        break
+                    current_slot -= 1
+                
+                if available_slot is None:
+                    logger.error("Could not find available blocks")
+                    return {
+                        "success": False,
+                        "error": "Could not find available blocks",
+                        "result": None
+                    }
+                    
+                # Set start and end slots based on available block
+                if start_slot is None:
+                    start_slot = available_slot
+                if end_slot is None:
+                    end_slot = start_slot + num_blocks - 1
+                    
+            # Process blocks in batches
+            processed_blocks = []
+            current_batch = []
+            
+            for slot in range(start_slot, end_slot + 1):
+                current_batch.append(slot)
+                
+                if len(current_batch) >= batch_size or slot == end_slot:
+                    # Process batch
+                    batch_tasks = []
+                    for batch_slot in current_batch:
+                        task = asyncio.create_task(self.get_block_data(batch_slot, commitment))
+                        batch_tasks.append(task)
+                        
+                    # Wait for batch to complete
+                    batch_results = await asyncio.gather(*batch_tasks, return_exceptions=True)
+                    
+                    # Process results
+                    for result in batch_results:
+                        if isinstance(result, Exception):
+                            logger.error(f"Error processing block: {str(result)}")
+                            continue
+                        if result:
+                            processed_blocks.append(result)
+                            
+                    current_batch = []
+                    
+            # Compile results
+            mint_addresses = set()
+            mint_operations = []
+            errors = []
+            
+            for block in processed_blocks:
+                if 'mint_addresses' in block:
+                    mint_addresses.update(block['mint_addresses'])
+                if 'mint_operations' in block:
+                    mint_operations.extend(block['mint_operations'])
+                if 'errors' in block:
+                    errors.extend(block['errors'])
+                    
+            return {
+                "success": True,
+                "result": {
+                    "mint_addresses": list(mint_addresses),
+                    "mint_operations": mint_operations,
+                    "processed_blocks": len(processed_blocks),
+                    "total_blocks": num_blocks,
+                    "errors": errors
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Error processing blocks: {str(e)}")
+            return {
+                "success": False,
+                "error": str(e),
+                "result": None
+            }
+
+    async def get_mints_from_recent_blocks(self, num_blocks: int = 10) -> Dict[str, Any]:
+        """Get mint information from recent blocks."""
+        try:
+            # Get latest block
+            latest = await self.get_latest_block()
+            if not latest:
+                return {
+                    "mints": [],
+                    "total_mints": 0,
+                    "blocks_analyzed": 0,
+                    "latest_block": None,
+                    "error": "Failed to get current slot"
+                }
+
+            start_slot = latest['slot']
+            logger.info(f"Starting analysis from slot {start_slot}")
+
+            # Analyze blocks
+            analysis = await self.analyze_blocks(
+                start_slot=start_slot,
+                num_blocks=num_blocks,
+                include_transactions=True
+            )
+
+            # Extract mint information from results
+            mint_results = []
+            for block_result in analysis.get('results', []):
+                if block_result and 'results' in block_result:
+                    for handler_result in block_result['results'].values():
+                        if isinstance(handler_result, dict) and 'mint_operations' in handler_result:
+                            mint_results.extend(handler_result['mint_operations'])
+
+            return {
+                "mints": mint_results,
+                "total_mints": len(mint_results),
+                "blocks_analyzed": analysis.get('blocks_analyzed', 0),
+                "latest_block": start_slot,
+                "start_slot": analysis.get('start_slot'),
+                "end_slot": analysis.get('end_slot')
+            }
+
+        except Exception as e:
+            logger.error(f"Error getting mints from recent blocks: {str(e)}")
+            raise RPCError(f"Failed to get mints from recent blocks: {str(e)}")
+
+    async def process_block(
+        self,
+        slot: int,
+    ) -> Dict[str, Any]:
+        """Process a block at the given slot with comprehensive error handling and statistics tracking."""
+        try:
+            # Get block data
+            block_data = await self.get_block(slot)
+            if not block_data:
+                logger.warning(f"No block data found for slot {slot}")
+                return None
+
+            # Transform block data for handlers
+            transformed_data = {
+                'slot': slot,
+                'transactions': [],
+                'block_time': block_data.get('blockTime'),
+                'block_height': block_data.get('blockHeight'),
+                'parent_slot': block_data.get('parentSlot')
+            }
+
+            # Process transactions if present
+            transactions = block_data.get('transactions', [])
+            if not transactions:
+                logger.debug(f"No transactions found in block {slot}")
+            
+            for tx_data in transactions:
+                try:
+                    # Handle both list and dict formats
+                    if isinstance(tx_data, list):
+                        tx = tx_data[0] if tx_data else None
+                        meta = tx_data[1] if len(tx_data) > 1 else None
+                    else:
+                        tx = tx_data
+                        meta = tx_data.get('meta') if isinstance(tx_data, dict) else None
+
+                    if not tx:
+                        logger.debug(f"Invalid transaction data format: {type(tx)}")
+                        continue
+
+                    # Get transaction data and metadata
+                    message = None
+                    if isinstance(tx, dict):
+                        message = tx.get('message', {})
+                        if isinstance(message, str):
+                            # Try to handle encoded message
+                            try:
+                                import base64
+                                import json
+                                decoded = base64.b64decode(message)
+                                message = json.loads(decoded)
+                            except:
+                                message = {}
+                    elif hasattr(tx, 'message'):
+                        message = tx.message
+                        if hasattr(message, '__dict__'):
+                            message = message.__dict__
+
+                    if not isinstance(message, dict):
+                        logger.debug(f"Message not a dict in transaction: {type(message)}")
+                        message = {}
+
+                    # Build transaction data structure
+                    transformed_tx = {
+                        'transaction': {
+                            'message': {
+                                'instructions': [],
+                                'accountKeys': [],
+                                'recentBlockhash': message.get('recentBlockhash'),
+                                'programIdIndex': message.get('programIdIndex')
+                            },
+                            'signatures': []
+                        },
+                        'meta': {}
+                    }
+
+                    # Process instructions
+                    instructions = message.get('instructions', [])
+                    if isinstance(instructions, (list, tuple)):
+                        for instr in instructions:
+                            if isinstance(instr, dict):
+                                # Already in dict format
+                                transformed_tx['transaction']['message']['instructions'].append(instr)
+                            elif isinstance(instr, (list, tuple)) and len(instr) >= 2:
+                                # Convert list format to dict
+                                instruction_dict = {
+                                    'programId': str(instr[0]) if instr[0] else None,
+                                    'accounts': instr[1] if isinstance(instr[1], list) else [],
+                                    'data': instr[2] if len(instr) > 2 else None
+                                }
+                                transformed_tx['transaction']['message']['instructions'].append(instruction_dict)
+                            elif hasattr(instr, 'program_id'):
+                                # Handle object format
+                                instruction_dict = {
+                                    'programId': str(instr.program_id),
+                                    'accounts': [],
+                                    'data': None
+                                }
+                                if hasattr(instr, 'accounts'):
+                                    instruction_dict['accounts'] = instr.accounts
+                                if hasattr(instr, 'data'):
+                                    instruction_dict['data'] = instr.data
+                                transformed_tx['transaction']['message']['instructions'].append(instruction_dict)
+
+                    # Process account keys
+                    account_keys = message.get('accountKeys', [])
+                    if isinstance(account_keys, (list, tuple)):
+                        for key in account_keys:
+                            if isinstance(key, dict):
+                                # Handle dict format
+                                pubkey = key.get('pubkey')
+                                if pubkey:
+                                    transformed_tx['transaction']['message']['accountKeys'].append(str(pubkey))
+                            elif isinstance(key, str):
+                                # Handle string format
+                                transformed_tx['transaction']['message']['accountKeys'].append(str(key))
+                            else:
+                                # Try string conversion
+                                try:
+                                    transformed_tx['transaction']['message']['accountKeys'].append(str(key))
+                                except:
+                                    continue
+
+                    # Process signatures
+                    signatures = tx.get('signatures', []) if isinstance(tx, dict) else []
+                    if signatures:
+                        transformed_tx['transaction']['signatures'] = [str(sig) for sig in signatures]
+
+                    # Process meta
+                    if meta:
+                        if isinstance(meta, dict):
+                            transformed_tx['meta'] = meta
+                        elif hasattr(meta, '__dict__'):
+                            transformed_tx['meta'] = meta.__dict__
+
+                    transformed_data['transactions'].append(transformed_tx)
+                except Exception as e:
+                    logger.error(f"Error transforming transaction: {str(e)}")
+                    continue
+
+            # Process with all registered handlers
+            handlers_processed = 0
+            results = {}
+
+            for handler_name, handler in self.handlers.items():
+                if handler_name == 'base':  # Skip base handler
+                    continue
+                    
+                try:
+                    handler_result = await handler.handle_response(transformed_data)
+                    if handler_result:
+                        results[handler_name] = handler_result
+                        handlers_processed += 1
+                        logger.info(f"{handler_name.capitalize()} handler processed block {slot} successfully")
+                except Exception as e:
+                    logger.error(f"Error in {handler_name} handler for block {slot}: {str(e)}")
+
+            logger.info(f"Block {slot} Processing Summary:")
+            logger.info(f"  Handlers Processed: {handlers_processed}")
+            if handlers_processed > 0:
+                logger.info(f"  Results: {list(results.keys())}")
+
+            return {
+                'slot': slot,
+                'results': results,
+                'handlers_processed': handlers_processed,
+                'total_transactions': len(transformed_data['transactions'])
+            }
+
+        except Exception as e:
+            logger.error(f"Error processing block {slot}: {str(e)}")
+            return None
+
+    async def get_block(
+        self,
+        slot: int,
+        opts: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """Get block data from Solana RPC."""
+        try:
+            # Get client from pool
+            client = await self.connection_pool.get_client()
+            
+            logger.debug(f"Fetching block {slot} with options: {opts}")
+            
+            # Update options to support all transaction versions
+            if 'maxSupportedTransactionVersion' not in opts:
+                opts['maxSupportedTransactionVersion'] = None  # Support all versions
+            
+            # Get block data with retries
+            max_retries = 3
+            current_retry = 0
+            backoff_time = 1.0
+            max_backoff = 30.0
+
+            while current_retry < max_retries:
+                try:
+                    block_data = await client.get_block(slot, opts)
+                    
+                    if block_data:
+                        # Validate block has transactions
+                        if 'transactions' not in block_data or not block_data['transactions']:
+                            logger.debug(f"Block {slot} has no transactions")
+                            return None
+                            
+                        # Log transaction count
+                        tx_count = len(block_data['transactions'])
+                        logger.info(f"Successfully retrieved block {slot} with {tx_count} transactions")
+                        return block_data
+                    else:
+                        logger.info(f"Block not available: Block not available for slot {slot}")
+                        return None
+                except Exception as e:
+                    error_msg = str(e)
+                    current_retry += 1
+
+                    if "slot was skipped, or missing in long-term storage" in error_msg:
+                        logger.debug(f"Block {slot} was skipped or missing")
+                        return None
+                    elif "block not available for slot" in error_msg:
+                        logger.info(f"Block not available: Block not available for slot {slot}")
+                        return None
+                    elif "429" in error_msg or "Too Many Requests" in error_msg:
+                        logger.warning(f"Rate limit hit for block {slot}, backing off...")
+                        await asyncio.sleep(backoff_time)
+                        backoff_time = min(backoff_time * 2, max_backoff)
+                        continue
+                    
+                    logger.error(f"Error getting block {slot}: {error_msg}")
+                    if current_retry >= max_retries:
+                        raise
+                    
+                    await asyncio.sleep(backoff_time)
+                    backoff_time = min(backoff_time * 2, max_backoff)
+            
+            logger.error(f"Failed to get block at slot {slot} after {max_retries} retries")
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error in get_block for slot {slot}: {str(e)}")
+            raise
+
+    async def get_multiple_blocks(
+        self,
+        slots: List[int],
+        commitment: str = "finalized"
+    ) -> List[Optional[Dict[str, Any]]]:
+        """Get multiple blocks in parallel."""
+        # Configure block fetch options
+        opts = {
+            "maxSupportedTransactionVersion": None,  # Support all transaction versions
+            "commitment": commitment,
+            "transactionDetails": "full",
+            "rewards": False
+        }
+        
+        tasks = []
+        for slot in slots:
+            tasks.append(self.get_block(slot, opts))
+        
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            processed_results = []
+            
+            for i, result in enumerate(results):
+                if isinstance(result, Exception):
+                    logger.error(f"Error getting block {slots[i]}: {str(result)}")
+                    processed_results.append(None)
+                else:
+                    processed_results.append(result)
+                    
+            return processed_results
+            
+        except Exception as e:
+            logger.error(f"Error in get_multiple_blocks: {str(e)}")
+            raise
+
+    async def analyze_blocks(
+        self,
+        start_slot: int,
+        end_slot: int,
+        commitment: str = "finalized",
+        batch_size: int = 10
+    ) -> List[Dict[str, Any]]:
+        """Analyze multiple blocks in parallel with batching."""
+        try:
+            logger.info(f"Analyzing blocks from {start_slot} to {end_slot}")
+            
+            # Validate slot range
+            if start_slot > end_slot:
+                raise ValueError("Start slot must be less than or equal to end slot")
+            
+            # Configure block fetch options
+            opts = {
+                "maxSupportedTransactionVersion": None,  # Support all transaction versions
+                "commitment": commitment,
+                "transactionDetails": "full",
+                "rewards": False,
+                "encoding": "jsonParsed"  # Get parsed transaction data
+            }
+            
+            # Create batches
+            slots = range(start_slot, end_slot + 1)
+            batches = [slots[i:i + batch_size] for i in range(0, len(slots), batch_size)]
+            
+            results = []
+            for batch in batches:
+                # Process batch in parallel
+                tasks = [
+                    self.get_block_data(slot, commitment)
+                    for slot in batch
+                ]
+                
+                batch_results = await asyncio.gather(*tasks, return_exceptions=True)
+                
+                # Handle results
+                for slot, result in zip(batch, batch_results):
+                    if isinstance(result, Exception):
+                        logger.error(f"Failed to analyze block {slot}: {str(result)}")
+                        results.append({
+                            "slot": slot,
+                            "success": False,
+                            "error": str(result)
+                        })
+                    else:
+                        results.append({
+                            "slot": slot,
+                            "success": True,
+                            "result": result
+                        })
+                        
+                        # Log transaction count if available
+                        if result and isinstance(result, dict):
+                            tx_count = len(result.get('transactions', []))
+                            logger.debug(f"Block {slot} has {tx_count} transactions")
+                
+            return results
+            
+        except Exception as e:
+            logger.error(f"Error analyzing blocks: {str(e)}")
+            raise
+
+    async def get_mints_from_recent_blocks(self, num_blocks: int = 10) -> Dict[str, Any]:
+        """Get mint information from recent blocks."""
+        try:
+            # Get latest block
+            latest = await self.get_latest_block()
+            if not latest:
+                return {
+                    "mints": [],
+                    "total_mints": 0,
+                    "blocks_analyzed": 0,
+                    "latest_block": None,
+                    "error": "Failed to get current slot"
+                }
+
+            start_slot = latest['slot']
+            logger.info(f"Starting analysis from slot {start_slot}")
+
+            # Analyze blocks
+            analysis = await self.analyze_blocks(
+                start_slot=start_slot,
+                num_blocks=num_blocks,
+                include_transactions=True
+            )
+
+            # Extract mint information from results
+            mint_results = []
+            for block_result in analysis.get('results', []):
+                if block_result and 'results' in block_result:
+                    for handler_result in block_result['results'].values():
+                        if isinstance(handler_result, dict) and 'mint_operations' in handler_result:
+                            mint_results.extend(handler_result['mint_operations'])
+
+            return {
+                "mints": mint_results,
+                "total_mints": len(mint_results),
+                "blocks_analyzed": analysis.get('blocks_analyzed', 0),
+                "latest_block": start_slot,
+                "start_slot": analysis.get('start_slot'),
+                "end_slot": analysis.get('end_slot')
+            }
+
+        except Exception as e:
+            logger.error(f"Error getting mints from recent blocks: {str(e)}")
+            raise RPCError(f"Failed to get mints from recent blocks: {str(e)}")
+
+    async def process_block(
+        self,
+        slot: int,
+    ) -> Dict[str, Any]:
+        """Process a block at the given slot with comprehensive error handling and statistics tracking."""
+        try:
+            # Get block data
+            block_data = await self.get_block(slot)
+            if not block_data:
+                logger.warning(f"No block data found for slot {slot}")
+                return None
+
+            # Transform block data for handlers
+            transformed_data = {
+                'slot': slot,
+                'transactions': [],
+                'block_time': block_data.get('blockTime'),
+                'block_height': block_data.get('blockHeight'),
+                'parent_slot': block_data.get('parentSlot')
+            }
+
+            # Process transactions if present
+            transactions = block_data.get('transactions', [])
+            if not transactions:
+                logger.debug(f"No transactions found in block {slot}")
+            
+            for tx_data in transactions:
+                try:
+                    # Handle both list and dict formats
+                    if isinstance(tx_data, list):
+                        tx = tx_data[0] if tx_data else None
+                        meta = tx_data[1] if len(tx_data) > 1 else None
+                    else:
+                        tx = tx_data
+                        meta = tx_data.get('meta') if isinstance(tx_data, dict) else None
+
+                    if not tx:
+                        logger.debug(f"Invalid transaction data format: {type(tx)}")
+                        continue
+
+                    # Get transaction data and metadata
+                    message = None
+                    if isinstance(tx, dict):
+                        message = tx.get('message', {})
+                        if isinstance(message, str):
+                            # Try to handle encoded message
+                            try:
+                                import base64
+                                import json
+                                decoded = base64.b64decode(message)
+                                message = json.loads(decoded)
+                            except:
+                                message = {}
+                    elif hasattr(tx, 'message'):
+                        message = tx.message
+                        if hasattr(message, '__dict__'):
+                            message = message.__dict__
+
+                    if not isinstance(message, dict):
+                        logger.debug(f"Message not a dict in transaction: {type(message)}")
+                        message = {}
+
+                    # Build transaction data structure
+                    transformed_tx = {
+                        'transaction': {
+                            'message': {
+                                'instructions': [],
+                                'accountKeys': [],
+                                'recentBlockhash': message.get('recentBlockhash'),
+                                'programIdIndex': message.get('programIdIndex')
+                            },
+                            'signatures': []
+                        },
+                        'meta': {}
+                    }
+
+                    # Process instructions
+                    instructions = message.get('instructions', [])
+                    if isinstance(instructions, (list, tuple)):
+                        for instr in instructions:
+                            if isinstance(instr, dict):
+                                # Already in dict format
+                                transformed_tx['transaction']['message']['instructions'].append(instr)
+                            elif isinstance(instr, (list, tuple)) and len(instr) >= 2:
+                                # Convert list format to dict
+                                instruction_dict = {
+                                    'programId': str(instr[0]) if instr[0] else None,
+                                    'accounts': instr[1] if isinstance(instr[1], list) else [],
+                                    'data': instr[2] if len(instr) > 2 else None
+                                }
+                                transformed_tx['transaction']['message']['instructions'].append(instruction_dict)
+                            elif hasattr(instr, 'program_id'):
+                                # Handle object format
+                                instruction_dict = {
+                                    'programId': str(instr.program_id),
+                                    'accounts': [],
+                                    'data': None
+                                }
+                                if hasattr(instr, 'accounts'):
+                                    instruction_dict['accounts'] = instr.accounts
+                                if hasattr(instr, 'data'):
+                                    instruction_dict['data'] = instr.data
+                                transformed_tx['transaction']['message']['instructions'].append(instruction_dict)
+
+                    # Process account keys
+                    account_keys = message.get('accountKeys', [])
+                    if isinstance(account_keys, (list, tuple)):
+                        for key in account_keys:
+                            if isinstance(key, dict):
+                                # Handle dict format
+                                pubkey = key.get('pubkey')
+                                if pubkey:
+                                    transformed_tx['transaction']['message']['accountKeys'].append(str(pubkey))
+                            elif isinstance(key, str):
+                                # Handle string format
+                                transformed_tx['transaction']['message']['accountKeys'].append(str(key))
+                            else:
+                                # Try string conversion
+                                try:
+                                    transformed_tx['transaction']['message']['accountKeys'].append(str(key))
+                                except:
+                                    continue
+
+                    # Process signatures
+                    signatures = tx.get('signatures', []) if isinstance(tx, dict) else []
+                    if signatures:
+                        transformed_tx['transaction']['signatures'] = [str(sig) for sig in signatures]
+
+                    # Process meta
+                    if meta:
+                        if isinstance(meta, dict):
+                            transformed_tx['meta'] = meta
+                        elif hasattr(meta, '__dict__'):
+                            transformed_tx['meta'] = meta.__dict__
+
+                    transformed_data['transactions'].append(transformed_tx)
+                except Exception as e:
+                    logger.error(f"Error transforming transaction: {str(e)}")
+                    continue
+
+            # Process with all registered handlers
+            handlers_processed = 0
+            results = {}
+
+            for handler_name, handler in self.handlers.items():
+                if handler_name == 'base':  # Skip base handler
+                    continue
+                    
+                try:
+                    handler_result = await handler.handle_response(transformed_data)
+                    if handler_result:
+                        results[handler_name] = handler_result
+                        handlers_processed += 1
+                        logger.info(f"{handler_name.capitalize()} handler processed block {slot} successfully")
+                except Exception as e:
+                    logger.error(f"Error in {handler_name} handler for block {slot}: {str(e)}")
+
+            logger.info(f"Block {slot} Processing Summary:")
+            logger.info(f"  Handlers Processed: {handlers_processed}")
+            if handlers_processed > 0:
+                logger.info(f"  Results: {list(results.keys())}")
+
+            return {
+                'slot': slot,
+                'results': results,
+                'handlers_processed': handlers_processed,
+                'total_transactions': len(transformed_data['transactions'])
+            }
+
+        except Exception as e:
+            logger.error(f"Error processing block {slot}: {str(e)}")
+            return None
+
+    async def get_block(
+        self,
+        slot: int,
+        opts: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """Get block data from Solana RPC."""
+        try:
+            # Get client from pool
+            client = await self.connection_pool.get_client()
+            
+            logger.debug(f"Fetching block {slot} with options: {opts}")
+            
+            # Update options to support all transaction versions
+            if 'maxSupportedTransactionVersion' not in opts:
+                opts['maxSupportedTransactionVersion'] = None  # Support all versions
+            
+            # Get block data with retries
+            max_retries = 3
+            current_retry = 0
+            backoff_time = 1.0
+            max_backoff = 30.0
+
+            while current_retry < max_retries:
+                try:
+                    block_data = await client.get_block(slot, opts)
+                    
+                    if block_data:
+                        # Validate block has transactions
+                        if 'transactions' not in block_data or not block_data['transactions']:
+                            logger.debug(f"Block {slot} has no transactions")
+                            return None
+                            
+                        # Log transaction count
+                        tx_count = len(block_data['transactions'])
+                        logger.info(f"Successfully retrieved block {slot} with {tx_count} transactions")
+                        return block_data
+                    else:
+                        logger.info(f"Block not available: Block not available for slot {slot}")
+                        return None
+                except Exception as e:
+                    error_msg = str(e)
+                    current_retry += 1
+
+                    if "slot was skipped, or missing in long-term storage" in error_msg:
+                        logger.debug(f"Block {slot} was skipped or missing")
+                        return None
+                    elif "block not available for slot" in error_msg:
+                        logger.info(f"Block not available: Block not available for slot {slot}")
+                        return None
+                    elif "429" in error_msg or "Too Many Requests" in error_msg:
+                        logger.warning(f"Rate limit hit for block {slot}, backing off...")
+                        await asyncio.sleep(backoff_time)
+                        backoff_time = min(backoff_time * 2, max_backoff)
+                        continue
+                    
+                    logger.error(f"Error getting block {slot}: {error_msg}")
+                    if current_retry >= max_retries:
+                        raise
+                    
+                    await asyncio.sleep(backoff_time)
+                    backoff_time = min(backoff_time * 2, max_backoff)
+            
+            logger.error(f"Failed to get block at slot {slot} after {max_retries} retries")
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error in get_block for slot {slot}: {str(e)}")
+            raise
+
+    async def get_multiple_blocks(
+        self,
+        slots: List[int],
+        commitment: str = "finalized"
+    ) -> List[Optional[Dict[str, Any]]]:
+        """Get multiple blocks in parallel."""
+        # Configure block fetch options
+        opts = {
+            "maxSupportedTransactionVersion": None,  # Support all transaction versions
+            "commitment": commitment,
+            "transactionDetails": "full",
+            "rewards": False
+        }
+        
+        tasks = []
+        for slot in slots:
+            tasks.append(self.get_block(slot, opts))
+        
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            processed_results = []
+            
+            for i, result in enumerate(results):
+                if isinstance(result, Exception):
+                    logger.error(f"Error getting block {slots[i]}: {str(result)}")
+                    processed_results.append(None)
+                else:
+                    processed_results.append(result)
+                    
+            return processed_results
+            
+        except Exception as e:
+            logger.error(f"Error in get_multiple_blocks: {str(e)}")
+            raise
+
+    async def analyze_blocks(
+        self,
+        start_slot: int,
+        end_slot: int,
+        commitment: str = "finalized",
+        batch_size: int = 10
+    ) -> List[Dict[str, Any]]:
+        """Analyze multiple blocks in parallel with batching."""
+        try:
+            logger.info(f"Analyzing blocks from {start_slot} to {end_slot}")
+            
+            # Validate slot range
+            if start_slot > end_slot:
+                raise ValueError("Start slot must be less than or equal to end slot")
+            
+            # Configure block fetch options
+            opts = {
+                "maxSupportedTransactionVersion": None,  # Support all transaction versions
+                "commitment": commitment,
+                "transactionDetails": "full",
+                "rewards": False,
+                "encoding": "jsonParsed"  # Get parsed transaction data
+            }
+            
+            # Create batches
+            slots = range(start_slot, end_slot + 1)
+            batches = [slots[i:i + batch_size] for i in range(0, len(slots), batch_size)]
+            
+            results = []
+            for batch in batches:
+                # Process batch in parallel
+                tasks = [
+                    self.get_block_data(slot, commitment)
+                    for slot in batch
+                ]
+                
+                batch_results = await asyncio.gather(*tasks, return_exceptions=True)
+                
+                # Handle results
+                for slot, result in zip(batch, batch_results):
+                    if isinstance(result, Exception):
+                        logger.error(f"Failed to analyze block {slot}: {str(result)}")
+                        results.append({
+                            "slot": slot,
+                            "success": False,
+                            "error": str(result)
+                        })
+                    else:
+                        results.append({
+                            "slot": slot,
+                            "success": True,
+                            "result": result
+                        })
+                        
+                        # Log transaction count if available
+                        if result and isinstance(result, dict):
+                            tx_count = len(result.get('transactions', []))
+                            logger.debug(f"Block {slot} has {tx_count} transactions")
+                
+            return results
+            
+        except Exception as e:
+            logger.error(f"Error analyzing blocks: {str(e)}")
+            raise
+
+    async def get_mints_from_recent_blocks(self, num_blocks: int = 10) -> Dict[str, Any]:
+        """Get mint information from recent blocks."""
+        try:
+            # Get latest block
+            latest = await self.get_latest_block()
+            if not latest:
+                return {
+                    "mints": [],
+                    "total_mints": 0,
+                    "blocks_analyzed": 0,
+                    "latest_block": None,
+                    "error": "Failed to get current slot"
+                }
+
+            start_slot = latest['slot']
+            logger.info(f"Starting analysis from slot {start_slot}")
+
+            # Analyze blocks
+            analysis = await self.analyze_blocks(
+                start_slot=start_slot,
+                num_blocks=num_blocks,
+                include_transactions=True
+            )
+
+            # Extract mint information from results
+            mint_results = []
+            for block_result in analysis.get('results', []):
+                if block_result and 'results' in block_result:
+                    for handler_result in block_result['results'].values():
+                        if isinstance(handler_result, dict) and 'mint_operations' in handler_result:
+                            mint_results.extend(handler_result['mint_operations'])
+
+            return {
+                "mints": mint_results,
+                "total_mints": len(mint_results),
+                "blocks_analyzed": analysis.get('blocks_analyzed', 0),
+                "latest_block": start_slot,
+                "start_slot": analysis.get('start_slot'),
+                "end_slot": analysis.get('end_slot')
+            }
+
+        except Exception as e:
+            logger.error(f"Error getting mints from recent blocks: {str(e)}")
+            raise RPCError(f"Failed to get mints from recent blocks: {str(e)}")
+
+    async def process_block(
+        self,
+        slot: int,
+    ) -> Dict[str, Any]:
+        """Process a block at the given slot with comprehensive error handling and statistics tracking."""
+        try:
+            # Get block data
+            block_data = await self.get_block(slot)
+            if not block_data:
+                logger.warning(f"No block data found for slot {slot}")
+                return None
+
+            # Transform block data for handlers
+            transformed_data = {
+                'slot': slot,
+                'transactions': [],
+                'block_time': block_data.get('blockTime'),
+                'block_height': block_data.get('blockHeight'),
+                'parent_slot': block_data.get('parentSlot')
+            }
+
+            # Process transactions if present
+            transactions = block_data.get('transactions', [])
+            if not transactions:
+                logger.debug(f"No transactions found in block {slot}")
+            
+            for tx_data in transactions:
+                try:
+                    # Handle both list and dict formats
+                    if isinstance(tx_data, list):
+                        tx = tx_data[0] if tx_data else None
+                        meta = tx_data[1] if len(tx_data) > 1 else None
+                    else:
+                        tx = tx_data
+                        meta = tx_data.get('meta') if isinstance(tx_data, dict) else None
+
+                    if not tx:
+                        logger.debug(f"Invalid transaction data format: {type(tx)}")
+                        continue
+
+                    # Get transaction data and metadata
+                    message = None
+                    if isinstance(tx, dict):
+                        message = tx.get('message', {})
+                        if isinstance(message, str):
+                            # Try to handle encoded message
+                            try:
+                                import base64
+                                import json
+                                decoded = base64.b64decode(message)
+                                message = json.loads(decoded)
+                            except:
+                                message = {}
+                    elif hasattr(tx, 'message'):
+                        message = tx.message
+                        if hasattr(message, '__dict__'):
+                            message = message.__dict__
+
+                    if not isinstance(message, dict):
+                        logger.debug(f"Message not a dict in transaction: {type(message)}")
+                        message = {}
+
+                    # Build transaction data structure
+                    transformed_tx = {
+                        'transaction': {
+                            'message': {
+                                'instructions': [],
+                                'accountKeys': [],
+                                'recentBlockhash': message.get('recentBlockhash'),
+                                'programIdIndex': message.get('programIdIndex')
+                            },
+                            'signatures': []
+                        },
+                        'meta': {}
+                    }
+
+                    # Process instructions
+                    instructions = message.get('instructions', [])
+                    if isinstance(instructions, (list, tuple)):
+                        for instr in instructions:
+                            if isinstance(instr, dict):
+                                # Already in dict format
+                                transformed_tx['transaction']['message']['instructions'].append(instr)
+                            elif isinstance(instr, (list, tuple)) and len(instr) >= 2:
+                                # Convert list format to dict
+                                instruction_dict = {
+                                    'programId': str(instr[0]) if instr[0] else None,
+                                    'accounts': instr[1] if isinstance(instr[1], list) else [],
+                                    'data': instr[2] if len(instr) > 2 else None
+                                }
+                                transformed_tx['transaction']['message']['instructions'].append(instruction_dict)
+                            elif hasattr(instr, 'program_id'):
+                                # Handle object format
+                                instruction_dict = {
+                                    'programId': str(instr.program_id),
+                                    'accounts': [],
+                                    'data': None
+                                }
+                                if hasattr(instr, 'accounts'):
+                                    instruction_dict['accounts'] = instr.accounts
+                                if hasattr(instr, 'data'):
+                                    instruction_dict['data'] = instr.data
+                                transformed_tx['transaction']['message']['instructions'].append(instruction_dict)
+
+                    # Process account keys
+                    account_keys = message.get('accountKeys', [])
+                    if isinstance(account_keys, (list, tuple)):
+                        for key in account_keys:
+                            if isinstance(key, dict):
+                                # Handle dict format
+                                pubkey = key.get('pubkey')
+                                if pubkey:
+                                    transformed_tx['transaction']['message']['accountKeys'].append(str(pubkey))
+                            elif isinstance(key, str):
+                                # Handle string format
+                                transformed_tx['transaction']['message']['accountKeys'].append(str(key))
+                            else:
+                                # Try string conversion
+                                try:
+                                    transformed_tx['transaction']['message']['accountKeys'].append(str(key))
+                                except:
+                                    continue
+
+                    # Process signatures
+                    signatures = tx.get('signatures', []) if isinstance(tx, dict) else []
+                    if signatures:
+                        transformed_tx['transaction']['signatures'] = [str(sig) for sig in signatures]
+
+                    # Process meta
+                    if meta:
+                        if isinstance(meta, dict):
+                            transformed_tx['meta'] = meta
+                        elif hasattr(meta, '__dict__'):
+                            transformed_tx['meta'] = meta.__dict__
+
+                    transformed_data['transactions'].append(transformed_tx)
+                except Exception as e:
+                    logger.error(f"Error transforming transaction: {str(e)}")
+                    continue
+
+            # Process with all registered handlers
+            handlers_processed = 0
+            results = {}
+
+            for handler_name, handler in self.handlers.items():
+                if handler_name == 'base':  # Skip base handler
+                    continue
+                    
+                try:
+                    handler_result = await handler.handle_response(transformed_data)
+                    if handler_result:
+                        results[handler_name] = handler_result
+                        handlers_processed += 1
+                        logger.info(f"{handler_name.capitalize()} handler processed block {slot} successfully")
+                except Exception as e:
+                    logger.error(f"Error in {handler_name} handler for block {slot}: {str(e)}")
+
+            logger.info(f"Block {slot} Processing Summary:")
+            logger.info(f"  Handlers Processed: {handlers_processed}")
+            if handlers_processed > 0:
+                logger.info(f"  Results: {list(results.keys())}")
+
+            return {
+                'slot': slot,
+                'results': results,
+                'handlers_processed': handlers_processed,
+                'total_transactions': len(transformed_data['transactions'])
+            }
+
+        except Exception as e:
+            logger.error(f"Error processing block {slot}: {str(e)}")
+            return None
+
+    async def get_block(
+        self,
+        slot: int,
+        opts: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """Get block data from Solana RPC."""
+        try:
+            # Get client from pool
+            client = await self.connection_pool.get_client()
+            
+            logger.debug(f"Fetching block {slot} with options: {opts}")
+            
+            # Update options to support all transaction versions
+            if 'maxSupportedTransactionVersion' not in opts:
+                opts['maxSupportedTransactionVersion'] = None  # Support all versions
+            
+            # Get block data with retries
+            max_retries = 3
+            current_retry = 0
+            backoff_time = 1.0
+            max_backoff = 30.0
+
+            while current_retry < max_retries:
+                try:
+                    block_data = await client.get_block(slot, opts)
+                    
+                    if block_data:
+                        # Validate block has transactions
+                        if 'transactions' not in block_data or not block_data['transactions']:
+                            logger.debug(f"Block {slot} has no transactions")
+                            return None
+                            
+                        # Log transaction count
+                        tx_count = len(block_data['transactions'])
+                        logger.info(f"Successfully retrieved block {slot} with {tx_count} transactions")
+                        return block_data
+                    else:
+                        logger.info(f"Block not available: Block not available for slot {slot}")
+                        return None
+                except Exception as e:
+                    error_msg = str(e)
+                    current_retry += 1
+
+                    if "slot was skipped, or missing in long-term storage" in error_msg:
+                        logger.debug(f"Block {slot} was skipped or missing")
+                        return None
+                    elif "block not available for slot" in error_msg:
+                        logger.info(f"Block not available: Block not available for slot {slot}")
+                        return None
+                    elif "429" in error_msg or "Too Many Requests" in error_msg:
+                        logger.warning(f"Rate limit hit for block {slot}, backing off...")
+                        await asyncio.sleep(backoff_time)
+                        backoff_time = min(backoff_time * 2, max_backoff)
+                        continue
+                    
+                    logger.error(f"Error getting block {slot}: {error_msg}")
+                    if current_retry >= max_retries:
+                        raise
+                    
+                    await asyncio.sleep(backoff_time)
+                    backoff_time = min(backoff_time * 2, max_backoff)
+            
+            logger.error(f"Failed to get block at slot {slot} after {max_retries} retries")
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error in get_block for slot {slot}: {str(e)}")
+            raise
+
+    async def get_multiple_blocks(
+        self,
+        slots: List[int],
+        commitment: str = "finalized"
+    ) -> List[Optional[Dict[str, Any]]]:
+        """Get multiple blocks in parallel."""
+        # Configure block fetch options
+        opts = {
+            "maxSupportedTransactionVersion": None,  # Support all transaction versions
+            "commitment": commitment,
+            "transactionDetails": "full",
+            "rewards": False
+        }
+        
+        tasks = []
+        for slot in slots:
+            tasks.append(self.get_block(slot, opts))
+        
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            processed_results = []
+            
+            for i, result in enumerate(results):
+                if isinstance(result, Exception):
+                    logger.error(f"Error getting block {slots[i]}: {str(result)}")
+                    processed_results.append(None)
+                else:
+                    processed_results.append(result)
+                    
+            return processed_results
+            
+        except Exception as e:
+            logger.error(f"Error in get_multiple_blocks: {str(e)}")
+            raise
+
+    async def analyze_blocks(
+        self,
+        start_slot: int,
+        end_slot: int,
+        commitment: str = "finalized",
+        batch_size: int = 10
+    ) -> List[Dict[str, Any]]:
+        """Analyze multiple blocks in parallel with batching."""
+        try:
+            logger.info(f"Analyzing blocks from {start_slot} to {end_slot}")
+            
+            # Validate slot range
+            if start_slot > end_slot:
+                raise ValueError("Start slot must be less than or equal to end slot")
+            
+            # Configure block fetch options
+            opts = {
+                "maxSupportedTransactionVersion": None,  # Support all transaction versions
+                "commitment": commitment,
+                "transactionDetails": "full",
+                "rewards": False,
+                "encoding": "jsonParsed"  # Get parsed transaction data
+            }
+            
+            # Create batches
+            slots = range(start_slot, end_slot + 1)
+            batches = [slots[i:i + batch_size] for i in range(0, len(slots), batch_size)]
+            
+            results = []
+            for batch in batches:
+                # Process batch in parallel
+                tasks = [
+                    self.get_block_data(slot, commitment)
+                    for slot in batch
+                ]
+                
+                batch_results = await asyncio.gather(*tasks, return_exceptions=True)
+                
+                # Handle results
+                for slot, result in zip(batch, batch_results):
+                    if isinstance(result, Exception):
+                        logger.error(f"Failed to analyze block {slot}: {str(result)}")
+                        results.append({
+                            "slot": slot,
+                            "success": False,
+                            "error": str(result)
+                        })
+                    else:
+                        results.append({
+                            "slot": slot,
+                            "success": True,
+                            "result": result
+                        })
+                        
+                        # Log transaction count if available
+                        if result and isinstance(result, dict):
+                            tx_count = len(result.get('transactions', []))
+                            logger.debug(f"Block {slot} has {tx_count} transactions")
+                
+            return results
+            
+        except Exception as e:
+            logger.error(f"Error analyzing blocks: {str(e)}")
+            raise
+
+    async def get_mints_from_recent_blocks(self, num_blocks: int = 10) -> Dict[str, Any]:
+        """Get mint information from recent blocks."""
+        try:
+            # Get latest block
+            latest = await self.get_latest_block()
+            if not latest:
+                return {
+                    "mints": [],
+                    "total_mints": 0,
+                    "blocks_analyzed": 0,
+                    "latest_block": None,
+                    "error": "Failed to get current slot"
+                }
+
+            start_slot = latest['slot']
+            logger.info(f"Starting analysis from slot {start_slot}")
+
+            # Analyze blocks
+            analysis = await self.analyze_blocks(
+                start_slot=start_slot,
+                num_blocks=num_blocks,
+                include_transactions=True
+            )
+
+            # Extract mint information from results
+            mint_results = []
+            for block_result in analysis.get('results', []):
+                if block_result and 'results' in block_result:
+                    for handler_result in block_result['results'].values():
+                        if isinstance(handler_result, dict) and 'mint_operations' in handler_result:
+                            mint_results.extend(handler_result['mint_operations'])
+
+            return {
+                "mints": mint_results,
+                "total_mints": len(mint_results),
+                "blocks_analyzed": analysis.get('blocks_analyzed', 0),
+                "latest_block": start_slot,
+                "start_slot": analysis.get('start_slot'),
+                "end_slot": analysis.get('end_slot')
+            }
+
+        except Exception as e:
+            logger.error(f"Error getting mints from recent blocks: {str(e)}")
+            raise RPCError(f"Failed to get mints from recent blocks: {str(e)}")
+
+    async def process_block(
+        self,
+        slot: int,
+    ) -> Dict[str, Any]:
+        """Process a block at the given slot with comprehensive error handling and statistics tracking."""
+        try:
+            # Get block data
+            block_data = await self.get_block(slot)
+            if not block_data:
+                logger.warning(f"No block data found for slot {slot}")
+                return None
+
+            # Transform block data for handlers
+            transformed_data = {
+                'slot': slot,
+                'transactions': [],
+                'block_time': block_data.get('blockTime'),
+                'block_height': block_data.get('blockHeight'),
+                'parent_slot': block_data.get('parentSlot')
+            }
+
+            # Process transactions if present
+            transactions = block_data.get('transactions', [])
+            if not transactions:
+                logger.debug(f"No transactions found in block {slot}")
+            
+            for tx_data in transactions:
+                try:
+                    # Handle both list and dict formats
+                    if isinstance(tx_data, list):
+                        tx = tx_data[0] if tx_data else None
+                        meta = tx_data[1] if len(tx_data) > 1 else None
+                    else:
+                        tx = tx_data
+                        meta = tx_data.get('meta') if isinstance(tx_data, dict) else None
+
+                    if not tx:
+                        logger.debug(f"Invalid transaction data format: {type(tx)}")
+                        continue
+
+                    # Get transaction data and metadata
+                    message = None
+                    if isinstance(tx, dict):
+                        message = tx.get('message', {})
+                        if isinstance(message, str):
+                            # Try to handle encoded message
+                            try:
+                                import base64
+                                import json
+                                decoded = base64.b64decode(message)
+                                message = json.loads(decoded)
+                            except:
+                                message = {}
+                    elif hasattr(tx, 'message'):
+                        message = tx.message
+                        if hasattr(message, '__dict__'):
+                            message = message.__dict__
+
+                    if not isinstance(message, dict):
+                        logger.debug(f"Message not a dict in transaction: {type(message)}")
+                        message = {}
+
+                    # Build transaction data structure
+                    transformed_tx = {
+                        'transaction': {
+                            'message': {
+                                'instructions': [],
+                                'accountKeys': [],
+                                'recentBlockhash': message.get('recentBlockhash'),
+                                'programIdIndex': message.get('programIdIndex')
+                            },
+                            'signatures': []
+                        },
+                        'meta': {}
+                    }
+
+                    # Process instructions
+                    instructions = message.get('instructions', [])
+                    if isinstance(instructions, (list, tuple)):
+                        for instr in instructions:
+                            if isinstance(instr, dict):
+                                # Already in dict format
+                                transformed_tx['transaction']['message']['instructions'].append(instr)
+                            elif isinstance(instr, (list, tuple)) and len(instr) >= 2:
+                                # Convert list format to dict
+                                instruction_dict = {
+                                    'programId': str(instr[0]) if instr[0] else None,
+                                    'accounts': instr[1] if isinstance(instr[1], list) else [],
+                                    'data': instr[2] if len(instr) > 2 else None
+                                }
+                                transformed_tx['transaction']['message']['instructions'].append(instruction_dict)
+                            elif hasattr(instr, 'program_id'):
+                                # Handle object format
+                                instruction_dict = {
+                                    'programId': str(instr.program_id),
+                                    'accounts': [],
+                                    'data': None
+                                }
+                                if hasattr(instr, 'accounts'):
+                                    instruction_dict['accounts'] = instr.accounts
+                                if hasattr(instr, 'data'):
+                                    instruction_dict['data'] = instr.data
+                                transformed_tx['transaction']['message']['instructions'].append(instruction_dict)
+
+                    # Process account keys
+                    account_keys = message.get('accountKeys', [])
+                    if isinstance(account_keys, (list, tuple)):
+                        for key in account_keys:
+                            if isinstance(key, dict):
+                                # Handle dict format
+                                pubkey = key.get('pubkey')
+                                if pubkey:
+                                    transformed_tx['transaction']['message']['accountKeys'].append(str(pubkey))
+                            elif isinstance(key, str):
+                                # Handle string format
+                                transformed_tx['transaction']['message']['accountKeys'].append(str(key))
+                            else:
+                                # Try string conversion
+                                try:
+                                    transformed_tx['transaction']['message']['accountKeys'].append(str(key))
+                                except:
+                                    continue
+
+                    # Process signatures
+                    signatures = tx.get('signatures', []) if isinstance(tx, dict) else []
+                    if signatures:
+                        transformed_tx['transaction']['signatures'] = [str(sig) for sig in signatures]
+
+                    # Process meta
+                    if meta:
+                        if isinstance(meta, dict):
+                            transformed_tx['meta'] = meta
+                        elif hasattr(meta, '__dict__'):
+                            transformed_tx['meta'] = meta.__dict__
+
+                    transformed_data['transactions'].append(transformed_tx)
+                except Exception as e:
+                    logger.error(f"Error transforming transaction: {str(e)}")
+                    continue
+
+            # Process with all registered handlers
+            handlers_processed = 0
+            results = {}
+
+            for handler_name, handler in self.handlers.items():
+                if handler_name == 'base':  # Skip base handler
+                    continue
+                    
+                try:
+                    handler_result = await handler.handle_response(transformed_data)
+                    if handler_result:
+                        results[handler_name] = handler_result
+                        handlers_processed += 1
+                        logger.info(f"{handler_name.capitalize()} handler processed block {slot} successfully")
+                except Exception as e:
+                    logger.error(f"Error in {handler_name} handler for block {slot}: {str(e)}")
+
+            logger.info(f"Block {slot} Processing Summary:")
+            logger.info(f"  Handlers Processed: {handlers_processed}")
+            if handlers_processed > 0:
+                logger.info(f"  Results: {list(results.keys())}")
+
+            return {
+                'slot': slot,
+                'results': results,
+                'handlers_processed': handlers_processed,
+                'total_transactions': len(transformed_data['transactions'])
+            }
+
+        except Exception as e:
+            logger.error(f"Error processing block {slot}: {str(e)}")
+            return None
+
+    async def get_block(
+        self,
+        slot: int,
+        opts: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """Get block data from Solana RPC."""
+        try:
+            # Get client from pool
+            client = await self.connection_pool.get_client()
+            
+            logger.debug(f"Fetching block {slot} with options: {opts}")
+            
+            # Update options to support all transaction versions
+            if 'maxSupportedTransactionVersion' not in opts:
+                opts['maxSupportedTransactionVersion'] = None  # Support all versions
+            
+            # Get block data with retries
+            max_retries = 3
+            current_retry = 0
+            backoff_time = 1.0
+            max_backoff = 30.0
+
+            while current_retry < max_retries:
+                try:
+                    block_data = await client.get_block(slot, opts)
+                    
+                    if block_data:
+                        # Validate block has transactions
+                        if 'transactions' not in block_data or not block_data['transactions']:
+                            logger.debug(f"Block {slot} has no transactions")
+                            return None
+                            
+                        # Log transaction count
+                        tx_count = len(block_data['transactions'])
+                        logger.info(f"Successfully retrieved block {slot} with {tx_count} transactions")
+                        return block_data
+                    else:
+                        logger.info(f"Block not available: Block not available for slot {slot}")
+                        return None
+                except Exception as e:
+                    error_msg = str(e)
+                    current_retry += 1
+
+                    if "slot was skipped, or missing in long-term storage" in error_msg:
+                        logger.debug(f"Block {slot} was skipped or missing")
+                        return None
+                    elif "block not available for slot" in error_msg:
+                        logger.info(f"Block not available: Block not available for slot {slot}")
+                        return None
+                    elif "429" in error_msg or "Too Many Requests" in error_msg:
+                        logger.warning(f"Rate limit hit for block {slot}, backing off...")
+                        await asyncio.sleep(backoff_time)
+                        backoff_time = min(backoff_time * 2, max_backoff)
+                        continue
+                    
+                    logger.error(f"Error getting block {slot}: {error_msg}")
+                    if current_retry >= max_retries:
+                        raise
+                    
+                    await asyncio.sleep(backoff_time)
+                    backoff_time = min(backoff_time * 2, max_backoff)
+            
+            logger.error(f"Failed to get block at slot {slot} after {max_retries} retries")
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error in get_block for slot {slot}: {str(e)}")
+            raise
+
+    async def get_multiple_blocks(
+        self,
+        slots: List[int],
+        commitment: str = "finalized"
+    ) -> List[Optional[Dict[str, Any]]]:
+        """Get multiple blocks in parallel."""
+        # Configure block fetch options
+        opts = {
+            "maxSupportedTransactionVersion": None,  # Support all transaction versions
+            "commitment": commitment,
+            "transactionDetails": "full",
+            "rewards": False
+        }
+        
+        tasks = []
+        for slot in slots:
+            tasks.append(self.get_block(slot, opts))
+        
+        try:
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            processed_results = []
+            
+            for i, result in enumerate(results):
+                if isinstance(result, Exception):
+                    logger.error(f"Error getting block {slots[i]}: {str(result)}")
+                    processed_results.append(None)
+                else:
+                    processed_results.append(result)
+                    
+            return processed_results
+            
+        except Exception as e:
+            logger.error(f"Error in get_multiple_blocks: {str(e)}")
+            raise
+
+    async def analyze_blocks(
+        self,
+        start_slot: int,
+        end_slot: int,
+        commitment: str = "finalized",
+        batch_size: int = 10
+    ) -> List[Dict[str, Any]]:
+        """Analyze multiple blocks in parallel with batching."""
+        try:
+            logger.info(f"Analyzing blocks from {start_slot} to {end_slot}")
+            
+            # Validate slot range
+            if start_slot > end_slot:
+                raise ValueError("Start slot must be less than or equal to end slot")
+            
+            # Configure block fetch options
+            opts = {
+                "maxSupportedTransactionVersion": None,  # Support all transaction versions
+                "commitment": commitment,
+                "transactionDetails": "full",
+                "rewards": False,
+                "encoding": "jsonParsed"  # Get parsed transaction data
+            }
+            
+            # Create batches
+            slots = range(start_slot, end_slot + 1)
+            batches = [slots[i:i + batch_size] for i in range(0, len(slots), batch_size)]
+            
+            results = []
+            for batch in batches:
+                # Process batch in parallel
+                tasks = [
+                    self.get_block_data(slot, commitment)
+                    for slot in batch
+                ]
+                
+                batch_results = await asyncio.gather(*tasks, return_exceptions=True)
+                
+                # Handle results
+                for slot, result in zip(batch, batch_results):
+                    if isinstance(result, Exception):
+                        logger.error(f"Failed to analyze block {slot}: {str(result)}")
+                        results.append({
+                            "slot": slot,
+                            "success": False,
+                            "error": str(result)
+                        })
+                    else:
+                        results.append({
+                            "slot": slot,
+                            "success": True,
+                            "result": result
+                        })
+                        
+                        # Log transaction count if available
+                        if result and isinstance(result, dict):
+                            tx_count = len(result.get('transactions', []))
+                            logger.debug(f"Block {slot} has {tx_count} transactions")
+                
+            return results
+            
+        except Exception as e:
+            logger.error(f"Error analyzing blocks: {str(e)}")
+            raise
+
+    async def analyze_new_mints(self, num_blocks: int = 1) -> Dict[str, Any]:
+        """Analyze new mints from recent blocks"""
+        try:
+            # Get latest block
+            latest_block = await self.get_latest_block()
+            if not latest_block:
+                logger.error("Failed to get latest block")
+                return {
+                    "success": False,
+                    "error": "Failed to get latest block",
+                    "mint_addresses": [],
+                    "pump_token_addresses": [],
+                    "mint_operations": [],
+                    "blocks_processed": 0
+                }
+                
+            # Get slot from latest block
+            if not isinstance(latest_block, dict) or "slot" not in latest_block:
+                logger.error("Invalid latest block format - missing slot")
+                return {
+                    "success": False,
+                    "error": "Invalid latest block format",
+                    "mint_addresses": [],
+                    "pump_token_addresses": [],
+                    "mint_operations": [],
+                    "blocks_processed": 0
+                }
+                
+            # Calculate block range
+            current_slot = latest_block["slot"]
+            buffer = 5  # Look at blocks slightly behind to ensure availability
+            end_block = current_slot - buffer  # End a few blocks behind current
+            start_block = end_block - num_blocks + 1  # Start one block before end_block based on requested blocks
+            
+            # Process blocks
+            blocks_processed = 0
+            all_mint_addresses = set()
+            all_pump_tokens = set()
+            all_mint_operations = []
+            errors = []
+            
+            for slot in range(start_block, end_block + 1):
+                try:
+                    # Get block data
+                    block = await self.get_block_data(slot)
+                    if not block:
+                        logger.warning(f"No data for block {slot}")
+                        continue
+                        
+                    # Extract mint addresses
+                    try:
+                        result = await self.extract_mint_data(block)
+                        if result:
+                            all_mint_addresses.update(result["mint_addresses"])
+                            all_pump_tokens.update(result.get("pump_token_addresses", []))
+                            all_mint_operations.extend(result["mint_operations"])
+                            blocks_processed += 1
+                    except Exception as e:
+                        error_msg = f"Error extracting mints from block {slot}: {str(e)}"
+                        logger.error(error_msg)
+                        errors.append(error_msg)
+                        
+                except Exception as e:
+                    error_msg = f"Error processing block {slot}: {str(e)}"
+                    logger.error(error_msg)
+                    errors.append(error_msg)
+                    
+            return {
+                "success": True,
+                "error": None,
+                "mint_addresses": list(all_mint_addresses),
+                "pump_token_addresses": list(all_pump_tokens),
+                "mint_operations": all_mint_operations,
+                "blocks_processed": blocks_processed,
+                "start_block": start_block,
+                "end_block": end_block,
+                "errors": errors
+            }
+            
+        except Exception as e:
+            error_msg = str(e)
+            logger.error(f"Error analyzing new mints: {error_msg}")
+            return {
+                "success": False,
+                "error": error_msg,
+                "mint_addresses": [],
+                "pump_token_addresses": [],
+                "mint_operations": [],
+                "blocks_processed": 0,
+                "errors": [error_msg]
+            }
+
+    async def analyze_blocks(self, num_blocks: int = 1, commitment: str = "confirmed") -> Dict[str, Any]:
+        """Analyze recent blocks for mint operations"""
+        try:
+            latest_slot = await self.get_latest_slot()
+            if not latest_slot:
+                return {"success": False, "error": "Failed to get latest slot"}
+
+            results = {
+                "success": True,
+                "result": {
+                    "mint_addresses": set(),
+                    "mint_operations": [],
+                    "mint_types": {
+                        "new_mints": 0,
+                        "mint_to": 0,
+                        "ata_created": 0
+                    },
+                    "tx_types": set(),
+                    "processed_blocks": 0,
+                    "total_blocks": num_blocks,
+                    "errors": []
+                }
+            }
+
+            for i in range(num_blocks):
+                target_slot = latest_slot - 50 - i  # Skip very recent blocks to avoid uncle blocks
+                logger.info(f"Trying block at slot {target_slot}")
+                
+                block_data = await self.get_block_data(target_slot)
+                if not block_data:
+                    logger.warning(f"Block {target_slot} not available")
+                    continue
+
+                # Process block with handlers
+                handler_result = await self.handlers['mint'].process(block_data)
+                if handler_result.get('success'):
+                    results['result']['processed_blocks'] += 1
+                    results['result']['mint_addresses'].update(handler_result.get('mint_addresses', []))
+                    results['result']['mint_operations'].extend(handler_result.get('mint_operations', []))
+                    results['result']['tx_types'].update(handler_result.get('tx_types', []))
+                    
+                    # Update mint type counters
+                    mint_types = handler_result.get('mint_types', {})
+                    results['result']['mint_types']['new_mints'] += mint_types.get('new_mints', 0)
+                    results['result']['mint_types']['mint_to'] += mint_types.get('mint_to', 0)
+                    results['result']['mint_types']['ata_created'] += mint_types.get('ata_created', 0)
+                else:
+                    results['result']['errors'].append(f"Failed to process block {target_slot}: {handler_result.get('error')}")
+
+            # Convert sets to lists for JSON serialization
+            results['result']['mint_addresses'] = list(results['result']['mint_addresses'])
+            results['result']['tx_types'] = list(results['result']['tx_types'])
+            
+            return results
+
+        except Exception as e:
+            logger.error(f"Error analyzing blocks: {str(e)}")
+            return {
+                "success": False,
+                "error": str(e)
+            }
