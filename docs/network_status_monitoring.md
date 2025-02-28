@@ -34,6 +34,14 @@ The Solana Network Status Monitoring system is a comprehensive component of the 
 - **Fee Analysis**: Analysis of transaction fees and fee market
 - **Confirmation Time**: Monitoring of transaction confirmation times
 
+### 5. Enhanced Error Handling
+
+- **Coroutine Management**: Proper handling of asynchronous operations with timeouts
+- **Caching System**: Intelligent caching with TTL and fallback mechanisms
+- **Recursive Data Processing**: Advanced processing of complex nested data structures
+- **Graceful Degradation**: Fallback to cached data when live data is unavailable
+- **Comprehensive Logging**: Detailed logging of data collection and processing operations
+
 ## Implementation Details
 
 ### NetworkStatusHandler Class
@@ -52,84 +60,225 @@ class NetworkStatusHandler:
             solana_query: SolanaQueryHandler instance for blockchain queries
         """
         self.solana_query = solana_query
+        self.timeout = 10.0  # Timeout for RPC calls
+        self.cache = {}  # Cache for network status data
+        self.cache_ttl = {  # Time-to-live for cached data
+            'nodes': timedelta(minutes=5),
+            'stakes': timedelta(minutes=5),
+            'performance': timedelta(minutes=1),
+            'version': timedelta(hours=1),
+            'epoch': timedelta(minutes=1)
+        }
+```
+
+### Coroutine Handling
+
+The `_get_data_with_timeout` method provides robust handling of coroutines with timeout management and caching:
+
+```python
+async def _get_data_with_timeout(self, coro, name: str) -> Tuple[str, Any]:
+    """
+    Run coroutine with timeout and caching.
+    
+    Args:
+        coro: The coroutine or callable to execute
+        name: Name of the operation for logging and caching
         
-    async def get_comprehensive_status(self) -> Dict[str, Any]:
-        """
-        Get comprehensive status of the Solana network.
+    Returns:
+        A tuple of (name, result)
+    """
+    try:
+        # Check cache first
+        cached_data = self._get_cached_data(name)
+        if cached_data is not None:
+            logger.debug(f"Using cached data for {name}")
+            return name, cached_data
+            
+        # Ensure we're dealing with a coroutine object
+        if not asyncio.iscoroutine(coro):
+            logger.warning(f"{name} is not a coroutine, attempting to call it")
+            if callable(coro):
+                coro = coro()
+            else:
+                logger.error(f"{name} is neither a coroutine nor callable")
+                return name, None
         
-        Returns:
-            Dict containing comprehensive network status information
-        """
+        # Now await the coroutine with timeout
+        logger.info(f"Fetching {name} data with timeout {self.timeout}s")
+        result = await asyncio.wait_for(coro, timeout=self.timeout)
+        
+        # Log the result type and structure
+        if result is not None:
+            logger.debug(f"Received {name} data of type {type(result)}")
+            if isinstance(result, dict):
+                logger.debug(f"Keys in {name} response: {list(result.keys())}")
+            elif isinstance(result, list):
+                logger.debug(f"Received list of {len(result)} items for {name}")
+            
+            # Update cache
+            self._update_cache(name, result)
+        else:
+            logger.warning(f"Received None result for {name}")
+        
+        return name, result
+    except asyncio.TimeoutError:
+        logger.error(f"Timeout getting {name}")
+        # Try to use expired cache data as fallback
+        if name in self.cache:
+            logger.warning(f"Using expired cache data for {name}")
+            return name, self.cache[name]['data']
+        return name, None
+        
+    except Exception as e:
+        logger.error(f"Error getting {name}: {str(e)}")
+        logger.exception(e)  # Log full stack trace
+        # Try to use expired cache data as fallback
+        if name in self.cache:
+            logger.warning(f"Using expired cache data for {name} due to error")
+            return name, self.cache[name]['data']
+        return name, None
+```
+
+### Comprehensive Status Collection
+
+The `get_comprehensive_status` method collects multiple data points concurrently with proper error handling:
+
+```python
+async def get_comprehensive_status(self):
+    """
+    Get comprehensive network status including nodes, stakes, and performance.
+    
+    Returns:
+        Dict containing network status data
+    """
+    try:
+        # Create coroutines for all data sources
+        nodes_coro = self.solana_query.get_cluster_nodes()
+        version_coro = self.solana_query.get_version()
+        epoch_coro = self.solana_query.get_epoch_info()
+        performance_coro = self.solana_query.get_recent_performance_samples()
+        stakes_coro = self.solana_query.get_vote_accounts()
+        
+        # Execute all coroutines concurrently with proper timeout handling
+        results = await asyncio.gather(
+            self._get_data_with_timeout(nodes_coro, 'nodes'),
+            self._get_data_with_timeout(version_coro, 'version'),
+            self._get_data_with_timeout(epoch_coro, 'epoch'),
+            self._get_data_with_timeout(performance_coro, 'performance'),
+            self._get_data_with_timeout(stakes_coro, 'stakes')
+        )
+        
+        # Process results
+        status_data = {}
+        for name, data in results:
+            if name == 'nodes':
+                status_data['nodes'] = self._process_node_info(data)
+            elif name == 'stakes':
+                status_data['stakes'] = self._process_stake_info(data)
+            elif name == 'performance':
+                status_data['performance'] = self._process_performance_info(data)
+            elif name == 'version':
+                status_data['version'] = data
+            elif name == 'epoch':
+                status_data['epoch'] = data
+        
+        # Calculate overall health status
+        status_data['health'] = self._calculate_health_status(status_data)
+        
+        return status_data
+    except Exception as e:
+        logger.error(f"Error getting comprehensive status: {str(e)}")
+        logger.exception(e)
+        return {"error": str(e)}
+```
+
+### Advanced Response Processing
+
+The `_process_stake_info` method demonstrates advanced processing of complex nested structures:
+
+```python
+def _process_stake_info(self, vote_accounts: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Process and analyze validator stake distribution.
+    
+    Args:
+        vote_accounts: Vote accounts data from Solana RPC
+        
+    Returns:
+        Dict containing processed stake information
+    """
+    try:
+        # Add debug logging
+        logger.debug(f"Processing vote accounts data type: {type(vote_accounts)}")
+        
+        # Validate input type
+        if not isinstance(vote_accounts, dict):
+            error_msg = f"Invalid vote_accounts data type: {type(vote_accounts)}"
+            logger.error(error_msg)
+            return {'error': error_msg, 'total_stake': 0, 'active_validators': 0}
+        
+        # Extract and validate validator lists
+        # Handle both direct response and nested response formats
+        current = []
+        delinquent = []
+        
+        if 'current' in vote_accounts:
+            current = vote_accounts.get('current', [])
+            delinquent = vote_accounts.get('delinquent', [])
+        elif 'result' in vote_accounts and isinstance(vote_accounts['result'], dict):
+            result = vote_accounts['result']
+            current = result.get('current', [])
+            delinquent = result.get('delinquent', [])
+        else:
+            # Try to find current/delinquent at any level of nesting
+            def find_validators(obj, key):
+                if isinstance(obj, dict):
+                    if key in obj:
+                        return obj[key]
+                    for k, v in obj.items():
+                        result = find_validators(v, key)
+                        if result:
+                            return result
+                return None
+            
+            current = find_validators(vote_accounts, 'current') or []
+            delinquent = find_validators(vote_accounts, 'delinquent') or []
+        
+        # Process validator data
         # Implementation details...
+        
+        return processed_data
+    except Exception as e:
+        logger.error(f"Error processing stake info: {str(e)}")
+        logger.exception(e)
+        return {
+            'total_stake': 0, 
+            'active_validators': 0,
+            'delinquent_validators': 0,
+            'error': str(e)
+        }
 ```
 
-### Key Methods
+## API Endpoints
 
-The system provides several key methods for different aspects of network monitoring:
-
-#### 1. Comprehensive Status
+The network status monitoring system exposes several API endpoints:
 
 ```python
-async def get_comprehensive_status(self) -> Dict[str, Any]:
-    """
-    Get comprehensive status of the Solana network.
-    
-    Returns:
-        Dict containing comprehensive network status information
-    """
-    # Implementation details...
+@router.get("/network/status", response_model=NetworkStatusResponse)
+async def get_network_status():
+    """Get comprehensive network status information"""
+    handler = NetworkStatusHandler(solana_query)
+    status = await handler.get_comprehensive_status()
+    return {
+        "status": "success",
+        "data": status,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
 ```
 
-#### 2. Validator Information
+## Response Format
 
-```python
-async def get_vote_accounts(self) -> Dict[str, Any]:
-    """
-    Get information about validator vote accounts.
-    
-    Returns:
-        Dict containing vote account information
-    """
-    # Implementation details...
-```
-
-#### 3. Performance Metrics
-
-```python
-async def get_performance_metrics(self) -> Dict[str, Any]:
-    """
-    Get performance metrics for the Solana network.
-    
-    Returns:
-        Dict containing performance metrics
-    """
-    # Implementation details...
-```
-
-#### 4. Block Production
-
-```python
-async def get_block_production(self) -> Dict[str, Any]:
-    """
-    Get block production information.
-    
-    Returns:
-        Dict containing block production information
-    """
-    # Implementation details...
-```
-
-### Data Collection Process
-
-1. **Initialization**: Initialize handlers and connection pool
-2. **Parallel Data Collection**: Collect different metrics in parallel using asyncio
-3. **Data Processing**: Process and analyze collected data
-4. **Result Aggregation**: Combine results into a comprehensive status report
-5. **Caching**: Cache results to reduce load on RPC nodes
-
-### Response Format
-
-The system provides a structured response format:
+The network status response follows this format:
 
 ```json
 {
@@ -137,90 +286,30 @@ The system provides a structured response format:
   "cluster_nodes": {
     "total": 1500,
     "rpc_nodes": 250,
-    "version_distribution": {
-      "1.14.17": 45,
-      "1.14.16": 30,
-      "1.14.15": 25,
-      "other": 150
-    }
+    "validator_nodes": 1250,
+    "delinquent_nodes": 15
   },
-  "validators": {
-    "total": 1200,
-    "active": 1150,
-    "delinquent": 50,
-    "stake_distribution": {
-      "top_10_percent": 45.5,
-      "top_25_percent": 68.2,
-      "top_50_percent": 85.7
-    }
-  },
-  "performance": {
-    "current_slot": 123456789,
-    "current_block_height": 123456700,
-    "transactions_per_second": 2500,
-    "average_confirmation_time": 0.5,
-    "recent_performance_samples": [
-      {"slot": 123456788, "num_transactions": 2500, "num_slots": 1, "sample_period_secs": 1},
-      {"slot": 123456787, "num_transactions": 2600, "num_slots": 1, "sample_period_secs": 1}
+  "stake_distribution": {
+    "total_stake": 500000000,
+    "active_stake": 485000000,
+    "delinquent_stake": 15000000,
+    "top_validators": [
+      {
+        "pubkey": "ValidatorPubkey1",
+        "stake": 50000000,
+        "commission": 10
+      }
     ]
   },
-  "block_production": {
-    "total_blocks_produced": 123456700,
-    "total_slots": 123456789,
-    "slot_skip_rate": 0.0007,
-    "current_leader": "5XKJwdKB2Hs7pkEXzifAyXRSYGCjXaRXPVK47aXnywoD"
+  "performance": {
+    "tps": 2500,
+    "avg_confirmation_time": 0.55,
+    "block_time": 0.4
   },
-  "timestamp": "2023-04-15T12:34:56Z"
+  "epoch_info": {
+    "epoch": 280,
+    "slot": 121445000,
+    "slots_in_epoch": 432000,
+    "remaining_slots": 310555
+  }
 }
-```
-
-## Usage
-
-### API Endpoint
-
-The Network Status Monitoring system is exposed through the `/api/soleco/solana/network/status` endpoint with the following query parameters:
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `include_validators` | boolean | `true` | Include validator information |
-| `include_performance` | boolean | `true` | Include performance metrics |
-| `include_block_production` | boolean | `true` | Include block production information |
-| `include_cluster_nodes` | boolean | `true` | Include cluster node information |
-
-### Example Usage
-
-```python
-from app.utils.handlers.network_status_handler import NetworkStatusHandler
-from app.utils.solana_query import SolanaQueryHandler
-from app.utils.solana_rpc import get_connection_pool
-
-async def get_network_status():
-    # Get connection pool
-    pool = await get_connection_pool()
-    
-    # Initialize query handler
-    query_handler = SolanaQueryHandler(pool)
-    
-    # Initialize network status handler
-    status_handler = NetworkStatusHandler(query_handler)
-    
-    # Get comprehensive status
-    status = await status_handler.get_comprehensive_status()
-    
-    return status
-```
-
-## Performance Considerations
-
-- **Parallel Data Collection**: Collects different metrics in parallel to reduce response time
-- **Caching**: Implements caching to reduce load on RPC nodes
-- **Selective Data Collection**: Allows selective inclusion of data components
-- **Timeout Management**: Implements timeouts to prevent hanging on slow RPC nodes
-
-## Monitoring Best Practices
-
-1. **Regular Polling**: Poll network status at regular intervals
-2. **Trend Analysis**: Track trends over time to identify issues
-3. **Alert Configuration**: Configure alerts for critical metrics
-4. **Validator Monitoring**: Monitor validator performance and delinquency
-5. **Performance Benchmarking**: Benchmark performance against historical data
