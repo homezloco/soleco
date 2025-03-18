@@ -19,6 +19,7 @@ pynacl==1.5.0  # Updated from nacl for signature verification
 # Web3 and Crypto
 requests==2.31.0
 web3==6.11.1
+eth_typing==5.2.0
 python-jose==3.3.0
 cryptography==42.0.2
 
@@ -33,3 +34,6 @@ prometheus-client==0.19.0
 
 # Async Database Support
 sqlalchemy[asyncio]==2.0.25  # Added for async database operations
+
+# Testing
+pytest_xprocess==1.0.2
