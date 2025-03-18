@@ -3,14 +3,16 @@
 Script to reset the connection pool and initialize it from scratch.
 """
 
-import asyncio
 import sys
 import os
+import asyncio
+import logging
 
 # Add the parent directory to the path so we can import the app modules
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from app.utils.solana_rpc import get_connection_pool, SolanaConnectionPool, DEFAULT_RPC_ENDPOINTS
+from app.utils.solana_rpc import get_connection_pool, SolanaConnectionPool
+from app.utils.solana_rpc_constants import DEFAULT_RPC_ENDPOINTS
 
 async def reset_pool():
     """Reset the connection pool and initialize it from scratch."""

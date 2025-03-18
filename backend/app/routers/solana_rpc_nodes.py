@@ -16,6 +16,7 @@ from ..utils.solana_rpc import get_connection_pool
 from ..utils.solana_query import SolanaQueryHandler
 from ..utils.handlers.rpc_node_extractor import RPCNodeExtractor
 from ..utils.solana_connection_pool import rpc_nodes_cache
+from ..utils.solana_rpc_constants import KNOWN_RPC_PROVIDERS, SOLANA_OFFICIAL_ENDPOINTS
 from ..config import HELIUS_API_KEY
 
 # Configure logging
@@ -73,28 +74,11 @@ MAX_CONCURRENT_DNS_LOOKUPS = 10
 MAX_IP_CONVERSIONS = 30
 
 # Well-known RPC providers mapping - expanded with more providers
-KNOWN_RPC_PROVIDERS = {
-    # Public RPC providers - expanded list
-    "mainnet.helius-rpc.com": f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}",
-    "rpc.ankr.com/solana": "https://rpc.ankr.com/solana",
-    "solana.public-rpc.com": "https://solana.public-rpc.com",
-}
-
-# Official Solana network endpoints
-SOLANA_OFFICIAL_ENDPOINTS = [
-    "https://api.mainnet-beta.solana.com",
-    "https://api.devnet.solana.com",
-    "https://api.testnet.solana.com"
-]
-
-# Expanded patterns for identifying RPC providers
 RPC_PROVIDER_PATTERNS = [
     (r'.*\.mainnet-beta\.solana\.com$', SOLANA_OFFICIAL_ENDPOINTS[0]),  # mainnet
-    (r'.*\.devnet\.solana\.com$', SOLANA_OFFICIAL_ENDPOINTS[1]),  # devnet
-    (r'.*\.testnet\.solana\.com$', SOLANA_OFFICIAL_ENDPOINTS[2]),  # testnet
     (r'.*\.helius-rpc\.com$', f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}"),
-    (r'.*\.ankr\.com$', "https://rpc.ankr.com/solana"),
-    (r'.*\.public-rpc\.com$', "https://solana.public-rpc.com"),
+    # Removing problematic endpoints
+    # (r'.*\.ankr\.com$', "https://rpc.ankr.com/solana"),  # API key issues
 ]
 
 # Expanded list of server hostname patterns to filter out
@@ -382,26 +366,36 @@ def get_well_known_rpc_urls() -> List[str]:
     # Remove any duplicates and return
     return list(dict.fromkeys(urls))
 
-@router.get("/rpc-nodes", summary="Get Available Solana RPC Nodes")
+@router.get("/rpc-nodes", response_model=Dict[str, Any])
 async def get_rpc_nodes(
     include_details: bool = Query(False, description="Include detailed information for each RPC node"),
     health_check: bool = Query(False, description="Perform health checks on a sample of RPC nodes"),
-    skip_dns_lookup: bool = Query(False, description="Skip DNS lookups for faster response time"),
-    include_raw_urls: bool = Query(False, description="Include raw, unconverted RPC URLs in the response"),
-    prioritize_clean_urls: bool = Query(True, description="Prioritize user-friendly URLs in the response"),
-    include_well_known: bool = Query(True, description="Include well-known RPC endpoints in the response"),
-    max_conversions: int = Query(30, description="Maximum number of IP addresses to attempt to convert to hostnames"),
+    skip_dns_lookup: bool = Query(False, description="Skip DNS lookup for IP addresses"),
+    include_raw_urls: bool = Query(True, description="Include raw RPC URLs in the response"),
+    prioritize_clean_urls: bool = Query(True, description="Prioritize clean URLs over IPs"),
+    include_well_known: bool = Query(True, description="Include well-known RPC providers"),
+    max_conversions: int = Query(10, description="Maximum number of IP to hostname conversions to perform"),
     request: Request = None
-) -> Dict[str, Any]:
+):
     """
-    Get a list of available Solana RPC nodes.
+    Get available Solana RPC nodes.
     
-    Optionally include detailed information about each node and perform health checks.
-    
+    Args:
+        include_details: Whether to include detailed information for each RPC node
+        health_check: Whether to perform health checks on a sample of RPC nodes
+        skip_dns_lookup: Whether to skip DNS lookup for IP addresses
+        include_raw_urls: Whether to include raw RPC URLs in the response
+        prioritize_clean_urls: Whether to prioritize clean URLs over IPs
+        include_well_known: Whether to include well-known RPC providers
+        max_conversions: Maximum number of IP to hostname conversions to perform
+        request: FastAPI request object
+        
     Returns:
         Dict[str, Any]: A dictionary containing the list of RPC nodes and additional metadata.
     """
     start_time = time.time()
+    client_ip = request.client.host if request else "unknown"
+    logger.info(f"RPC nodes request from {client_ip} with params: details={include_details}, health={health_check}")
     
     # Create a cache key based on the parameters
     cache_key = f"rpc_nodes_{include_details}_{health_check}_{skip_dns_lookup}_{include_raw_urls}_{prioritize_clean_urls}_{include_well_known}_{max_conversions}"
@@ -409,136 +403,102 @@ async def get_rpc_nodes(
     # Check cache first
     cached_result = rpc_nodes_cache.get(cache_key)
     if cached_result:
-        logger.info("Returning cached RPC nodes data")
+        logger.info(f"Returning cached RPC nodes data (age: {time.time() - cached_result.get('cache_timestamp', 0):.1f}s)")
         return cached_result
     
-    # Initialize handlers if needed
-    await initialize_handlers()
-    
-    # Get RPC nodes
-    result = await rpc_node_extractor.get_all_rpc_nodes()
-    
-    # Extract RPC URLs
-    rpc_urls = []
-    if "rpc_nodes" in result:
-        for node in result["rpc_nodes"]:
-            if "rpc_endpoint" in node and node["rpc_endpoint"]:
-                rpc_urls.append(node["rpc_endpoint"])
-    
-    # Convert IP addresses to hostnames if needed
-    converted_urls = []
-    conversion_stats = {
-        "attempted": 0,
-        "successful": 0,
-        "failed": 0,
-        "skipped": 0
-    }
-    
-    if not skip_dns_lookup:
-        converted_urls, conversion_stats = await convert_ips_to_hostnames(rpc_urls, max_conversions)
-    
-    # Add well-known RPC endpoints if requested
-    well_known_urls = []
-    solana_official_urls = []
-    
-    if include_well_known:
-        # Get well-known RPC endpoints from Soleco
-        well_known_urls = [url for url in list(KNOWN_RPC_PROVIDERS.values()) if url]
+    try:
+        # Initialize handlers if needed
+        await initialize_handlers()
         
-        # Get official Solana endpoints
-        solana_official_urls = SOLANA_OFFICIAL_ENDPOINTS
-    
-    # Prepare the response
-    response = {
-        "total_nodes": len(result.get("rpc_nodes", [])),
-        "version_distribution": result.get("version_distribution", {}),
-        "well_known_rpc_urls": well_known_urls,
-        "solana_official_urls": solana_official_urls,
-        "conversion_stats": conversion_stats
-    }
-    
-    # Include raw RPC URLs if requested
-    if include_raw_urls:
-        response["raw_rpc_urls"] = rpc_urls
-    
-    # Include converted URLs if available
-    if converted_urls:
-        response["converted_rpc_urls"] = converted_urls
-    
-    # Include detailed information if requested
-    if include_details:
-        response["rpc_nodes"] = result.get("rpc_nodes", [])
-    
-    # Add timestamp and execution time
-    response["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    response["execution_time_ms"] = int((time.time() - start_time) * 1000)
-    
-    # Cache the result
-    rpc_nodes_cache.set(cache_key, response)
-    
-    return response
-
-def is_user_friendly_domain(domain: str) -> bool:
-    """
-    Check if a domain appears to be a user-friendly RPC provider domain.
-    
-    Args:
-        domain: The domain name to check
+        # Get RPC nodes
+        result = await rpc_node_extractor.get_all_rpc_nodes()
         
-    Returns:
-        True if it appears to be a user-friendly domain, False otherwise
-    """
-    if not domain:
-        return False
-    
-    # Check if it's a known provider
-    if domain in KNOWN_RPC_PROVIDERS:
-        return True
-    
-    # Check if it matches any provider patterns
-    for pattern, _ in RPC_PROVIDER_PATTERNS:
-        if re.match(pattern, domain):
-            return True
-    
-    # Check if it's a server hostname
-    for pattern in SERVER_HOSTNAME_PATTERNS:
-        if re.search(pattern, domain):
-            return False
-    
-    # Look for keywords that suggest it's a real domain
-    good_keywords = ['solana', 'rpc', 'api', 'node', 'mainnet', 'service', 'blockchain']
-    for keyword in good_keywords:
-        if keyword in domain.lower():
-            return True
-    
-    # Default to false for ambiguous cases
-    return False
-
-def match_provider_from_domain(domain: str) -> Optional[str]:
-    """
-    Try to match a domain to a known RPC provider.
-    
-    Args:
-        domain: The domain name to match
+        # Check for errors
+        if result.get("status") != "success":
+            error_msg = result.get("error", "Unknown error fetching RPC nodes")
+            logger.error(f"Error fetching RPC nodes: {error_msg}")
+            return {
+                "status": "error",
+                "error": error_msg,
+                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                "execution_time_ms": int((time.time() - start_time) * 1000)
+            }
         
-    Returns:
-        The URL of the matched provider, or None if no match
-    """
-    if not domain:
-        return None
-    
-    # Direct match
-    if domain in KNOWN_RPC_PROVIDERS:
-        return KNOWN_RPC_PROVIDERS[domain]
-    
-    # Pattern match
-    for pattern, provider_url in RPC_PROVIDER_PATTERNS:
-        if re.match(pattern, domain):
-            return provider_url
-    
-    return None
+        # Extract RPC URLs
+        rpc_urls = []
+        if "rpc_nodes" in result:
+            for node in result["rpc_nodes"]:
+                if "rpc_endpoint" in node and node["rpc_endpoint"]:
+                    rpc_urls.append(node["rpc_endpoint"])
+        
+        logger.info(f"Found {len(rpc_urls)} RPC URLs")
+        
+        # Convert IP addresses to hostnames if needed
+        converted_urls = []
+        conversion_stats = {
+            "attempted": 0,
+            "successful": 0,
+            "failed": 0,
+            "skipped": 0
+        }
+        
+        if not skip_dns_lookup:
+            converted_urls, conversion_stats = await convert_ips_to_hostnames(rpc_urls, max_conversions)
+        
+        # Add well-known RPC endpoints if requested
+        well_known_urls = []
+        solana_official_urls = []
+        
+        if include_well_known:
+            # Get well-known RPC endpoints from Soleco
+            well_known_urls = [url for url in list(KNOWN_RPC_PROVIDERS.values()) if url]
+            
+            # Get official Solana endpoints
+            solana_official_urls = SOLANA_OFFICIAL_ENDPOINTS
+        
+        # Prepare the response
+        response = {
+            "status": "success",
+            "total_nodes": len(result.get("rpc_nodes", [])),
+            "version_distribution": result.get("version_distribution", {}),
+            "well_known_rpc_urls": well_known_urls,
+            "solana_official_urls": solana_official_urls,
+            "conversion_stats": conversion_stats,
+            "cache_timestamp": time.time()  # Add timestamp for cache age calculation
+        }
+        
+        # Include raw RPC URLs if requested
+        if include_raw_urls:
+            response["raw_rpc_urls"] = rpc_urls
+        
+        # Include converted URLs if available
+        if converted_urls:
+            response["converted_rpc_urls"] = converted_urls
+        
+        # Include detailed information if requested
+        if include_details:
+            response["rpc_nodes"] = result.get("rpc_nodes", [])
+        
+        # Add timestamp and execution time
+        response["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        response["execution_time_ms"] = int((time.time() - start_time) * 1000)
+        
+        # Cache the result
+        rpc_nodes_cache.set(cache_key, response)
+        logger.info(f"RPC nodes data cached with key: {cache_key}")
+        
+        return response
+    except Exception as e:
+        logger.error(f"Error processing RPC nodes request: {str(e)}")
+        logger.exception(e)
+        return {
+            "status": "error",
+            "error": f"Failed to process RPC nodes request: {str(e)}",
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+            "execution_time_ms": int((time.time() - start_time) * 1000)
+        }
 
-@router.get("/solana/rpc/stats")
+@router.get("/rpc/stats")
 async def get_rpc_stats():
     """
     Get statistics about RPC endpoint performance.
@@ -601,7 +561,7 @@ async def get_rpc_stats():
     
     return formatted_stats
 
-@router.get("/solana/rpc/filtered-stats", response_model=Dict[str, Any], tags=["solana"])
+@router.get("/rpc/filtered-stats", response_model=Dict[str, Any], tags=["solana"])
 async def get_filtered_rpc_stats():
     """
     Get detailed statistics about RPC endpoint performance, excluding Helius endpoints.
@@ -620,14 +580,15 @@ async def get_filtered_rpc_stats():
     
     # Initialize the pool if not already initialized
     if not pool._initialized:
-        await pool.initialize()
+        from app.utils.solana_rpc import DEFAULT_RPC_ENDPOINTS
+        await pool.initialize(DEFAULT_RPC_ENDPOINTS)
         
     # Get the filtered stats directly from the connection pool
     stats = pool.get_filtered_rpc_stats()
     
     return stats
 
-@router.get("/solana/rpc/test-fallback", response_model=Dict[str, Any], tags=["solana"])
+@router.get("/rpc/test-fallback", response_model=Dict[str, Any], tags=["solana"])
 async def test_fallback_endpoint():
     """
     Test endpoint that forces the use of a non-Helius fallback endpoint.
@@ -647,7 +608,8 @@ async def test_fallback_endpoint():
     
     # Initialize the pool if not already initialized
     if not pool._initialized:
-        await pool.initialize()
+        from app.utils.solana_rpc import DEFAULT_RPC_ENDPOINTS
+        await pool.initialize(DEFAULT_RPC_ENDPOINTS)
     
     # Get a list of non-Helius endpoints
     non_helius_endpoints = [ep for ep in pool.endpoints if "helius" not in ep.lower()]
@@ -696,3 +658,63 @@ async def test_fallback_endpoint():
     finally:
         # Close the client
         await client.close()
+
+def is_user_friendly_domain(domain: str) -> bool:
+    """
+    Check if a domain appears to be a user-friendly RPC provider domain.
+    
+    Args:
+        domain: The domain name to check
+        
+    Returns:
+        True if it appears to be a user-friendly domain, False otherwise
+    """
+    if not domain:
+        return False
+    
+    # Check if it's a known provider
+    if domain in KNOWN_RPC_PROVIDERS:
+        return True
+    
+    # Check if it matches any provider patterns
+    for pattern, _ in RPC_PROVIDER_PATTERNS:
+        if re.match(pattern, domain):
+            return True
+    
+    # Check if it's a server hostname
+    for pattern in SERVER_HOSTNAME_PATTERNS:
+        if re.search(pattern, domain):
+            return False
+    
+    # Look for keywords that suggest it's a real domain
+    good_keywords = ['solana', 'rpc', 'api', 'node', 'mainnet', 'service', 'blockchain']
+    for keyword in good_keywords:
+        if keyword in domain.lower():
+            return True
+    
+    # Default to false for ambiguous cases
+    return False
+
+def match_provider_from_domain(domain: str) -> Optional[str]:
+    """
+    Try to match a domain to a known RPC provider.
+    
+    Args:
+        domain: The domain name to match
+        
+    Returns:
+        The URL of the matched provider, or None if no match
+    """
+    if not domain:
+        return None
+    
+    # Direct match
+    if domain in KNOWN_RPC_PROVIDERS:
+        return KNOWN_RPC_PROVIDERS[domain]
+    
+    # Pattern match
+    for pattern, provider_url in RPC_PROVIDER_PATTERNS:
+        if re.match(pattern, domain):
+            return provider_url
+    
+    return None

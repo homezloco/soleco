@@ -2,23 +2,25 @@
 Helper functions and utilities for Solana query operations.
 """
 
-from typing import Dict, List, Any, Union, Optional
+import asyncio
 import base64
+import inspect
 import json
 import logging
+import random
+import sys
 import time
-import asyncio
-import inspect
-from .solana_types import (
-    RPCError,
-    RetryableError,
-    RateLimitError,
-    SlotSkippedError,
-    NodeUnhealthyError
-)
+import traceback
+from typing import Any, Dict, List, Optional, Tuple, Union, Set, Callable
+
+import aiohttp
+from solders.pubkey import Pubkey
+
+from .solana_error import RetryableError, RPCError, RateLimitError, SlotSkippedError
+from .solana_types import NodeUnhealthyError
 
 # Configure logging
-logger = logging.getLogger('solana.helpers')
+logger = logging.getLogger(__name__)
 
 # Default configurations
 DEFAULT_BLOCK_OPTIONS = {
@@ -137,75 +139,293 @@ def serialize_solana_object(obj):
         logger.error(f"Error serializing object: {e}")
         return f"<Error serializing object: {str(e)}>"
 
-async def safe_rpc_call_async(coro_or_func, method_name, timeout=30.0):
+async def safe_rpc_call_async(
+    method_or_name,
+    *args,
+    client=None,
+    max_retries=3,
+    retry_delay=1.0,
+    timeout=30.0,
+    error_callback=None,
+    **kwargs
+):
     """
-    Safely execute an RPC call with proper error handling and logging.
+    Execute an RPC call with retry logic and error handling.
     
     Args:
-        coro_or_func: A coroutine or function that returns a coroutine
-        method_name: Name of the RPC method for logging
-        timeout: Timeout in seconds
+        method_or_name: Either a callable method or a string method name to call on the client
+        *args: Arguments to pass to the method
+        client: Optional client to use (if None, one will be obtained from the pool)
+        max_retries: Maximum number of retries
+        retry_delay: Base delay between retries in seconds
+        timeout: Timeout for the operation in seconds
+        error_callback: Optional callback function for errors
+        **kwargs: Additional keyword arguments for the method
         
     Returns:
-        The result of the RPC call
+        Result of the RPC call
         
     Raises:
-        RPCError: For general RPC errors
-        RateLimitError: When rate limit is exceeded
-        NodeUnhealthyError: When node is unhealthy
-        TimeoutError: When the call times out
+        RPCError: If all retries fail
     """
-    start_time = time.time()
-    logger.debug(f"Executing {method_name}")
+    from ..utils.solana_rpc import get_connection_pool
     
-    try:
-        # Handle both coroutines and functions that return coroutines
-        if asyncio.iscoroutine(coro_or_func):
-            coro = coro_or_func
-        elif callable(coro_or_func):
-            coro = coro_or_func()
-        else:
-            raise RPCError(f"Invalid input: {coro_or_func} is not a coroutine or callable")
-            
-        # Execute with timeout
-        response = await asyncio.wait_for(coro, timeout=timeout)
+    start_time = time.time()
+    attempts = 0
+    backoff = retry_delay
+    client_from_pool = False
+    connection_pool = None
+    log_prefix = ""
+    
+    # Determine what we're calling
+    if isinstance(method_or_name, str):
+        method_name = method_or_name
+        log_prefix = f"{method_name}: "
+    else:
+        method_name = method_or_name.__name__ if hasattr(method_or_name, "__name__") else "unknown_method"
+        log_prefix = f"{method_name}: "
+    
+    # Keep track of tried endpoints to avoid retrying the same one
+    tried_endpoints = set()
+    rate_limited_endpoints = set()
+    error_endpoints = {}  # Track specific errors by endpoint
+    
+    # Special handling for getClusterNodes method
+    is_get_cluster_nodes = method_name == "get_cluster_nodes" or method_name == "getClusterNodes"
+    if is_get_cluster_nodes:
+        logger.info(f"Executing getClusterNodes RPC call with special handling")
+    
+    while attempts < max_retries:
+        attempts += 1
+        release_client = False
         
-        # Check response format
-        if not isinstance(response, dict):
-            raise RPCError(f"Invalid response from {method_name}: {response}")
-            
-        # Check for error in response
-        if "error" in response:
-            error = response["error"]
-            code = error.get("code", 0)
-            message = error.get("message", "Unknown error")
-            
-            # Handle specific error codes
-            if code == -32005:
-                raise RateLimitError(f"Rate limit exceeded in {method_name}: {message}")
-            elif code == -32015 or "behind by" in message.lower():
-                raise NodeUnhealthyError(f"Node is unhealthy in {method_name}: {message}")
-            else:
-                raise RPCError(f"RPC error in {method_name}: {code} - {message}")
+        try:
+            # Get a client if one wasn't provided
+            if client is None:
+                # Get the connection pool if we don't have it yet
+                if connection_pool is None:
+                    connection_pool = await get_connection_pool()
                 
-        # Check for missing result
-        if "result" not in response:
-            raise RPCError(f"Missing result in response from {method_name}")
+                # Get a client from the pool
+                client = await connection_pool.get_client()
+                client_from_pool = True
+                release_client = True
+                
+                # Skip if we've already tried this endpoint
+                endpoint = client.endpoint
+                if endpoint in tried_endpoints:
+                    logger.debug(f"{log_prefix}Skipping already tried endpoint {endpoint}")
+                    
+                    # Release the client before continuing
+                    if client_from_pool and connection_pool is not None:
+                        try:
+                            await connection_pool.release(client, success=False)
+                        except Exception as release_error:
+                            logger.error(f"{log_prefix}Error releasing client: {str(release_error)}")
+                    
+                    continue
+                
+                # Skip if this endpoint was rate limited
+                if endpoint in rate_limited_endpoints:
+                    logger.debug(f"{log_prefix}Skipping rate-limited endpoint {endpoint}")
+                    
+                    # Release the client before continuing
+                    if client_from_pool and connection_pool is not None:
+                        try:
+                            await connection_pool.release(client, success=False)
+                        except Exception as release_error:
+                            logger.error(f"{log_prefix}Error releasing client: {str(release_error)}")
+                    
+                    continue
+                
+                tried_endpoints.add(endpoint)
             
-        # Return the result
-        execution_time = time.time() - start_time
-        logger.debug(f"{method_name} completed in {execution_time:.2f} seconds")
-        return response["result"]
+            # Log the endpoint we're using
+            logger.debug(f"{log_prefix}Using endpoint: {client.endpoint}")
+            
+            # Execute the method
+            if isinstance(method_or_name, str):
+                # It's a method name, call it on the client
+                method = getattr(client, method_or_name)
+                
+                # Special handling for getClusterNodes
+                if is_get_cluster_nodes:
+                    logger.debug(f"Calling getClusterNodes on client with endpoint {client.endpoint}")
+                
+                result = await asyncio.wait_for(method(*args, **kwargs), timeout=timeout)
+            else:
+                # It's a callable, call it directly
+                result = await asyncio.wait_for(method_or_name(client, *args, **kwargs), timeout=timeout)
+            
+            # If we get here, the call succeeded
+            if client_from_pool and connection_pool is not None:
+                # Update endpoint stats with success
+                if hasattr(connection_pool, 'update_endpoint_stats'):
+                    connection_pool.update_endpoint_stats(client.endpoint, True, time.time() - start_time)
+            
+            # Special handling for getClusterNodes result
+            if is_get_cluster_nodes:
+                logger.debug(f"getClusterNodes result type: {type(result)}")
+                
+                # Check for error in the response
+                if isinstance(result, dict) and 'error' in result:
+                    error = result['error']
+                    error_msg = error.get('message', str(error))
+                    error_code = error.get('code', 0)
+                    
+                    # Track this endpoint's error
+                    error_endpoints[client.endpoint] = {
+                        'message': error_msg,
+                        'code': error_code
+                    }
+                    
+                    logger.warning(f"getClusterNodes returned error from {client.endpoint}: {error_msg} (code: {error_code})")
+                    
+                    # Release the client with failure status
+                    if client_from_pool and connection_pool is not None:
+                        try:
+                            await connection_pool.release(client, success=False)
+                            release_client = False  # Already released
+                        except Exception as release_error:
+                            logger.error(f"{log_prefix}Error releasing client: {str(release_error)}")
+                    
+                    # If this is the last attempt, return the error result with additional context
+                    if attempts >= max_retries:
+                        # Add additional context to the error result
+                        result['_soleco_context'] = {
+                            'attempted_endpoints': list(tried_endpoints),
+                            'endpoint_errors': error_endpoints,
+                            'attempts': attempts
+                        }
+                        logger.error(f"All getClusterNodes attempts failed. Last error: {error_msg}")
+                        return result
+                    
+                    # Otherwise, try another endpoint
+                    continue
+                
+                # Check for empty or invalid response
+                if isinstance(result, list) and len(result) == 0:
+                    logger.warning(f"getClusterNodes returned empty list from {client.endpoint}")
+                    
+                    # Release the client with failure status
+                    if client_from_pool and connection_pool is not None:
+                        try:
+                            await connection_pool.release(client, success=False)
+                            release_client = False  # Already released
+                        except Exception as release_error:
+                            logger.error(f"{log_prefix}Error releasing client: {str(release_error)}")
+                    
+                    # If this is the last attempt, add context to the empty result
+                    if attempts >= max_retries:
+                        empty_result = {
+                            'error': {
+                                'message': 'All endpoints returned empty cluster nodes list',
+                                'code': -32000  # Generic server error
+                            },
+                            '_soleco_context': {
+                                'attempted_endpoints': list(tried_endpoints),
+                                'endpoint_errors': error_endpoints,
+                                'attempts': attempts
+                            }
+                        }
+                        logger.error("All getClusterNodes attempts returned empty lists")
+                        return empty_result
+                    
+                    # Try another endpoint
+                    continue
+            
+            # Return the successful result
+            return result
+            
+        except asyncio.TimeoutError:
+            logger.warning(f"{log_prefix}Request timed out after {timeout}s on attempt {attempts}/{max_retries}")
+            if client_from_pool and connection_pool is not None and hasattr(connection_pool, 'update_endpoint_stats'):
+                # Update endpoint stats with failure
+                connection_pool.update_endpoint_stats(client.endpoint, False, timeout)
+                
+            # Track this endpoint's error
+            if is_get_cluster_nodes and client and hasattr(client, 'endpoint'):
+                error_endpoints[client.endpoint] = {
+                    'message': f'Request timed out after {timeout}s',
+                    'code': -32000,  # Generic server error
+                    'type': 'TimeoutError'
+                }
+                
+        except Exception as e:
+            error_msg = str(e)
+            logger.warning(f"{log_prefix}Error on attempt {attempts}/{max_retries}: {error_msg}")
+            
+            # Check for rate limiting errors
+            is_rate_limited = False
+            if "429" in error_msg or "rate limit" in error_msg.lower():
+                is_rate_limited = True
+                if client and hasattr(client, 'endpoint'):
+                    rate_limited_endpoints.add(client.endpoint)
+                    logger.warning(f"{log_prefix}Endpoint {client.endpoint} is rate limited")
+            
+            # Update endpoint stats with failure
+            if client_from_pool and connection_pool is not None and hasattr(connection_pool, 'update_endpoint_stats'):
+                connection_pool.update_endpoint_stats(client.endpoint, False, time.time() - start_time)
+            
+            # Track this endpoint's error for getClusterNodes
+            if is_get_cluster_nodes and client and hasattr(client, 'endpoint'):
+                error_endpoints[client.endpoint] = {
+                    'message': error_msg,
+                    'code': -32000,  # Generic server error
+                    'type': type(e).__name__,
+                    'stack': traceback.format_exc() if 'traceback' in sys.modules else None
+                }
+            
+            # Call error callback if provided
+            if error_callback:
+                try:
+                    error_callback(e)
+                except Exception as callback_error:
+                    logger.error(f"{log_prefix}Error in error callback: {str(callback_error)}")
         
-    except asyncio.TimeoutError:
-        execution_time = time.time() - start_time
-        logger.error(f"{method_name} timed out after {execution_time:.2f} seconds")
-        raise
+        finally:
+            # Release the client back to the pool
+            if release_client and client and connection_pool is not None:
+                try:
+                    await connection_pool.release(client, success=False)
+                    client = None  # Set to None to get a new client on the next attempt
+                except Exception as release_error:
+                    logger.error(f"{log_prefix}Error releasing client: {str(release_error)}")
         
-    except Exception as e:
-        execution_time = time.time() - start_time
-        logger.error(f"{method_name} failed after {execution_time:.2f} seconds: {str(e)}")
-        raise
+        # Exponential backoff for retries
+        if attempts < max_retries:
+            # Calculate backoff with jitter
+            jitter = random.uniform(0.8, 1.2)
+            sleep_time = backoff * jitter
+            logger.debug(f"{log_prefix}Retrying in {sleep_time:.2f}s (attempt {attempts}/{max_retries})")
+            await asyncio.sleep(sleep_time)
+            backoff *= 2  # Exponential backoff
+    
+    # If we get here, all retries failed
+    total_time = time.time() - start_time
+    
+    # Special handling for getClusterNodes failure
+    if is_get_cluster_nodes:
+        error_result = {
+            'error': {
+                'message': f'Failed to get cluster nodes after {max_retries} attempts',
+                'code': -32000  # Generic server error
+            },
+            '_soleco_context': {
+                'attempted_endpoints': list(tried_endpoints),
+                'endpoint_errors': error_endpoints,
+                'attempts': attempts,
+                'total_time': total_time
+            }
+        }
+        logger.error(f"All getClusterNodes attempts failed after {total_time:.2f}s")
+        return error_result
+    
+    # For other methods, raise an exception
+    error_message = f"Failed after {max_retries} attempts and {total_time:.2f}s"
+    logger.error(f"{log_prefix}{error_message}")
+    
+    raise RPCError(error_message)
 
 def handle_rpc_error(error: Exception, context: str) -> None:
     """Standardized error handling for RPC calls."""

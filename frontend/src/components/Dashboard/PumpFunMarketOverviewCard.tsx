@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Box, 
   Card, 
@@ -18,27 +18,43 @@ import {
   StatArrow, 
   useColorModeValue 
 } from '@chakra-ui/react';
-import { useQuery } from 'react-query';
+import { useRefreshablePumpFunQuery } from '../../hooks/usePumpFunQuery';
 import { pumpFunApi } from '../../api/pumpFunService';
 import { getSafeImageUrl, handleImageError } from '../../utils/imageUtils';
+import RefreshButton from '../common/RefreshButton';
 
 const PumpFunMarketOverviewCard: React.FC = () => {
-  const { data, isLoading, error } = useQuery(
-    'pumpfun-market-overview',
-    () => pumpFunApi.getMarketOverview(),
-    { refetchInterval: 60000 } // Refresh every minute
+  const { 
+    data, 
+    isLoading, 
+    error, 
+    refresh,
+    isRefetching
+  } = useRefreshablePumpFunQuery(
+    'market-overview',
+    (refresh) => pumpFunApi.getMarketOverview(true, 5, refresh),
+    { refetchInterval: 5 * 60 * 1000 } // Refresh every 5 minutes
   );
 
-  const { data: solPrice } = useQuery(
-    'pumpfun-sol-price',
-    () => pumpFunApi.getSolPrice(),
-    { refetchInterval: 60000 } // Refresh every minute
+  const { 
+    data: solPrice,
+    isLoading: isSolPriceLoading,
+    refresh: refreshSolPrice
+  } = useRefreshablePumpFunQuery(
+    'sol-price',
+    (refresh) => pumpFunApi.getSolPrice(refresh),
+    { refetchInterval: 5 * 60 * 1000 } // Refresh every 5 minutes
   );
 
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
+  
+  const handleRefresh = async () => {
+    refresh();
+    refreshSolPrice();
+  };
 
-  if (isLoading) {
+  if (isLoading || isSolPriceLoading) {
     return (
       <Card>
         <CardHeader>
@@ -57,10 +73,37 @@ const PumpFunMarketOverviewCard: React.FC = () => {
     return (
       <Card>
         <CardHeader>
-          <Heading size="md">Market Overview</Heading>
+          <Flex justify="space-between" align="center">
+            <Heading size="md">Market Overview</Heading>
+            <RefreshButton isLoading={isRefetching} onClick={handleRefresh} />
+          </Flex>
         </CardHeader>
         <CardBody>
-          <Text>Error loading market data</Text>
+          <Text>Error loading market data. Please try refreshing.</Text>
+        </CardBody>
+      </Card>
+    );
+  }
+
+  // Check if data is empty or missing essential properties
+  const isDataEmpty = !data || 
+    (data.total_tokens === 0 && 
+     data.total_volume_24h === 0 && 
+     data.total_trades_24h === 0 && 
+     (!data.most_active_tokens || data.most_active_tokens.length === 0));
+
+  if (isDataEmpty) {
+    return (
+      <Card>
+        <CardHeader>
+          <Flex justify="space-between" align="center">
+            <Heading size="md">Pump.fun Market Overview</Heading>
+            <RefreshButton isLoading={isRefetching} onClick={handleRefresh} />
+          </Flex>
+        </CardHeader>
+        <CardBody>
+          <Text>Market data is currently unavailable. The API endpoint may be down or experiencing issues.</Text>
+          <Text mt={2}>Please try again later or check the API status.</Text>
         </CardBody>
       </Card>
     );
@@ -69,7 +112,10 @@ const PumpFunMarketOverviewCard: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <Heading size="md">Pump.fun Market Overview</Heading>
+        <Flex justify="space-between" align="center">
+          <Heading size="md">Pump.fun Market Overview</Heading>
+          <RefreshButton isLoading={isRefetching} onClick={handleRefresh} />
+        </Flex>
       </CardHeader>
       <CardBody>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>

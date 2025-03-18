@@ -5,9 +5,11 @@ import os
 import json
 import sqlite3
 import logging
+import threading
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Union
 from pathlib import Path
+import asyncio
 
 # Configure logging
 logger = logging.getLogger("app.database.sqlite")
@@ -18,20 +20,41 @@ DB_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__)
 # Ensure data directory exists
 os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
 
+# Thread-local storage for database connections
+thread_local = threading.local()
+
 class DatabaseCache:
     """
     SQLite database cache for dashboard data.
     """
     def __init__(self):
         """Initialize the database connection and create tables if they don't exist."""
-        self.conn = None
-        self.cursor = None
-        self._connect()
-        self._create_tables()
+        # We'll initialize connections on demand in each thread
+        pass
         
     def __del__(self):
         """Ensure connection is closed when object is destroyed."""
         self._close()
+    
+    def _get_connection(self):
+        """Get a thread-local connection to the database."""
+        if not hasattr(thread_local, "conn") or thread_local.conn is None:
+            # Create parent directory if it doesn't exist
+            Path(os.path.dirname(DB_FILE)).mkdir(parents=True, exist_ok=True)
+            
+            # Connect with timeout and enable WAL mode for better concurrency
+            thread_local.conn = sqlite3.connect(DB_FILE, timeout=30.0)
+            thread_local.conn.execute("PRAGMA journal_mode=WAL")
+            thread_local.conn.execute("PRAGMA synchronous=NORMAL")
+            thread_local.conn.row_factory = sqlite3.Row
+            thread_local.cursor = thread_local.conn.cursor()
+            
+            # Create tables if they don't exist
+            self._create_tables()
+            
+            logger.debug(f"Created new SQLite connection in thread {threading.get_ident()}")
+        
+        return thread_local.conn, thread_local.cursor
     
     def _connect(self):
         """Connect to the SQLite database."""
@@ -39,16 +62,10 @@ class DatabaseCache:
             # Close existing connection if it exists
             self._close()
             
-            # Create parent directory if it doesn't exist
-            Path(os.path.dirname(DB_FILE)).mkdir(parents=True, exist_ok=True)
-            
-            # Connect with timeout and enable WAL mode for better concurrency
-            self.conn = sqlite3.connect(DB_FILE, timeout=30.0)
-            self.conn.execute("PRAGMA journal_mode=WAL")
-            self.conn.execute("PRAGMA synchronous=NORMAL")
-            self.conn.row_factory = sqlite3.Row
-            self.cursor = self.conn.cursor()
+            # Get a new connection
+            conn, cursor = self._get_connection()
             logger.info(f"Connected to SQLite database at {DB_FILE}")
+            return conn, cursor
         except sqlite3.Error as e:
             logger.error(f"Error connecting to SQLite database: {e}")
             raise
@@ -56,18 +73,21 @@ class DatabaseCache:
     def _close(self):
         """Close the database connection."""
         try:
-            if self.conn:
-                self.conn.close()
-                self.conn = None
-                self.cursor = None
+            if hasattr(thread_local, "conn") and thread_local.conn:
+                thread_local.conn.close()
+                thread_local.conn = None
+                thread_local.cursor = None
+                logger.debug(f"Closed SQLite connection in thread {threading.get_ident()}")
         except Exception as e:
             logger.error(f"Error closing database connection: {e}")
     
     def _create_tables(self):
         """Create the necessary tables if they don't exist."""
         try:
+            conn, cursor = self._get_connection()
+            
             # Cache table for storing API responses
-            self.cursor.execute('''
+            cursor.execute('''
             CREATE TABLE IF NOT EXISTS cache (
                 endpoint TEXT PRIMARY KEY,
                 data TEXT,
@@ -78,7 +98,7 @@ class DatabaseCache:
             ''')
             
             # Network status history
-            self.cursor.execute('''
+            cursor.execute('''
             CREATE TABLE IF NOT EXISTS network_status_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 status TEXT,
@@ -88,7 +108,7 @@ class DatabaseCache:
             ''')
             
             # Mint analytics history
-            self.cursor.execute('''
+            cursor.execute('''
             CREATE TABLE IF NOT EXISTS mint_analytics_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 blocks INTEGER,
@@ -100,7 +120,7 @@ class DatabaseCache:
             ''')
             
             # Pump tokens history
-            self.cursor.execute('''
+            cursor.execute('''
             CREATE TABLE IF NOT EXISTS pump_tokens_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 timeframe TEXT,
@@ -112,7 +132,7 @@ class DatabaseCache:
             ''')
             
             # RPC nodes history
-            self.cursor.execute('''
+            cursor.execute('''
             CREATE TABLE IF NOT EXISTS rpc_nodes_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 total_nodes INTEGER,
@@ -122,7 +142,7 @@ class DatabaseCache:
             ''')
             
             # Performance metrics history
-            self.cursor.execute('''
+            cursor.execute('''
             CREATE TABLE IF NOT EXISTS performance_metrics_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 max_tps REAL,
@@ -133,7 +153,7 @@ class DatabaseCache:
             ''')
             
             # Pump token performance history
-            self.cursor.execute('''
+            cursor.execute('''
             CREATE TABLE IF NOT EXISTS pump_token_performance (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 mint TEXT,
@@ -152,7 +172,7 @@ class DatabaseCache:
             )
             ''')
             
-            self.conn.commit()
+            conn.commit()
             logger.info("Database tables created successfully")
         except sqlite3.Error as e:
             logger.error(f"Error creating tables: {e}")
@@ -175,14 +195,15 @@ class DatabaseCache:
             Cached data or None if not found or expired
         """
         try:
+            conn, cursor = self._get_connection()
             params_str = json.dumps(params) if params else None
             
             # Get the cached data
-            self.cursor.execute(
+            cursor.execute(
                 "SELECT data, timestamp FROM cache WHERE endpoint = ? AND (params = ? OR (params IS NULL AND ? IS NULL))",
                 (endpoint, params_str, params_str)
             )
-            row = self.cursor.fetchone()
+            row = cursor.fetchone()
             
             if row:
                 data = json.loads(row['data'])
@@ -217,20 +238,69 @@ class DatabaseCache:
             True if successful, False otherwise
         """
         try:
+            conn, cursor = self._get_connection()
             params_str = json.dumps(params) if params else None
             data_str = json.dumps(data)
             timestamp = datetime.now().isoformat()
             
             # Insert or replace the cached data
-            self.cursor.execute(
+            cursor.execute(
                 "INSERT OR REPLACE INTO cache (endpoint, data, params, timestamp, ttl) VALUES (?, ?, ?, ?, ?)",
                 (endpoint, data_str, params_str, timestamp, ttl)
             )
-            self.conn.commit()
+            conn.commit()
             logger.debug(f"Cached data for {endpoint} with params {params}")
             return True
         except Exception as e:
             logger.error(f"Error caching data for {endpoint}: {e}")
+            return False
+    
+    async def get(self, key: str) -> Optional[Dict[str, Any]]:
+        """
+        Async wrapper for get_cached_data method.
+        
+        Args:
+            key: Cache key
+            
+        Returns:
+            Cached data or None if not found or expired
+        """
+        try:
+            # Run the synchronous method in a thread pool to avoid blocking
+            loop = asyncio.get_event_loop()
+            result = await loop.run_in_executor(None, lambda: self.get_cached_data(key, None, 300))
+            return result
+        except Exception as e:
+            logger.error(f"Error getting cached data for {key}: {e}")
+            return None
+    
+    async def set(self, key: str, data: Any, ttl: int = 300) -> bool:
+        """
+        Async wrapper for cache_data method.
+        
+        Args:
+            key: Cache key
+            data: Data to cache
+            ttl: Time to live in seconds
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            # Ensure data is JSON serializable
+            if isinstance(data, str):
+                # If it's already a string, assume it's JSON
+                json_data = json.loads(data)
+            else:
+                # Otherwise, try to serialize it
+                json_data = data
+            
+            # Run the synchronous method in a thread pool to avoid blocking
+            loop = asyncio.get_event_loop()
+            result = await loop.run_in_executor(None, lambda: self.cache_data(key, json_data, None, ttl))
+            return result
+        except Exception as e:
+            logger.error(f"Error caching data for {key}: {e}")
             return False
     
     def store_network_status(self, status: str, data: Dict[str, Any]) -> bool:
@@ -245,14 +315,15 @@ class DatabaseCache:
             True if successful, False otherwise
         """
         try:
+            conn, cursor = self._get_connection()
             data_str = json.dumps(data)
             timestamp = datetime.now().isoformat()
             
-            self.cursor.execute(
+            cursor.execute(
                 "INSERT INTO network_status_history (status, timestamp, data) VALUES (?, ?, ?)",
                 (status, timestamp, data_str)
             )
-            self.conn.commit()
+            conn.commit()
             logger.debug(f"Stored network status: {status}")
             return True
         except Exception as e:
@@ -273,14 +344,15 @@ class DatabaseCache:
             True if successful, False otherwise
         """
         try:
+            conn, cursor = self._get_connection()
             data_str = json.dumps(data)
             timestamp = datetime.now().isoformat()
             
-            self.cursor.execute(
+            cursor.execute(
                 "INSERT INTO mint_analytics_history (blocks, new_mints_count, pump_tokens_count, timestamp, data) VALUES (?, ?, ?, ?, ?)",
                 (blocks, new_mints_count, pump_tokens_count, timestamp, data_str)
             )
-            self.conn.commit()
+            conn.commit()
             logger.debug(f"Stored mint analytics for {blocks} blocks")
             return True
         except Exception as e:
@@ -301,14 +373,15 @@ class DatabaseCache:
             True if successful, False otherwise
         """
         try:
+            conn, cursor = self._get_connection()
             data_str = json.dumps(data)
             timestamp = datetime.now().isoformat()
             
-            self.cursor.execute(
+            cursor.execute(
                 "INSERT INTO pump_tokens_history (timeframe, sort_metric, tokens_count, timestamp, data) VALUES (?, ?, ?, ?, ?)",
                 (timeframe, sort_metric, tokens_count, timestamp, data_str)
             )
-            self.conn.commit()
+            conn.commit()
             logger.debug(f"Stored pump tokens for {timeframe} timeframe")
             return True
         except Exception as e:
@@ -327,14 +400,15 @@ class DatabaseCache:
             True if successful, False otherwise
         """
         try:
+            conn, cursor = self._get_connection()
             data_str = json.dumps(data)
             timestamp = datetime.now().isoformat()
             
-            self.cursor.execute(
+            cursor.execute(
                 "INSERT INTO rpc_nodes_history (total_nodes, timestamp, data) VALUES (?, ?, ?)",
                 (total_nodes, timestamp, data_str)
             )
-            self.conn.commit()
+            conn.commit()
             logger.debug(f"Stored RPC nodes: {total_nodes} nodes")
             return True
         except Exception as e:
@@ -354,14 +428,15 @@ class DatabaseCache:
             True if successful, False otherwise
         """
         try:
+            conn, cursor = self._get_connection()
             data_str = json.dumps(data)
             timestamp = datetime.now().isoformat()
             
-            self.cursor.execute(
+            cursor.execute(
                 "INSERT INTO performance_metrics_history (max_tps, avg_tps, timestamp, data) VALUES (?, ?, ?, ?)",
                 (max_tps, avg_tps, timestamp, data_str)
             )
-            self.conn.commit()
+            conn.commit()
             logger.debug(f"Stored performance metrics: max TPS {max_tps}, avg TPS {avg_tps}")
             return True
         except Exception as e:
@@ -379,6 +454,7 @@ class DatabaseCache:
             True if successful, False otherwise
         """
         try:
+            conn, cursor = self._get_connection()
             mint = token_data.get('mint')
             if not mint:
                 logger.warning("Cannot store token performance: missing mint address")
@@ -409,7 +485,7 @@ class DatabaseCache:
             data_str = json.dumps(token_data)
             timestamp = datetime.now().isoformat()
             
-            self.cursor.execute(
+            cursor.execute(
                 """
                 INSERT INTO pump_token_performance 
                 (mint, name, symbol, price, price_change_1h, price_change_24h, price_change_7d, 
@@ -419,7 +495,7 @@ class DatabaseCache:
                 (mint, name, symbol, price, price_change_1h, price_change_24h, price_change_7d, 
                 volume_24h, market_cap, virtual_sol_reserves, virtual_token_reserves, timestamp, data_str)
             )
-            self.conn.commit()
+            conn.commit()
             logger.debug(f"Stored performance data for token {symbol} ({mint})")
             return True
         except Exception as e:
@@ -438,13 +514,14 @@ class DatabaseCache:
             List of network status records
         """
         try:
+            conn, cursor = self._get_connection()
             cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
             
-            self.cursor.execute(
+            cursor.execute(
                 "SELECT status, timestamp, data FROM network_status_history WHERE timestamp > ? ORDER BY timestamp DESC LIMIT ?",
                 (cutoff, limit)
             )
-            rows = self.cursor.fetchall()
+            rows = cursor.fetchall()
             
             return [
                 {
@@ -471,13 +548,14 @@ class DatabaseCache:
             List of mint analytics records
         """
         try:
+            conn, cursor = self._get_connection()
             cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
             
-            self.cursor.execute(
+            cursor.execute(
                 "SELECT blocks, new_mints_count, pump_tokens_count, timestamp, data FROM mint_analytics_history WHERE blocks = ? AND timestamp > ? ORDER BY timestamp DESC LIMIT ?",
                 (blocks, cutoff, limit)
             )
-            rows = self.cursor.fetchall()
+            rows = cursor.fetchall()
             
             return [
                 {
@@ -507,13 +585,14 @@ class DatabaseCache:
             List of pump tokens records
         """
         try:
+            conn, cursor = self._get_connection()
             cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
             
-            self.cursor.execute(
+            cursor.execute(
                 "SELECT timeframe, sort_metric, tokens_count, timestamp, data FROM pump_tokens_history WHERE timeframe = ? AND sort_metric = ? AND timestamp > ? ORDER BY timestamp DESC LIMIT ?",
                 (timeframe, sort_metric, cutoff, limit)
             )
-            rows = self.cursor.fetchall()
+            rows = cursor.fetchall()
             
             return [
                 {
@@ -542,6 +621,7 @@ class DatabaseCache:
             List of top performing tokens
         """
         try:
+            conn, cursor = self._get_connection()
             valid_metrics = ['volume_24h', 'price_change_1h', 'price_change_24h', 'price_change_7d', 'market_cap']
             if metric not in valid_metrics:
                 logger.warning(f"Invalid metric: {metric}. Using volume_24h instead.")
@@ -550,7 +630,7 @@ class DatabaseCache:
             cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
             
             # Get the latest record for each token within the time window
-            self.cursor.execute(
+            cursor.execute(
                 f"""
                 WITH LatestTokens AS (
                     SELECT mint, MAX(timestamp) as max_timestamp
@@ -566,7 +646,7 @@ class DatabaseCache:
                 """,
                 (cutoff, limit)
             )
-            rows = self.cursor.fetchall()
+            rows = cursor.fetchall()
             
             return [
                 {
@@ -588,6 +668,73 @@ class DatabaseCache:
             ]
         except Exception as e:
             logger.error(f"Error getting top performing tokens: {e}")
+            return []
+    
+    def get_rpc_nodes_history(self, limit: int = 24, hours: int = 24) -> List[Dict[str, Any]]:
+        """
+        Get RPC nodes history for the past hours.
+        
+        Args:
+            limit: Maximum number of records to return
+            hours: Number of hours to look back
+            
+        Returns:
+            List of RPC nodes history records
+        """
+        try:
+            conn, cursor = self._get_connection()
+            cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
+            
+            cursor.execute(
+                "SELECT total_nodes, timestamp, data FROM rpc_nodes_history WHERE timestamp > ? ORDER BY timestamp DESC LIMIT ?",
+                (cutoff, limit)
+            )
+            rows = cursor.fetchall()
+            
+            return [
+                {
+                    "total_nodes": row["total_nodes"],
+                    "timestamp": row["timestamp"],
+                    "data": json.loads(row["data"])
+                }
+                for row in rows
+            ]
+        except Exception as e:
+            logger.error(f"Error getting RPC nodes history: {e}")
+            return []
+    
+    def get_performance_metrics_history(self, limit: int = 24, hours: int = 24) -> List[Dict[str, Any]]:
+        """
+        Get performance metrics history for the past hours.
+        
+        Args:
+            limit: Maximum number of records to return
+            hours: Number of hours to look back
+            
+        Returns:
+            List of performance metrics history records
+        """
+        try:
+            conn, cursor = self._get_connection()
+            cutoff = (datetime.now() - timedelta(hours=hours)).isoformat()
+            
+            cursor.execute(
+                "SELECT max_tps, avg_tps, timestamp, data FROM performance_metrics_history WHERE timestamp > ? ORDER BY timestamp DESC LIMIT ?",
+                (cutoff, limit)
+            )
+            rows = cursor.fetchall()
+            
+            return [
+                {
+                    "max_tps": row["max_tps"],
+                    "avg_tps": row["avg_tps"],
+                    "timestamp": row["timestamp"],
+                    "data": json.loads(row["data"])
+                }
+                for row in rows
+            ]
+        except Exception as e:
+            logger.error(f"Error getting performance metrics history: {e}")
             return []
 
 # Create a singleton instance

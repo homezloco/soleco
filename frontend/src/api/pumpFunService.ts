@@ -22,6 +22,20 @@ const logError = (message: string, error: any) => {
   }
 };
 
+// Helper function to handle API errors with fallback data
+const handleApiError = <T>(error: any, fallbackData: T, endpoint: string): T => {
+  logError(`Error fetching from ${endpoint}:`, error);
+  
+  // If it's a 404 error, return the fallback data
+  if (error.response && error.response.status === 404) {
+    console.warn(`Endpoint ${endpoint} not found (404), using fallback data`);
+    return fallbackData;
+  }
+  
+  // For other errors, throw the error to be handled by the caller
+  throw error;
+};
+
 // Helper function to log the full URL being requested
 const logRequest = (url: string, params?: any) => {
   if (DEBUG) {
@@ -186,318 +200,288 @@ export interface TokenHistory {
 // PumpFun API Service
 export const pumpFunApi = {
   // Get latest tokens
-  getLatestTokens(qty: number = 10, include_nsfw: boolean = true) {
-    logRequest('/soleco/pumpfun/coins/latest', { qty, include_nsfw });
-    return apiClient.get('/soleco/pumpfun/coins/latest', {
-      params: { 
-        qty,
-        include_nsfw
-      },
-      timeout: 60000 // Increase timeout to 60 seconds
-    }).then(response => {
-      // Deduplicate tokens based on mint
-      if (Array.isArray(response.data)) {
-        const uniqueTokens = [];
-        const mints = new Set();
-        
-        for (const token of response.data) {
-          if (!mints.has(token.mint)) {
-            mints.add(token.mint);
-            uniqueTokens.push(token);
-          }
+  async getLatestTokens(
+    qty: number = 10, 
+    refresh: boolean = false
+  ): Promise<PumpFunToken[]> {
+    try {
+      logRequest('/soleco/pumpfun/coins/latest', { qty, refresh });
+      const response = await apiClient.get('/soleco/pumpfun/coins/latest', {
+        params: {
+          qty,
+          refresh
         }
-        
+      });
+      logDebug('Latest tokens response:', response.data);
+      
+      // Additional check for duplicate tokens
+      if (Array.isArray(response.data)) {
+        const seenMints = new Set<string>();
+        const uniqueTokens = response.data.filter((token: PumpFunToken) => {
+          if (!token.mint) return false;
+          if (seenMints.has(token.mint)) return false;
+          seenMints.add(token.mint);
+          return true;
+        });
         return uniqueTokens;
       }
       
       return response.data;
-    })
-    .catch(error => {
-      logError('Error fetching latest tokens:', error);
-      // Return empty array instead of throwing to avoid breaking the UI
-      return [];
-    });
+    } catch (error) {
+      return handleApiError(error, [], '/soleco/pumpfun/coins/latest');
+    }
   },
 
   // Get latest trades
-  getLatestTrades(qty: number = 10) {
-    logRequest('/soleco/pumpfun/trades/latest', { qty, include_nsfw: true, include_all: true });
-    return apiClient.get('/soleco/pumpfun/trades/latest', {
-      params: { 
-        qty,
-        include_nsfw: true,
-        include_all: true
-      },
-      timeout: 60000 // Increase timeout to 60 seconds
-    }).then(response => {
-      // Deduplicate trades based on signature
-      if (Array.isArray(response.data)) {
-        const uniqueTrades = [];
-        const signatures = new Set();
-        
-        for (const trade of response.data) {
-          if (!signatures.has(trade.signature)) {
-            signatures.add(trade.signature);
-            uniqueTrades.push(trade);
-          }
+  async getLatestTrades(
+    qty: number = 10, 
+    include_all: boolean = true,
+    include_nsfw: boolean = true,
+    refresh: boolean = false
+  ): Promise<PumpFunTrade[]> {
+    try {
+      logRequest('/soleco/pumpfun/trades/latest', { qty, include_all, include_nsfw, refresh });
+      const response = await apiClient.get('/soleco/pumpfun/trades/latest', {
+        params: {
+          qty,
+          include_all,
+          include_nsfw,
+          refresh
         }
-        
+      });
+      logDebug('Latest trades response:', response.data);
+      
+      // Additional check for duplicate trades
+      if (Array.isArray(response.data)) {
+        const seenSignatures = new Set<string>();
+        const uniqueTrades = response.data.filter((trade: PumpFunTrade) => {
+          if (!trade.signature) return false;
+          if (seenSignatures.has(trade.signature)) return false;
+          seenSignatures.add(trade.signature);
+          return true;
+        });
         return uniqueTrades;
       }
       
       return response.data;
-    })
-    .catch(error => {
-      logError('Error fetching latest trades:', error);
-      // Check if it's a 422 error and provide more detailed logging
-      if (error.response && error.response.status === 422) {
-        logError('422 Unprocessable Entity error details:', error.response.data);
-      }
-      // Return empty array instead of throwing to avoid breaking the UI
-      return [];
-    });
+    } catch (error) {
+      return handleApiError(error, [], '/soleco/pumpfun/trades/latest');
+    }
   },
 
   // Get king of the hill
-  getKingOfTheHill(include_nsfw: boolean = true) {
-    const cacheBuster = new Date().getTime();
-    console.log(`[DEBUG] Calling getKingOfTheHill with include_nsfw=${include_nsfw}, cacheBuster=${cacheBuster}`);
-    console.log(`[DEBUG] API URL: /soleco/pumpfun/coins/king-of-the-hill`);
-    
-    logRequest('/soleco/pumpfun/coins/king-of-the-hill', { include_nsfw, _: cacheBuster });
-    return apiClient.get('/soleco/pumpfun/coins/king-of-the-hill', {
-      params: {
-        include_nsfw,
-        _: cacheBuster // Add cache-busting parameter
-      },
-      timeout: 60000 // Increase timeout to 60 seconds
-    }).then(response => {
-      console.log('[DEBUG] getKingOfTheHill response:', response);
-      return response.data;
-    })
-    .catch(error => {
-      logError('Error fetching king of the hill:', error);
-      console.error('[DEBUG] getKingOfTheHill error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        config: error.config
+  async getKingOfTheHill(
+    include_nsfw: boolean = false,
+    refresh: boolean = false
+  ): Promise<KingOfTheHill> {
+    try {
+      // Use the FastAPI backend endpoint
+      logRequest('/soleco/pumpfun/coins/king-of-the-hill', { include_nsfw, refresh });
+      const response = await apiClient.get('/soleco/pumpfun/coins/king-of-the-hill', {
+        params: {
+          include_nsfw, // Note: parameter name is 'include_nsfw' in our FastAPI
+          refresh
+        }
       });
-      // Check if there's a response with error details
-      if (error.response) {
-        logError(`${error.response.status} error details:`, error.response.data);
-      }
-      // Return a default object instead of null to avoid breaking the UI
-      return {
+      
+      logDebug('King of the hill response:', response.data);
+      return response.data;
+    } catch (error) {
+      // Create a fallback object for KingOfTheHill with required fields
+      const fallback: KingOfTheHill = {
         mint: '',
-        name: 'No King of the Hill',
-        symbol: 'NONE',
-        virtual_sol_reserves: 0,
-        virtual_token_reserves: 0,
-        king_of_the_hill_timestamp: Date.now() / 1000,
+        name: 'No King of the Hill Available',
+        symbol: 'N/A',
+        description: 'Data currently unavailable',
+        market_cap: 0,
+        king_of_the_hill_timestamp: Date.now(),
         previous_kings: []
       };
-    });
+      return handleApiError(error, fallback, '/soleco/pumpfun/coins/king-of-the-hill');
+    }
   },
 
   // Search tokens
-  searchTokens(query: string, limit: number = 10) {
-    logRequest('/soleco/pumpfun/search', { q: query, limit, include_nsfw: true, include_all: true, include_metadata: true, skip_validation: true });
-    return apiClient.get('/soleco/pumpfun/search', {
-      params: { 
-        q: query, 
-        limit,
-        include_nsfw: true,
-        include_all: true,
-        include_metadata: true,
-        skip_validation: true
-      },
-      timeout: 60000
-    }).then(response => response.data)
-    .catch(error => {
+  async searchTokens(
+    query: string, 
+    limit: number = 10,
+    refresh: boolean = false
+  ): Promise<PumpFunToken[]> {
+    try {
+      logRequest('/soleco/pumpfun/search', { query, limit, refresh });
+      const response = await apiClient.get('/soleco/pumpfun/search', {
+        params: {
+          query,
+          limit,
+          refresh
+        }
+      });
+      logDebug('Search tokens response:', response.data);
+      return response.data;
+    } catch (error) {
       logError('Error searching tokens:', error);
-      return [];
-    });
+      throw error;
+    }
   },
 
   // The getFeaturedTokens function has been removed because the endpoint is not functional.
   // The featured tokens endpoint is no longer available in the Pump.fun API.
 
   // Get SOL price
-  getSolPrice() {
-    logRequest('/soleco/pumpfun/sol-price');
-    return apiClient.get('/soleco/pumpfun/sol-price', {
-      timeout: 60000
-    }).then(response => {
-      logDebug('SOL price:', response.data);
+  async getSolPrice(refresh: boolean = false): Promise<number> {
+    try {
+      logRequest('/soleco/pumpfun/sol-price', { refresh });
+      const response = await apiClient.get('/soleco/pumpfun/sol-price', {
+        params: { refresh }
+      });
+      logDebug('SOL price response:', response.data);
       return response.data;
-    })
-    .catch(error => {
-      logError('Error fetching SOL price:', error);
-      // Check if there's a response with error details
-      if (error.response) {
-        logError(`${error.response.status} error details:`, error.response.data);
-      }
-      // Return a default value instead of null to avoid breaking the UI
-      return { price: 0, price_change_24h: 0 };
-    });
+    } catch (error) {
+      // Return a default SOL price as fallback
+      return handleApiError(error, 0, '/soleco/pumpfun/sol-price');
+    }
   },
 
   // Get candlesticks for a token
-  getCandlesticks(mint: string, timeframe: '1m' | '5m' | '15m' | '1h' | '4h' | '1d' = '1h') {
-    logRequest(`/soleco/pumpfun/candlesticks/${mint}`, {});
-    return apiClient.get(`/soleco/pumpfun/candlesticks/${mint}`, {
-      params: {
-        timeframe
-      },
-      timeout: 60000
-    }).then(response => {
-      logDebug(`Candlesticks for ${mint}:`, response.data);
+  async getCandlesticks(
+    mint: string, 
+    timeframe: '1m' | '5m' | '15m' | '1h' | '4h' | '1d' = '1h',
+    refresh: boolean = false
+  ): Promise<Candlestick[]> {
+    try {
+      logRequest(`/soleco/pumpfun/token/${mint}/candlesticks`, { interval: timeframe, refresh });
+      const response = await apiClient.get(`/soleco/pumpfun/token/${mint}/candlesticks`, {
+        params: {
+          interval: timeframe,
+          refresh
+        }
+      });
+      logDebug('Candlesticks response:', response.data);
       return response.data;
-    })
-    .catch(error => {
+    } catch (error) {
       logError(`Error fetching candlesticks for ${mint}:`, error);
-      return [];
-    });
+      throw error;
+    }
   },
 
   // Get all trades for a token
-  getTokenTrades(mint: string, limit: number = 50) {
-    logRequest(`/soleco/pumpfun/trades/all/${mint}`, { limit });
-    return apiClient.get(`/soleco/pumpfun/trades/all/${mint}`, {
-      params: {
-        limit
-      },
-      timeout: 60000
-    }).then(response => {
-      logDebug(`Trades for ${mint}:`, response.data);
+  async getTokenTrades(
+    mint: string, 
+    limit: number = 50,
+    refresh: boolean = false
+  ): Promise<PumpFunTrade[]> {
+    try {
+      logRequest(`/soleco/pumpfun/token/${mint}/trades`, { limit, refresh });
+      const response = await apiClient.get(`/soleco/pumpfun/token/${mint}/trades`, {
+        params: {
+          limit,
+          refresh
+        }
+      });
+      logDebug('Token trades response:', response.data);
       return response.data;
-    })
-    .catch(error => {
+    } catch (error) {
       logError(`Error fetching trades for ${mint}:`, error);
-      return [];
-    });
+      throw error;
+    }
   },
 
   // Get trade count for a token
-  getTradeCount(mint: string) {
-    logRequest(`/soleco/pumpfun/trades/count/${mint}`, {});
-    return apiClient.get(`/soleco/pumpfun/trades/count/${mint}`, {
-      timeout: 60000
-    }).then(response => {
-      logDebug(`Trade count for ${mint}:`, response.data);
-      return response.data;
-    })
-    .catch(error => {
+  async getTradeCount(
+    mint: string,
+    refresh: boolean = false
+  ): Promise<number> {
+    try {
+      logRequest(`/soleco/pumpfun/token/${mint}/trade-count`, { refresh });
+      const response = await apiClient.get(`/soleco/pumpfun/token/${mint}/trade-count`, {
+        params: { refresh }
+      });
+      logDebug('Trade count response:', response.data);
+      return response.data.count;
+    } catch (error) {
       logError(`Error fetching trade count for ${mint}:`, error);
-      return { count: 0 };
-    });
+      throw error;
+    }
   },
 
   // Get token details
-  getTokenDetails(mint: string) {
-    logRequest(`/soleco/pumpfun/coins/${mint}`, {});
-    return apiClient.get(`/soleco/pumpfun/coins/${mint}`, {
-      timeout: 60000
-    }).then(response => {
-      logDebug(`Token details for ${mint}:`, response.data);
+  async getTokenDetails(
+    mint: string,
+    refresh: boolean = false
+  ): Promise<PumpFunToken> {
+    try {
+      logRequest(`/soleco/pumpfun/token/${mint}`, { refresh });
+      const response = await apiClient.get(`/soleco/pumpfun/token/${mint}`, {
+        params: { refresh }
+      });
+      logDebug('Token details response:', response.data);
       return response.data;
-    })
-    .catch(error => {
+    } catch (error) {
       logError(`Error fetching token details for ${mint}:`, error);
-      // Check if there's a response with error details
-      if (error.response) {
-        logError(`${error.response.status} error details:`, error.response.data);
-      }
-      // Return a default token object with the requested mint
-      return {
-        mint: mint,
-        name: 'Unknown Token',
-        symbol: 'UNKNOWN',
-        virtual_sol_reserves: 0,
-        virtual_token_reserves: 0,
-        created_timestamp: Date.now() / 1000
-      };
-    });
+      throw error;
+    }
   },
 
   // Get token price history
-  getTokenPriceHistory(mint: string, period: string = '1d') {
-    logRequest(`/soleco/pumpfun/coins/${mint}/price-history`, { period });
-    return apiClient.get(`/soleco/pumpfun/coins/${mint}/price-history`, {
-      params: { 
-        period
-      },
-      timeout: 60000
-    }).then(response => response.data)
-    .catch(error => {
+  async getTokenPriceHistory(
+    mint: string, 
+    period: string = '1d',
+    refresh: boolean = false
+  ): Promise<any> {
+    try {
+      logRequest(`/soleco/pumpfun/token/${mint}/price-history`, { period, refresh });
+      const response = await apiClient.get(`/soleco/pumpfun/token/${mint}/price-history`, {
+        params: {
+          period,
+          refresh
+        }
+      });
+      logDebug('Token price history response:', response.data);
+      return response.data;
+    } catch (error) {
       logError(`Error fetching price history for ${mint}:`, error);
-      return [];
-    });
+      throw error;
+    }
   },
 
   // Get token analytics
-  getTokenAnalytics(mint: string) {
-    logRequest(`/soleco/pumpfun/analytics/${mint}`, {});
-    return apiClient.get(`/soleco/pumpfun/analytics/${mint}`, {
-      timeout: 60000
-    }).then(response => {
-      logDebug(`Analytics for ${mint}:`, response.data);
+  async getTokenAnalytics(
+    mint: string,
+    refresh: boolean = false
+  ): Promise<TokenAnalytics> {
+    try {
+      logRequest(`/soleco/pumpfun/token/${mint}/analytics`, { refresh });
+      const response = await apiClient.get(`/soleco/pumpfun/token/${mint}/analytics`, {
+        params: { refresh }
+      });
+      logDebug('Token analytics response:', response.data);
       return response.data;
-    })
-    .catch(error => {
+    } catch (error) {
       logError(`Error fetching analytics for ${mint}:`, error);
-      // Check if there's a response with error details
-      if (error.response) {
-        logError(`${error.response.status} error details:`, error.response.data);
-      }
-      // Return a default analytics object
-      return {
-        mint: mint,
-        name: 'Unknown Token',
-        total_volume: 0,
-        price_high: 0,
-        price_low: 0,
-        trade_count: 0,
-        holder_count: 0,
-        created_at: new Date().toISOString(),
-        price_change_24h: 0,
-        volume_change_24h: 0
-      };
-    });
+      throw error;
+    }
   },
 
   // Get market overview
-  getMarketOverview(include_nsfw: boolean = true) {
-    logRequest('/soleco/pumpfun/market-overview', { include_nsfw });
-    return apiClient.get('/soleco/pumpfun/market-overview', {
-      params: {
-        include_nsfw
-      },
-      timeout: 60000
-    }).then(response => {
-      logDebug('Market overview:', response.data);
-      
-      // Transform the response to match what the UI expects
-      const data = response.data;
-      return {
-        total_tokens: data.total_tokens_tracked || 0,
-        total_volume_24h: data.total_volume_24h || 0,
-        total_trades_24h: 0, // Not provided by the backend currently
-        new_tokens_24h: 0, // Not provided by the backend currently
-        sol_price: data.sol_price || 0,
-        sol_price_change_24h: 0, // Not provided by the backend currently
-        most_active_tokens: [] // Featured tokens endpoint is not available
-      };
-    })
-    .catch(error => {
-      logError('Error fetching market overview:', error);
-      // Check if there's a response with error details
-      if (error.response) {
-        logError(`${error.response.status} error details:`, error.response.data);
-      }
-      // Return a default object instead of null to avoid breaking the UI
-      return {
+  async getMarketOverview(
+    include_nsfw: boolean = true,
+    latest_limit: number = 5,
+    refresh: boolean = false
+  ): Promise<MarketOverview> {
+    try {
+      logRequest('/soleco/pumpfun/market-overview', { include_nsfw, latest_limit, refresh });
+      const response = await apiClient.get('/soleco/pumpfun/market-overview', {
+        params: {
+          include_nsfw,
+          latest_limit,
+          refresh
+        }
+      });
+      logDebug('Market overview response:', response.data);
+      return response.data;
+    } catch (error) {
+      // Create a minimal fallback object for MarketOverview
+      const fallback: MarketOverview = {
         total_tokens: 0,
         total_volume_24h: 0,
         total_trades_24h: 0,
@@ -506,70 +490,64 @@ export const pumpFunApi = {
         sol_price_change_24h: 0,
         most_active_tokens: []
       };
-    });
+      return handleApiError(error, fallback, '/soleco/pumpfun/market-overview');
+    }
   },
 
   // Get top performing tokens
-  getTopPerformers(params: {
+  async getTopPerformers(params: {
     metric?: string;
     limit?: number;
     hours?: number;
     include_nsfw?: boolean;
     refresh?: boolean;
-  } = {}) {
-    const defaultParams = {
-      metric: 'volume_24h',
-      limit: 10,
-      hours: 24,
-      include_nsfw: true,
-      refresh: false
-    };
+  } = {}): Promise<PumpFunToken[]> {
+    const { 
+      metric = 'volume_24h', 
+      limit = 10, 
+      hours = 24, 
+      include_nsfw = true,
+      refresh = false
+    } = params;
     
-    const queryParams = { ...defaultParams, ...params };
-    
-    logRequest('/soleco/pumpfun/top-performers', queryParams);
-    return apiClient.get('/soleco/pumpfun/top-performers', {
-      params: queryParams,
-      timeout: 60000
-    }).then(response => {
-      logDebug('Top performers:', response.data);
+    try {
+      logRequest('/soleco/pumpfun/top-performers', { metric, limit, hours, include_nsfw, refresh });
+      const response = await apiClient.get('/soleco/pumpfun/top-performers', {
+        params: {
+          metric,
+          limit,
+          hours,
+          include_nsfw,
+          refresh
+        }
+      });
+      logDebug('Top performers response:', response.data);
       return response.data;
-    })
-    .catch(error => {
+    } catch (error) {
       logError('Error fetching top performers:', error);
-      // Check if there's a response with error details
-      if (error.response) {
-        logError(`${error.response.status} error details:`, error.response.data);
-      }
-      // Return an empty array to avoid breaking the UI
-      return [];
-    });
+      throw error;
+    }
   },
 
   // Get token history
-  getTokenHistory(mint: string) {
-    logRequest(`/soleco/pumpfun/token-history/${mint}`, {});
-    return apiClient.get(`/soleco/pumpfun/token-history/${mint}`, {
-      timeout: 60000
-    }).then(response => {
-      logDebug('Token history:', response.data);
+  async getTokenHistory(
+    mint: string,
+    time_range: string = '24h',
+    refresh: boolean = false
+  ): Promise<TokenHistory> {
+    try {
+      logRequest(`/soleco/pumpfun/token/${mint}/history`, { time_range, refresh });
+      const response = await apiClient.get(`/soleco/pumpfun/token/${mint}/history`, {
+        params: {
+          time_range,
+          refresh
+        }
+      });
+      logDebug('Token history response:', response.data);
       return response.data;
-    })
-    .catch(error => {
+    } catch (error) {
       logError(`Error fetching history for ${mint}:`, error);
-      // Check if there's a response with error details
-      if (error.response) {
-        logError(`${error.response.status} error details:`, error.response.data);
-      }
-      // Return a default history object
-      const now = new Date().toISOString();
-      return {
-        mint: mint,
-        name: 'Unknown Token',
-        price_history: [{ timestamp: now, price: 0 }],
-        volume_history: [{ timestamp: now, volume: 0 }],
-        holder_history: [{ timestamp: now, holders: 0 }]
-      };
-    });
+      throw error;
+    }
   }
 };

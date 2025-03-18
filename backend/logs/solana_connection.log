@@ -1,0 +1,108 @@
+2025-03-01 21:57:08 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 21:57:08 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 21:57:08 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 21:57:11 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 21:57:11 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 21:57:11 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 21:59:17 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 21:59:18 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 21:59:18 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 21:59:19 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 21:59:19 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 21:59:19 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 22:01:27 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 22:01:29 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 22:01:29 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 22:01:31 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 22:01:31 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 22:01:31 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 22:11:07 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 22:11:08 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 22:11:08 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 22:11:11 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 22:11:11 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 22:11:11 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 22:14:54 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 22:14:55 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 22:14:55 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 22:14:57 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 22:14:57 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 22:14:57 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 22:17:39 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 22:17:39 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 22:17:39 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 22:17:40 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 22:17:40 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 22:17:40 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 22:20:42 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 22:20:43 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 22:20:43 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 22:20:44 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 22:20:44 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 22:20:44 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 22:22:46 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 22:22:46 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 22:22:46 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 22:22:48 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 22:22:48 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 22:22:48 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 22:30:27 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 22:30:27 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 22:30:27 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 22:30:28 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 22:30:28 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 22:30:28 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 22:32:12 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 22:32:12 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 22:32:12 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 22:32:13 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 22:32:14 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 22:32:14 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 23:30:36 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 23:30:36 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 23:30:36 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 23:30:37 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 23:30:37 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 23:30:37 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 23:34:22 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 23:34:22 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 23:34:22 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 23:34:23 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 23:34:23 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 23:34:23 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 23:36:32 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 23:36:32 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 23:36:32 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 23:36:33 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 23:36:33 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 23:36:33 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 23:43:54 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 23:43:54 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 23:43:54 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 23:43:55 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 23:43:55 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 23:43:55 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-01 23:50:22 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-01 23:50:22 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-01 23:50:22 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-01 23:50:23 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-01 23:50:23 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-01 23:50:23 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-02 00:01:21 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-02 00:01:21 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-02 00:01:21 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-02 00:01:22 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-02 00:01:22 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-02 00:01:22 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-02 00:11:20 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-02 00:11:20 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-02 00:11:20 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-02 00:11:21 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-02 00:11:21 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-02 00:11:21 - solana.connection - INFO - Connection pool initialized with 2 clients
+2025-03-02 00:28:22 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-02 00:28:22 - solana.connection - INFO - Successfully connected to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70
+2025-03-02 00:28:22 - solana.connection - INFO - Successfully connected to endpoint: https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70 (SSL verify: True)
+2025-03-02 00:28:23 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-02 00:28:23 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-02 00:28:23 - solana.connection - INFO - Connection pool initialized with 2 clients

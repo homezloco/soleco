@@ -16,7 +16,8 @@ import {
   StatHelpText,
   useColorModeValue,
   Divider,
-  Tooltip
+  Tooltip,
+  StatGroup
 } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 import { dashboardApi } from '../../api/dashboardService';
@@ -89,10 +90,26 @@ const PerformanceMetricsCard: React.FC = () => {
   }
 
   // Prepare data for the TPS chart
-  const tpsChartData = data?.performance_samples?.map(sample => ({
-    slot: sample.slot,
-    tps: sample.numTransactions / sample.samplePeriodSecs
-  })) || [];
+  const tpsChartData = data?.performance_samples && Array.isArray(data.performance_samples) 
+    ? data.performance_samples.map(sample => ({
+        slot: sample.slot,
+        tps: sample.numTransactions / sample.samplePeriodSecs
+      })) 
+    : [];
+
+  // Get the performance stats from the response
+  const performanceStats = data?.performance_samples && !Array.isArray(data.performance_samples)
+    ? data.performance_samples
+    : { current_tps: 0, max_tps: 0, min_tps: 0, average_tps: 0 };
+
+  // Get the block production stats from the response
+  const blockStats = data?.block_production || {
+    total_slots: 0,
+    leader_slots: 0,
+    blocks_produced: 0,
+    skipped_slots: 0,
+    skip_rate: 0
+  };
 
   return (
     <Card shadow="md" borderWidth="1px" borderColor={borderColor} bg={cardBg}>
@@ -126,7 +143,7 @@ const PerformanceMetricsCard: React.FC = () => {
             bg={cardBg}
           >
             <StatLabel fontSize="xs">Max TPS</StatLabel>
-            <StatNumber fontSize="lg">{data?.tps_statistics?.max_tps?.toFixed(1) || 'N/A'}</StatNumber>
+            <StatNumber fontSize="lg">{performanceStats.max_tps || 0}</StatNumber>
             <StatHelpText fontSize="xs">Transactions per second</StatHelpText>
           </Stat>
           
@@ -140,7 +157,7 @@ const PerformanceMetricsCard: React.FC = () => {
             bg={cardBg}
           >
             <StatLabel fontSize="xs">Avg TPS</StatLabel>
-            <StatNumber fontSize="lg">{data?.tps_statistics?.average_tps?.toFixed(1) || 'N/A'}</StatNumber>
+            <StatNumber fontSize="lg">{performanceStats.average_tps || 0}</StatNumber>
             <StatHelpText fontSize="xs">Transactions per second</StatHelpText>
           </Stat>
           
@@ -168,10 +185,25 @@ const PerformanceMetricsCard: React.FC = () => {
             bg={cardBg}
           >
             <StatLabel fontSize="xs">Slot Skip Rate</StatLabel>
-            <StatNumber fontSize="lg">{(data?.block_production_statistics?.skipped_slot_percentage)?.toFixed(2) || 'N/A'}%</StatNumber>
+            <StatNumber fontSize="lg">{(blockStats.skip_rate * 100).toFixed(2) || 'N/A'}%</StatNumber>
             <StatHelpText fontSize="xs">Lower is better</StatHelpText>
           </Stat>
         </SimpleGrid>
+        
+        <StatGroup mt={4} textAlign="center">
+          <Stat>
+            <StatLabel>Current TPS</StatLabel>
+            <StatNumber>{performanceStats.current_tps || 0}</StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel>Max TPS</StatLabel>
+            <StatNumber>{performanceStats.max_tps || 0}</StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel>Avg TPS</StatLabel>
+            <StatNumber>{performanceStats.average_tps || 0}</StatNumber>
+          </Stat>
+        </StatGroup>
         
         <Heading size="sm" mb={3}>Transactions Per Second (TPS)</Heading>
         <Box sx={styles.chartContainer}>
@@ -218,7 +250,7 @@ const PerformanceMetricsCard: React.FC = () => {
             bg={cardBg}
           >
             <StatLabel fontSize="xs">Total Blocks Produced</StatLabel>
-            <StatNumber fontSize="lg">{data?.block_production_statistics?.total_blocks?.toLocaleString() || 'N/A'}</StatNumber>
+            <StatNumber fontSize="lg">{blockStats.blocks_produced?.toLocaleString() || 'N/A'}</StatNumber>
           </Stat>
           
           <Stat
@@ -231,7 +263,7 @@ const PerformanceMetricsCard: React.FC = () => {
             bg={cardBg}
           >
             <StatLabel fontSize="xs">Total Slots Skipped</StatLabel>
-            <StatNumber fontSize="lg">{data?.block_production_statistics?.skipped_slots?.toLocaleString() || 'N/A'}</StatNumber>
+            <StatNumber fontSize="lg">{blockStats.skipped_slots?.toLocaleString() || 'N/A'}</StatNumber>
           </Stat>
           
           <Stat
@@ -244,7 +276,7 @@ const PerformanceMetricsCard: React.FC = () => {
             bg={cardBg}
           >
             <StatLabel fontSize="xs">Total Transactions</StatLabel>
-            <StatNumber fontSize="lg">{data?.tps_statistics?.average_tps ? Math.round(data.tps_statistics.average_tps * 60).toLocaleString() : 'N/A'}</StatNumber>
+            <StatNumber fontSize="lg">{performanceStats.average_tps ? Math.round(performanceStats.average_tps * 60).toLocaleString() : 'N/A'}</StatNumber>
           </Stat>
         </SimpleGrid>
       </CardBody>

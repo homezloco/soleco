@@ -157,7 +157,7 @@ export interface PerformanceMetrics {
 // Dashboard API Service
 export const dashboardApi = {
   // Get network status
-  getNetworkStatus(summaryOnly: boolean = true): Promise<NetworkStatus> {
+  getNetworkStatus(summaryOnly: boolean = false): Promise<NetworkStatus> {
     return apiClient.get('/soleco/solana/network/status', {
       params: { summary_only: summaryOnly },
       timeout: 30000
@@ -203,7 +203,7 @@ export const dashboardApi = {
   
   // Get RPC nodes
   getRPCNodes(includeDetails: boolean = false, healthCheck: boolean = false): Promise<RPCNodesResponse> {
-    return apiClient.get('/soleco/network/rpc-nodes', {
+    return apiClient.get('/soleco/solana/rpc-nodes', {
       params: { 
         include_details: includeDetails,
         health_check: healthCheck,
@@ -254,7 +254,7 @@ export const dashboardApi = {
   getRecentMints(blocks: number = 2): Promise<MintAnalyticsResponse> {
     return apiClient.get('/soleco/mints/new/recent', {
       params: { blocks },
-      timeout: 30000
+      timeout: 60000  // Increase timeout to 60 seconds
     }).then(response => response.data);
   },
   
@@ -267,8 +267,9 @@ export const dashboardApi = {
   },
   
   // Get performance metrics
-  getPerformanceMetrics(): Promise<PerformanceMetrics> {
+  getPerformanceMetrics(refresh: boolean = false): Promise<PerformanceMetrics> {
     return apiClient.get('/soleco/solana/performance/metrics', {
+      params: { refresh },
       timeout: 30000
     }).then(response => response.data);
   },

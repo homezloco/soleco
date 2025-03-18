@@ -1,7 +1,12 @@
+# Core Web Framework
 fastapi==0.109.0
 uvicorn==0.25.0
 pydantic==2.6.1
+
+# Async HTTP Client
 aiohttp==3.9.2
+
+# Environment Management
 python-dotenv==1.0.0
 email-validator==2.1.0
 
@@ -11,11 +16,11 @@ solders==0.23.0
 base58==2.1.1
 pynacl==1.5.0  # Updated from nacl for signature verification
 
-# Existing dependencies
-requests
-web3
-python-jose
-cryptography
+# Web3 and Crypto
+requests==2.31.0
+web3==6.11.1
+python-jose==3.3.0
+cryptography==42.0.2
 
 # Retry and Resilience
 tenacity==8.2.3
@@ -25,9 +30,6 @@ APScheduler==3.10.4
 
 # Monitoring and Metrics
 prometheus-client==0.19.0
-
-# Enhanced Key Management
-cryptography==42.0.2
 
 # Async Database Support
 sqlalchemy[asyncio]==2.0.25  # Added for async database operations

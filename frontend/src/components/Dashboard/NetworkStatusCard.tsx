@@ -150,27 +150,40 @@ const NetworkStatusCard: React.FC = () => {
           </Text>
         )}
         
-        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={4}>
+        <SimpleGrid columns={{ base: 2, md: 3 }} spacing={4} mb={4}>
           <Stat>
             <StatLabel>Total Nodes</StatLabel>
-            <StatNumber>
-              {cluster_nodes.total_nodes?.toLocaleString() || 
-               (network_summary && typeof network_summary === 'object' && 'total_nodes' in network_summary) ? 
-                 ('total_nodes' in network_summary ? network_summary.total_nodes?.toLocaleString() : 'N/A') : 
-                 'N/A'}
-            </StatNumber>
+            <StatNumber>{network_summary.total_nodes || 0}</StatNumber>
             <StatHelpText>
-              {network_summary && typeof network_summary === 'object' && 'rpc_nodes_available' in network_summary ? 
-                `${network_summary.rpc_nodes_available} RPC nodes available` : ''}
+              RPC Available: {network_summary.rpc_nodes_available || 0}
             </StatHelpText>
           </Stat>
-          
           <Stat>
             <StatLabel>Latest Version</StatLabel>
-            <StatNumber>{network_summary.latest_version}</StatNumber>
+            <StatNumber>{network_summary.latest_version || 'Unknown'}</StatNumber>
             <StatHelpText>
-              {network_summary && typeof network_summary === 'object' && 'nodes_on_latest_version_percentage' in network_summary ? 
-                `${network_summary.nodes_on_latest_version_percentage?.toFixed(1)}% of nodes` : ''}
+              RPC Availability: {network_summary.rpc_availability_percentage?.toFixed(1) || 0}%
+            </StatHelpText>
+          </Stat>
+          <Stat>
+            <StatLabel>Current Epoch</StatLabel>
+            <StatNumber>{network_summary.current_epoch || 0}</StatNumber>
+            <StatHelpText>
+              Progress: {network_summary.epoch_progress?.toFixed(1) || 0}%
+            </StatHelpText>
+          </Stat>
+          <Stat>
+            <StatLabel>Slot Height</StatLabel>
+            <StatNumber>{network_summary.slot_height?.toLocaleString() || 0}</StatNumber>
+            <StatHelpText>
+              Avg. Slot Time: {network_summary.average_slot_time_ms?.toFixed(1) || 0} ms
+            </StatHelpText>
+          </Stat>
+          <Stat>
+            <StatLabel>Transactions/Sec</StatLabel>
+            <StatNumber>{network_summary.transactions_per_second?.toFixed(1) || 0}</StatNumber>
+            <StatHelpText>
+              Network TPS
             </StatHelpText>
           </Stat>
         </SimpleGrid>

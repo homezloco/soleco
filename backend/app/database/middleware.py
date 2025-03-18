@@ -131,29 +131,29 @@ class CacheMiddleware(BaseHTTPMiddleware):
                 
             if endpoint == "/soleco/solana/network/status":
                 status = data.get("status", "unknown")
-                db_cache.store_network_status_history(status, json.dumps(data))
+                db_cache.store_network_status(status, json.dumps(data))
             
             elif endpoint == "/soleco/mints/new/recent":
                 blocks = int(params.get("blocks", 2))
                 new_mints_count = len(data.get("new_mints", []))
                 pump_tokens_count = len(data.get("pump_tokens", []))
-                db_cache.store_mint_analytics_history(blocks, new_mints_count, pump_tokens_count, json.dumps(data))
+                db_cache.store_mint_analytics(blocks, new_mints_count, pump_tokens_count, json.dumps(data))
             
             elif endpoint == "/soleco/pump_trending/pump/trending":
                 timeframe = params.get("timeframe", "24h")
                 sort_metric = params.get("sort_metric", "volume")
                 tokens_count = len(data.get("tokens", []))
-                db_cache.store_pump_tokens_history(timeframe, sort_metric, tokens_count, json.dumps(data))
+                db_cache.store_pump_tokens(timeframe, sort_metric, tokens_count, json.dumps(data))
             
             elif endpoint == "/soleco/network/rpc-nodes":
                 total_nodes = data.get("total_nodes", 0)
-                db_cache.store_rpc_nodes_history(total_nodes, json.dumps(data))
+                db_cache.store_rpc_nodes(total_nodes, json.dumps(data))
             
             elif endpoint == "/soleco/solana/performance/metrics":
                 tps_stats = data.get("tps_statistics", {})
                 max_tps = tps_stats.get("max", 0)
                 avg_tps = tps_stats.get("avg", 0)
-                db_cache.store_performance_metrics_history(max_tps, avg_tps, json.dumps(data))
+                db_cache.store_performance_metrics(max_tps, avg_tps, json.dumps(data))
         
         except Exception as e:
             logger.error(f"Error storing historical data for {endpoint}: {e}")

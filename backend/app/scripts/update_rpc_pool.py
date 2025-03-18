@@ -12,35 +12,56 @@ Usage:
     python -m app.scripts.update_rpc_pool
 """
 
-import asyncio
+import os
+import sys
 import time
 import json
-import sys
-import os
-import random
-from typing import Dict, List, Any, Tuple
+import asyncio
 import aiohttp
 import logging
 import argparse
+from typing import List, Dict, Any, Optional, Tuple
+from ssl import SSLError
+from datetime import datetime
+import re
+import httpx
 
 # Add the parent directory to the path so we can import from app
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from app.config import HELIUS_API_KEY
-from app.utils.solana_rpc import (
-    get_connection_pool, 
-    SolanaConnectionPool,
-    DEFAULT_RPC_ENDPOINTS,
-    KNOWN_RPC_PROVIDERS
+from app.utils.solana_rpc import get_connection_pool, SolanaConnectionPool, SolanaClient
+from app.utils.solana_error import (
+    SlotSkippedError, 
+    MethodNotSupportedError, 
+    RPCError, 
+    NodeUnhealthyError,
+    BlockNotAvailableError
+)
+from app.utils.solana_rpc_constants import DEFAULT_RPC_ENDPOINTS, KNOWN_RPC_PROVIDERS
+from app.tests.test_discovered_rpc_nodes import (
+    fetch_rpc_nodes,
+    test_endpoint_with_both_protocols,
+    test_multiple_endpoints,
+    WELL_KNOWN_ENDPOINTS,
+    PREVIOUSLY_WORKING_ENDPOINTS
 )
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[logging.StreamHandler()]
-)
 logger = logging.getLogger(__name__)
+
+def setup_logging(verbose: bool = False):
+    """
+    Set up logging configuration.
+    
+    Args:
+        verbose: Whether to enable verbose logging
+    """
+    log_level = logging.DEBUG if verbose else logging.INFO
+    logging.basicConfig(
+        level=log_level,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
 
 # Test methods to check
 TEST_METHODS = [
@@ -48,379 +69,766 @@ TEST_METHODS = [
     {"method": "getVersion", "params": []},
     {"method": "getSlot", "params": []},
     {"method": "getBlockHeight", "params": []},
-    {"method": "getRecentBlockhash", "params": []}
+    {"method": "getLatestBlockhash", "params": [{"commitment": "processed"}]},
+    {"method": "getRecentBlockhash", "params": [{"commitment": "processed"}]}
 ]
 
 # API endpoint for discovering RPC nodes
-API_BASE_URL = "http://localhost:8001/api"
-RPC_NODES_ENDPOINT = f"{API_BASE_URL}/soleco/solana/network/rpc-nodes"
-RPC_NODES_LIST_ENDPOINT = f"{API_BASE_URL}/soleco/solana/network/rpc-nodes-list"
+API_BASE_URL = "http://localhost:8001"
+PRIMARY_RPC_NODES_ENDPOINT = f"{API_BASE_URL}/api/soleco/solana/network/rpc-nodes-v2"
+FALLBACK_RPC_NODES_ENDPOINT = f"{API_BASE_URL}/api/soleco/solana/network/rpc-nodes"
 
-async def discover_rpc_nodes() -> List[str]:
-    """Discover available RPC nodes from the API."""
-    logger.info("Discovering RPC nodes from API...")
-    
-    async with aiohttp.ClientSession() as session:
-        rpc_urls = []
-        
-        # Get RPC nodes from the API
-        try:
-            async with session.get(
-                RPC_NODES_ENDPOINT,
-                params={
-                    "include_details": "false",
-                    "health_check": "false",
-                    "skip_dns_lookup": "true",  # Skip DNS lookup since it's not needed
-                    "include_raw_urls": "true",
-                    "prioritize_clean_urls": "false",  # Don't prioritize clean URLs
-                    "include_well_known": "true"
-                }
-            ) as response:
-                if response.status == 200:
-                    data = await response.json()
-                    
-                    # Add raw RPC URLs (these are the IP:port format)
-                    if "raw_rpc_urls" in data and data["raw_rpc_urls"]:
-                        rpc_urls.extend(data["raw_rpc_urls"])
-                    
-                    # Add well-known URLs
-                    if "well_known_rpc_urls" in data:
-                        rpc_urls.extend(data["well_known_rpc_urls"])
-                    
-                    # Add Solana official URLs
-                    if "solana_official_urls" in data:
-                        rpc_urls.extend(data["solana_official_urls"])
-                    
-                    # Extract RPC endpoints from node details
-                    if "rpc_nodes" in data:
-                        for node in data["rpc_nodes"]:
-                            if "rpc_endpoint" in node and node["rpc_endpoint"]:
-                                rpc_urls.append(node["rpc_endpoint"])
-                else:
-                    logger.error(f"Failed to get RPC nodes from API: HTTP {response.status}")
-        except Exception as e:
-            logger.error(f"Error getting RPC nodes from API: {str(e)}")
-        
-        # Also add our known fallback endpoints
-        fallback_endpoints = [
-            "http://173.231.14.98:8899",
-            "http://107.182.163.194:8899",
-            "http://66.45.229.34:8899",
-            "http://38.58.176.230:8899",
-            "http://147.75.198.219:8899"
-        ]
-        rpc_urls.extend(fallback_endpoints)
-        
-        # Add additional endpoints from our MEMORY
-        additional_endpoints = [
-            "http://145.40.126.95:8899",
-            "http://74.50.65.194:8899",
-            "http://207.148.14.220:8899",
-            "http://149-255-37-170.static.hvvc.us:8899",
-            "http://74.50.65.226:8899",
-            "http://149-255-37-154.static.hvvc.us:8899"
-        ]
-        rpc_urls.extend(additional_endpoints)
-        
-        # Remove duplicates while preserving order
-        unique_urls = []
-        for url in rpc_urls:
-            if url and url not in unique_urls:
-                unique_urls.append(url)
-        
-        logger.info(f"Discovered {len(unique_urls)} unique RPC nodes")
-        return unique_urls
-
-async def test_rpc_endpoint(session: aiohttp.ClientSession, endpoint: str) -> Dict[str, Any]:
-    """Test a single RPC endpoint for health and performance."""
-    # Ensure endpoint has http:// prefix
-    if not endpoint.startswith('http://') and not endpoint.startswith('https://'):
-        endpoint = f'http://{endpoint}'
-    
-    results = {
-        "endpoint": endpoint,
-        "status": "unknown",
-        "response_times": {},
-        "errors": [],
-        "rate_limits": {},
-        "methods_supported": {},
-        "overall_score": 0,
-        "api_key_required": False
-    }
-    
-    # Test each method
-    for test in TEST_METHODS:
-        method = test["method"]
-        params = test["params"]
-        
-        try:
-            start_time = time.time()
-            async with session.post(
-                endpoint,
-                json={"jsonrpc": "2.0", "id": 1, "method": method, "params": params},
-                timeout=5
-            ) as response:
-                elapsed = time.time() - start_time
-                results["response_times"][method] = elapsed
-                
-                # Check rate limits in headers
-                if "x-ratelimit-remaining" in response.headers:
-                    results["rate_limits"]["remaining"] = response.headers["x-ratelimit-remaining"]
-                if "x-ratelimit-limit" in response.headers:
-                    results["rate_limits"]["limit"] = response.headers["x-ratelimit-limit"]
-                
-                # Check response
-                if response.status == 200:
-                    json_response = await response.json()
-                    if "result" in json_response:
-                        results["methods_supported"][method] = True
-                    else:
-                        results["methods_supported"][method] = False
-                        results["errors"].append(f"{method}: No result in response")
-                elif response.status == 401 or response.status == 403:
-                    # Likely requires API key
-                    results["api_key_required"] = True
-                    results["methods_supported"][method] = False
-                    results["errors"].append(f"{method}: HTTP {response.status} - Likely requires API key")
-                else:
-                    results["methods_supported"][method] = False
-                    results["errors"].append(f"{method}: HTTP {response.status}")
-        
-        except asyncio.TimeoutError:
-            results["methods_supported"][method] = False
-            results["errors"].append(f"{method}: Timeout")
-        except Exception as e:
-            results["methods_supported"][method] = False
-            results["errors"].append(f"{method}: {str(e)}")
-    
-    # Calculate overall status
-    if all(results["methods_supported"].values()):
-        results["status"] = "excellent"
-    elif results["methods_supported"].get("getHealth", False) and results["methods_supported"].get("getVersion", False):
-        results["status"] = "good"
-    elif any(results["methods_supported"].values()):
-        results["status"] = "partial"
-    else:
-        results["status"] = "down"
-    
-    # Calculate score (lower is better)
-    avg_response_time = sum(results["response_times"].values()) / len(results["response_times"]) if results["response_times"] else 999
-    method_score = sum(1 for m in results["methods_supported"].values() if m) / len(TEST_METHODS)
-    results["overall_score"] = avg_response_time * (2 - method_score)  # Lower score is better
-    
-    return results
-
-async def test_rpc_endpoints(endpoints: List[str], max_endpoints: int = 50) -> List[Dict[str, Any]]:
-    """Test a list of RPC endpoints and return results."""
-    # Limit the number of endpoints to test to avoid overloading
-    if len(endpoints) > max_endpoints:
-        logger.info(f"Limiting testing to {max_endpoints} randomly selected endpoints")
-        random.shuffle(endpoints)
-        endpoints = endpoints[:max_endpoints]
-    
-    logger.info(f"Testing {len(endpoints)} RPC endpoints...")
-    
-    async with aiohttp.ClientSession() as session:
-        tasks = [test_rpc_endpoint(session, endpoint) for endpoint in endpoints]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-    
-    # Filter out exceptions
-    valid_results = []
-    for result in results:
-        if isinstance(result, Exception):
-            logger.error(f"Error testing endpoint: {str(result)}")
-        else:
-            valid_results.append(result)
-    
-    return valid_results
-
-def print_summary(test_results: List[Dict[str, Any]]) -> None:
-    """Print a summary of the test results."""
-    # Count the number of endpoints in each status
-    status_counts = {
-        "excellent": 0,
-        "good": 0,
-        "partial": 0,
-        "down": 0
-    }
-    
-    for result in test_results:
-        status = result["status"]
-        if status in status_counts:
-            status_counts[status] += 1
-    
-    logger.info(f"\nTEST RESULTS SUMMARY:")
-    logger.info(f"  Excellent: {status_counts['excellent']} endpoints")
-    logger.info(f"  Good:      {status_counts['good']} endpoints")
-    logger.info(f"  Partial:   {status_counts['partial']} endpoints")
-    logger.info(f"  Down:      {status_counts['down']} endpoints")
-    
-    # Print top performers
-    logger.info("\nTOP PERFORMING ENDPOINTS:")
-    for i, result in enumerate(test_results[:5]):
-        endpoint = result["endpoint"]
-        avg_time = sum(result["response_times"].values()) / len(result["response_times"]) if result["response_times"] else 0
-        logger.info(f"  {i+1}. {endpoint}")
-        logger.info(f"     Score: {result['overall_score']:.3f}")
-        logger.info(f"     Avg Response Time: {avg_time:.3f}s")
-        logger.info(f"     Status: {result['status']}")
-
-async def update_connection_pool(test_results: List[Dict[str, Any]], existing_endpoints: List[str] = None) -> None:
+async def discover_rpc_nodes(quick_mode: bool = False) -> List[str]:
     """
-    Update the connection pool with newly discovered working nodes.
+    Discover RPC nodes from all sources including the API endpoint.
     
     Args:
-        test_results: List of discovered nodes with their test results
-        existing_endpoints: Optional list of existing endpoints to include
+        quick_mode: If True, only use community endpoints for faster discovery
+        
+    Returns:
+        List of discovered RPC endpoint URLs
     """
-    # Get the current connection pool
-    pool = await get_connection_pool()
+    # Start with community endpoints (these are more reliable)
+    logger.info("Discovering community endpoints")
+    community_endpoints = await discover_community_endpoints()
+    logger.info(f"Discovered {len(community_endpoints)} community endpoints")
     
-    # Get existing endpoints if not provided
-    if existing_endpoints is None:
-        existing_endpoints = pool.endpoints.copy()
+    # Fetch RPC nodes from the API using simplified parameters
+    logger.info("Fetching RPC nodes from API")
     
-    # Extract working endpoints from discovered nodes
-    # Only include endpoints with 'good' or 'partial' status
-    working_endpoints = []
-    for node in test_results:
-        if node.get("status") in ["good", "partial"] and node.get("endpoint"):
-            working_endpoints.append(node)
+    # Customize parameters to focus on raw URLs and skip conversions
+    params = {
+        "include_raw_urls": True,
+        "include_well_known": True,
+        "skip_dns_lookup": True,  # Skip DNS lookup to speed up the process
+        "prioritize_clean_urls": False,  # We'll handle all URLs directly
+        "include_all": True,  # Include all nodes
+        "max_conversions": 0  # Skip conversions entirely
+    }
     
-    logger.info(f"Found {len(working_endpoints)} working endpoints from test results")
+    api_endpoints = []
     
-    # Sort working endpoints by score (lower is better)
-    sorted_working_endpoints = sorted(working_endpoints, key=lambda x: x.get("overall_score", float('inf')))
-    
-    # Extract just the endpoint URLs
-    sorted_endpoint_urls = [node["endpoint"] for node in sorted_working_endpoints]
-    
-    # Log the best endpoints
-    best_endpoints = sorted_endpoint_urls[:10]
-    if best_endpoints:
-        logger.info(f"Best performing discovered endpoints: {best_endpoints}")
-        for i, endpoint in enumerate(best_endpoints[:5]):
-            node = next((n for n in sorted_working_endpoints if n["endpoint"] == endpoint), None)
-            if node:
-                logger.info(f"  {i+1}. {endpoint} - Score: {node.get('overall_score', 'N/A')}, " +
-                           f"Response Time: {node.get('response_time', 0):.3f}s")
-    else:
-        logger.warning("No working endpoints found in test results")
-    
-    # Create a new list with Helius endpoint first (if present)
-    helius_endpoint = next((ep for ep in existing_endpoints if "helius-rpc.com" in ep), None)
-    new_endpoints = [helius_endpoint] if helius_endpoint else []
-    
-    # Add newly discovered working endpoints next
-    for endpoint in sorted_endpoint_urls:
-        if endpoint not in new_endpoints:
-            new_endpoints.append(endpoint)
-    
-    # Add remaining existing endpoints
-    for endpoint in existing_endpoints:
-        if endpoint not in new_endpoints:
-            new_endpoints.append(endpoint)
-    
-    # Update the connection pool
-    await pool.update_endpoints(new_endpoints)
-    
-    # Update the DEFAULT_RPC_ENDPOINTS in solana_rpc.py
-    update_default_rpc_endpoints(new_endpoints)
-    
-    logger.info(f"Connection pool updated with {len(sorted_endpoint_urls)} new endpoints")
-    logger.info(f"New endpoints prioritized: {best_endpoints}")
-    logger.info(f"Total pool size: {len(new_endpoints)}")
-
-def update_default_rpc_endpoints(endpoints: List[str]) -> None:
-    """Update the DEFAULT_RPC_ENDPOINTS list in solana_rpc.py."""
-    try:
-        # Path to the solana_rpc.py file
-        solana_rpc_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
-                                      "utils", "solana_rpc.py")
-        
-        # Read the current file
-        with open(solana_rpc_path, "r") as f:
-            lines = f.readlines()
-        
-        # Find the DEFAULT_RPC_ENDPOINTS definition
-        start_index = -1
-        end_index = -1
-        for i, line in enumerate(lines):
-            if line.strip().startswith("DEFAULT_RPC_ENDPOINTS = ["):
-                start_index = i
-            if start_index != -1 and line.strip() == "]":
-                end_index = i
-                break
-        
-        if start_index == -1 or end_index == -1:
-            logger.error("Could not find DEFAULT_RPC_ENDPOINTS definition in solana_rpc.py")
-            return
-        
-        # Create new lines for the endpoints
-        new_lines = ["DEFAULT_RPC_ENDPOINTS = [\n"]
-        for endpoint in endpoints:
-            # Format the endpoint properly
-            if "helius" in endpoint.lower() and "api-key" in endpoint.lower():
-                new_lines.append(f'    f"https://mainnet.helius-rpc.com/?api-key={{HELIUS_API_KEY}}",\n')
+    # Use direct httpx call instead of fetch_rpc_nodes to customize parameters
+    async with httpx.AsyncClient() as client:
+        # Try primary endpoint first
+        try:
+            logger.info(f"Calling primary API endpoint: {PRIMARY_RPC_NODES_ENDPOINT}")
+            response = await client.get(PRIMARY_RPC_NODES_ENDPOINT, params=params, timeout=60.0)
+            
+            if response.status_code == 200:
+                api_response = response.json()
+                logger.info(f"Successfully retrieved data from primary endpoint")
+                
+                # Extract only raw URLs
+                if "raw_rpc_urls" in api_response and api_response["raw_rpc_urls"]:
+                    raw_urls = api_response["raw_rpc_urls"]
+                    logger.info(f"Found {len(raw_urls)} raw RPC URLs")
+                    api_endpoints.extend(raw_urls)
+                
+                # Add well-known URLs if available
+                if "well_known_rpc_urls" in api_response and api_response["well_known_rpc_urls"]:
+                    well_known = api_response["well_known_rpc_urls"]
+                    logger.info(f"Found {len(well_known)} well-known RPC URLs")
+                    api_endpoints.extend(well_known)
+                
+                # Add official Solana URLs if available
+                if "solana_official_urls" in api_response and api_response["solana_official_urls"]:
+                    official = api_response["solana_official_urls"]
+                    logger.info(f"Found {len(official)} Solana official URLs")
+                    api_endpoints.extend(official)
             else:
-                new_lines.append(f'    "{endpoint}",\n')
-        new_lines.append("]\n")
+                logger.warning(f"Primary endpoint returned status code {response.status_code}, trying fallback")
+                
+                # Try fallback endpoint
+                try:
+                    logger.info(f"Calling fallback API endpoint: {FALLBACK_RPC_NODES_ENDPOINT}")
+                    fallback_response = await client.get(FALLBACK_RPC_NODES_ENDPOINT, params=params, timeout=60.0)
+                    
+                    if fallback_response.status_code == 200:
+                        fallback_api_response = fallback_response.json()
+                        logger.info(f"Successfully retrieved data from fallback endpoint")
+                        
+                        # Extract only raw URLs
+                        if "raw_rpc_urls" in fallback_api_response and fallback_api_response["raw_rpc_urls"]:
+                            raw_urls = fallback_api_response["raw_rpc_urls"]
+                            logger.info(f"Found {len(raw_urls)} raw RPC URLs from fallback")
+                            api_endpoints.extend(raw_urls)
+                        
+                        # Add well-known URLs if available
+                        if "well_known_rpc_urls" in fallback_api_response and fallback_api_response["well_known_rpc_urls"]:
+                            well_known = fallback_api_response["well_known_rpc_urls"]
+                            logger.info(f"Found {len(well_known)} well-known RPC URLs from fallback")
+                            api_endpoints.extend(well_known)
+                    else:
+                        logger.error(f"Fallback endpoint returned status code {fallback_response.status_code}")
+                except Exception as fallback_error:
+                    logger.error(f"Error fetching RPC nodes from fallback API: {str(fallback_error)}")
+                
+        except Exception as e:
+            logger.error(f"Error fetching RPC nodes from primary API: {str(e)}")
+            
+            # Try fallback endpoint
+            try:
+                logger.info(f"Calling fallback API endpoint: {FALLBACK_RPC_NODES_ENDPOINT}")
+                fallback_response = await client.get(FALLBACK_RPC_NODES_ENDPOINT, params=params, timeout=60.0)
+                
+                if fallback_response.status_code == 200:
+                    fallback_api_response = fallback_response.json()
+                    logger.info(f"Successfully retrieved data from fallback endpoint")
+                    
+                    # Extract only raw URLs
+                    if "raw_rpc_urls" in fallback_api_response and fallback_api_response["raw_rpc_urls"]:
+                        raw_urls = fallback_api_response["raw_rpc_urls"]
+                        logger.info(f"Found {len(raw_urls)} raw RPC URLs from fallback")
+                        api_endpoints.extend(raw_urls)
+                    
+                    # Add well-known URLs if available
+                    if "well_known_rpc_urls" in fallback_api_response and fallback_api_response["well_known_rpc_urls"]:
+                        well_known = fallback_api_response["well_known_rpc_urls"]
+                        logger.info(f"Found {len(well_known)} well-known RPC URLs from fallback")
+                        api_endpoints.extend(well_known)
+                else:
+                    logger.error(f"Fallback endpoint returned status code {fallback_response.status_code}")
+            except Exception as fallback_error:
+                logger.error(f"Error fetching RPC nodes from fallback API: {str(fallback_error)}")
+    
+    logger.info(f"Discovered {len(api_endpoints)} endpoints from API")
+    
+    # Add well-known endpoints for comparison
+    api_endpoints.extend(WELL_KNOWN_ENDPOINTS)
+    
+    # Add previously discovered working endpoints
+    api_endpoints.extend(PREVIOUSLY_WORKING_ENDPOINTS)
+    
+    # If in quick mode, only use community and API endpoints
+    if quick_mode:
+        logger.info("Quick mode enabled, skipping validator endpoint discovery")
+        all_endpoints = get_unique_endpoints(community_endpoints + api_endpoints)
+        logger.info(f"Total unique endpoints (quick mode): {len(all_endpoints)}")
+        return all_endpoints
+    
+    # Discover validator endpoints
+    logger.info("Discovering validator endpoints")
+    validator_endpoints = await discover_validator_endpoints()
+    logger.info(f"Discovered {len(validator_endpoints)} validator endpoints")
+    
+    # Combine all endpoints
+    all_endpoints = get_unique_endpoints(community_endpoints + api_endpoints + validator_endpoints)
+    logger.info(f"Total unique endpoints: {len(all_endpoints)}")
+    
+    return all_endpoints
+
+def get_unique_endpoints(endpoints: List[Any]) -> List[str]:
+    """
+    Get a list of unique endpoints while handling unhashable types.
+    
+    Args:
+        endpoints: List of endpoints which may contain unhashable types
         
-        # Replace the old lines with the new ones
-        new_content = lines[:start_index] + new_lines + lines[end_index+1:]
-        
-        # Write the updated file
-        with open(solana_rpc_path, "w") as f:
-            f.writelines(new_content)
-        
-        logger.info(f"Updated DEFAULT_RPC_ENDPOINTS in solana_rpc.py with {len(endpoints)} endpoints")
+    Returns:
+        List of unique endpoints as strings
+    """
+    unique_endpoints = []
+    seen = set()
+    
+    for endpoint in endpoints:
+        # Convert endpoint to a hashable type (string) if it's a list or dict
+        endpoint_key = str(endpoint) if isinstance(endpoint, (list, dict)) else endpoint
+        if endpoint_key not in seen:
+            unique_endpoints.append(endpoint)
+            seen.add(endpoint_key)
+    
+    return unique_endpoints
+
+async def discover_api_endpoints() -> List[str]:
+    """
+    Discover RPC endpoints from the API endpoint.
+    
+    Returns:
+        List of discovered RPC endpoint URLs
+    """
+    endpoints = []
+    
+    try:
+        async with aiohttp.ClientSession() as session:
+            # Set parameters for the API call
+            params = {
+                "include_details": "true"  # We need the full details to get the RPC endpoints
+            }
+            
+            # Try primary endpoint first
+            logger.info(f"Fetching RPC nodes from {PRIMARY_RPC_NODES_ENDPOINT}")
+            async with session.get(PRIMARY_RPC_NODES_ENDPOINT, params=params, timeout=30) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    logger.debug(f"API response received: {str(data)[:200]}...")
+                    
+                    # Extract RPC endpoints from the response
+                    if data.get("status") == "success" and "rpc_nodes" in data:
+                        for node in data["rpc_nodes"]:
+                            if "rpc_endpoint" in node and node["rpc_endpoint"]:
+                                endpoints.append(node["rpc_endpoint"])
+                    
+                    logger.info(f"Discovered {len(endpoints)} RPC endpoints from API")
+                else:
+                    logger.warning(f"API returned status {response.status}, trying fallback endpoint")
+                    
+                    # Try fallback endpoint
+                    logger.info(f"Fetching RPC nodes from fallback {FALLBACK_RPC_NODES_ENDPOINT}")
+                    async with session.get(FALLBACK_RPC_NODES_ENDPOINT, params=params, timeout=30) as fallback_response:
+                        if fallback_response.status == 200:
+                            fallback_data = await fallback_response.json()
+                            logger.debug(f"Fallback API response received: {str(fallback_data)[:200]}...")
+                            
+                            # Extract RPC endpoints from the response
+                            if fallback_data.get("status") == "success" and "rpc_nodes" in fallback_data:
+                                for node in fallback_data["rpc_nodes"]:
+                                    if "rpc_endpoint" in node and node["rpc_endpoint"]:
+                                        endpoints.append(node["rpc_endpoint"])
+                            
+                            logger.info(f"Discovered {len(endpoints)} RPC endpoints from fallback API")
+                        else:
+                            logger.error(f"Fallback API returned status {fallback_response.status}")
     except Exception as e:
-        logger.error(f"Error updating DEFAULT_RPC_ENDPOINTS: {str(e)}")
+        logger.error(f"Error discovering API endpoints: {str(e)}")
+    
+    return endpoints
 
-async def main(args):
-    """Main function to run the script."""
-    # Discover RPC nodes
-    endpoints = await discover_rpc_nodes()
+async def discover_community_endpoints() -> List[str]:
+    """
+    Discover community RPC endpoints from known providers.
     
-    # Remove duplicates
-    unique_endpoints = list(set(endpoints))
-    logger.info(f"Discovered {len(unique_endpoints)} unique RPC nodes")
+    Returns:
+        List of discovered RPC endpoint URLs
+    """
+    endpoints = []
     
-    # Test the endpoints
-    test_results = await test_rpc_endpoints(unique_endpoints, args.max_test)
-    
-    # Print summary
-    print_summary(test_results)
-    
-    # Print top performers
-    logger.info("\nTOP PERFORMING ENDPOINTS:")
-    for i, result in enumerate(test_results[:5]):
-        endpoint = result["endpoint"]
-        avg_time = sum(result["response_times"].values()) / len(result["response_times"]) if result["response_times"] else 0
-        logger.info(f"  {i+1}. {endpoint}")
-        logger.info(f"     Score: {result['overall_score']:.3f}")
-        logger.info(f"     Avg Response Time: {avg_time:.3f}s")
-        logger.info(f"     Status: {result['status']}")
-    
-    # Update the connection pool if requested
-    if args.update_pool:
-        await update_connection_pool(test_results)
-    
-    # Save results to file if requested
-    if args.save_results:
-        output_file = args.output_file or "rpc_node_test_results.json"
-        with open(output_file, "w") as f:
-            json.dump(test_results, f, indent=2)
-        logger.info(f"\nDetailed results saved to {output_file}")
+    # Add default endpoints
+    for endpoint in DEFAULT_RPC_ENDPOINTS:
+        # Skip problematic endpoints
+        if "projectserum" in endpoint.lower() or "rpcpool.com" in endpoint.lower():
+            logger.info(f"Skipping known problematic endpoint: {endpoint}")
+            continue
+            
+        if endpoint not in endpoints:
+            endpoints.append(endpoint)
+            
+    # Add known providers
+    for provider, provider_endpoints in KNOWN_RPC_PROVIDERS.items():
+        # Skip problematic providers
+        if "projectserum" in provider.lower() or "rpcpool.com" in provider.lower():
+            logger.info(f"Skipping known problematic provider: {provider}")
+            continue
+            
+        # Handle list of endpoints
+        if isinstance(provider_endpoints, list):
+            for endpoint in provider_endpoints:
+                if endpoint not in endpoints and "projectserum" not in endpoint.lower() and "rpcpool.com" not in endpoint.lower():
+                    endpoints.append(endpoint)
+        # Handle single endpoint string
+        elif isinstance(provider_endpoints, str) and provider_endpoints not in endpoints:
+            if "projectserum" not in provider_endpoints.lower() and "rpcpool.com" not in provider_endpoints.lower():
+                endpoints.append(provider_endpoints)
+            
+    # Ensure API keys are only used with their specific endpoints
+    filtered_endpoints = []
+    for endpoint in endpoints:
+        # Keep Helius endpoint with API key
+        if "helius" in endpoint.lower() and "api-key" in endpoint.lower():
+            filtered_endpoints.append(endpoint)
+        # For other endpoints, ensure they don't have API keys from other services
+        elif "api-key" not in endpoint.lower() and HELIUS_API_KEY not in endpoint:
+            filtered_endpoints.append(endpoint)
+            
+    logger.info(f"Discovered {len(filtered_endpoints)} community endpoints")
+    return filtered_endpoints
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Discover and test Solana RPC nodes, then update the connection pool")
-    parser.add_argument("--update-pool", action="store_true", help="Update the connection pool with the best performing nodes")
-    parser.add_argument("--max-test", type=int, default=50, help="Maximum number of endpoints to test")
-    parser.add_argument("--save-results", action="store_true", help="Save test results to a file")
-    parser.add_argument("--output-file", type=str, help="Output file for test results (default: rpc_node_test_results.json)")
+async def discover_validator_endpoints(
+    cluster_api_url: str = "https://api.mainnet-beta.solana.com",
+    timeout: float = 10.0,
+    ssl_verify: bool = True
+) -> List[str]:
+    """
+    Discover validator RPC endpoints from cluster nodes.
     
+    Args:
+        cluster_api_url: URL of the cluster API to query for validators
+        timeout: Timeout in seconds for RPC calls
+        ssl_verify: Whether to verify SSL certificates
+        
+    Returns:
+        List of discovered RPC endpoints
+    """
+    logger.info(f"Discovering validator endpoints from {cluster_api_url}")
+    
+    # Initialize client with the cluster API URL
+    client = SolanaClient(endpoint=cluster_api_url, timeout=timeout, ssl_verify=ssl_verify)
+    
+    try:
+        # Get cluster nodes
+        nodes = await client.get_cluster_nodes()
+        logger.info(f"Found {len(nodes)} cluster nodes")
+        
+        # Extract RPC endpoints from nodes
+        endpoints = []
+        
+        for node in nodes:
+            # Skip nodes without rpc information
+            if not node.get("rpc"):
+                continue
+                
+            # Extract hostname/IP and port
+            rpc_host = node.get("rpc")
+            gossip_host = node.get("gossip")
+            
+            # Skip empty or invalid hosts
+            if not rpc_host or len(rpc_host) < 3:
+                continue
+                
+            # Try to extract port from gossip if available (usually rpc port = gossip port + 1)
+            rpc_port = None
+            if gossip_host and ":" in gossip_host:
+                try:
+                    gossip_port = int(gossip_host.split(":")[-1])
+                    rpc_port = gossip_port + 1
+                except (ValueError, IndexError):
+                    pass
+            
+            # If we couldn't get port from gossip, try to extract from rpc field
+            if not rpc_port and ":" in rpc_host:
+                try:
+                    rpc_port = int(rpc_host.split(":")[-1])
+                    # Remove port from host if it's included
+                    rpc_host = rpc_host.rsplit(":", 1)[0]
+                except (ValueError, IndexError):
+                    pass
+            
+            # Use default port if we couldn't extract one
+            if not rpc_port:
+                rpc_port = 8899  # Default Solana RPC port
+            
+            # Check if the host is an IP address or domain
+            is_ip = re.match(r'^\d+\.\d+\.\d+\.\d+$', rpc_host) is not None
+            
+            # Construct endpoint URL
+            if is_ip:
+                # For IP addresses, use http by default
+                endpoint = f"http://{rpc_host}:{rpc_port}"
+            else:
+                # For domains, prefer https
+                endpoint = f"https://{rpc_host}:{rpc_port}"
+                
+                # For standard domains, don't include default port
+                if rpc_port == 443:
+                    endpoint = f"https://{rpc_host}"
+                
+                # Check for common TLDs to identify likely public endpoints
+                common_tlds = ['.com', '.net', '.io', '.org']
+                has_common_tld = any(rpc_host.endswith(tld) for tld in common_tlds)
+                
+                # Prioritize endpoints with common TLDs
+                if has_common_tld:
+                    # Add both https and http versions for testing
+                    endpoints.append(endpoint)
+                    # Also try without the port for common domains
+                    if rpc_port != 443:
+                        endpoints.append(f"https://{rpc_host}")
+            
+            # Add the endpoint to our list
+            if endpoint not in endpoints:
+                endpoints.append(endpoint)
+        
+        # Filter out invalid endpoints
+        valid_endpoints = []
+        for endpoint in endpoints:
+            if not isinstance(endpoint, str) or not endpoint.startswith(("http://", "https://")):
+                logger.warning(f"Skipping invalid endpoint format: {endpoint}")
+                continue
+                
+            # Skip endpoints with non-standard ports except 8899 (Solana default)
+            if ":" in endpoint.split("/")[-1]:
+                port = endpoint.split(":")[-1]
+                if port not in ["80", "443", "8899"]:
+                    logger.debug(f"Skipping endpoint with non-standard port: {endpoint}")
+                    continue
+            
+            valid_endpoints.append(endpoint)
+        
+        logger.info(f"Discovered {len(valid_endpoints)} potential validator endpoints")
+        return valid_endpoints
+    
+    except Exception as e:
+        logger.error(f"Error discovering validator endpoints: {str(e)}")
+        return []
+    
+    finally:
+        # Ensure client is closed
+        try:
+            await client.close()
+        except Exception as e:
+            logger.debug(f"Error closing client: {str(e)}")
+
+async def test_endpoint(endpoint: str, timeout: float = 10.0, ssl_verify: bool = False) -> Dict[str, Any]:
+    """
+    Test an RPC endpoint for functionality and performance.
+    
+    Args:
+        endpoint: RPC endpoint URL to test
+        timeout: Timeout in seconds for RPC calls
+        ssl_verify: Whether to verify SSL certificates
+        
+    Returns:
+        Dictionary with test results
+    """
+    result = {
+        "endpoint": endpoint,
+        "status": "failed",
+        "latency": float('inf'),
+        "version": "unknown",
+        "slot": 0,
+        "tests_passed": 0,
+        "tests_total": 0,
+        "error": None,
+        "timestamp": datetime.now().isoformat(),
+        "ssl_verified": ssl_verify,
+        "persistent_failures": 0,
+        "last_failure_reason": None
+    }
+    
+    # Skip testing if endpoint is invalid
+    if not isinstance(endpoint, str) or not endpoint.startswith(("http://", "https://")) or len(endpoint) < 10:
+        result["error"] = f"Invalid endpoint format: {endpoint}"
+        return result
+        
+    # Check if this endpoint has an API key
+    has_api_key = "api-key" in endpoint.lower()
+    
+    # For endpoints with API keys, ensure they're only used with their specific service
+    if has_api_key:
+        # Only allow Helius API key with Helius endpoints
+        if "api-key" in endpoint.lower() and "helius" not in endpoint.lower():
+            result["error"] = "API key can only be used with its specific service"
+            return result
+        
+        # For non-Helius endpoints, ensure they don't have any API key in the URL
+        if HELIUS_API_KEY in endpoint and "helius" not in endpoint.lower():
+            # Remove the API key from the URL
+            result["error"] = "Helius API key cannot be used with non-Helius endpoints"
+            return result
+    
+    # Determine if this is likely a validator endpoint (IP address or non-standard port)
+    is_validator_endpoint = (
+        re.match(r'https?://\d+\.\d+\.\d+\.\d+', endpoint) is not None or
+        ":8899" in endpoint
+    )
+    
+    # For validator endpoints, use a shorter timeout
+    if is_validator_endpoint:
+        timeout = min(timeout, 5.0)
+    
+    # Check if this endpoint should bypass SSL verification
+    try:
+        from app.utils.solana_ssl_config import should_bypass_ssl_verification
+        bypass_ssl = should_bypass_ssl_verification(endpoint)
+        if bypass_ssl:
+            ssl_verify = False
+            result["ssl_verified"] = False
+            logger.info(f"Bypassing SSL verification for endpoint: {endpoint}")
+    except ImportError:
+        logger.warning("Could not import solana_ssl_config, using default SSL settings")
+    
+    client = None
+    start_time = time.time()
+    
+    try:
+        # Create client with appropriate SSL settings
+        client = SolanaClient(
+            endpoint=endpoint,
+            timeout=timeout,
+            ssl_verify=ssl_verify
+        )
+        
+        # Test getHealth - most basic test that almost all nodes support
+        try:
+            health = await client.get_health()
+            if health == "ok":
+                result["tests_passed"] += 1
+                logger.info(f"Endpoint {endpoint} health check passed")
+            result["tests_total"] += 1
+        except Exception as e:
+            error_msg = str(e)
+            logger.warning(f"Endpoint {endpoint} failed getHealth: {error_msg}")
+            result["last_failure_reason"] = f"getHealth: {error_msg}"
+            result["persistent_failures"] += 1
+            result["tests_total"] += 1
+            
+        # Test getVersion
+        try:
+            version_info = await client.get_version()
+            if version_info and "solana-core" in version_info:
+                result["version"] = version_info["solana-core"]
+                result["tests_passed"] += 1
+                logger.info(f"Endpoint {endpoint} returned version: {result['version']}")
+            result["tests_total"] += 1
+        except Exception as e:
+            error_msg = str(e)
+            logger.warning(f"Endpoint {endpoint} failed getVersion: {error_msg}")
+            result["last_failure_reason"] = f"getVersion: {error_msg}"
+            result["persistent_failures"] += 1
+            result["tests_total"] += 1
+            
+        # Test getSlot
+        try:
+            slot = await client.get_slot()
+            if slot and isinstance(slot, int):
+                result["slot"] = slot
+                result["tests_passed"] += 1
+                logger.info(f"Endpoint {endpoint} returned slot: {result['slot']}")
+            result["tests_total"] += 1
+        except Exception as e:
+            error_msg = str(e)
+            logger.warning(f"Endpoint {endpoint} failed getSlot: {error_msg}")
+            result["last_failure_reason"] = f"getSlot: {error_msg}"
+            result["persistent_failures"] += 1
+            result["tests_total"] += 1
+            
+        # Test getLatestBlockhash or getRecentBlockhash - try the newer method first
+        blockhash_test_passed = False
+        
+        # First try getLatestBlockhash (newer method)
+        try:
+            blockhash_info = await client.get_latest_blockhash("processed")
+            if blockhash_info and "blockhash" in blockhash_info and "lastValidBlockHeight" in blockhash_info:
+                result["tests_passed"] += 1
+                blockhash_test_passed = True
+                logger.info(f"Endpoint {endpoint} successfully returned latest blockhash with lastValidBlockHeight")
+            elif blockhash_info and "blockhash" in blockhash_info:
+                # Still pass if we have a blockhash but no lastValidBlockHeight
+                result["tests_passed"] += 1
+                blockhash_test_passed = True
+                logger.info(f"Endpoint {endpoint} successfully returned latest blockhash (without lastValidBlockHeight)")
+            result["tests_total"] += 1
+        except Exception as e:
+            error_msg = str(e)
+            logger.warning(f"Endpoint {endpoint} failed getLatestBlockhash: {error_msg}")
+            
+            # If getLatestBlockhash failed, try the deprecated getRecentBlockhash as fallback
+            if not blockhash_test_passed:
+                try:
+                    blockhash_info = await client.get_recent_blockhash("processed")
+                    if blockhash_info and "blockhash" in blockhash_info and "lastValidBlockHeight" in blockhash_info:
+                        result["tests_passed"] += 1
+                        blockhash_test_passed = True
+                        logger.info(f"Endpoint {endpoint} successfully returned recent blockhash with lastValidBlockHeight (deprecated method)")
+                    elif blockhash_info and "blockhash" in blockhash_info:
+                        # Still pass if we have a blockhash but no lastValidBlockHeight (older nodes)
+                        result["tests_passed"] += 1
+                        blockhash_test_passed = True
+                        logger.info(f"Endpoint {endpoint} successfully returned recent blockhash (deprecated method, without lastValidBlockHeight)")
+                    result["tests_total"] += 1
+                except Exception as e2:
+                    error_msg = str(e2)
+                    logger.warning(f"Endpoint {endpoint} failed getRecentBlockhash: {error_msg}")
+                    result["last_failure_reason"] = f"Blockhash methods: getLatestBlockhash: {error_msg}, getRecentBlockhash: {error_msg}"
+                    result["persistent_failures"] += 1
+                    result["tests_total"] += 1
+            else:
+                result["last_failure_reason"] = f"getLatestBlockhash: {error_msg}"
+                result["persistent_failures"] += 1
+                result["tests_total"] += 1
+            
+        # Calculate latency
+        result["latency"] = time.time() - start_time
+        
+        # Mark as success if it passed at least 2 tests
+        if result["tests_passed"] >= 2:
+            result["status"] = "success"
+            
+        # If we have SSL errors, add the endpoint to the bypass list
+        if result["persistent_failures"] > 0 and "SSL" in result.get("last_failure_reason", ""):
+            try:
+                from app.utils.solana_ssl_config import add_ssl_bypass_endpoint
+                add_ssl_bypass_endpoint(endpoint)
+                logger.info(f"Added {endpoint} to SSL bypass list due to SSL errors")
+            except ImportError:
+                logger.warning("Could not import solana_ssl_config to add endpoint to bypass list")
+        
+        return result
+    except Exception as e:
+        error_msg = str(e)
+        result["error"] = error_msg
+        result["last_failure_reason"] = f"Connection: {error_msg}"
+        result["persistent_failures"] += 1
+        logger.error(f"Error testing endpoint {endpoint}: {error_msg}")
+        
+        # If we have SSL errors, add the endpoint to the bypass list
+        if "SSL" in error_msg:
+            try:
+                from app.utils.solana_ssl_config import add_ssl_bypass_endpoint
+                add_ssl_bypass_endpoint(endpoint)
+                logger.info(f"Added {endpoint} to SSL bypass list due to SSL errors")
+            except ImportError:
+                logger.warning("Could not import solana_ssl_config to add endpoint to bypass list")
+                
+        return result
+    finally:
+        # Ensure client is closed
+        if client:
+            try:
+                await client.close()
+            except Exception as e:
+                logger.debug(f"Error closing client: {str(e)}")
+
+async def test_rpc_endpoints(endpoints: List[str], max_test: int = 50, parallel: int = 10) -> List[Dict[str, Any]]:
+    """
+    Test multiple RPC endpoints in parallel.
+    
+    Args:
+        endpoints: List of RPC endpoint URLs to test
+        max_test: Maximum number of endpoints to test
+        parallel: Maximum number of parallel tests
+        
+    Returns:
+        List of test results
+    """
+    # Ensure all endpoints have proper protocol
+    formatted_endpoints = []
+    for endpoint in endpoints:
+        # Skip empty endpoints
+        if not endpoint:
+            continue
+            
+        # Handle unhashable types
+        if isinstance(endpoint, (list, dict)):
+            endpoint = str(endpoint)
+            
+        # Add protocol if missing
+        if not isinstance(endpoint, str):
+            logger.warning(f"Skipping non-string endpoint: {endpoint}")
+            continue
+            
+        if not endpoint.startswith(("http://", "https://")):
+            # Try both protocols
+            formatted_endpoints.append(f"https://{endpoint}")
+            formatted_endpoints.append(f"http://{endpoint}")
+        else:
+            formatted_endpoints.append(endpoint)
+    
+    # Remove duplicates using our helper function
+    formatted_endpoints = get_unique_endpoints(formatted_endpoints)
+    
+    # Limit the number of endpoints to test
+    if max_test and len(formatted_endpoints) > max_test:
+        logger.info(f"Limiting to {max_test} endpoints for testing")
+        formatted_endpoints = formatted_endpoints[:max_test]
+    
+    # Test endpoints using test_multiple_endpoints
+    logger.info(f"Testing {len(formatted_endpoints)} endpoints with a maximum of {parallel} parallel tests")
+    results = await test_multiple_endpoints(formatted_endpoints, timeout=10.0)
+    
+    # Extract successful endpoints
+    successful_endpoints = results["successful"]
+    
+    # Log results
+    logger.info(f"Successfully tested {len(successful_endpoints)} out of {len(formatted_endpoints)} endpoints")
+    logger.info(f"Success rate: {results['success_rate']:.2f}%")
+    
+    return successful_endpoints
+
+async def update_connection_pool(endpoints: List[str], max_test: int, max_endpoints: int) -> bool:
+    """
+    Update the Solana connection pool with the best performing endpoints.
+    
+    Args:
+        endpoints: List of RPC endpoint URLs to test
+        max_test: Maximum number of endpoints to test
+        max_endpoints: Maximum number of endpoints to keep in the pool
+        
+    Returns:
+        True if the pool was updated, False otherwise
+    """
+    if not endpoints:
+        logger.warning("No endpoints provided for connection pool update")
+        return False
+        
+    try:
+        logger.info(f"Discovered {len(endpoints)} endpoints, testing up to {max_test}")
+        test_results = await test_rpc_endpoints(endpoints, max_test)
+        
+        if not test_results:
+            logger.warning("No valid endpoints found during testing")
+            return False
+            
+        # Sort by score (highest first)
+        test_results.sort(key=lambda x: x.get('score', 0), reverse=True)
+        
+        # Get the best endpoints
+        best_endpoints = [r.get('endpoint') for r in test_results[:max_endpoints]]
+        
+        if not best_endpoints:
+            logger.warning("No valid endpoints after filtering")
+            return False
+            
+        # Get the connection pool
+        pool = await get_connection_pool()
+        
+        # Update the pool
+        logger.info(f"Updating connection pool with {len(best_endpoints)} endpoints")
+        await pool.update_endpoints(best_endpoints)
+        logger.info("Connection pool updated successfully")
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error updating connection pool: {str(e)}")
+        logger.exception(e)
+        return False
+
+async def main():
+    """
+    Main function to update the RPC connection pool.
+    
+    This function discovers and tests RPC endpoints, then updates the connection pool
+    with the best performing endpoints.
+    """
+    parser = argparse.ArgumentParser(description="Update the Solana RPC connection pool")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging")
+    parser.add_argument("--quick", "-q", action="store_true", help="Quick mode (skip validator endpoint discovery)")
+    parser.add_argument("--max-test", "-m", type=int, default=50, help="Maximum number of endpoints to test")
+    parser.add_argument("--max-endpoints", "-e", type=int, default=15, help="Maximum number of endpoints to include in the pool")
+    parser.add_argument("--parallel", "-p", type=int, default=10, help="Maximum number of parallel tests")
+    parser.add_argument("--no-ssl-verify", action="store_true", help="Disable SSL certificate verification")
     args = parser.parse_args()
     
-    # Run the main function
-    asyncio.run(main(args))
+    # Set up logging
+    setup_logging(args.verbose)
+    
+    # Start time
+    start_time = time.time()
+    logger.info("Starting RPC pool update...")
+    
+    try:
+        # Discover RPC nodes
+        endpoints = await discover_rpc_nodes(quick_mode=args.quick)
+        
+        # Test RPC endpoints
+        test_results = await test_rpc_endpoints(endpoints, max_test=args.max_test, parallel=args.parallel)
+        
+        # Update connection pool
+        selected_endpoints = await update_connection_pool(
+            test_results, 
+            max_test=args.max_test,
+            max_endpoints=args.max_endpoints
+        )
+        
+        # Log completion
+        elapsed_time = time.time() - start_time
+        logger.info(f"RPC pool update completed in {elapsed_time:.2f} seconds")
+        logger.info(f"Updated pool with {len(selected_endpoints)} endpoints")
+        
+    except Exception as e:
+        logger.error(f"Error updating RPC pool: {str(e)}")
+        logger.exception(e)
+
+if __name__ == "__main__":
+    asyncio.run(main())

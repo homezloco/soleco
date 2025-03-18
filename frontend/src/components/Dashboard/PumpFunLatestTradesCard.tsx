@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Box,
   Card,
@@ -31,7 +31,7 @@ const PumpFunLatestTradesCard: React.FC = () => {
   const queryClient = useQueryClient();
   const { data, isLoading, error, isError } = useQuery(
     'pumpfun-latest-trades',
-    () => pumpFunApi.getLatestTrades(15),
+    () => pumpFunApi.getLatestTrades(15, true, true, true),
     { 
       refetchInterval: 30000, // Refresh every 30 seconds
       retry: 2,
@@ -42,8 +42,24 @@ const PumpFunLatestTradesCard: React.FC = () => {
     }
   );
 
+  // Filter out any duplicate trades by signature
+  const uniqueTrades = useMemo(() => {
+    if (!Array.isArray(data)) return [];
+    
+    const seenSignatures = new Set<string>();
+    return data.filter(trade => {
+      if (!trade.signature) return false;
+      if (seenSignatures.has(trade.signature)) return false;
+      seenSignatures.add(trade.signature);
+      return true;
+    });
+  }, [data]);
+
   const handleRetry = () => {
-    queryClient.invalidateQueries('pumpfun-latest-trades');
+    // Force refresh by passing true as the refresh parameter
+    queryClient.fetchQuery('pumpfun-latest-trades', () => 
+      pumpFunApi.getLatestTrades(15, true, true, true)
+    );
   };
 
   // Helper function to format timestamp
@@ -70,8 +86,16 @@ const PumpFunLatestTradesCard: React.FC = () => {
   if (isLoading) {
     return (
       <Card>
-        <CardHeader>
+        <CardHeader display="flex" justifyContent="space-between" alignItems="center">
           <Heading size="md">Latest Trades</Heading>
+          <Button 
+            size="sm" 
+            colorScheme="blue" 
+            onClick={handleRetry}
+            isLoading={isLoading}
+          >
+            Refresh
+          </Button>
         </CardHeader>
         <CardBody>
           <Flex justify="center" align="center" h="300px">
@@ -85,16 +109,24 @@ const PumpFunLatestTradesCard: React.FC = () => {
   if (isError) {
     return (
       <Card>
-        <CardHeader>
+        <CardHeader display="flex" justifyContent="space-between" alignItems="center">
           <Heading size="md">Latest Trades</Heading>
+          <Button 
+            size="sm" 
+            colorScheme="blue" 
+            onClick={handleRetry}
+            isLoading={isLoading}
+          >
+            Refresh
+          </Button>
         </CardHeader>
         <CardBody>
           <Box textAlign="center" py={4}>
             <Text color="red.500" mb={3}>
-              Error loading latest trades
+              Error loading latest trades from our backend API
             </Text>
             <Text fontSize="sm" color="gray.500" mb={4}>
-              Please try again later.
+              Our backend API may be experiencing issues or rate limiting.
             </Text>
             <Button 
               colorScheme="blue" 
@@ -111,8 +143,16 @@ const PumpFunLatestTradesCard: React.FC = () => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader display="flex" justifyContent="space-between" alignItems="center">
         <Heading size="md">Latest Pump.fun Trades</Heading>
+        <Button 
+          size="sm" 
+          colorScheme="blue" 
+          onClick={handleRetry}
+          isLoading={isLoading}
+        >
+          Refresh
+        </Button>
       </CardHeader>
       <CardBody overflowX="auto">
         <Table variant="simple" size="sm">
@@ -127,7 +167,7 @@ const PumpFunLatestTradesCard: React.FC = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {Array.isArray(data) ? data.map((trade: PumpFunTrade, index: number) => (
+            {Array.isArray(uniqueTrades) ? uniqueTrades.map((trade: PumpFunTrade, index: number) => (
               <Tr key={index}>
                 <Td>
                   <Flex align="center">

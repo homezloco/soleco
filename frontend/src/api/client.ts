@@ -11,10 +11,14 @@ export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 60000, // 60 second default timeout
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest' // Add this to prevent some ad blockers from blocking the request
   },
   // Add validation
   validateStatus: (status) => status >= 200 && status < 500,
+  // Add withCredentials for CORS
+  withCredentials: false
 });
 
 // Add a request interceptor for logging
@@ -24,6 +28,15 @@ apiClient.interceptors.request.use(
     if (import.meta.env.DEV) {
       console.log(`API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`, config.params || {});
     }
+    
+    // Add a timestamp to prevent caching issues
+    if (config.method?.toLowerCase() === 'get') {
+      config.params = {
+        ...config.params,
+        _t: new Date().getTime()
+      };
+    }
+    
     return config;
   },
   (error) => {
@@ -48,6 +61,11 @@ apiClient.interceptors.response.use(
       console.error(`API Error ${error.response.status}:`, error.response.data);
     } else if (error.request) {
       console.error('API Request failed (no response):', error.request);
+      
+      // Check if this might be due to an ad blocker
+      if (error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+        console.warn('This might be caused by an ad blocker or privacy extension. Try disabling these extensions for this site.');
+      }
     } else {
       console.error('API Error:', error.message);
     }

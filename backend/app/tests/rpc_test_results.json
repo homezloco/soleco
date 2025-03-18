@@ -1,0 +1,2303 @@
+{
+  "successful": [
+    {
+      "endpoint": "http://145.40.125.27:8899",
+      "status": "success",
+      "version": "2.3.0",
+      "slot": 0,
+      "response_time": 0.174
+    },
+    {
+      "endpoint": "http://145.40.117.251:8899",
+      "status": "success",
+      "version": "2.3.0",
+      "slot": 0,
+      "response_time": 0.262
+    },
+    {
+      "endpoint": "http://147.28.175.189:8899",
+      "status": "success",
+      "version": "2.1.13",
+      "slot": 0,
+      "response_time": 0.263
+    },
+    {
+      "endpoint": "http://145.40.126.135:8899",
+      "status": "success",
+      "version": "2.2.0",
+      "slot": 0,
+      "response_time": 0.429
+    },
+    {
+      "endpoint": "http://145.40.126.143:8899",
+      "status": "success",
+      "version": "2.2.1",
+      "slot": 0,
+      "response_time": 0.448
+    },
+    {
+      "endpoint": "http://145.40.126.95:8899",
+      "status": "success",
+      "version": "2.1.15",
+      "slot": 0,
+      "response_time": 0.462
+    },
+    {
+      "endpoint": "http://86.109.14.143:8899",
+      "status": "success",
+      "version": "2.2.0",
+      "slot": 0,
+      "response_time": 0.494
+    },
+    {
+      "endpoint": "http://145.40.126.95:8899",
+      "status": "success",
+      "version": "2.1.15",
+      "slot": 0,
+      "response_time": 0.61
+    },
+    {
+      "endpoint": "http://147.75.92.135:8899",
+      "status": "success",
+      "version": "2.3.0",
+      "slot": 0,
+      "response_time": 0.617
+    },
+    {
+      "endpoint": "http://147.28.169.15:8899",
+      "status": "success",
+      "version": "2.3.0",
+      "slot": 0,
+      "response_time": 0.825
+    },
+    {
+      "endpoint": "http://147.75.92.227:8899",
+      "status": "success",
+      "version": "2.1.13",
+      "slot": 0,
+      "response_time": 0.829
+    },
+    {
+      "endpoint": "http://108.171.216.194:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 0.995
+    },
+    {
+      "endpoint": "http://103.219.170.217:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.001
+    },
+    {
+      "endpoint": "http://173.231.22.242:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.021
+    },
+    {
+      "endpoint": "http://173.231.14.98:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.031
+    },
+    {
+      "endpoint": "http://108.171.216.114:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.038
+    },
+    {
+      "endpoint": "http://107.182.162.210:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.048
+    },
+    {
+      "endpoint": "http://147.28.180.247:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.055
+    },
+    {
+      "endpoint": "http://50.115.47.106:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.058
+    },
+    {
+      "endpoint": "http://38.97.61.158:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.1
+    },
+    {
+      "endpoint": "http://38.58.176.230:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.112
+    },
+    {
+      "endpoint": "http://103.219.170.217:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.118
+    },
+    {
+      "endpoint": "http://177.54.154.27:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.122
+    },
+    {
+      "endpoint": "http://173.231.14.98:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.16
+    },
+    {
+      "endpoint": "http://145.40.95.83:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.171
+    },
+    {
+      "endpoint": "http://185.189.44.139:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.182
+    },
+    {
+      "endpoint": "http://145.40.91.45:8899",
+      "status": "success",
+      "version": "2.2.1",
+      "slot": 0,
+      "response_time": 1.184
+    },
+    {
+      "endpoint": "http://185.189.44.239:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.195
+    },
+    {
+      "endpoint": "http://207.148.14.220:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.198
+    },
+    {
+      "endpoint": "http://88.216.198.210:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.202
+    },
+    {
+      "endpoint": "http://145.40.91.41:8899",
+      "status": "success",
+      "version": "2.3.0",
+      "slot": 0,
+      "response_time": 1.202
+    },
+    {
+      "endpoint": "http://88.198.54.74:8899",
+      "status": "success",
+      "version": "2.0.17",
+      "slot": 0,
+      "response_time": 1.202
+    },
+    {
+      "endpoint": "http://65.20.105.6:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.207
+    },
+    {
+      "endpoint": "http://149.255.37.170:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.209
+    },
+    {
+      "endpoint": "http://173.231.22.242:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.21
+    },
+    {
+      "endpoint": "http://107.182.163.194:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.21
+    },
+    {
+      "endpoint": "http://84.32.186.43:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.215
+    },
+    {
+      "endpoint": "http://84.32.186.52:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.22
+    },
+    {
+      "endpoint": "http://149.255.37.154:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.224
+    },
+    {
+      "endpoint": "http://149.255.37.174:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.237
+    },
+    {
+      "endpoint": "http://147.28.171.53:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.238
+    },
+    {
+      "endpoint": "http://185.177.74.241:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.241
+    },
+    {
+      "endpoint": "http://167.235.168.213:8899",
+      "status": "success",
+      "version": "2.2.0",
+      "slot": 0,
+      "response_time": 1.242
+    },
+    {
+      "endpoint": "http://206.212.242.4:8899",
+      "status": "success",
+      "version": "2.1.13",
+      "slot": 0,
+      "response_time": 1.246
+    },
+    {
+      "endpoint": "http://38.58.176.230:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.248
+    },
+    {
+      "endpoint": "http://67.213.119.41:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.249
+    },
+    {
+      "endpoint": "http://149.255.37.130:8899",
+      "status": "success",
+      "version": "2.0.22",
+      "slot": 0,
+      "response_time": 1.251
+    },
+    {
+      "endpoint": "http://144.202.50.238:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.254
+    },
+    {
+      "endpoint": "http://84.32.186.110:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.255
+    },
+    {
+      "endpoint": "http://107.182.163.194:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.262
+    },
+    {
+      "endpoint": "http://147.28.133.107:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.266
+    },
+    {
+      "endpoint": "http://91.242.214.213:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.27
+    },
+    {
+      "endpoint": "http://88.216.198.205:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.279
+    },
+    {
+      "endpoint": "http://72.46.85.29:8899",
+      "status": "success",
+      "version": "2.1.13",
+      "slot": 0,
+      "response_time": 1.287
+    },
+    {
+      "endpoint": "http://66.45.229.34:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.293
+    },
+    {
+      "endpoint": "http://64.176.65.109:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.298
+    },
+    {
+      "endpoint": "http://64.20.50.226:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.299
+    },
+    {
+      "endpoint": "http://70.34.245.172:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.3
+    },
+    {
+      "endpoint": "http://208.85.17.92:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.309
+    },
+    {
+      "endpoint": "http://45.250.254.191:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.317
+    },
+    {
+      "endpoint": "http://135.181.119.175:8899",
+      "status": "success",
+      "version": "2.1.13",
+      "slot": 0,
+      "response_time": 1.318
+    },
+    {
+      "endpoint": "http://185.26.9.5:8899",
+      "status": "success",
+      "version": "2.1.4",
+      "slot": 0,
+      "response_time": 1.333
+    },
+    {
+      "endpoint": "http://38.29.227.125:8899",
+      "status": "success",
+      "version": "2.0.22",
+      "slot": 0,
+      "response_time": 1.336
+    },
+    {
+      "endpoint": "http://205.209.107.186:8899",
+      "status": "success",
+      "version": "2.0.19",
+      "slot": 0,
+      "response_time": 1.34
+    },
+    {
+      "endpoint": "http://74.50.77.122:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.344
+    },
+    {
+      "endpoint": "http://185.189.44.139:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.348
+    },
+    {
+      "endpoint": "http://208.85.17.92:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.352
+    },
+    {
+      "endpoint": "http://185.26.9.215:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.355
+    },
+    {
+      "endpoint": "http://88.216.198.210:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.355
+    },
+    {
+      "endpoint": "http://38.29.227.126:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.363
+    },
+    {
+      "endpoint": "http://72.46.84.195:8899",
+      "status": "success",
+      "version": "2.0.17",
+      "slot": 0,
+      "response_time": 1.364
+    },
+    {
+      "endpoint": "http://204.13.239.42:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.377
+    },
+    {
+      "endpoint": "http://192.64.85.242:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.377
+    },
+    {
+      "endpoint": "http://136.244.117.186:8899",
+      "status": "success",
+      "version": "2.1.4",
+      "slot": 0,
+      "response_time": 1.377
+    },
+    {
+      "endpoint": "http://207.246.119.26:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.388
+    },
+    {
+      "endpoint": "http://91.211.83.252:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.388
+    },
+    {
+      "endpoint": "http://145.40.88.77:8899",
+      "status": "success",
+      "version": "2.1.7",
+      "slot": 0,
+      "response_time": 1.394
+    },
+    {
+      "endpoint": "http://69.67.150.19:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.4
+    },
+    {
+      "endpoint": "http://145.40.64.255:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.402
+    },
+    {
+      "endpoint": "http://207.148.14.220:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.405
+    },
+    {
+      "endpoint": "http://147.75.193.169:8899",
+      "status": "success",
+      "version": "2.1.15",
+      "slot": 0,
+      "response_time": 1.407
+    },
+    {
+      "endpoint": "http://141.95.97.47:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.415
+    },
+    {
+      "endpoint": "http://185.221.164.118:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.425
+    },
+    {
+      "endpoint": "http://137.220.59.111:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.436
+    },
+    {
+      "endpoint": "http://162.19.102.192:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.437
+    },
+    {
+      "endpoint": "http://195.162.83.18:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.437
+    },
+    {
+      "endpoint": "http://149.28.232.189:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.438
+    },
+    {
+      "endpoint": "http://139.178.73.255:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.443
+    },
+    {
+      "endpoint": "http://147.124.195.230:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.447
+    },
+    {
+      "endpoint": "http://66.45.229.34:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.452
+    },
+    {
+      "endpoint": "http://69.67.150.141:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.463
+    },
+    {
+      "endpoint": "http://162.19.222.23:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.467
+    },
+    {
+      "endpoint": "http://147.28.173.35:8899",
+      "status": "success",
+      "version": "2.1.13",
+      "slot": 0,
+      "response_time": 1.468
+    },
+    {
+      "endpoint": "http://3.79.229.25:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.469
+    },
+    {
+      "endpoint": "http://45.76.3.216:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.47
+    },
+    {
+      "endpoint": "http://147.28.173.107:8899",
+      "status": "success",
+      "version": "2.2.0",
+      "slot": 0,
+      "response_time": 1.476
+    },
+    {
+      "endpoint": "http://147.28.171.53:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.523
+    },
+    {
+      "endpoint": "http://192.158.239.143:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.538
+    },
+    {
+      "endpoint": "http://212.7.207.1:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.564
+    },
+    {
+      "endpoint": "http://18.195.65.66:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.567
+    },
+    {
+      "endpoint": "http://145.40.88.77:8899",
+      "status": "success",
+      "version": "2.1.7",
+      "slot": 0,
+      "response_time": 1.589
+    },
+    {
+      "endpoint": "http://149.248.62.208:8899",
+      "status": "success",
+      "version": "2.1.13",
+      "slot": 0,
+      "response_time": 1.667
+    },
+    {
+      "endpoint": "http://149-255-37-154.static.hvvc.us:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.688
+    },
+    {
+      "endpoint": "http://80.77.175.93:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.696
+    },
+    {
+      "endpoint": "http://80.77.161.201:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.704
+    },
+    {
+      "endpoint": "http://185.86.135.71:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.731
+    },
+    {
+      "endpoint": "http://185.86.135.78:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.746
+    },
+    {
+      "endpoint": "http://80.77.175.84:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.746
+    },
+    {
+      "endpoint": "http://80.77.161.202:8899",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 1.757
+    },
+    {
+      "endpoint": "http://149-255-37-170.static.hvvc.us:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 1.942
+    },
+    {
+      "endpoint": "http://216.238.102.89:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 2.014
+    },
+    {
+      "endpoint": "https://api.mainnet-beta.solana.com",
+      "status": "success",
+      "version": "2.1.11",
+      "slot": 0,
+      "response_time": 2.055
+    },
+    {
+      "endpoint": "http://103.88.233.29:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 2.059
+    },
+    {
+      "endpoint": "http://64.176.11.113:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 2.127
+    },
+    {
+      "endpoint": "http://147.124.195.78:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 2.414
+    },
+    {
+      "endpoint": "http://57.129.84.164:8899",
+      "status": "success",
+      "version": "2.1.13",
+      "slot": 0,
+      "response_time": 2.452
+    },
+    {
+      "endpoint": "http://104.37.190.98:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 2.471
+    },
+    {
+      "endpoint": "http://139.84.238.57:8899",
+      "status": "success",
+      "version": "2.1.14",
+      "slot": 0,
+      "response_time": 2.727
+    }
+  ],
+  "failed": [
+    {
+      "endpoint": "https://185.26.11.113:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.249
+    },
+    {
+      "endpoint": "https://185.135.82.142:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 185.135.82.142:8899 ssl:default [Connect call failed ('185.135.82.142', 8899)]",
+      "response_time": 0.449
+    },
+    {
+      "endpoint": "https://45.250.253.87:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.909
+    },
+    {
+      "endpoint": "https://62.197.45.158:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 62.197.45.158:8899 ssl:default [Connect call failed ('62.197.45.158', 8899)]",
+      "response_time": 0.347
+    },
+    {
+      "endpoint": "https://149.255.37.186:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.228
+    },
+    {
+      "endpoint": "https://185.135.82.174:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 185.135.82.174:8899 ssl:default [Connect call failed ('185.135.82.174', 8899)]",
+      "response_time": 0.42
+    },
+    {
+      "endpoint": "https://45.250.253.89:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.077
+    },
+    {
+      "endpoint": "https://2.57.215.75:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 2.57.215.75:8899 ssl:default [Connect call failed ('2.57.215.75', 8899)]",
+      "response_time": 0.17
+    },
+    {
+      "endpoint": "https://185.26.11.115:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.904
+    },
+    {
+      "endpoint": "https://80.239.223.72:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.339
+    },
+    {
+      "endpoint": "https://45.250.253.111:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.162
+    },
+    {
+      "endpoint": "https://207.90.226.250:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.06
+    },
+    {
+      "endpoint": "https://198.178.224.134:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.888
+    },
+    {
+      "endpoint": "https://208.91.110.116:7211",
+      "status": "error",
+      "error": "",
+      "response_time": 5.852
+    },
+    {
+      "endpoint": "https://64.176.65.114:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.356
+    },
+    {
+      "endpoint": "https://135.125.160.253:8666",
+      "status": "error",
+      "error": "",
+      "response_time": 6.34
+    },
+    {
+      "endpoint": "https://45.45.156.250:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.098
+    },
+    {
+      "endpoint": "https://70.34.245.161:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.215
+    },
+    {
+      "endpoint": "https://2.57.215.182:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 2.57.215.182:8899 ssl:default [Connect call failed ('2.57.215.182', 8899)]",
+      "response_time": 0.167
+    },
+    {
+      "endpoint": "https://185.26.11.109:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.165
+    },
+    {
+      "endpoint": "https://216.128.145.225:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.07
+    },
+    {
+      "endpoint": "https://185.26.11.111:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.019
+    },
+    {
+      "endpoint": "https://192.241.120.42:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.963
+    },
+    {
+      "endpoint": "https://91.199.149.16:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 91.199.149.16:8899 ssl:default [Connect call failed ('91.199.149.16', 8899)]",
+      "response_time": 0.44
+    },
+    {
+      "endpoint": "https://177.54.146.61:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.926
+    },
+    {
+      "endpoint": "https://195.14.6.38:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.939
+    },
+    {
+      "endpoint": "https://149.255.37.218:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.969
+    },
+    {
+      "endpoint": "https://185.191.116.181:7211",
+      "status": "error",
+      "error": "",
+      "response_time": 5.815
+    },
+    {
+      "endpoint": "https://5.199.172.140:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.37
+    },
+    {
+      "endpoint": "https://109.94.96.173:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 109.94.96.173:8899 ssl:default [Connect call failed ('109.94.96.173', 8899)]",
+      "response_time": 0.295
+    },
+    {
+      "endpoint": "https://185.26.11.107:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.281
+    },
+    {
+      "endpoint": "https://91.134.58.46:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.289
+    },
+    {
+      "endpoint": "https://160.202.131.107:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.322
+    },
+    {
+      "endpoint": "https://91.242.214.51:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 91.242.214.51:8899 ssl:default [Connect call failed ('91.242.214.51', 8899)]",
+      "response_time": 0.297
+    },
+    {
+      "endpoint": "https://149.255.37.190:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.045
+    },
+    {
+      "endpoint": "https://45.250.255.167:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.234
+    },
+    {
+      "endpoint": "https://103.167.235.121:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 103.167.235.121:8899 ssl:default [Connect call failed ('103.167.235.121', 8899)]",
+      "response_time": 0.282
+    },
+    {
+      "endpoint": "https://95.179.216.39:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.181
+    },
+    {
+      "endpoint": "https://185.135.82.243:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 185.135.82.243:8899 ssl:default [Connect call failed ('185.135.82.243', 8899)]",
+      "response_time": 0.442
+    },
+    {
+      "endpoint": "https://72.46.84.185:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.141
+    },
+    {
+      "endpoint": "https://154.51.14.145:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.137
+    },
+    {
+      "endpoint": "https://64.130.57.216:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.115
+    },
+    {
+      "endpoint": "https://84.32.186.145:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.099
+    },
+    {
+      "endpoint": "https://37.61.212.219:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 37.61.212.219:8899 ssl:default [Connect call failed ('37.61.212.219', 8899)]",
+      "response_time": 0.294
+    },
+    {
+      "endpoint": "https://47.76.169.204:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.05
+    },
+    {
+      "endpoint": "https://185.26.9.159:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.002
+    },
+    {
+      "endpoint": "https://37.114.51.68:2024",
+      "status": "error",
+      "error": "",
+      "response_time": 5.995
+    },
+    {
+      "endpoint": "https://195.189.97.55:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.965
+    },
+    {
+      "endpoint": "https://72.46.84.207:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.949
+    },
+    {
+      "endpoint": "https://57.129.36.243:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.922
+    },
+    {
+      "endpoint": "https://15.235.117.193:8666",
+      "status": "error",
+      "error": "",
+      "response_time": 5.916
+    },
+    {
+      "endpoint": "https://62.197.45.33:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.263
+    },
+    {
+      "endpoint": "https://185.209.179.15:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.879
+    },
+    {
+      "endpoint": "https://45.250.253.159:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.864
+    },
+    {
+      "endpoint": "https://204.16.242.229:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.86
+    },
+    {
+      "endpoint": "https://157.90.6.123:2024",
+      "status": "error",
+      "error": "",
+      "response_time": 6.302
+    },
+    {
+      "endpoint": "https://219.78.4.74:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.811
+    },
+    {
+      "endpoint": "https://85.195.97.187:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.365
+    },
+    {
+      "endpoint": "https://45.250.253.79:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.362
+    },
+    {
+      "endpoint": "https://45.43.11.14:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.817
+    },
+    {
+      "endpoint": "https://103.219.171.9:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.293
+    },
+    {
+      "endpoint": "https://91.199.149.203:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 91.199.149.203:8899 ssl:default [Connect call failed ('91.199.149.203', 8899)]",
+      "response_time": 0.435
+    },
+    {
+      "endpoint": "https://23.92.177.79:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.344
+    },
+    {
+      "endpoint": "https://45.77.156.249:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.869
+    },
+    {
+      "endpoint": "https://3.74.162.208:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.249
+    },
+    {
+      "endpoint": "https://101.44.163.28:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.324
+    },
+    {
+      "endpoint": "https://162.19.77.136:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.255
+    },
+    {
+      "endpoint": "https://72.46.86.113:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.315
+    },
+    {
+      "endpoint": "https://207.90.226.252:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.046
+    },
+    {
+      "endpoint": "https://35.178.207.182:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 35.178.207.182:8899 ssl:default [Connect call failed ('35.178.207.182', 8899)]",
+      "response_time": 0.31
+    },
+    {
+      "endpoint": "https://47.76.196.113:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.238
+    },
+    {
+      "endpoint": "https://108.181.93.162:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 108.181.93.162:8899 ssl:default [Connect call failed ('108.181.93.162', 8899)]",
+      "response_time": 0.294
+    },
+    {
+      "endpoint": "https://45.77.136.52:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.229
+    },
+    {
+      "endpoint": "https://147.124.195.126:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.223
+    },
+    {
+      "endpoint": "https://37.122.252.21:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.19
+    },
+    {
+      "endpoint": "https://86.109.8.203:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.203
+    },
+    {
+      "endpoint": "https://162.19.222.39:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.186
+    },
+    {
+      "endpoint": "https://207.90.225.250:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.17
+    },
+    {
+      "endpoint": "https://149.28.44.187:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.193
+    },
+    {
+      "endpoint": "https://31.184.193.251:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 31.184.193.251:8899 ssl:default [Connect call failed ('31.184.193.251', 8899)]",
+      "response_time": 0.378
+    },
+    {
+      "endpoint": "https://185.209.179.175:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.146
+    },
+    {
+      "endpoint": "https://212.83.42.33:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.116
+    },
+    {
+      "endpoint": "https://64.130.52.199:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.122
+    },
+    {
+      "endpoint": "https://66.135.11.69:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.089
+    },
+    {
+      "endpoint": "https://77.244.246.82:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.107
+    },
+    {
+      "endpoint": "https://67.213.113.133:7211",
+      "status": "error",
+      "error": "",
+      "response_time": 6.086
+    },
+    {
+      "endpoint": "https://147.28.171.31:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 147.28.171.31:8899 ssl:default [Connect call failed ('147.28.171.31', 8899)]",
+      "response_time": 0.307
+    },
+    {
+      "endpoint": "https://217.170.192.6:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 217.170.192.6:8899 ssl:default [Connect call failed ('217.170.192.6', 8899)]",
+      "response_time": 0.301
+    },
+    {
+      "endpoint": "https://23.111.240.97:7211",
+      "status": "error",
+      "error": "",
+      "response_time": 6.079
+    },
+    {
+      "endpoint": "https://3.236.229.191:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 3.236.229.191:8899 ssl:default [Connect call failed ('3.236.229.191', 8899)]",
+      "response_time": 0.32
+    },
+    {
+      "endpoint": "https://57.129.76.97:9899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.94
+    },
+    {
+      "endpoint": "https://162.19.103.100:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.057
+    },
+    {
+      "endpoint": "https://64.130.58.18:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.022
+    },
+    {
+      "endpoint": "https://147.28.171.15:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 147.28.171.15:8899 ssl:default [Connect call failed ('147.28.171.15', 8899)]",
+      "response_time": 0.351
+    },
+    {
+      "endpoint": "https://185.188.42.43:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.026
+    },
+    {
+      "endpoint": "https://162.19.103.253:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.013
+    },
+    {
+      "endpoint": "https://15.235.219.100:9899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.004
+    },
+    {
+      "endpoint": "https://45.250.253.157:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.974
+    },
+    {
+      "endpoint": "https://23.92.177.76:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 5.977
+    },
+    {
+      "endpoint": "https://208.91.109.81:8666",
+      "status": "error",
+      "error": "",
+      "response_time": 5.99
+    },
+    {
+      "endpoint": "https://5.199.172.144:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.956
+    },
+    {
+      "endpoint": "https://84.32.71.73:7211",
+      "status": "error",
+      "error": "",
+      "response_time": 5.929
+    },
+    {
+      "endpoint": "https://79.137.101.96:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 79.137.101.96:8899 ssl:default [Connect call failed ('79.137.101.96', 8899)]",
+      "response_time": 0.322
+    },
+    {
+      "endpoint": "https://103.219.168.159:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 5.926
+    },
+    {
+      "endpoint": "https://185.26.10.213:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.932
+    },
+    {
+      "endpoint": "https://206.72.196.138:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.917
+    },
+    {
+      "endpoint": "https://193.200.65.18:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.907
+    },
+    {
+      "endpoint": "https://209.250.237.140:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.903
+    },
+    {
+      "endpoint": "https://199.254.199.127:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.199
+    },
+    {
+      "endpoint": "https://45.158.38.46:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.889
+    },
+    {
+      "endpoint": "https://15.235.225.141:9899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.87
+    },
+    {
+      "endpoint": "https://207.90.224.250:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.873
+    },
+    {
+      "endpoint": "https://145.239.161.5:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.813
+    },
+    {
+      "endpoint": "https://62.113.194.29:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.865
+    },
+    {
+      "endpoint": "https://185.26.10.185:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.851
+    },
+    {
+      "endpoint": "https://45.250.253.235:7799",
+      "status": "error",
+      "error": "",
+      "response_time": 5.854
+    },
+    {
+      "endpoint": "https://45.135.201.155:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 45.135.201.155:8899 ssl:default [Connect call failed ('45.135.201.155', 8899)]",
+      "response_time": 0.277
+    },
+    {
+      "endpoint": "https://207.90.225.252:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.886
+    },
+    {
+      "endpoint": "https://185.209.176.160:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 5.842
+    },
+    {
+      "endpoint": "https://146.19.127.34:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.305
+    },
+    {
+      "endpoint": "https://185.209.179.183:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.308
+    },
+    {
+      "endpoint": "https://45.250.255.163:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 45.250.255.163:8899 ssl:default [Connect call failed ('45.250.255.163', 8899)]",
+      "response_time": 0.255
+    },
+    {
+      "endpoint": "https://45.250.254.65:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.354
+    },
+    {
+      "endpoint": "https://178.237.58.196:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.302
+    },
+    {
+      "endpoint": "https://160.202.128.5:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.294
+    },
+    {
+      "endpoint": "https://15.235.225.244:22222",
+      "status": "error",
+      "error": "",
+      "response_time": 6.297
+    },
+    {
+      "endpoint": "https://91.199.149.216:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 91.199.149.216:8899 ssl:default [Connect call failed ('91.199.149.216', 8899)]",
+      "response_time": 0.426
+    },
+    {
+      "endpoint": "https://148.113.190.5:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.195
+    },
+    {
+      "endpoint": "https://199.254.199.126:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.357
+    },
+    {
+      "endpoint": "https://176.99.142.182:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 176.99.142.182:8899 ssl:default [Connect call failed ('176.99.142.182', 8899)]",
+      "response_time": 0.326
+    },
+    {
+      "endpoint": "https://64.130.32.231:2024",
+      "status": "error",
+      "error": "",
+      "response_time": 6.283
+    },
+    {
+      "endpoint": "https://148.113.208.162:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 148.113.208.162:8899 ssl:default [Connect call failed ('148.113.208.162', 8899)]",
+      "response_time": 0.304
+    },
+    {
+      "endpoint": "https://64.176.228.107:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.347
+    },
+    {
+      "endpoint": "https://173.224.127.6:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.329
+    },
+    {
+      "endpoint": "https://207.90.226.251:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.345
+    },
+    {
+      "endpoint": "https://103.28.89.173:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.274
+    },
+    {
+      "endpoint": "https://15.235.80.19:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.339
+    },
+    {
+      "endpoint": "https://23.92.177.75:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.288
+    },
+    {
+      "endpoint": "https://147.28.184.21:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.263
+    },
+    {
+      "endpoint": "https://107.6.94.207:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.325
+    },
+    {
+      "endpoint": "https://45.250.253.6:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.257
+    },
+    {
+      "endpoint": "https://13.115.69.197:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 13.115.69.197:8899 ssl:default [Connect call failed ('13.115.69.197', 8899)]",
+      "response_time": 0.24
+    },
+    {
+      "endpoint": "https://64.130.63.22:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.271
+    },
+    {
+      "endpoint": "https://103.219.168.187:7799",
+      "status": "error",
+      "error": "",
+      "response_time": 6.25
+    },
+    {
+      "endpoint": "https://185.133.42.6:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 185.133.42.6:8899 ssl:default [Connect call failed ('185.133.42.6', 8899)]",
+      "response_time": 0.504
+    },
+    {
+      "endpoint": "https://64.130.59.190:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.315
+    },
+    {
+      "endpoint": "https://141.94.3.139:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.242
+    },
+    {
+      "endpoint": "https://162.19.136.122:8666",
+      "status": "error",
+      "error": "",
+      "response_time": 5.835
+    },
+    {
+      "endpoint": "https://51.210.194.40:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.309
+    },
+    {
+      "endpoint": "https://23.92.177.77:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.268
+    },
+    {
+      "endpoint": "https://45.45.156.251:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.265
+    },
+    {
+      "endpoint": "https://80.77.161.197:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.224
+    },
+    {
+      "endpoint": "https://67.213.119.31:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.215
+    },
+    {
+      "endpoint": "https://63.251.232.230:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.212
+    },
+    {
+      "endpoint": "https://185.26.8.225:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.232
+    },
+    {
+      "endpoint": "https://176.99.142.188:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 176.99.142.188:8899 ssl:default [Connect call failed ('176.99.142.188', 8899)]",
+      "response_time": 0.384
+    },
+    {
+      "endpoint": "https://207.90.224.251:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.203
+    },
+    {
+      "endpoint": "https://45.45.156.252:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.206
+    },
+    {
+      "endpoint": "https://103.252.91.228:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.181
+    },
+    {
+      "endpoint": "https://185.26.10.211:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.163
+    },
+    {
+      "endpoint": "https://185.187.154.161:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.171
+    },
+    {
+      "endpoint": "https://77.244.246.86:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.173
+    },
+    {
+      "endpoint": "https://83.143.83.234:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.279
+    },
+    {
+      "endpoint": "https://207.90.225.251:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.157
+    },
+    {
+      "endpoint": "https://109.123.108.142:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.037
+    },
+    {
+      "endpoint": "https://207.90.224.252:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.147
+    },
+    {
+      "endpoint": "https://64.130.50.131:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.151
+    },
+    {
+      "endpoint": "https://57.129.36.136:8666",
+      "status": "error",
+      "error": "",
+      "response_time": 6.13
+    },
+    {
+      "endpoint": "https://84.32.71.81:7211",
+      "status": "error",
+      "error": "",
+      "response_time": 6.14
+    },
+    {
+      "endpoint": "https://178.237.58.173:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.126
+    },
+    {
+      "endpoint": "https://170.39.119.202:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 170.39.119.202:8899 ssl:default [Connect call failed ('170.39.119.202', 8899)]",
+      "response_time": 0.373
+    },
+    {
+      "endpoint": "https://103.109.101.10:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.123
+    },
+    {
+      "endpoint": "https://103.219.171.221:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.117
+    },
+    {
+      "endpoint": "https://88.216.198.202:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.088
+    },
+    {
+      "endpoint": "https://185.26.11.119:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.107
+    },
+    {
+      "endpoint": "https://185.26.10.179:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.101
+    },
+    {
+      "endpoint": "https://193.200.64.48:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.098
+    },
+    {
+      "endpoint": "https://177.54.154.7:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.073
+    },
+    {
+      "endpoint": "https://207.188.6.104:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.08
+    },
+    {
+      "endpoint": "https://193.222.57.21:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.06
+    },
+    {
+      "endpoint": "https://147.75.32.229:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.07
+    },
+    {
+      "endpoint": "https://109.94.96.59:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.826
+    },
+    {
+      "endpoint": "https://217.65.3.42:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.057
+    },
+    {
+      "endpoint": "https://108.160.136.181:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.03
+    },
+    {
+      "endpoint": "https://149.51.224.84:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 149.51.224.84:8899 ssl:default [Connect call failed ('149.51.224.84', 8899)]",
+      "response_time": 0.367
+    },
+    {
+      "endpoint": "https://103.219.171.8:21611",
+      "status": "error",
+      "error": "",
+      "response_time": 6.047
+    },
+    {
+      "endpoint": "https://37.27.227.59:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 37.27.227.59:8899 ssl:default [Connect call failed ('37.27.227.59', 8899)]",
+      "response_time": 0.414
+    },
+    {
+      "endpoint": "https://103.167.235.142:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 103.167.235.142:8899 ssl:default [Connect call failed ('103.167.235.142', 8899)]",
+      "response_time": 0.352
+    },
+    {
+      "endpoint": "https://147.124.195.75:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.033
+    },
+    {
+      "endpoint": "https://3.121.218.7:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 3.121.218.7:8899 ssl:default [Connect call failed ('3.121.218.7', 8899)]",
+      "response_time": 0.414
+    },
+    {
+      "endpoint": "https://scb1:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.027
+    },
+    {
+      "endpoint": "https://50-115-47-106.static.webnx.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 50-115-47-106.static.webnx.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.16
+    },
+    {
+      "endpoint": "https://70.34.245.172.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 70.34.245.172.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.424
+    },
+    {
+      "endpoint": "https://149-255-37-186.static.hvvc.us:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.007
+    },
+    {
+      "endpoint": "https://anza-staked-node-sg-5:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 6.016
+    },
+    {
+      "endpoint": "https://207.148.14.220.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 207.148.14.220.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.422
+    },
+    {
+      "endpoint": "https://ns31544072.ip-162-19-222.eu:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host ns31544072.ip-162-19-222.eu:8899 ssl:default [[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)]",
+      "response_time": 0.904
+    },
+    {
+      "endpoint": "https://64.176.65.109.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 64.176.65.109.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.416
+    },
+    {
+      "endpoint": "https://149.248.62.208.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 149.248.62.208.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.41
+    },
+    {
+      "endpoint": "https://139.84.238.57.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 139.84.238.57.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.435
+    },
+    {
+      "endpoint": "https://45.76.3.216.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 45.76.3.216.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.426
+    },
+    {
+      "endpoint": "https://144.202.50.238.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 144.202.50.238.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.418
+    },
+    {
+      "endpoint": "https://mail.promotionsonnline.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host mail.promotionsonnline.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.364
+    },
+    {
+      "endpoint": "https://216.238.102.89.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 216.238.102.89.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.426
+    },
+    {
+      "endpoint": "https://80-77-161-201.as51369.ru:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 80-77-161-201.as51369.ru:8899 ssl:default [Name or service not known]",
+      "response_time": 0.607
+    },
+    {
+      "endpoint": "https://108.171.216.114.static.webnx.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 108.171.216.114.static.webnx.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.432
+    },
+    {
+      "endpoint": "https://64.176.65.114.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 64.176.65.114.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.41
+    },
+    {
+      "endpoint": "https://ns3234978.ip-135-125-160.eu:8666",
+      "status": "error",
+      "error": "",
+      "response_time": 6.004
+    },
+    {
+      "endpoint": "https://anza-staked-node-hk-1:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.981
+    },
+    {
+      "endpoint": "https://70.34.245.161.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 70.34.245.161.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.418
+    },
+    {
+      "endpoint": "https://anza-dev-staked-ny-1:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.993
+    },
+    {
+      "endpoint": "https://anza-dev-staked-montreal-423:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.984
+    },
+    {
+      "endpoint": "https://anza-staked-node-ny-1:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.977
+    },
+    {
+      "endpoint": "https://216.128.145.225.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 216.128.145.225.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.424
+    },
+    {
+      "endpoint": "https://65.20.105.6.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 65.20.105.6.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.419
+    },
+    {
+      "endpoint": "https://137.220.59.111.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 137.220.59.111.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.41
+    },
+    {
+      "endpoint": "https://applaud.canyonsfretsaw.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host applaud.canyonsfretsaw.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.401
+    },
+    {
+      "endpoint": "https://177-54-146-61.rev.hostzone.com.br:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 177-54-146-61.rev.hostzone.com.br:8899 ssl:default [Name or service not known]",
+      "response_time": 0.381
+    },
+    {
+      "endpoint": "https://ec2-3-79-229-25.eu-central-1.compute.amazonaws.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host ec2-3-79-229-25.eu-central-1.compute.amazonaws.com:8899 ssl:default [[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)]",
+      "response_time": 0.881
+    },
+    {
+      "endpoint": "https://anza-dev-staked-tokyo:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.966
+    },
+    {
+      "endpoint": "https://149-255-37-218.static.hvvc.us:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.815
+    },
+    {
+      "endpoint": "https://80-77-175-93.colo.fiord.ru:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 80-77-175-93.colo.fiord.ru:8899 ssl:default [Name or service not known]",
+      "response_time": 1.179
+    },
+    {
+      "endpoint": "https://208.85.17.92.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 208.85.17.92.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.587
+    },
+    {
+      "endpoint": "https://ns3246748.ip-91-134-58.eu:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.946
+    },
+    {
+      "endpoint": "https://scb2:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.95
+    },
+    {
+      "endpoint": "https://80-77-175-84.colo.fiord.ru:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 80-77-175-84.colo.fiord.ru:8899 ssl:default [Name or service not known]",
+      "response_time": 1.258
+    },
+    {
+      "endpoint": "https://149-255-37-190.static.hvvc.us:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.94
+    },
+    {
+      "endpoint": "https://64.176.11.113.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 64.176.11.113.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.595
+    },
+    {
+      "endpoint": "https://108.171.216.194.static.webnx.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 108.171.216.194.static.webnx.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.752
+    },
+    {
+      "endpoint": "https://ns3237175.ip-162-19-102.eu:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host ns3237175.ip-162-19-102.eu:8899 ssl:default [[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)]",
+      "response_time": 1.172
+    },
+    {
+      "endpoint": "https://95.179.216.39.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 95.179.216.39.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.56
+    },
+    {
+      "endpoint": "https://149-255-37-174.static.hvvc.us:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 149-255-37-174.static.hvvc.us:8899 ssl:default [[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)]",
+      "response_time": 0.961
+    },
+    {
+      "endpoint": "https://80-77-161-202.as51369.ru:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 80-77-161-202.as51369.ru:8899 ssl:default [Name or service not known]",
+      "response_time": 0.733
+    },
+    {
+      "endpoint": "https://107-182-163-194.static.webnx.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 107-182-163-194.static.webnx.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.755
+    },
+    {
+      "endpoint": "https://149-255-37-170.static.hvvc.us:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 149-255-37-170.static.hvvc.us:8899 ssl:default [[SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1000)]",
+      "response_time": 0.851
+    },
+    {
+      "endpoint": "https://149.28.232.189.vultrusercontent.com:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 149.28.232.189.vultrusercontent.com:8899 ssl:default [Name or service not known]",
+      "response_time": 0.587
+    },
+    {
+      "endpoint": "https://['https://mainnet.helius-rpc.com/?api-key=your_helius_api_key']",
+      "status": "error",
+      "error": "Request failed: https://['https://mainnet.helius-rpc.com/?api-key=your_helius_api_key']",
+      "response_time": 0.071
+    },
+    {
+      "endpoint": "https://['https://api.mainnet-beta.solana.com']",
+      "status": "error",
+      "error": "Request failed: https://['https://api.mainnet-beta.solana.com']",
+      "response_time": 0.071
+    },
+    {
+      "endpoint": "https://solana-api.projectserum.com",
+      "status": "error",
+      "error": "",
+      "response_time": 5.907
+    },
+    {
+      "endpoint": "https://rpc.ankr.com/solana",
+      "status": "error",
+      "error": "RPC error: API key is not allowed to access blockchain",
+      "response_time": 1.819
+    },
+    {
+      "endpoint": "https://solana.public-rpc.com",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host solana.public-rpc.com:443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1000)')]",
+      "response_time": 1.109
+    },
+    {
+      "endpoint": "http://74.50.65.226:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 74.50.65.226:8899 ssl:default [Connect call failed ('74.50.65.226', 8899)]",
+      "response_time": 0.388
+    },
+    {
+      "endpoint": "http://67.213.115.207:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.889
+    },
+    {
+      "endpoint": "http://74.50.65.194:8899",
+      "status": "error",
+      "error": "Request failed: Cannot connect to host 74.50.65.194:8899 ssl:default [Connect call failed ('74.50.65.194', 8899)]",
+      "response_time": 0.384
+    },
+    {
+      "endpoint": "http://147.75.198.219:8899",
+      "status": "error",
+      "error": "",
+      "response_time": 5.876
+    }
+  ],
+  "success_rate": 32.5068870523416
+}
