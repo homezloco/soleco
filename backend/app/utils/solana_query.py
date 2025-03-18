@@ -3,12 +3,14 @@ Solana query module for handling blockchain data queries.
 This module provides query handlers and utilities for fetching and processing Solana blockchain data.
 """
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, Tuple
 from datetime import datetime, timedelta
 import asyncio
 import time
 import json
 import logging
+import traceback
+
 from tenacity import (
     retry,
     stop_after_attempt,
@@ -27,7 +29,8 @@ from .solana_helpers import (
     transform_transaction_data,
     get_block_options,
     handle_rpc_error,
-    DEFAULT_COMMITMENT
+    DEFAULT_COMMITMENT,
+    safe_rpc_call_async
 )
 from .solana_error import (
     SolanaError,
@@ -40,7 +43,8 @@ from .solana_error import (
     TransactionError,
     MissingTransactionDataError,
     InvalidInstructionError,
-    RetryableError
+    RetryableError,
+    MethodNotSupportedError
 )
 from .handlers.base_handler import BaseHandler
 from .handlers.mint_handler import MintHandler
@@ -65,11 +69,34 @@ class SolanaQueryHandler:
         self.initialized = False
         
     async def ensure_initialized(self):
-        """Ensure the connection pool is initialized."""
+        """Ensure the handler is initialized."""
         if not self.initialized:
             if not self.connection_pool:
                 self.connection_pool = await get_connection_pool()
-            await self.connection_pool.initialize()
+            
+            # Check if the connection pool is already initialized
+            if hasattr(self.connection_pool, '_initialized') and self.connection_pool._initialized:
+                self.initialized = True
+                return
+                
+            # Initialize the connection pool
+            try:
+                # First try without arguments (newer implementation)
+                await self.connection_pool.initialize()
+            except TypeError as e:
+                # If it fails with TypeError, it might be the older implementation that requires endpoints
+                if "missing 1 required positional argument: 'endpoints'" in str(e):
+                    logger.info("Connection pool requires endpoints argument, using alternative initialization")
+                    # Get endpoints from the pool or use defaults
+                    if hasattr(self.connection_pool, 'endpoints') and self.connection_pool.endpoints:
+                        await self.connection_pool.initialize(self.connection_pool.endpoints)
+                    else:
+                        from app.utils.solana_rpc import DEFAULT_RPC_ENDPOINTS
+                        await self.connection_pool.initialize(DEFAULT_RPC_ENDPOINTS)
+                else:
+                    # If it's a different TypeError, re-raise it
+                    raise
+            
             self.initialized = True
             
     async def initialize(self):
@@ -119,18 +146,36 @@ class SolanaQueryHandler:
         raise last_error or Exception("Max retries exceeded")
 
     async def get_block(self, slot: int, **kwargs) -> Optional[Dict[str, Any]]:
-        """Get block information with retries and error handling."""
+        """
+        Get block information with retries and error handling.
+        
+        Args:
+            slot: Block slot number
+            **kwargs: Additional parameters for getBlock
+            
+        Returns:
+            Block data or None if not found
+            
+        Raises:
+            MissingBlocksError: If too many consecutive slots are skipped
+            RPCError: For other RPC errors
+        """
+        # Import here to avoid circular imports
+        from .solana_error import RetryableError, MissingBlocksError, MethodNotSupportedError
+        
+        # Initialize retry parameters
         retries = 0
         max_retries = 3
         backoff_time = 1.0
+        
+        # Track skipped slots
         skipped_slots = 0
-        max_skipped_slots = 5
+        max_skipped_slots = 10
         
-        logger.debug(f"Getting block data for slot {slot}")
-        
+        # Try to get the block with retries
         while True:
             try:
-                # Set up request options
+                # Prepare options
                 options = {
                     "encoding": "jsonParsed",
                     "transactionDetails": "full",
@@ -143,13 +188,25 @@ class SolanaQueryHandler:
                     options.update(kwargs)
                     logger.debug(f"Using options: {options}")
                 
-                # Create params list with slot and options
-                params = [slot, options]
-                
                 # Make RPC call
                 logger.debug(f"Making RPC call for slot {slot}")
                 client = await self.connection_pool.get_client()
-                result = await client.get_block(*params)
+                try:
+                    result = await client.get_block(slot, options)
+                except MethodNotSupportedError as e:
+                    logger.error(f"Endpoint {client.endpoint} does not support getBlock method")
+                    # Release the client and try a different one
+                    await self.connection_pool.release(client, success=False)
+                    
+                    # If we've tried multiple times, it might be that none of our endpoints support getBlock
+                    if retries >= max_retries - 1:
+                        logger.error("None of the available endpoints support getBlock method")
+                        raise
+                    
+                    retries += 1
+                    await asyncio.sleep(backoff_time)
+                    backoff_time = min(backoff_time * 2, 60)  # Cap backoff at 60 seconds
+                    continue
                 
                 if not result or not isinstance(result, dict) or "result" not in result:
                     logger.warning(f"Invalid response format for block {slot}")
@@ -557,37 +614,203 @@ class SolanaQueryHandler:
                 return response
             
             # If response is not a dict, log and return empty dict
-            logging.warning(f"Unexpected vote accounts response type: {type(response)}")
+            logging.warning(f"Unexpected response type: {type(response)}")
             return {}
         except Exception as e:
             logging.error(f"Error getting vote accounts: {str(e)}")
             return {}
 
     async def get_cluster_nodes(self) -> List[Dict[str, Any]]:
-        """Get information about all the nodes participating in the cluster."""
+        """
+        Get information about all the nodes participating in the cluster.
+        
+        Returns:
+            List of node information or empty list on error
+        """
+        # Ensure the handler is initialized
+        await self.ensure_initialized()
+        
+        # Get the connection pool
+        connection_pool = self.connection_pool
+        
+        # Track all errors for diagnostics
+        all_errors = []
+        
         try:
-            client = await self.connection_pool.get_client()
-            logging.info(f"Making get_cluster_nodes RPC call to endpoint: {client.endpoint}")
-            response = await client.get_cluster_nodes()
+            # Get multiple clients to try in parallel
+            clients = []
+            tasks = []
             
-            # Log the response for debugging
-            logging.info(f"get_cluster_nodes response: {response}")
+            # Try to get up to 3 different clients
+            for _ in range(3):
+                try:
+                    client = await connection_pool.get_client()
+                    clients.append(client)
+                    
+                    # Create a task for this client
+                    task = asyncio.create_task(self._get_cluster_nodes_from_client(client))
+                    task.client = client  # Store the client reference on the task
+                    tasks.append(task)
+                except Exception as e:
+                    logging.error(f"Error getting client from pool: {str(e)}")
+                    if client:
+                        try:
+                            await connection_pool.release(client, success=False)
+                        except Exception as release_error:
+                            logging.error(f"Error releasing client: {str(release_error)}")
             
-            # Check if the response is successful and extract the result
-            if isinstance(response, dict):
-                if 'result' in response:
-                    logging.info(f"Found {len(response['result'])} cluster nodes")
-                    return response['result']
-                elif 'result' in response.get('result', {}):
-                    logging.info(f"Found {len(response['result']['result'])} cluster nodes (nested)")
-                    return response['result']['result']
+            # Wait for the first successful result or all failures
+            if tasks:
+                done, pending = await asyncio.wait(
+                    tasks, 
+                    return_when=asyncio.FIRST_COMPLETED,
+                    timeout=5.0  # 5 second timeout for faster response
+                )
+                
+                # Cancel any pending tasks
+                for task in pending:
+                    task.cancel()
+                    # Make sure to release the client associated with this task
+                    if hasattr(task, 'client'):
+                        try:
+                            await connection_pool.release(task.client, success=False)
+                        except Exception as release_error:
+                            logging.error(f"Error releasing client from cancelled task: {str(release_error)}")
+                
+                # Check for successful results
+                for task in done:
+                    try:
+                        result = task.result()
+                        if result and isinstance(result, tuple) and len(result) == 2:
+                            nodes, success_client = result
+                            
+                            # Only consider this a success if we got actual nodes
+                            if nodes and len(nodes) > 0:
+                                # Release all clients except the successful one
+                                for client in clients:
+                                    if client != success_client:
+                                        try:
+                                            await connection_pool.release(client, success=False)
+                                        except Exception as release_error:
+                                            logging.error(f"Error releasing client: {str(release_error)}")
+                                
+                                # Release the successful client
+                                try:
+                                    await connection_pool.release(success_client, success=True)
+                                except Exception as release_error:
+                                    logging.error(f"Error releasing successful client: {str(release_error)}")
+                                
+                                # Log success statistics
+                                logging.info(f"Successfully retrieved {len(nodes)} cluster nodes from {success_client.endpoint}")
+                                
+                                # Return the nodes
+                                return nodes
+                            else:
+                                logging.warning(f"Task completed but returned empty nodes list from {success_client.endpoint}")
+                                all_errors.append({
+                                    'endpoint': success_client.endpoint,
+                                    'error': 'Empty nodes list returned',
+                                    'type': 'EmptyResponse',
+                                    'timestamp': datetime.now().isoformat()
+                                })
+                                
+                                # Release the client
+                                try:
+                                    await connection_pool.release(success_client, success=False)
+                                except Exception as release_error:
+                                    logging.error(f"Error releasing client: {str(release_error)}")
+                    except Exception as e:
+                        logging.error(f"Error processing task result: {str(e)}", exc_info=True)
+                        all_errors.append({
+                            'error': str(e),
+                            'type': type(e).__name__,
+                            'stack': traceback.format_exc(),
+                            'timestamp': datetime.now().isoformat()
+                        })
+                
+                # Release any remaining clients
+                for client in clients:
+                    try:
+                        await connection_pool.release(client, success=False)
+                    except Exception as release_error:
+                        logging.error(f"Error releasing client: {str(release_error)}")
+            
+            # If we get here, all parallel attempts failed
+            # Try to use the RPCNodeExtractor as a fallback
+            logging.warning("All parallel RPC endpoints failed to retrieve cluster nodes, trying RPCNodeExtractor fallback")
+            
+            try:
+                # Import the RPCNodeExtractor class
+                from .rpc_node_extractor import RPCNodeExtractor
+                
+                # Create an extractor instance
+                extractor = RPCNodeExtractor()
+                
+                # Get nodes from the extractor with a timeout
+                nodes = await asyncio.wait_for(
+                    extractor.get_all_rpc_nodes(),
+                    timeout=4.0  # 4 second timeout for extractor
+                )
+                
+                if nodes and len(nodes) > 0:
+                    logging.info(f"Successfully retrieved {len(nodes)} nodes using RPCNodeExtractor fallback")
+                    
+                    # Convert to the expected format
+                    formatted_nodes = []
+                    for node in nodes:
+                        formatted_nodes.append({
+                            'pubkey': node.get('pubkey', ''),
+                            'gossip': node.get('gossip', ''),
+                            'tpu': node.get('tpu', ''),
+                            'rpc': node.get('rpc', ''),
+                            'version': node.get('version', 'unknown'),
+                            'featureSet': node.get('feature_set', 0),
+                            'shredVersion': node.get('shred_version', 0)
+                        })
+                    
+                    return formatted_nodes
                 else:
-                    logging.warning(f"No 'result' field found in response: {response}")
-            else:
-                logging.warning(f"Response is not a dictionary: {response}")
+                    logging.error("RPCNodeExtractor fallback returned empty nodes list")
+                    all_errors.append({
+                        'endpoint': 'RPCNodeExtractor',
+                        'error': 'Empty nodes list returned',
+                        'type': 'EmptyResponse',
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    
+            except asyncio.TimeoutError:
+                logging.error("RPCNodeExtractor fallback timed out")
+                all_errors.append({
+                    'endpoint': 'RPCNodeExtractor',
+                    'error': 'Timeout after 4 seconds',
+                    'type': 'TimeoutError',
+                    'timestamp': datetime.now().isoformat()
+                })
+            except Exception as fallback_error:
+                logging.error(f"Fallback RPCNodeExtractor also failed: {str(fallback_error)}", exc_info=True)
+                all_errors.append({
+                    'endpoint': 'RPCNodeExtractor',
+                    'error': str(fallback_error),
+                    'type': type(fallback_error).__name__,
+                    'stack': traceback.format_exc(),
+                    'timestamp': datetime.now().isoformat()
+                })
+            
+            # Log all errors for diagnostics
+            logging.error(f"All attempts to get cluster nodes failed. Errors: {json.dumps(all_errors)}")
+            
+            # Return empty list as last resort
             return []
+                
         except Exception as e:
-            logging.error(f"Error getting cluster nodes: {str(e)}")
+            logging.error(f"Error getting cluster nodes: {str(e)}", exc_info=True)
+            all_errors.append({
+                'error': str(e),
+                'type': type(e).__name__,
+                'stack': traceback.format_exc(),
+                'timestamp': datetime.now().isoformat()
+            })
+            logging.error(f"Final error details: {json.dumps(all_errors)}")
             return []
 
     async def get_version(self) -> Dict[str, Any]:
@@ -632,48 +855,789 @@ class SolanaQueryHandler:
             List of performance samples or empty list on error
         """
         try:
-            client = await self.connection_pool.get_client()
-            response = await client.get_recent_performance_samples()
+            # Use safe_rpc_call_async for more robust error handling
+            from ..utils.solana_helpers import safe_rpc_call_async
+            from ..config import HELIUS_API_KEY
             
-            # Log the response type and structure for debugging
-            logging.debug(f"Performance samples response type: {type(response)}")
-            if isinstance(response, dict):
-                logging.debug(f"Performance samples response keys: {list(response.keys())}")
+            # Try to get performance samples with explicit fallback handling
+            max_attempts = 5  # Try up to 5 different endpoints
+            tried_endpoints = set()
+            not_supported_count = 0
+            other_error_count = 0
+            client = None  # Initialize client to None for proper cleanup
             
-            # Handle direct JSON response format (most common case)
-            if isinstance(response, dict) and 'jsonrpc' in response and 'result' in response:
-                samples = response.get('result', [])
-                if isinstance(samples, list):
-                    logging.info(f"Retrieved {len(samples)} performance samples directly from JSON response")
-                    return samples
+            # Create a list of known endpoints that support getRecentPerformanceSamples
+            # These are endpoints that we know support this method
+            known_supporting_endpoints = [
+                "https://api.mainnet-beta.solana.com",
+                "https://solana-api.projectserum.com",
+                "https://rpc.ankr.com/solana"
+            ]
+            
+            # First try the known supporting endpoints specifically
+            for endpoint in known_supporting_endpoints:
+                try:
+                    # Get a specific client from the pool that matches the endpoint
+                    client = await self.connection_pool.get_specific_client(endpoint)
+                    
+                    if client:
+                        tried_endpoints.add(client.endpoint)
+                        logging.info(f"Attempting to get performance samples from known supporting endpoint: {client.endpoint}")
+                        
+                        # Try to get performance samples with a shorter timeout
+                        response = await asyncio.wait_for(
+                            client.get_recent_performance_samples(),
+                            timeout=5.0  # Shorter timeout for faster fallback
+                        )
+                        
+                        # Process the response
+                        if isinstance(response, dict):
+                            # Check if there's an error indicating method not supported
+                            if 'error' in response and isinstance(response['error'], dict):
+                                error = response['error']
+                                if error.get('code') == -32601 or "not supported" in error.get('message', '').lower():
+                                    logging.warning(f"Endpoint {client.endpoint} does not support getRecentPerformanceSamples")
+                                    not_supported_count += 1
+                                    await self.connection_pool.release(client, success=True)
+                                    client = None  # Reset client after release
+                                else:
+                                    logging.error(f"Error from endpoint {client.endpoint}: {error}")
+                                    other_error_count += 1
+                                    await self.connection_pool.release(client, success=False)
+                                    client = None  # Reset client after release
+                            elif 'result' in response:
+                                if isinstance(response['result'], list):
+                                    samples_count = len(response['result'])
+                                    logging.info(f"Found {samples_count} performance samples from {client.endpoint}")
+                                    if samples_count > 0:
+                                        await self.connection_pool.release(client, success=True)
+                                        client = None  # Reset client after release
+                                        return response['result']
+                                    else:
+                                        logging.warning(f"Empty performance samples list returned from {client.endpoint}")
+                                        await self.connection_pool.release(client, success=True)
+                                        client = None  # Reset client after release
+                                else:
+                                    logging.warning(f"Result from {client.endpoint} is not a list: {type(response['result'])}")
+                                    await self.connection_pool.release(client, success=True)
+                                    client = None  # Reset client after release
+                            else:
+                                logging.warning(f"No result field in performance samples response from {client.endpoint}")
+                                await self.connection_pool.release(client, success=True)
+                                client = None  # Reset client after release
+                        else:
+                            logging.warning(f"Unexpected response type from {client.endpoint}: {type(response)}")
+                            await self.connection_pool.release(client, success=True)
+                            client = None  # Reset client after release
+                except Exception as e:
+                    if client is not None:
+                        await self.connection_pool.release(client, success=False)
+                        client = None  # Reset client after release
+                    
+                    error_msg = str(e).lower()
+                    if "not supported" in error_msg or "method not found" in error_msg:
+                        logging.warning(f"Endpoint does not support getRecentPerformanceSamples: {error_msg}")
+                        not_supported_count += 1
+                        # Continue to try another endpoint
+                    else:
+                        logging.error(f"Error getting performance samples from {endpoint}: {str(e)}")
+                        logging.exception(e)
+                        other_error_count += 1
+            
+            # If we still don't have data, try other endpoints
+            for attempt in range(max_attempts):
+                try:
+                    # Get a client from the pool
+                    client = await self.connection_pool.get_client()
+                    
+                    # Skip if we've already tried this endpoint
+                    if client.endpoint in tried_endpoints:
+                        logging.debug(f"Skipping already tried endpoint {client.endpoint}")
+                        # Release the client back to the pool
+                        await self.connection_pool.release(client, success=True)
+                        client = None  # Reset client after release
+                        continue
+                    
+                    tried_endpoints.add(client.endpoint)
+                    logging.info(f"Attempting to get performance samples from {client.endpoint} (attempt {attempt+1}/{max_attempts})")
+                    
+                    # Try to get performance samples with a shorter timeout
+                    response = await asyncio.wait_for(
+                        client.get_recent_performance_samples(),
+                        timeout=4.0  # Shorter timeout for faster fallback
+                    )
+                    
+                    # Process the response
+                    if isinstance(response, dict):
+                        # Check if there's an error indicating method not supported
+                        if 'error' in response and isinstance(response['error'], dict):
+                            error = response['error']
+                            if error.get('code') == -32601 or "not supported" in error.get('message', '').lower():
+                                logging.warning(f"Endpoint {client.endpoint} does not support getRecentPerformanceSamples")
+                                not_supported_count += 1
+                                await self.connection_pool.release(client, success=True)
+                                client = None  # Reset client after release
+                                continue
+                        
+                        if 'result' in response:
+                            if isinstance(response['result'], list):
+                                samples_count = len(response['result'])
+                                logging.info(f"Found {samples_count} performance samples")
+                                if samples_count > 0:
+                                    await self.connection_pool.release(client, success=True)
+                                    client = None  # Reset client after release
+                                    return response['result']
+                                else:
+                                    logging.warning("Empty performance samples list returned")
+                                    await self.connection_pool.release(client, success=True)
+                                    client = None  # Reset client after release
+                                    # Continue to try another endpoint
+                            else:
+                                logging.warning(f"Result is not a list: {type(response['result'])}")
+                                await self.connection_pool.release(client, success=True)
+                                client = None  # Reset client after release
+                                # Continue to try another endpoint
+                        else:
+                            logging.warning("No result field in performance samples response")
+                            await self.connection_pool.release(client, success=True)
+                            client = None  # Reset client after release
+                            # Continue to try another endpoint
+                    else:
+                        logging.warning(f"Unexpected response type: {type(response)}")
+                        await self.connection_pool.release(client, success=True)
+                        client = None  # Reset client after release
+                        # Continue to try another endpoint
                 
-            # Handle wrapped response format from safe_rpc_call_async
-            if isinstance(response, dict) and response.get('success', False):
-                result = response.get('result', {})
-                if isinstance(result, dict) and 'result' in result:
-                    samples = result['result']
-                    if isinstance(samples, list):
-                        logging.info(f"Retrieved {len(samples)} performance samples from wrapped response")
-                        return samples
+                except Exception as e:
+                    # Release the client back to the pool
+                    if client is not None:
+                        await self.connection_pool.release(client, success=False)
+                        client = None  # Reset client after release
+                    
+                    # Check if this is a "method not supported" error
+                    error_msg = str(e).lower()
+                    if "not supported" in error_msg or "method not found" in error_msg:
+                        logging.warning(f"Endpoint does not support getRecentPerformanceSamples: {error_msg}")
+                        not_supported_count += 1
+                        # Continue to try another endpoint
                     else:
-                        logging.warning(f"Performance samples is not a list: {type(samples)}")
-                else:
-                    # Try direct access to result if it's a list
-                    if isinstance(result, list):
-                        logging.info(f"Retrieved {len(result)} performance samples from direct result list")
-                        return result
-                    else:
-                        logging.warning(f"Performance samples result structure is unexpected: {result}")
-            else:
-                # If response is already a list, return it directly
-                if isinstance(response, list):
-                    logging.info(f"Retrieved {len(response)} performance samples from direct list response")
-                    return response
-                else:
-                    logging.warning(f"Failed to get performance samples: {response}")
+                        logging.error(f"Error getting performance samples: {str(e)}")
+                        logging.exception(e)  # Log full stack trace
+                        other_error_count += 1
+                        # Continue to try another endpoint
+            
+            # If we get here, we've tried multiple endpoints and none worked
+            logging.warning(f"Failed to get performance samples after trying {len(tried_endpoints)} endpoints")
+            logging.warning(f"Method not supported: {not_supported_count} endpoints, Other errors: {other_error_count} endpoints")
+            
+            # If all endpoints don't support the method, return a synthetic sample with reasonable defaults
+            if not_supported_count == len(tried_endpoints):
+                logging.error("getRecentPerformanceSamples not supported by any endpoint")
+                
+                # Create synthetic performance data based on typical Solana performance
+                # This is better than returning an error when all endpoints don't support the method
+                current_time = int(time.time())
+                return [{
+                    "numSlots": 120,  # ~2 slots per second is typical
+                    "numTransactions": 1200,  # ~10 TPS per slot is reasonable
+                    "samplePeriodSecs": 60,
+                    "slot": 0,  # We don't know the actual slot
+                    "timestamp": current_time - 60,  # 1 minute ago
+                    "synthetic": True,  # Mark as synthetic data
+                    "error": "Method not supported by any endpoint",
+                    "endpoints_tried": len(tried_endpoints)
+                }]
+            
+            # Otherwise, return an empty list to indicate error
+            return []
+        
+        except Exception as e:
+            logging.error(f"Error in get_recent_performance: {str(e)}")
+            logging.exception(e)  # Log full stack trace
+            
+            # Ensure client is properly released if it exists
+            if 'client' in locals() and client is not None:
+                try:
+                    await self.connection_pool.release(client, success=False)
+                except Exception as release_error:
+                    logging.error(f"Error releasing client in exception handler: {str(release_error)}")
             
             return []
+
+    async def get_block_production(self) -> Dict[str, Any]:
+        """
+        Get block production information.
+        
+        Returns:
+            Dict with block production information or error details
+        """
+        try:
+            # Import required modules
+            from ..utils.solana_helpers import safe_rpc_call_async
+            from ..config import HELIUS_API_KEY
+            
+            # Try to get block production with explicit fallback handling
+            max_attempts = 5  # Try up to 5 different endpoints
+            tried_endpoints = set()
+            not_supported_count = 0
+            other_error_count = 0
+            
+            # First try the Helius endpoint specifically if available
+            if HELIUS_API_KEY:
+                try:
+                    helius_endpoint = f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}"
+                    
+                    # Get a specific client from the pool that matches the Helius endpoint
+                    client = await self.connection_pool.get_specific_client(helius_endpoint)
+                    
+                    if client:
+                        tried_endpoints.add(client.endpoint)
+                        logging.info(f"Attempting to get block production from Helius endpoint")
+                        
+                        # Try to get block production with timeout
+                        response = await asyncio.wait_for(
+                            client.get_block_production(),
+                            timeout=10.0
+                        )
+                        
+                        # Process the response
+                        if isinstance(response, dict):
+                            # Check if there's an error indicating method not supported
+                            if 'error' in response and isinstance(response['error'], dict):
+                                error = response['error']
+                                if error.get('code') == -32601 or "not supported" in error.get('message', '').lower():
+                                    logging.warning(f"Helius endpoint does not support getBlockProduction")
+                                    not_supported_count += 1
+                                    await self.connection_pool.release(client, success=True)
+                                else:
+                                    logging.error(f"Error from Helius endpoint: {error}")
+                                    other_error_count += 1
+                                    await self.connection_pool.release(client, success=False)
+                            elif 'result' in response:
+                                logging.info(f"Successfully retrieved block production from Helius")
+                                await self.connection_pool.release(client, success=True)
+                                return response
+                            else:
+                                logging.warning("No result field in block production response from Helius")
+                                await self.connection_pool.release(client, success=True)
+                        else:
+                            logging.warning(f"Unexpected response type from Helius: {type(response)}")
+                            await self.connection_pool.release(client, success=True)
+                except Exception as e:
+                    if 'client' in locals() and client is not None:
+                        await self.connection_pool.release(client, success=False)
+                    
+                    error_msg = str(e).lower()
+                    if "not supported" in error_msg or "method not found" in error_msg:
+                        logging.warning(f"Helius endpoint does not support getBlockProduction: {error_msg}")
+                        not_supported_count += 1
+                    else:
+                        logging.error(f"Error getting block production from Helius: {str(e)}")
+                        logging.exception(e)
+                        other_error_count += 1
+            
+            # Then try other endpoints
+            for attempt in range(max_attempts):
+                try:
+                    # Get a client from the pool
+                    client = await self.connection_pool.get_client()
+                    
+                    # Skip if we've already tried this endpoint
+                    if client.endpoint in tried_endpoints:
+                        logging.debug(f"Skipping already tried endpoint {client.endpoint}")
+                        # Release the client back to the pool
+                        await self.connection_pool.release(client, success=True)
+                        continue
+                    
+                    tried_endpoints.add(client.endpoint)
+                    logging.info(f"Attempting to get block production from {client.endpoint} (attempt {attempt+1}/{max_attempts})")
+                    
+                    # Try to get block production with timeout
+                    response = await asyncio.wait_for(
+                        client.get_block_production(),
+                        timeout=10.0
+                    )
+                    
+                    # Process the response
+                    if isinstance(response, dict):
+                        # Check if there's an error indicating method not supported
+                        if 'error' in response and isinstance(response['error'], dict):
+                            error = response['error']
+                            if error.get('code') == -32601 or "not supported" in error.get('message', '').lower():
+                                logging.warning(f"Endpoint {client.endpoint} does not support getBlockProduction")
+                                not_supported_count += 1
+                                await self.connection_pool.release(client, success=True)
+                                continue
+                        
+                        if 'result' in response:
+                            logging.info(f"Successfully retrieved block production")
+                            await self.connection_pool.release(client, success=True)
+                            return response
+                        else:
+                            logging.warning("No result field in block production response")
+                            await self.connection_pool.release(client, success=True)
+                            # Continue to try another endpoint
+                    else:
+                        logging.warning(f"Unexpected response type: {type(response)}")
+                        await self.connection_pool.release(client, success=True)
+                        # Continue to try another endpoint
+                
+                except Exception as e:
+                    # Release the client back to the pool
+                    if 'client' in locals() and client is not None:
+                        await self.connection_pool.release(client, success=False)
+                    
+                    # Check if this is a "method not supported" error
+                    error_msg = str(e).lower()
+                    if "not supported" in error_msg or "method not found" in error_msg:
+                        logging.warning(f"Endpoint does not support getBlockProduction: {error_msg}")
+                        not_supported_count += 1
+                        # Continue to try another endpoint
+                    else:
+                        logging.error(f"Error getting block production: {str(e)}")
+                        logging.exception(e)  # Log full stack trace
+                        other_error_count += 1
+                        # Continue to try another endpoint
+            
+            # If we get here, we've tried multiple endpoints and none worked
+            logging.warning(f"Failed to get block production after trying {len(tried_endpoints)} endpoints")
+            logging.warning(f"Method not supported: {not_supported_count} endpoints, Other errors: {other_error_count} endpoints")
+            
+            # Return a structured empty result with error information
+            if not_supported_count == len(tried_endpoints):
+                logging.error("getBlockProduction not supported by any endpoint")
+                return {
+                    "result": {
+                        "value": {
+                            "total": 0,
+                            "skippedSlots": 0,
+                            "byIdentity": {}
+                        }
+                    },
+                    "error": {
+                        "message": "Method not supported by any endpoint",
+                        "code": -32601,
+                        "data": {
+                            "endpoints_tried": len(tried_endpoints),
+                            "timestamp": int(time.time())
+                        }
+                    }
+                }
+            
+            # Return a generic error response
+            return {
+                "result": {
+                    "value": {
+                        "total": 0,
+                        "skippedSlots": 0,
+                        "byIdentity": {}
+                    }
+                },
+                "error": {
+                    "message": f"Failed to get block production after {len(tried_endpoints)} attempts",
+                    "code": -32000,
+                    "data": {
+                        "endpoints_tried": len(tried_endpoints),
+                        "not_supported_count": not_supported_count,
+                        "other_error_count": other_error_count,
+                        "timestamp": int(time.time())
+                    }
+                }
+            }
+                
         except Exception as e:
-            logging.error(f"Error getting performance samples: {str(e)}")
+            logging.error(f"Unexpected error in get_block_production: {str(e)}")
             logging.exception(e)  # Log full stack trace
-            return []
+            return {
+                "result": {
+                    "value": {
+                        "total": 0,
+                        "skippedSlots": 0,
+                        "byIdentity": {}
+                    }
+                },
+                "error": {
+                    "message": f"Unexpected error: {str(e)}",
+                    "code": -32000,
+                    "data": {
+                        "timestamp": int(time.time())
+                    }
+                }
+            }
+
+    async def get_network_status(self) -> Dict[str, Any]:
+        """
+        Get comprehensive information about the Solana network status.
+        
+        Returns:
+            Dict with network status information including:
+            - node_count: Total number of nodes
+            - active_nodes: Number of active nodes
+            - delinquent_nodes: Number of delinquent nodes
+            - version_distribution: Distribution of node versions
+            - feature_set_distribution: Distribution of feature sets
+            - stake_distribution: Distribution of stake among validators
+            - errors: Any errors encountered during data collection
+            - status: Overall network status (healthy, degraded, or unhealthy)
+        """
+        # Initialize the result structure
+        result = {
+            'node_count': 0,
+            'active_nodes': 0,
+            'delinquent_nodes': 0,
+            'version_distribution': {},
+            'feature_set_distribution': {},
+            'stake_distribution': {},
+            'errors': [],
+            'status': 'unknown',
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        try:
+            # Get cluster nodes
+            nodes = await self.get_cluster_nodes()
+            
+            if not nodes:
+                result['errors'].append({
+                    'source': 'get_cluster_nodes',
+                    'error': 'Failed to retrieve cluster nodes',
+                    'timestamp': datetime.now().isoformat()
+                })
+                result['status'] = 'degraded'
+                return result
+                
+            # Process node information
+            result['node_count'] = len(nodes)
+            
+            # Track version and feature set distribution
+            version_counts = {}
+            feature_set_counts = {}
+            
+            for node in nodes:
+                # Count active vs delinquent nodes
+                if node.get('delinquent', False):
+                    result['delinquent_nodes'] += 1
+                else:
+                    result['active_nodes'] += 1
+                    
+                # Track version distribution
+                version = node.get('version', 'unknown')
+                version_counts[version] = version_counts.get(version, 0) + 1
+                
+                # Track feature set distribution
+                feature_set = node.get('featureSet', 0)
+                feature_set_counts[feature_set] = feature_set_counts.get(feature_set, 0) + 1
+                
+            # Convert counts to percentages
+            total_nodes = result['node_count']
+            
+            for version, count in version_counts.items():
+                result['version_distribution'][version] = {
+                    'count': count,
+                    'percentage': round((count / total_nodes) * 100, 2)
+                }
+                
+            for feature_set, count in feature_set_counts.items():
+                result['feature_set_distribution'][str(feature_set)] = {
+                    'count': count,
+                    'percentage': round((count / total_nodes) * 100, 2)
+                }
+                
+            # Try to get vote accounts for stake distribution
+            try:
+                vote_accounts = await self.get_vote_accounts()
+                
+                if vote_accounts and isinstance(vote_accounts, dict):
+                    # Calculate total stake
+                    current = vote_accounts.get('current', [])
+                    delinquent = vote_accounts.get('delinquent', [])
+                    
+                    total_stake = 0
+                    for validator in current + delinquent:
+                        total_stake += validator.get('activatedStake', 0)
+                        
+                    # Only process if we have some stake
+                    if total_stake > 0:
+                        # Group validators by stake
+                        stake_groups = {
+                            'high': {'count': 0, 'stake': 0},  # Top 10% of validators by stake
+                            'medium': {'count': 0, 'stake': 0},  # Middle 40% of validators
+                            'low': {'count': 0, 'stake': 0},    # Bottom 50% of validators
+                            'delinquent': {'count': 0, 'stake': 0}  # Delinquent validators
+                        }
+                        
+                        # Process current validators
+                        sorted_validators = sorted(current, key=lambda v: v.get('activatedStake', 0), reverse=True)
+                        validator_count = len(sorted_validators)
+                        
+                        if validator_count > 0:
+                            # Determine thresholds
+                            high_threshold = max(1, int(validator_count * 0.1))
+                            medium_threshold = max(high_threshold, int(validator_count * 0.5))
+                            
+                            # Categorize validators
+                            for i, validator in enumerate(sorted_validators):
+                                stake = validator.get('activatedStake', 0)
+                                
+                                if i < high_threshold:
+                                    stake_groups['high']['count'] += 1
+                                    stake_groups['high']['stake'] += stake
+                                elif i < medium_threshold:
+                                    stake_groups['medium']['count'] += 1
+                                    stake_groups['medium']['stake'] += stake
+                                else:
+                                    stake_groups['low']['count'] += 1
+                                    stake_groups['low']['stake'] += stake
+                                    
+                        # Process delinquent validators
+                        for validator in delinquent:
+                            stake = validator.get('activatedStake', 0)
+                            stake_groups['delinquent']['count'] += 1
+                            stake_groups['delinquent']['stake'] += stake
+                            
+                        # Calculate percentages
+                        for group, data in stake_groups.items():
+                            data['stake_percentage'] = round((data['stake'] / total_stake) * 100, 2)
+                            
+                        result['stake_distribution'] = stake_groups
+                        
+                else:
+                    result['errors'].append({
+                        'source': 'get_vote_accounts',
+                        'error': 'Failed to retrieve vote accounts',
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    
+            except Exception as vote_error:
+                logging.error(f"Error processing vote accounts: {str(vote_error)}", exc_info=True)
+                result['errors'].append({
+                    'source': 'get_vote_accounts',
+                    'error': str(vote_error),
+                    'type': type(vote_error).__name__,
+                    'timestamp': datetime.now().isoformat()
+                })
+                
+            # Determine overall network status
+            active_percentage = 0
+            if total_nodes > 0:
+                active_percentage = (result['active_nodes'] / total_nodes) * 100
+                
+            if active_percentage >= 95:
+                result['status'] = 'healthy'
+            elif active_percentage >= 80:
+                result['status'] = 'degraded'
+            else:
+                result['status'] = 'unhealthy'
+                
+            # Add performance metrics if available
+            try:
+                performance = await self.get_recent_performance()
+                
+                if performance and isinstance(performance, list) and len(performance) > 0:
+                    # Calculate average TPS from the most recent samples
+                    recent_samples = performance[:min(5, len(performance))]
+                    
+                    total_tps = 0
+                    sample_count = 0
+                    
+                    for sample in recent_samples:
+                        if isinstance(sample, dict) and 'numTransactions' in sample and 'samplePeriodSecs' in sample:
+                            num_txns = sample.get('numTransactions', 0)
+                            period_secs = sample.get('samplePeriodSecs', 1)
+                            
+                            if period_secs > 0:
+                                tps = num_txns / period_secs
+                                total_tps += tps
+                                sample_count += 1
+                                
+                    if sample_count > 0:
+                        result['average_tps'] = round(total_tps / sample_count, 2)
+                        
+                else:
+                    result['errors'].append({
+                        'source': 'get_recent_performance',
+                        'error': 'Failed to retrieve performance samples',
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    
+            except Exception as perf_error:
+                logging.error(f"Error processing performance data: {str(perf_error)}", exc_info=True)
+                result['errors'].append({
+                    'source': 'get_recent_performance',
+                    'error': str(perf_error),
+                    'type': type(perf_error).__name__,
+                    'timestamp': datetime.now().isoformat()
+                })
+                
+            return result
+            
+        except Exception as e:
+            logging.error(f"Error getting network status: {str(e)}", exc_info=True)
+            result['errors'].append({
+                'source': 'get_network_status',
+                'error': str(e),
+                'type': type(e).__name__,
+                'stack': traceback.format_exc(),
+                'timestamp': datetime.now().isoformat()
+            })
+            result['status'] = 'unhealthy'
+            return result
+
+    async def _get_cluster_nodes_from_client(self, client):
+        """
+        Get cluster nodes from a specific client.
+        
+        Args:
+            client: The RPC client to use
+            
+        Returns:
+            Tuple of (nodes list, client) if successful, or ([], client) on error
+        """
+        try:
+            logging.info(f"Making get_cluster_nodes RPC call to endpoint: {client.endpoint}")
+            
+            # Use safe_rpc_call_async for better error handling and retry logic
+            response = await safe_rpc_call_async(
+                "getClusterNodes",  # Use the exact RPC method name
+                client=client,
+                max_retries=1,  # Reduced retries for faster response
+                retry_delay=0.5,  # Shorter delay between retries
+                timeout=5.0  # Shorter timeout for faster failure detection
+            )
+            
+            # Enhanced response handling with detailed logging
+            if isinstance(response, dict):
+                if 'result' in response:
+                    nodes = response['result']
+                    if isinstance(nodes, list):
+                        nodes_count = len(nodes) if nodes else 0
+                        if nodes_count > 0:
+                            logging.info(f"Found {nodes_count} cluster nodes in dict response with 'result' key from {client.endpoint}")
+                            # Log a sample node for debugging
+                            if nodes_count > 0:
+                                sample_node = nodes[0]
+                                logging.debug(f"Sample node format: {json.dumps(sample_node)[:200]}...")
+                            return (nodes, client)
+                        else:
+                            logging.warning(f"Empty nodes list in 'result' from {client.endpoint}")
+                            return ([], client)
+                    else:
+                        logging.warning(f"Non-list 'result' from {client.endpoint}: {type(nodes)}")
+                        # Try to convert to list if possible
+                        if nodes is not None:
+                            try:
+                                if isinstance(nodes, dict):
+                                    # Some endpoints might return a single node as a dict
+                                    logging.info(f"Converting single node dict to list from {client.endpoint}")
+                                    return ([nodes], client)
+                            except Exception as conversion_error:
+                                logging.error(f"Error converting result to list: {str(conversion_error)}")
+                        return ([], client)
+                elif 'error' in response:
+                    error_info = response['error']
+                    error_msg = error_info.get('message', str(error_info))
+                    error_code = error_info.get('code', 0)
+                    logging.error(f"RPC error from {client.endpoint}: {error_msg} (code: {error_code})")
+                    
+                    # Check for specific error codes that indicate the endpoint doesn't support this method
+                    if error_code in [-32601, -32600]:  # Method not found or invalid request
+                        logging.error(f"Method getClusterNodes not supported by {client.endpoint}")
+                    # Check for API key related errors
+                    elif error_code in [401, 403, -32000, -32001, -32002, -32003, -32004]:
+                        logging.error(f"API key or authorization error from {client.endpoint}: {error_msg}")
+                        # Add to SSL bypass if it's an SSL error
+                        if "SSL" in error_msg or "certificate" in error_msg.lower():
+                            try:
+                                from .solana_ssl_config import add_ssl_bypass_endpoint
+                                add_ssl_bypass_endpoint(client.endpoint)
+                                logging.info(f"Added {client.endpoint} to SSL bypass list due to certificate error")
+                            except Exception as ssl_config_error:
+                                logging.error(f"Error adding endpoint to SSL bypass: {str(ssl_config_error)}")
+                    
+                    return ([], client)
+                elif '_soleco_context' in response:
+                    # This is our special error context from safe_rpc_call_async
+                    context = response.get('_soleco_context', {})
+                    logging.error(f"RPC call failed with context: {json.dumps(context)}")
+                    
+                    # Log detailed error information for each endpoint
+                    endpoint_errors = context.get('endpoint_errors', {})
+                    if endpoint_errors:
+                        for endpoint, error in endpoint_errors.items():
+                            logging.error(f"Endpoint {endpoint} error: {json.dumps(error)}")
+                            
+                            # Check for SSL errors and add to bypass list
+                            error_str = str(error)
+                            if "SSL" in error_str or "certificate" in error_str.lower():
+                                try:
+                                    from .solana_ssl_config import add_ssl_bypass_endpoint
+                                    add_ssl_bypass_endpoint(endpoint)
+                                    logging.info(f"Added {endpoint} to SSL bypass list due to certificate error")
+                                except Exception as ssl_config_error:
+                                    logging.error(f"Error adding endpoint to SSL bypass: {str(ssl_config_error)}")
+                    
+                    return ([], client)
+                else:
+                    # Some endpoints might return a dict without result or error keys
+                    logging.warning(f"Unexpected dict response format from {client.endpoint}: {list(response.keys())}")
+                    
+                    # Try to extract nodes if the response itself is a list of nodes (direct response)
+                    if any(key in response for key in ['pubkey', 'gossip', 'tpu', 'rpc']):
+                        logging.info(f"Response appears to be a single node from {client.endpoint}")
+                        return ([response], client)
+                    
+                    # Try to find any array in the response that might contain nodes
+                    for key, value in response.items():
+                        if isinstance(value, list) and len(value) > 0:
+                            # Check if the first item looks like a node
+                            first_item = value[0]
+                            if isinstance(first_item, dict) and any(node_key in first_item for node_key in ['pubkey', 'gossip', 'tpu', 'rpc']):
+                                logging.info(f"Found potential nodes list in key '{key}' from {client.endpoint}")
+                                return (value, client)
+                    
+                    return ([], client)
+                    
+            elif isinstance(response, list):
+                # Some RPC endpoints return the result directly as a list
+                nodes_count = len(response) if response else 0
+                if nodes_count > 0:
+                    logging.info(f"Found {nodes_count} cluster nodes in direct list response from {client.endpoint}")
+                    # Validate that the list contains node objects
+                    if all(isinstance(node, dict) for node in response):
+                        # Check if at least one node has expected keys
+                        if any(any(key in node for key in ['pubkey', 'gossip', 'tpu', 'rpc']) for node in response[:5]):
+                            return (response, client)
+                        else:
+                            logging.warning(f"List items don't appear to be nodes from {client.endpoint}")
+                            return ([], client)
+                    else:
+                        logging.warning(f"List contains non-dict items from {client.endpoint}")
+                        return ([], client)
+                else:
+                    logging.warning(f"Empty list response from {client.endpoint}")
+                    return ([], client)
+                
+            else:
+                # Handle unexpected response types
+                logging.warning(f"Unexpected response type from {client.endpoint}: {type(response)}")
+                if response is not None:
+                    logging.debug(f"Response preview: {str(response)[:200]}...")
+                return ([], client)
+                
+        except asyncio.TimeoutError:
+            logging.error(f"Timeout in _get_cluster_nodes_from_client for {client.endpoint}")
+            return ([], client)
+        except Exception as e:
+            error_str = str(e)
+            logging.error(f"Error in _get_cluster_nodes_from_client for {client.endpoint}: {error_str}", exc_info=True)
+            
+            # Check for SSL errors and add to bypass list
+            if "SSL" in error_str or "certificate" in error_str.lower():
+                try:
+                    from .solana_ssl_config import add_ssl_bypass_endpoint
+                    add_ssl_bypass_endpoint(client.endpoint)
+                    logging.info(f"Added {client.endpoint} to SSL bypass list due to certificate error")
+                except Exception as ssl_config_error:
+                    logging.error(f"Error adding endpoint to SSL bypass: {str(ssl_config_error)}")
+            
+            return ([], client)

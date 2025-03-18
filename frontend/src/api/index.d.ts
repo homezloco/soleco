@@ -15,10 +15,16 @@ declare module 'api' {
   export interface NetworkSummary {
     total_nodes?: number;
     rpc_nodes_available?: number;
+    rpc_availability_percentage?: number;
     latest_version?: string;
+    current_epoch?: number;
+    epoch_progress?: number;
+    slot_height?: number;
+    average_slot_time_ms?: number;
+    transactions_per_second?: number;
+    // Keep these for backward compatibility
     nodes_on_latest_version_percentage?: number;
     version_distribution?: any[];
-    rpc_availability_percentage?: number;
     total_versions_in_use?: number;
     total_feature_sets_in_use?: number;
   }

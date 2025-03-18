@@ -49,14 +49,38 @@ class PumpDataCollector:
             }
             
             logger.info(f"Fetching latest tokens from Pump.fun API: {url}")
+            
+            # Make the request
             response = await self.client.get(url, params=params)
+            
+            # Check for successful response
+            if response.status_code == 404:
+                # Try alternative endpoint without /api prefix
+                alternative_url = url.replace("/api/coins/latest", "/coins/latest")
+                logger.warning(f"API endpoint not found, trying alternative URL: {alternative_url}")
+                response = await self.client.get(alternative_url, params=params)
+                
             response.raise_for_status()
             
+            # Parse the response
             data = response.json()
-            logger.info(f"Fetched {len(data)} tokens from Pump.fun API")
+            
+            # Check if the response contains the expected data
+            if not isinstance(data, list):
+                logger.warning(f"Unexpected response format from Pump.fun API: {data}")
+                return []
+                
+            logger.info(f"Successfully fetched {len(data)} tokens from Pump.fun API")
             return data
+        except httpx.HTTPStatusError as e:
+            logger.error(f"Error fetching latest tokens: {e.response.status_code} {e.response.reason_phrase}")
+            logger.error(f"Response content: {e.response.text}")
+            return []
+        except httpx.RequestError as e:
+            logger.error(f"Error fetching latest tokens: {str(e)}")
+            return []
         except Exception as e:
-            logger.error(f"Error fetching latest tokens: {e}")
+            logger.error(f"Unexpected error fetching latest tokens: {str(e)}")
             return []
             
     async def store_token_data(self, tokens: List[Dict[str, Any]]) -> int:

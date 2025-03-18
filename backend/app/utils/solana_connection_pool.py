@@ -62,8 +62,8 @@ performance_cache = SimpleCache(ttl_seconds=30)
 block_production_cache = SimpleCache(ttl_seconds=60)
 # Network status cache - 15 seconds TTL
 network_status_cache = SimpleCache(ttl_seconds=15)
-# RPC nodes cache - 5 minutes TTL
-rpc_nodes_cache = SimpleCache(ttl_seconds=300)
+# RPC nodes cache - 2 minutes TTL
+rpc_nodes_cache = SimpleCache(ttl_seconds=120)
 # Mint analytics cache - 60 seconds TTL
 mint_analytics_cache = SimpleCache(ttl_seconds=60)
 
@@ -103,12 +103,15 @@ class SolanaConnectionPool:
         self.current_endpoint = 0
         self._initialized = False
         
-    async def initialize(self):
+    async def initialize(self, endpoints=None):
         """Initialize connections to all endpoints"""
+        if endpoints is None:
+            endpoints = self.rpc_endpoints
+            
         if self._initialized:
             return
             
-        for endpoint in self.rpc_endpoints:
+        for endpoint in endpoints:
             url = endpoint["url"]
             name = endpoint["name"]
             
@@ -345,6 +348,44 @@ class SolanaConnectionPool:
                 result = await client.get_version()
         """
         return self.ClientContextManager(self)
+        
+    async def get_specific_client(self, target_endpoint: str) -> Optional[AsyncClient]:
+        """
+        Get a client for a specific endpoint.
+        
+        Args:
+            target_endpoint: The endpoint URL to get a client for
+            
+        Returns:
+            AsyncClient or None if the endpoint is not in the pool
+        """
+        try:
+            # Normalize the endpoint URL for comparison
+            target_endpoint = target_endpoint.strip().rstrip('/')
+            
+            # First check if we already have a client for this endpoint
+            for endpoint, client in self.clients.items():
+                normalized_endpoint = endpoint.strip().rstrip('/')
+                if normalized_endpoint == target_endpoint:
+                    logger.debug(f"Found existing client for endpoint {target_endpoint}")
+                    return client
+                
+            # If not found by exact match, try to find by partial match (for API keys)
+            for endpoint, client in self.clients.items():
+                # For Helius endpoints, the API key might be different but the base URL is the same
+                if "helius-rpc.com" in endpoint.lower() and "helius-rpc.com" in target_endpoint.lower():
+                    logger.debug(f"Found Helius client (different API key) for {target_endpoint}")
+                    return client
+            
+            # If we don't have a client for this endpoint, create one
+            logger.info(f"Creating new client for specific endpoint {target_endpoint}")
+            client = AsyncClient(target_endpoint)
+            self.clients[target_endpoint] = client
+            return client
+            
+        except Exception as e:
+            logger.error(f"Error getting specific client for {target_endpoint}: {str(e)}")
+            return None
         
     def _sanitize_url(self, url):
         """

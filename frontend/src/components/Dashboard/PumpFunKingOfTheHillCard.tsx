@@ -52,7 +52,7 @@ const PumpFunKingOfTheHillCard: React.FC<PumpFunKingOfTheHillCardProps> = ({ inc
   const queryClient = useQueryClient();
   const { data, isLoading, error, isError, refetch } = useQuery(
     'pumpfun-king-of-the-hill',
-    () => pumpFunApi.getKingOfTheHill(includeNsfw), // Use the prop value
+    () => pumpFunApi.getKingOfTheHill(includeNsfw, false), // Use include_nsfw, don't force refresh by default
     { 
       refetchInterval: 30000, // Refresh every 30 seconds
       retry: 2,
@@ -72,8 +72,14 @@ const PumpFunKingOfTheHillCard: React.FC<PumpFunKingOfTheHillCardProps> = ({ inc
 
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   
-  const handleRetry = () => {
-    queryClient.invalidateQueries('pumpfun-king-of-the-hill');
+  const handleRetry = async () => {
+    // Force refresh when manually retrying
+    try {
+      await pumpFunApi.getKingOfTheHill(includeNsfw, true); // Force refresh
+      refetch();
+    } catch (err) {
+      console.error('Error during manual refresh:', err);
+    }
   };
 
   // Update time remaining every second
@@ -144,9 +150,10 @@ const PumpFunKingOfTheHillCard: React.FC<PumpFunKingOfTheHillCardProps> = ({ inc
     );
   }
 
-  if (isError) {
+  if (isError || !data || !data.mint) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     const isRateLimitError = errorMessage.includes('429') || errorMessage.includes('rate limit');
+    const isDataMissing = !data || !data.mint;
     
     return (
       <Card>
@@ -157,11 +164,15 @@ const PumpFunKingOfTheHillCard: React.FC<PumpFunKingOfTheHillCardProps> = ({ inc
           <Box textAlign="center" py={4}>
             <Text color="red.500" mb={3}>
               {isRateLimitError 
-                ? 'Pump.fun API rate limit exceeded. Please try again later.' 
-                : 'Error loading King of the Hill data'}
+                ? 'API rate limit exceeded. Please try again later.' 
+                : isDataMissing
+                  ? 'No King of the Hill data available at this time.'
+                  : 'Error loading King of the Hill data'}
             </Text>
             <Text fontSize="sm" color="gray.500" mb={4}>
-              The Pump.fun API may be experiencing issues or rate limiting.
+              {isDataMissing 
+                ? 'There may not be a current King of the Hill, or the API may be experiencing issues.'
+                : 'Our backend API may be experiencing issues or rate limiting.'}
             </Text>
             <Button 
               colorScheme="blue" 

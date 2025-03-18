@@ -24,15 +24,15 @@ export default defineConfig({
     host: '0.0.0.0', // Bind to all interfaces
     proxy: {
       '/api': {
-        target: 'http://172.28.118.135:8001',
+        target: 'http://localhost:8001',
         changeOrigin: true,
         secure: false,
       }
     }
   },
   define: {
-    'import.meta.env.VITE_BACKEND_URL': JSON.stringify(process.env.VITE_BACKEND_URL || '/api'),
-    'import.meta.env.VITE_FRONTEND_URL': JSON.stringify(process.env.VITE_FRONTEND_URL || 'http://localhost:5181')
+    // Vite automatically loads variables from .env files with the VITE_ prefix
+    // We don't need to explicitly define them here
   },
   // Optimize dependencies
   optimizeDeps: {

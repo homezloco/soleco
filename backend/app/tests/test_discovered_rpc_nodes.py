@@ -177,7 +177,7 @@ async def test_endpoint_with_both_protocols(endpoint: str, timeout: float = 5.0)
 
 async def test_multiple_endpoints(endpoints: List[str], timeout: float = 5.0) -> Dict[str, Any]:
     """
-    Test multiple RPC endpoints concurrently.
+    Test multiple RPC endpoints with both HTTP and HTTPS protocols.
     
     Args:
         endpoints: List of RPC endpoints to test
@@ -187,16 +187,18 @@ async def test_multiple_endpoints(endpoints: List[str], timeout: float = 5.0) ->
         Dict[str, Any]: Test results including successful and failed endpoints.
     """
     if not endpoints:
-        logger.warning("No endpoints to test!")
+        logger.warning("No endpoints to test")
         return {"successful": [], "failed": [], "success_rate": 0}
     
     # Remove duplicates while preserving order
     unique_endpoints = []
     seen = set()
     for endpoint in endpoints:
-        if endpoint not in seen:
+        # Convert endpoint to a hashable type (string) if it's a list
+        endpoint_key = str(endpoint) if isinstance(endpoint, (list, dict)) else endpoint
+        if endpoint_key not in seen:
             unique_endpoints.append(endpoint)
-            seen.add(endpoint)
+            seen.add(endpoint_key)
     
     logger.info(f"Testing {len(unique_endpoints)} unique endpoints...")
     

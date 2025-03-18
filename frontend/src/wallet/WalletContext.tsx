@@ -62,7 +62,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
 
     const apiClient = axios.create({
         baseURL: import.meta.env.VITE_BACKEND_URL || '/api',
-        withCredentials: true,
+        withCredentials: false, // Changed from true to false to avoid CORS issues
         timeout: 30000 // Increased timeout to 30 seconds
     });
 

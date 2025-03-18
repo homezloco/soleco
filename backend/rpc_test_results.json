@@ -2090,9 +2090,9 @@
       "response_time": 24.605
     },
     {
-      "endpoint": "https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70",
+      "endpoint": "https://mainnet.helius-rpc.com/?api-key=your_helius_api_key",
       "status": "error",
-      "error": "Failed to connect to https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70: Request timed out: ",
+      "error": "Failed to connect to https://mainnet.helius-rpc.com/?api-key=your_helius_api_key: Request timed out: ",
       "response_time": 24.376
     },
     {

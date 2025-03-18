@@ -3,33 +3,33 @@ Solana router module for handling Solana blockchain interactions
 """
 from typing import Dict, List, Optional, Any, Union
 import traceback
-from fastapi import APIRouter, HTTPException, Query, Path
+from fastapi import APIRouter, HTTPException, Query, Path, Depends
 from solders.pubkey import Pubkey
 from solders.transaction import Transaction
 from solders.system_program import ID as SYSTEM_PROGRAM_ID
 import time
 import logging
 import json
+import asyncio
 from datetime import datetime, timezone
 from collections import defaultdict
-import asyncio
 
 from ..utils.solana_rpc import (
     SolanaConnectionPool, 
     get_connection_pool,
     SolanaClient,
-    create_robust_client
+    create_robust_client,
+    DEFAULT_RPC_ENDPOINTS
 )
-from ..utils.solana_errors import RetryableError, RPCError
 from ..utils.solana_query import SolanaQueryHandler
-from ..utils.solana_response import (
-    MintHandler,
-    ResponseHandler,
-    SolanaResponseManager
-)
-from ..utils.handlers.network_status_handler import NetworkStatusHandler
+from ..utils.solana_errors import RetryableError, RPCError
 from ..utils.handlers.rpc_node_extractor import RPCNodeExtractor
-from ..utils.solana_connection_pool import performance_cache
+from ..database.sqlite import db_cache
+from ..constants.cache import (
+    NETWORK_STATUS_CACHE_TTL,
+    PERFORMANCE_METRICS_CACHE_TTL,
+    RPC_NODES_CACHE_TTL
+)
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -450,7 +450,6 @@ async def safe_rpc_call_async(client, method, *args, **kwargs):
         return {
             'success': False,
             'error': str(e),
-            'traceback': traceback.format_exc(),
             'method': method,
             'args': str(args),
             'kwargs': str(kwargs),
@@ -599,7 +598,7 @@ def get_recent_blocks(client=None, **kwargs):
 router = APIRouter(
     prefix="/solana",
     tags=["Soleco"],
-    responses={404: {"description": "Not found"}}
+    responses={404: {"description": "Not found"}},
 )
 
 # Initialize handlers
@@ -611,9 +610,30 @@ rpc_node_extractor = None
 async def initialize_handlers():
     """Initialize connection pool and handlers."""
     global solana_query_handler, response_handler, network_handler, rpc_node_extractor
-    if solana_query_handler is None:
-        connection_pool = await get_connection_pool()
-        solana_query_handler = SolanaQueryHandler(connection_pool)
+    
+    try:
+        logger.info("Initializing Solana handlers")
+        
+        # Get connection pool with error handling
+        try:
+            connection_pool = await get_connection_pool()
+            if connection_pool is None:
+                logger.error("Failed to get connection pool")
+                return False
+        except Exception as pool_error:
+            logger.error(f"Error getting connection pool: {str(pool_error)}", exc_info=True)
+            return False
+        
+        # Initialize the SolanaQueryHandler
+        try:
+            solana_query_handler = SolanaQueryHandler(connection_pool)
+            # Ensure the handler is properly initialized
+            if hasattr(solana_query_handler, 'ensure_initialized'):
+                await solana_query_handler.ensure_initialized()
+            logger.info("SolanaQueryHandler initialized successfully")
+        except Exception as query_error:
+            logger.error(f"Error initializing SolanaQueryHandler: {str(query_error)}", exc_info=True)
+            return False
         
         # Create an EndpointConfig for the response manager
         from ..utils.solana_types import EndpointConfig
@@ -626,19 +646,42 @@ async def initialize_handlers():
         )
         
         # Create a SolanaResponseManager with the config
-        response_manager = SolanaResponseManager(default_endpoint_config)
+        try:
+            response_manager = SolanaResponseManager(default_endpoint_config)
+            # Initialize the ResponseHandler with the manager
+            response_handler = ResponseHandler(response_manager)
+            logger.info("ResponseHandler initialized successfully")
+        except Exception as response_error:
+            logger.error(f"Error initializing ResponseHandler: {str(response_error)}", exc_info=True)
+            return False
         
-        # Initialize the ResponseHandler with the manager
-        response_handler = ResponseHandler(response_manager)
+        # Initialize the NetworkStatusHandler
+        try:
+            network_handler = NetworkStatusHandler(solana_query_handler)
+            logger.info("NetworkStatusHandler initialized successfully")
+        except Exception as network_error:
+            logger.error(f"Error initializing NetworkStatusHandler: {str(network_error)}", exc_info=True)
+            return False
         
-        network_handler = NetworkStatusHandler(solana_query_handler)
-        rpc_node_extractor = RPCNodeExtractor(solana_query_handler)
-        logger.info("Initialized Solana handlers")
+        # Initialize the RPCNodeExtractor
+        try:
+            rpc_node_extractor = RPCNodeExtractor(solana_query_handler)
+            logger.info("RPCNodeExtractor initialized successfully")
+        except Exception as extractor_error:
+            logger.error(f"Error initializing RPCNodeExtractor: {str(extractor_error)}", exc_info=True)
+            return False
+        
+        logger.info("All Solana handlers initialized successfully")
+        return True
+    except Exception as e:
+        logger.error(f"Unexpected error during handler initialization: {str(e)}", exc_info=True)
+        return False
 
-@router.get("/network/status", summary="Get Comprehensive Solana Network Status", tags=["Soleco"])
+@router.get("/network/status", summary="Solana Network Status")
 async def get_network_status(
-    summary_only: bool = Query(False, description="Return only the network summary without detailed node information")
-) -> Dict[str, Any]:
+    summary_only: bool = Query(False, description="Return only the network summary without detailed node information"),
+    refresh: bool = Query(False, description="Force refresh from Solana RPC")
+):
     """
     Retrieve comprehensive Solana network status with robust error handling.
     
@@ -646,135 +689,127 @@ async def get_network_status(
     including health, node information, version distribution, and performance metrics.
     
     - **summary_only**: When true, returns only summary information without the detailed node list
-    
-    Returns a JSON object containing:
-    
-    - **status**: Overall network health status (healthy, degraded, error)
-    - **errors**: Any errors encountered during data collection
-    - **timestamp**: When the data was retrieved
-    - **network_summary**: Summary statistics including:
-      - **total_nodes**: Total number of nodes in the network
-      - **rpc_nodes_available**: Number of nodes providing RPC services
-      - **rpc_availability_percentage**: Percentage of nodes providing RPC services
-      - **latest_version**: Latest Solana version detected in the network
-      - **nodes_on_latest_version_percentage**: Percentage of nodes on the latest version
-      - **version_distribution**: Distribution of node versions (top 5)
-      - **total_versions_in_use**: Total number of different versions in use
-      - **total_feature_sets_in_use**: Total number of different feature sets in use
-    - **cluster_nodes**: Information about cluster nodes
-    - **network_version**: Current network version information
-    - **epoch_info**: Current epoch information
-    - **performance_metrics**: Network performance metrics
+    - **refresh**: When true, forces a refresh from the Solana RPC instead of using cached data
     """
     try:
-        # Initialize handlers if needed
-        await initialize_handlers()
-
-        # Get comprehensive status
-        status_data = await network_handler.get_comprehensive_status()
+        # Create cache key based on parameters
+        params = {
+            "summary_only": summary_only
+        }
         
-        # If summary_only is True, remove the detailed node list
-        if summary_only and 'cluster_nodes' in status_data and 'nodes' in status_data['cluster_nodes']:
-            # Save the total nodes count
-            total_nodes = status_data['cluster_nodes']['total_nodes']
-            # Remove the detailed node list
-            status_data['cluster_nodes'].pop('nodes', None)
-            # Ensure total_nodes is still present
-            status_data['cluster_nodes']['total_nodes'] = total_nodes
-            
-        return status_data
-    
+        # Try to get from cache if not forcing refresh
+        if not refresh:
+            cached_data = db_cache.get_cached_data("network-status", params, NETWORK_STATUS_CACHE_TTL)
+            if cached_data:
+                logging.info("Retrieved network status from cache")
+                return cached_data
+        
+        # Initialize handlers if needed
+        if network_handler is None:
+            initialization_success = await initialize_handlers()
+            if not initialization_success or network_handler is None:
+                return {
+                    "status": "error",
+                    "error": "Failed to initialize network status handler",
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
+        
+        # Get comprehensive network status
+        result = await network_handler.get_comprehensive_status(summary_only=summary_only)
+        
+        # Cache the response
+        db_cache.cache_data("network-status", result, params, NETWORK_STATUS_CACHE_TTL)
+        
+        return result
     except Exception as e:
-        logger.error(f"Error retrieving network status: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail={
-                'error': 'Failed to retrieve network status',
-                'message': str(e)
-            }
-        )
+        logger.error(f"Error retrieving network status: {str(e)}", exc_info=True)
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "traceback": traceback.format_exc()
+        }
 
 @router.get("/token/{token_address}", summary="Get SPL Token Information")
 async def get_token_info(
     token_address: str = Path(..., description="SPL Token contract address"),
-    wallet_address: Optional[str] = Query(None, description="Wallet address to check token balance")
-) -> Dict[str, Any]:
+    wallet_address: Optional[str] = Query(None, description="Wallet address to check token balance"),
+    refresh: bool = Query(False, description="Force refresh from Solana RPC")
+):
     """
     Retrieve comprehensive SPL Token information with robust error handling
     
     Args:
         token_address: Contract address of the token
         wallet_address: Optional wallet address to check balance
+        refresh: Force refresh from Solana RPC
     
     Returns:
         Dict: Detailed token information
     """
     try:
-        # Get connection pool
-        pool = await get_connection_pool()
-        
-        # Create query handler
-        query_handler = SolanaQueryHandler(pool)
-        
-        # Get token transactions
-        token_txs = await query_handler.get_program_transactions(
-            program_id=TOKEN_PROGRAM_ID,
-            address=token_address,
-            limit=100
-        )
-        
-        # Process token info
-        token_info = {
-            'address': token_address,
-            'transactions': [],
-            'holders': set(),
-            'total_volume': 0,
-            'last_activity': None
+        # Create cache key based on parameters
+        params = {
+            "token_address": token_address,
+            "wallet_address": wallet_address
         }
         
-        for tx in token_txs:
-            # Extract transaction info
-            signature = tx.get('transaction', {}).get('signatures', [''])[0]
-            block_time = tx.get('blockTime', 0)
-            
-            # Update token info
-            token_info['transactions'].append({
-                'signature': signature,
-                'block_time': block_time,
-                'type': tx.get('type', 'unknown')
-            })
-            
-            # Update last activity
-            if not token_info['last_activity'] or block_time > token_info['last_activity']:
-                token_info['last_activity'] = block_time
-                
-        # Get wallet balance if requested
-        if wallet_address:
-            try:
-                balance = await pool.get_client().get_token_account_balance(wallet_address)
-                token_info['wallet_balance'] = balance.value.amount if balance else 0
-            except Exception as e:
-                logger.warning(f"Failed to get wallet balance: {str(e)}")
-                token_info['wallet_balance'] = None
-                
-        # Log query stats
-        query_handler.stats.log_summary()
+        # Try to get from cache if not forcing refresh
+        if not refresh:
+            cached_data = db_cache.get_cached_data("token-info", params, TOKEN_INFO_CACHE_TTL)
+            if cached_data:
+                logging.info(f"Retrieved token info for {token_address} from cache")
+                return cached_data
         
-        return {
-            'token_info': token_info,
-            'query_stats': {
-                'total_queries': query_handler.stats.total_queries,
-                'error_queries': query_handler.stats.error_queries,
-                'error_breakdown': dict(query_handler.stats.error_counts)
+        # Initialize handlers if needed
+        if solana_query_handler is None:
+            initialization_success = await initialize_handlers()
+            if not initialization_success or solana_query_handler is None:
+                return {
+                    "status": "error",
+                    "error": "Failed to initialize Solana query handler",
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
+        
+        # Validate addresses
+        try:
+            token_pubkey = Pubkey.from_string(token_address)
+            wallet_pubkey = Pubkey.from_string(wallet_address) if wallet_address else None
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": "Invalid address format",
+                "details": str(e),
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
+        
+        # Get token info
+        token_info = await solana_query_handler.get_token_info(token_pubkey)
+        
+        # Get wallet balance if requested
+        if wallet_pubkey:
+            balance = await solana_query_handler.get_token_balance(wallet_pubkey, token_pubkey)
+            token_info["wallet_balance"] = balance
+        
+        # Format the result
+        result = {
+            "status": "success",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "token_info": token_info
         }
         
+        # Cache the response
+        db_cache.cache_data("token-info", result, params, TOKEN_INFO_CACHE_TTL)
+        
+        return result
     except Exception as e:
-        logger.error(f"Error getting token info: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to get token info: {str(e)}"
-        )
+        logger.error(f"Error retrieving token info: {str(e)}", exc_info=True)
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "traceback": traceback.format_exc()
+        }
 
 @router.get("/transaction/simulate", summary="Simulate Solana Transaction")
 async def simulate_transaction(
@@ -812,7 +847,8 @@ async def simulate_transaction(
         return {
             'error': 'Transaction simulation failed',
             'details': str(e),
-            'traceback': traceback.format_exc()
+            'traceback': traceback.format_exc(),
+            'timestamp': datetime.now(timezone.utc).isoformat()
         }
 
 @router.get("/wallet/{wallet_address}", summary="Analyze Solana Wallet")
@@ -830,7 +866,7 @@ async def analyze_wallet(
         pool = await get_connection_pool()
         
         # Create query handler
-        query_handler = SolanaQueryHandler(pool)
+        query_handler = solana_query_handler or SolanaQueryHandler(pool)
         
         # Get wallet transactions
         transactions = await query_handler.get_signatures_for_address(
@@ -927,7 +963,11 @@ async def analyze_wallet(
         logger.error(f"Error analyzing wallet: {str(e)}")
         raise HTTPException(
             status_code=500,
-            detail=f"Failed to analyze wallet: {str(e)}"
+            detail={
+                'error': 'Failed to analyze wallet',
+                'message': str(e),
+                'timestamp': datetime.now(timezone.utc).isoformat()
+            }
         )
 
 @router.get("/system/resources", summary="Get Solana System Resources")
@@ -966,89 +1006,14 @@ async def get_system_resources():
         return {
             'error': 'System resources retrieval failed',
             'details': str(e),
-            'traceback': traceback.format_exc()
-        }
-
-@router.get("/validators/analysis", summary="Analyze Solana Validator Network")
-async def analyze_validator_network():
-    """
-    Perform comprehensive analysis of the Solana validator network
-    
-    Returns:
-        Dict: Detailed validator network insights
-    """
-    try:
-        # Get client from connection pool
-        pool = await get_connection_pool()
-        async with await pool.acquire() as client:
-            # Retrieve validator information
-            cluster_nodes_result = await safe_rpc_call_async(client, 'get_cluster_nodes')
-            
-            # Validate and process cluster nodes
-            if not cluster_nodes_result.get('success', False):
-                raise ValueError("Failed to retrieve cluster nodes")
-            
-            # Analyze validator network
-            validator_analysis = {
-                'total_nodes': len(cluster_nodes_result.get('result', [])),
-                'node_details': cluster_nodes_result.get('result', []),
-                'epoch_info': await safe_rpc_call_async(client, 'get_epoch_info')
-            }
-            
-            return validator_analysis
-    
-    except Exception as e:
-        logger.error(f"Validator network analysis failed: {str(e)}")
-        return {
-            'error': 'Validator network analysis failed',
-            'details': str(e),
-            'traceback': traceback.format_exc()
-        }
-
-@router.get("/program/registry", summary="Get Solana Program Registry")
-async def get_program_registry():
-    """
-    Get a registry of core Solana programs
-    
-    Returns:
-        Dict: Program registry with account information
-    """
-    try:
-        # Get client from connection pool
-        pool = await get_connection_pool()
-        async with await pool.acquire() as client:
-            system_program_id = "11111111111111111111111111111111"
-            stake_program_id = "Stake11111111111111111111111111111111111111"
-            vote_program_id = "Vote111111111111111111111111111111111111111"
-            
-            # Retrieve program information
-            program_registry = {
-                "system_program": {
-                    "id": system_program_id,
-                    "account_info": await safe_rpc_call_async(client, 'get_account_info', system_program_id)
-                },
-                "stake_program": {
-                    "id": stake_program_id,
-                    "account_info": await safe_rpc_call_async(client, 'get_account_info', stake_program_id)
-                },
-                "vote_program": {
-                    "id": vote_program_id,
-                    "account_info": await safe_rpc_call_async(client, 'get_account_info', vote_program_id)
-                }
-            }
-            
-            return program_registry
-        
-    except Exception as e:
-        logger.error(f"Program registry retrieval failed: {str(e)}")
-        return {
-            'error': 'Program registry retrieval failed',
-            'details': str(e),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'traceback': traceback.format_exc()
         }
 
 @router.get("/performance/metrics", summary="Solana Performance Metrics")
-async def get_performance_metrics():
+async def get_performance_metrics(
+    refresh: bool = Query(False, description="Force refresh from Solana RPC")
+):
     """
     Retrieve current Solana network performance metrics
     - Transaction processing speed
@@ -1057,197 +1022,364 @@ async def get_performance_metrics():
     - Summary statistics for both performance samples and block production
     """
     try:
-        # Check cache first
-        cached_result = performance_cache.get("performance_metrics")
-        if cached_result:
-            logger.info("Returning cached performance metrics")
-            return cached_result
-            
-        # Create a robust client
-        client = await create_robust_client()
+        # Try to get from cache if not forcing refresh
+        if not refresh:
+            cached_data = db_cache.get_cached_data("performance-metrics", None, PERFORMANCE_METRICS_CACHE_TTL)
+            if cached_data:
+                logging.info("Retrieved performance metrics from cache")
+                return cached_data
+
+        # Initialize handlers if needed
+        if solana_query_handler is None:
+            initialization_success = await initialize_handlers()
+            if not initialization_success or solana_query_handler is None:
+                return {
+                    "status": "error",
+                    "error": "Failed to initialize Solana query handler",
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
         
-        # Get recent performance samples
+        # Get performance samples using the handler's method
         try:
-            performance_samples = await client.get_recent_performance_samples(20)
+            performance_samples = await solana_query_handler.get_recent_performance()
+            logger.info(f"Retrieved {len(performance_samples) if performance_samples else 0} performance samples")
         except Exception as e:
-            return {
-                "status": "error",
-                "error": str(e),
-                "timestamp": datetime.now(timezone.utc).isoformat()
+            logger.error(f"Error getting performance samples: {str(e)}", exc_info=True)
+            performance_samples = []
+        
+        # Get block production data
+        block_production_response = None
+        try:
+            # Use the new get_block_production method that prioritizes Helius
+            block_production_response = await solana_query_handler.get_block_production()
+            logger.info(f"Retrieved block production data: {bool(block_production_response)}")
+        except Exception as e:
+            logger.error(f"Error getting block production: {str(e)}")
+            block_production_response = {
+                "error": str(e)
             }
         
-        if not performance_samples or isinstance(performance_samples, dict) and "error" in performance_samples:
-            return {
-                "status": "error",
-                "error": "Failed to retrieve performance samples",
-                "timestamp": datetime.now(timezone.utc).isoformat()
+        # Process performance samples
+        performance_stats = {}
+        if performance_samples and len(performance_samples) > 0:
+            try:
+                performance_stats = calculate_tps_statistics(performance_samples)
+            except Exception as e:
+                logger.error(f"Error processing performance samples: {str(e)}", exc_info=True)
+                performance_stats = {
+                    "error": str(e),
+                    "samples_analyzed": len(performance_samples) if isinstance(performance_samples, list) else 0
+                }
+        else:
+            # Try to get performance metrics from network status handler directly
+            try:
+                if network_handler:
+                    metrics = await network_handler.get_performance_metrics()
+                    if metrics and metrics.get('status') in ['success', 'cached'] and metrics.get('data_available', False):
+                        logger.info("Using performance metrics from network status handler")
+                        performance_stats = {
+                            "current_tps": metrics.get('transactions_per_second', 0),
+                            "max_tps": metrics.get('transactions_per_second', 0) * 1.1,  # Estimate
+                            "min_tps": metrics.get('transactions_per_second', 0) * 0.9,  # Estimate
+                            "average_tps": metrics.get('transactions_per_second', 0)
+                        }
+                    else:
+                        logger.warning("No valid performance metrics from network status handler")
+                        performance_stats = {
+                            "error": "No performance samples available",
+                            "samples_analyzed": 0,
+                            "message": "Performance data not available from any RPC endpoint"
+                        }
+                else:
+                    logger.warning("Network status handler not initialized")
+                    performance_stats = {
+                        "error": "No performance samples available",
+                        "samples_analyzed": 0
+                    }
+            except Exception as e:
+                logger.error(f"Error getting performance metrics from network status handler: {str(e)}", exc_info=True)
+                performance_stats = {
+                    "error": "No performance samples available",
+                    "samples_analyzed": 0,
+                    "exception": str(e)
+                }
+        
+        # Process block production
+        block_stats = {}
+        try:
+            if block_production_response and isinstance(block_production_response, dict):
+                # Check if there's an error indicating method not supported
+                if 'error' in block_production_response and isinstance(block_production_response['error'], dict):
+                    error = block_production_response['error']
+                    if error.get('code') == -32601 or "not supported" in error.get('message', '').lower():
+                        logger.warning(f"Block production not supported by endpoint")
+                        block_stats = {
+                            "error": "Method not supported by endpoint",
+                            "details": error.get('message', 'Unknown error')
+                        }
+                    else:
+                        block_stats = {
+                            "error": error.get('message', 'Unknown error'),
+                            "details": str(error)
+                        }
+                elif 'result' in block_production_response and isinstance(block_production_response['result'], dict):
+                    value = block_production_response.get('result', {}).get('value', {})
+                    
+                    if value:
+                        # Extract block production stats
+                        block_stats = {
+                            "total_slots": value.get('total', 0),
+                            "leader_slots": value.get('total', 0),
+                            "blocks_produced": value.get('total', 0) - value.get('skippedSlots', 0),
+                            "skipped_slots": value.get('skippedSlots', 0),
+                            "skip_rate": value.get('skippedSlots', 0) / value.get('total', 1) if value.get('total', 0) > 0 else 0
+                        }
+                    else:
+                        block_stats = {
+                            "error": "Empty block production value",
+                            "details": str(block_production_response)
+                        }
+                else:
+                    block_stats = {
+                        "error": "Invalid block production response format",
+                        "details": str(block_production_response)
+                    }
+            else:
+                block_stats = {
+                    "error": "Invalid block production response",
+                    "details": str(block_production_response)
+                }
+        except Exception as e:
+            logger.error(f"Error processing block production: {str(e)}", exc_info=True)
+            block_stats = {
+                "error": str(e)
             }
-            
-        samples = performance_samples.get("result", [])
         
-        # Calculate TPS statistics
-        tps_stats = calculate_tps_statistics(samples)
-        
-        # Get recent block production info
-        block_production = await safe_rpc_call_async(
-            client,
-            "get_block_production"
-        )
-        
-        # Process block production data
-        block_stats = process_block_production(block_production)
-        
-        # Combine all metrics
-        result = {
+        # Prepare response
+        response = {
             "status": "success",
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "performance_samples": samples[:5],  # Only return the 5 most recent samples
-            "tps_statistics": tps_stats,
-            "block_production_statistics": block_stats
+            "performance_samples": performance_stats,
+            "block_production": block_stats
         }
         
-        # Cache the result
-        performance_cache.set("performance_metrics", result)
+        # Add a status message if both performance samples and block production have errors
+        if (isinstance(performance_stats, dict) and 'error' in performance_stats and 
+            isinstance(block_stats, dict) and 'error' in block_stats):
+            response["status_message"] = "Limited data available: Some Solana RPC methods are not supported by the available endpoints"
+            
+            # Log this situation for monitoring
+            logger.warning(
+                f"Limited performance data available: Performance samples error: {performance_stats.get('error')}, "
+                f"Block production error: {block_stats.get('error')}"
+            )
         
-        return result
+        # Cache the response
+        try:
+            db_cache.cache_data("performance-metrics", response, None, PERFORMANCE_METRICS_CACHE_TTL)
+        except Exception as e:
+            logger.error(f"Error caching performance metrics: {str(e)}", exc_info=True)
+        
+        return response
     except Exception as e:
-        logger.error(f"Error retrieving performance metrics: {str(e)}")
+        logger.error(f"Error retrieving performance metrics: {str(e)}", exc_info=True)
         return {
             "status": "error",
             "error": str(e),
-            "timestamp": datetime.now(timezone.utc).isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "traceback": traceback.format_exc()
         }
 
-def calculate_tps_statistics(samples):
-    """Calculate TPS statistics from performance samples"""
-    if not samples:
-        return {
-            "current_tps": 0,
-            "max_tps": 0,
-            "min_tps": 0,
-            "average_tps": 0
-        }
-    
-    # Extract TPS values
-    tps_values = []
-    for sample in samples:
-        num_transactions = sample.get("numTransactions", 0)
-        sample_period_secs = sample.get("samplePeriodSecs", 1)
-        if sample_period_secs > 0:
-            tps = num_transactions / sample_period_secs
-            tps_values.append(tps)
-    
-    if not tps_values:
-        return {
-            "current_tps": 0,
-            "max_tps": 0,
-            "min_tps": 0,
-            "average_tps": 0
-        }
-    
-    return {
-        "current_tps": round(tps_values[0], 2),
-        "max_tps": round(max(tps_values), 2),
-        "min_tps": round(min(tps_values), 2),
-        "average_tps": round(sum(tps_values) / len(tps_values), 2)
-    }
-
-def process_block_production(block_production):
-    """Process block production data"""
-    if "error" in block_production or "result" not in block_production:
-        return {
-            "total_blocks": 0,
-            "total_slots": 0,
-            "current_slot": 0,
-            "leader_slots": 0,
-            "blocks_produced": 0,
-            "skipped_slots": 0,
-            "skipped_slot_percentage": 0
-        }
-    
-    result = block_production.get("result", {})
-    value = result.get("value", {})
-    
-    # Extract statistics
-    total_slots = 0
-    leader_slots = 0
-    blocks_produced = 0
-    
-    by_identity = value.get("byIdentity", {})
-    for identity, stats in by_identity.items():
-        leader_slots += stats[0]
-        blocks_produced += stats[1]
-    
-    total_slots = value.get("range", {}).get("totalSlots", 0)
-    skipped_slots = leader_slots - blocks_produced
-    skipped_slot_percentage = (skipped_slots / leader_slots * 100) if leader_slots > 0 else 0
-    
-    return {
-        "total_blocks": blocks_produced,
-        "total_slots": total_slots,
-        "current_slot": value.get("range", {}).get("lastSlot", 0),
-        "leader_slots": leader_slots,
-        "blocks_produced": blocks_produced,
-        "skipped_slots": skipped_slots,
-        "skipped_slot_percentage": round(skipped_slot_percentage, 2)
-    }
-
-@router.get("/network/rpc-nodes", summary="Get Available Solana RPC Nodes", tags=["Soleco"])
+@router.get("/network/rpc-nodes", summary="Get Available Solana RPC Nodes")
 async def get_rpc_nodes(
     include_details: bool = Query(False, description="Include detailed information for each RPC node"),
-    health_check: bool = Query(False, description="Perform health checks on a sample of RPC nodes")
+    health_check: bool = Query(False, description="Perform health checks on a sample of RPC nodes"),
+    include_all: bool = Query(False, description="Include all discovered RPC nodes, even those that may be unreliable"),
+    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
+    use_enhanced_extractor: bool = Query(True, description="Use enhanced RPC node extractor with improved error handling")
 ):
     """
-    Extract and analyze available RPC nodes from the Solana network.
-    
-    This endpoint provides information about RPC nodes available on the Solana network,
-    including their count, version distribution, and optionally their health status.
-    
-    - **include_details**: When true, includes the full list of RPC nodes with their details
-    - **health_check**: When true, performs health checks on a sample of RPC nodes
-    
-    Returns a JSON object containing:
-    
-    - **status**: Success or error status
-    - **timestamp**: When the data was retrieved
-    - **total_rpc_nodes**: Total number of RPC nodes found
-    - **version_distribution**: Distribution of node versions (top 5)
-    - **health_sample_size**: Number of nodes sampled for health check (if requested)
-    - **estimated_health_percentage**: Percentage of healthy nodes in sample (if requested)
-    - **rpc_nodes**: Array of RPC node details (if requested)
-    
-    Each RPC node object contains:
-    - **pubkey**: The node's public key
-    - **rpc_endpoint**: The RPC endpoint URL/address
-    - **version**: The node's Solana version
-    - **feature_set**: The node's feature set
+    Get a list of available Solana RPC nodes
+    - Optionally includes detailed information about each node
+    - Can perform health checks on a sample of nodes
+    - Provides version distribution statistics
+    - Can use enhanced extractor with improved error handling and reliability
     """
     try:
+        # Create cache key based on parameters
+        params = {
+            "include_details": include_details,
+            "health_check": health_check,
+            "include_all": include_all,
+            "use_enhanced_extractor": use_enhanced_extractor
+        }
+        
+        # Try to get from cache if not forcing refresh
+        if not refresh:
+            cached_data = db_cache.get_cached_data("rpc-nodes", params, RPC_NODES_CACHE_TTL)
+            if cached_data:
+                logging.info("Retrieved RPC nodes from cache")
+                return cached_data
+        
         # Initialize handlers if needed
-        await initialize_handlers()
+        if solana_query_handler is None:
+            initialization_success = await initialize_handlers()
+            if not initialization_success or solana_query_handler is None:
+                return {
+                    "status": "error",
+                    "error": "Failed to initialize Solana query handler",
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
         
-        # Get RPC nodes
-        result = await rpc_node_extractor.get_all_rpc_nodes()
+        # Extract RPC nodes
+        logger.info(f"Creating RPCNodeExtractor and extracting RPC nodes (enhanced mode: {use_enhanced_extractor})")
+        start_time = time.time()
         
-        # If details are not requested, remove the full node list
-        if not include_details and 'rpc_nodes' in result:
-            result.pop('rpc_nodes', None)
+        try:
+            extractor = RPCNodeExtractor(solana_query_handler, use_enhanced_mode=use_enhanced_extractor)
             
-        # If health check is not requested, remove health-related fields
-        if not health_check:
-            result.pop('health_sample_size', None)
-            result.pop('estimated_health_percentage', None)
+            # Configure health check setting
+            extractor.check_health = health_check
             
+            # Get all RPC nodes first to check for errors
+            all_nodes_result = await extractor.get_all_rpc_nodes()
+            
+            # In enhanced mode, we continue even if there are errors
+            if not use_enhanced_extractor and all_nodes_result.get("status") != "success":
+                error_msg = all_nodes_result.get("error", "Unknown error retrieving cluster nodes")
+                logger.error(f"Failed to get RPC nodes: {error_msg}")
+                execution_time_ms = int((time.time() - start_time) * 1000)
+                
+                return {
+                    "status": "error",
+                    "error": error_msg,
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "execution_time_ms": execution_time_ms
+                }
+            
+            # Extract RPC nodes
+            rpc_nodes = await extractor.extract_rpc_nodes(include_all=include_all)
+            extraction_time = time.time() - start_time
+            logger.info(f"Extracted {len(rpc_nodes)} RPC nodes in {extraction_time:.2f} seconds")
+            
+            # Get any errors that were collected during extraction
+            extraction_errors = extractor.get_errors() if use_enhanced_extractor else []
+            
+        except Exception as extract_error:
+            logger.error(f"Error during RPC node extraction: {str(extract_error)}", exc_info=True)
+            execution_time_ms = int((time.time() - start_time) * 1000)
+            
+            return {
+                "status": "error",
+                "error": f"Error extracting RPC nodes: {str(extract_error)}",
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "execution_time_ms": execution_time_ms
+            }
+        
+        # Check if we got any nodes
+        if not rpc_nodes:
+            logger.warning("No RPC nodes were extracted")
+            execution_time_ms = int((time.time() - start_time) * 1000)
+            
+            return {
+                "status": "warning",
+                "message": "No RPC nodes were found",
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "execution_time_ms": execution_time_ms
+            }
+        
+        # Count version distribution
+        version_counts = {}
+        for node in rpc_nodes:
+            version = node.get("version", "unknown")
+            version_counts[version] = version_counts.get(version, 0) + 1
+        
+        # Sort versions by count
+        sorted_versions = sorted(version_counts.items(), key=lambda x: x[1], reverse=True)
+        top_versions = sorted_versions[:5]  # Top 5 versions
+        
+        # Calculate version percentages
+        total_nodes = len(rpc_nodes)
+        version_distribution = [
+            {
+                "version": version,
+                "count": count,
+                "percentage": round((count / total_nodes) * 100, 2)
+            }
+            for version, count in top_versions
+        ]
+        
+        # Calculate health statistics if health check was performed
+        health_stats = {}
+        if health_check:
+            healthy_nodes = sum(1 for node in rpc_nodes if node.get("health", False))
+            health_sample_size = sum(1 for node in rpc_nodes if "health" in node)
+            if health_sample_size > 0:
+                estimated_health_percentage = (healthy_nodes / health_sample_size) * 100
+                health_stats = {
+                    "healthy_nodes": healthy_nodes,
+                    "health_sample_size": health_sample_size,
+                    "estimated_health_percentage": estimated_health_percentage
+                }
+        
+        # Prepare result
+        result = {
+            "status": "success",
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "total_rpc_nodes": total_nodes,
+            "version_distribution": version_distribution,
+            "execution_time_ms": int(extraction_time * 1000)
+        }
+        
+        # Add health statistics if available
+        if health_stats:
+            result.update(health_stats)
+        
+        # Add errors if using enhanced extractor and errors were found
+        if use_enhanced_extractor and extraction_errors:
+            result["errors"] = extraction_errors
+        
+        # Add detailed node info if requested
+        if include_details:
+            # Sanitize node information to ensure it's JSON serializable
+            sanitized_nodes = []
+            for node in rpc_nodes:
+                sanitized_node = {
+                    "pubkey": node.get("pubkey", ""),
+                    "rpc_endpoint": node.get("rpc_endpoint", ""),
+                    "version": node.get("version", "unknown"),
+                    "feature_set": node.get("feature_set", 0),
+                    "gossip": node.get("gossip", ""),
+                    "shred_version": node.get("shred_version", 0)
+                }
+                
+                # Add health information if available
+                if "health" in node:
+                    sanitized_node["health"] = node["health"]
+                    if not node["health"] and "health_error" in node:
+                        sanitized_node["health_error"] = node["health_error"]
+                
+                sanitized_nodes.append(sanitized_node)
+            
+            result["rpc_nodes"] = sanitized_nodes
+        
+        # Cache the response
+        try:
+            # Make sure we're storing a JSON serializable object
+            db_cache.cache_data("rpc-nodes", result, params, RPC_NODES_CACHE_TTL)
+            logger.info("Cached RPC nodes data")
+        except Exception as cache_error:
+            logger.error(f"Error caching RPC nodes data: {str(cache_error)}")
+        
         return result
     except Exception as e:
-        logger.error(f"Error retrieving RPC nodes: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail={
-                'error': 'Failed to retrieve RPC nodes',
-                'message': str(e)
-            }
-        )
+        logger.error(f"Error retrieving RPC nodes: {str(e)}", exc_info=True)
+        return {
+            "status": "error",
+            "error": f"Failed to retrieve cluster nodes: {str(e)}",
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "execution_time_ms": int((time.time() - (start_time if 'start_time' in locals() else time.time())) * 1000)
+        }
 
 @router.get("/blocks/recent", summary="Retrieve Recent Solana Blocks")
 async def retrieve_recent_blocks(limit: int = 10) -> Dict[str, Any]:
@@ -1279,7 +1411,8 @@ async def retrieve_recent_blocks(limit: int = 10) -> Dict[str, Any]:
             status_code=500,
             detail={
                 'error': 'Failed to retrieve recent blocks',
-                'message': str(e)
+                'message': str(e),
+                'timestamp': datetime.now(timezone.utc).isoformat()
             }
         )
 
@@ -1301,7 +1434,7 @@ async def get_rpc_stats():
     
     # Initialize the pool if not already initialized
     if not pool._initialized:
-        await pool.initialize()
+        await pool.initialize(DEFAULT_RPC_ENDPOINTS)
         
     # Get the stats
     stats = pool.get_rpc_stats()
@@ -1327,7 +1460,7 @@ async def get_filtered_rpc_stats():
     
     # Initialize the pool if not already initialized
     if not pool._initialized:
-        await pool.initialize()
+        await pool.initialize(DEFAULT_RPC_ENDPOINTS)
         
     # Get the filtered stats directly from the connection pool
     stats = pool.get_filtered_rpc_stats()
@@ -1353,7 +1486,7 @@ async def test_fallback_endpoint():
     
     # Initialize the pool if not already initialized
     if not pool._initialized:
-        await pool.initialize()
+        await pool.initialize(DEFAULT_RPC_ENDPOINTS)
     
     # Get a list of non-Helius endpoints
     non_helius_endpoints = [ep for ep in pool.endpoints if "helius" not in ep.lower()]
@@ -1385,7 +1518,8 @@ async def test_fallback_endpoint():
         return {
             "endpoint": endpoint,
             "result": result,
-            "latency": client.average_latency()
+            "latency": client.average_latency(),
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
     except Exception as e:
         # Update the stats for this endpoint
@@ -1393,57 +1527,17 @@ async def test_fallback_endpoint():
         
         return {
             "endpoint": endpoint,
-            "error": str(e)
+            "error": str(e),
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
     finally:
         # Close the client
         await client.close()
 
-@router.get("/network/rpc-nodes", summary="Get Available Solana RPC Nodes", tags=["Soleco"])
-async def get_rpc_nodes(
-    include_details: bool = Query(False, description="Include detailed information for each RPC node"),
-    health_check: bool = Query(False, description="Perform health checks on a sample of RPC nodes"),
-    include_all: bool = Query(False, description="Include all discovered RPC nodes, even those that may be unreliable")
-):
-    """
-    Get a list of available Solana RPC nodes
-    - Optionally includes detailed information about each node
-    - Can perform health checks on a sample of nodes
-    - Provides version distribution statistics
-    """
-    try:
-        # Check cache first
-        cache_key = f"rpc_nodes_{include_details}_{health_check}_{include_all}"
-        cached_result = rpc_nodes_cache.get(cache_key)
-        if cached_result:
-            logger.info(f"Returning cached RPC nodes data for key: {cache_key}")
-            return cached_result
-            
-        # Create RPC node extractor
-        rpc_node_extractor = RPCNodeExtractor()
-        
-        # Get RPC nodes
-        result = await rpc_node_extractor.get_all_rpc_nodes(
-            include_details=include_details,
-            health_check=health_check,
-            include_all=include_all
-        )
-        
-        # Cache the result
-        rpc_nodes_cache.set(cache_key, result)
-        
-        return result
-    except Exception as e:
-        logger.error(f"Error retrieving RPC nodes: {str(e)}")
-        return {
-            "status": "error",
-            "error": str(e),
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        }
-
-@router.get("/network/status")
-async def get_network_status(
-    summary_only: bool = Query(False, description="Return only the network summary without detailed node information")
+@router.get("/network/status-v2", response_model=Dict[str, Any])
+async def get_network_status_v2(
+    summary_only: bool = Query(False, description="Return only the network summary without detailed node information"),
+    refresh: bool = Query(False, description="Force refresh from Solana RPC")
 ):
     """
     Retrieve comprehensive Solana network status with robust error handling.
@@ -1452,6 +1546,7 @@ async def get_network_status(
     including health, node information, version distribution, and performance metrics.
     
     - **summary_only**: When true, returns only summary information without the detailed node list
+    - **refresh**: When true, forces a refresh from the Solana RPC instead of using cached data
     
     Returns a JSON object containing:
     
@@ -1473,20 +1568,198 @@ async def get_network_status(
     - **performance_metrics**: Network performance metrics
     """
     try:
-        # Initialize network status handler
-        handler = NetworkStatusHandler()
+        # Check if we have cached data and refresh is not requested
+        cache_key = f"network_status_{summary_only}"
+        if not refresh:
+            cached_data = db_cache.get(cache_key)
+            if cached_data:
+                logger.info(f"Using cached network status data (cache key: {cache_key})")
+                return json.loads(cached_data)
         
         # Get network status
-        status_data = await handler.get_network_status(summary_only=summary_only)
+        status_handler = NetworkStatusHandler()
+        initialization_success = await initialize_handlers()
+        if not initialization_success or network_handler is None:
+            return {
+                "status": "error",
+                "error": "Failed to initialize network status handler",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        network_status = await network_handler.get_network_status(summary_only=summary_only)
         
-        return status_data
+        # Cache the result
+        db_cache.set(cache_key, json.dumps(network_status), NETWORK_STATUS_CACHE_TTL)
+        
+        return network_status
     except Exception as e:
-        logger.error(f"Error retrieving network status: {str(e)}")
+        logger.error(f"Error getting network status: {str(e)}")
+        traceback.print_exc()
         return {
             "status": "error",
-            "errors": [str(e)],
+            "error": str(e),
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "message": "Failed to retrieve network status"
+            "traceback": traceback.format_exc()
+        }
+
+@router.get("/network/rpc-nodes-v2", response_model=Dict[str, Any])
+async def get_rpc_nodes_v2(
+    include_details: bool = Query(False, description="Include detailed information for each RPC node"),
+    health_check: bool = Query(False, description="Perform health checks on a sample of RPC nodes"),
+    include_all: bool = Query(False, description="Include all discovered RPC nodes, even those that may be unreliable"),
+    refresh: bool = Query(False, description="Force refresh from Solana RPC")
+):
+    """
+    Get a list of available Solana RPC nodes
+    - Optionally includes detailed information about each node
+    - Can perform health checks on a sample of nodes
+    - Provides version distribution statistics
+    """
+    try:
+        # Check if we have cached data and refresh is not requested
+        cache_key = f"rpc_nodes_{include_details}_{health_check}_{include_all}"
+        if not refresh:
+            cached_data = db_cache.get(cache_key)
+            if cached_data:
+                logger.info(f"Using cached RPC nodes data (cache key: {cache_key})")
+                try:
+                    # Check if the cached data is a coroutine
+                    if asyncio.iscoroutine(cached_data):
+                        logger.warning("Cached data is a coroutine, awaiting it")
+                        cached_data = await cached_data
+                    
+                    # Try to parse the cached data
+                    if isinstance(cached_data, str):
+                        return json.loads(cached_data)
+                    elif isinstance(cached_data, dict):
+                        return cached_data
+                    else:
+                        logger.warning(f"Unexpected cached data type: {type(cached_data)}, ignoring cache")
+                except Exception as cache_error:
+                    logger.error(f"Error processing cached data: {str(cache_error)}")
+                    logger.warning("Ignoring cache due to error")
+        
+        # Initialize SolanaQueryHandler
+        from app.utils.solana_query import SolanaQueryHandler
+        query_handler = SolanaQueryHandler()
+        initialization_success = await initialize_handlers()
+        if not initialization_success or solana_query_handler is None:
+            return {
+                "status": "error",
+                "error": "Failed to initialize Solana query handler",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        
+        # Extract RPC nodes
+        from app.utils.handlers.rpc_node_extractor import RPCNodeExtractor
+        extractor = RPCNodeExtractor(query_handler)
+        rpc_nodes_data = await extractor.get_all_rpc_nodes()
+        
+        # Check if we got valid data
+        if not rpc_nodes_data or not isinstance(rpc_nodes_data, dict) or 'rpc_nodes' not in rpc_nodes_data or not rpc_nodes_data['rpc_nodes']:
+            logger.warning("No RPC nodes data returned from extractor")
+            # Return default endpoints as a fallback
+            from app.utils.solana_rpc_constants import DEFAULT_RPC_ENDPOINTS
+            rpc_nodes_data = {
+                "status": "warning",
+                "message": "No cluster nodes returned from Solana network. Using default endpoints.",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "rpc_nodes": [{"endpoint": url, "is_default": True} for url in DEFAULT_RPC_ENDPOINTS]
+            }
+        
+        # Ensure proper serialization of the response data
+        from app.utils.solana_helpers import serialize_solana_object
+        rpc_nodes_data = serialize_solana_object(rpc_nodes_data)
+        
+        # If include_all is False, filter out potentially unreliable nodes
+        if not include_all and 'rpc_nodes' in rpc_nodes_data:
+            # Filter to only include nodes with specific criteria
+            filtered_nodes = [
+                node for node in rpc_nodes_data['rpc_nodes']
+                if node.get('feature_set', 0) > 0  # Must have a valid feature set
+            ]
+            rpc_nodes_data['rpc_nodes'] = filtered_nodes
+            rpc_nodes_data['total_nodes'] = len(filtered_nodes)
+        
+        # Perform health checks if requested
+        if health_check and 'rpc_nodes' in rpc_nodes_data:
+            # Only check a sample of nodes to avoid overloading
+            sample_size = min(5, len(rpc_nodes_data['rpc_nodes']))
+            sample_nodes = random.sample(rpc_nodes_data['rpc_nodes'], sample_size) if rpc_nodes_data['rpc_nodes'] else []
+            
+            # Check health of sample nodes
+            for node in sample_nodes:
+                try:
+                    endpoint = node['rpc_endpoint']
+                    # Create a temporary client for this endpoint
+                    temp_client = SolanaClient(endpoint=endpoint, timeout=5)
+                    # Simple health check - get slot
+                    start_time = time.time()
+                    slot_response = await temp_client.get_slot()
+                    response_time = time.time() - start_time
+                    
+                    # Update node with health info
+                    node['health_check'] = {
+                        'status': 'healthy' if 'result' in slot_response else 'error',
+                        'response_time_ms': round(response_time * 1000, 2),
+                        'timestamp': datetime.now(timezone.utc).isoformat()
+                    }
+                    
+                    # Close the temporary client
+                    await temp_client.close()
+                except Exception as e:
+                    # Mark node as unhealthy
+                    node['health_check'] = {
+                        'status': 'error',
+                        'error': str(e),
+                        'timestamp': datetime.now(timezone.utc).isoformat()
+                    }
+        
+        # Include detailed information if requested
+        if not include_details and 'rpc_nodes' in rpc_nodes_data:
+            # Simplify the response by only including essential fields
+            simplified_nodes = []
+            for node in rpc_nodes_data['rpc_nodes']:
+                simplified_node = {
+                    'rpc_endpoint': node['rpc_endpoint'],
+                    'version': node.get('version', 'unknown')
+                }
+                if health_check and 'health_check' in node:
+                    simplified_node['health_check'] = node['health_check']
+                simplified_nodes.append(simplified_node)
+            rpc_nodes_data['rpc_nodes'] = simplified_nodes
+        
+        # Cache the result
+        try:
+            # Make sure we're storing a JSON serializable object
+            if isinstance(rpc_nodes_data, dict):
+                cache_data = json.dumps(rpc_nodes_data)
+                await db_cache.set(cache_key, cache_data, RPC_NODES_CACHE_TTL)
+                logger.info(f"Cached RPC nodes data (cache key: {cache_key})")
+            else:
+                logger.warning(f"Cannot cache data of type {type(rpc_nodes_data)}")
+        except Exception as cache_error:
+            logger.error(f"Error caching RPC nodes data: {str(cache_error)}")
+        
+        return rpc_nodes_data
+    except Exception as e:
+        logger.error(f"Error getting RPC nodes: {str(e)}")
+        traceback.print_exc()
+        error_msg = str(e)
+        if "coroutine" in error_msg:
+            logger.error("Detected coroutine error. Ensure all async functions are properly awaited.")
+            return {
+                "status": "error",
+                "error": "Coroutine error detected. This is likely due to an async function not being properly awaited.",
+                "details": error_msg,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "rpc_nodes": []
+            }
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "traceback": traceback.format_exc(),
+            "rpc_nodes": []
         }
 
 def calculate_tps_statistics(samples):
@@ -1497,6 +1770,19 @@ def calculate_tps_statistics(samples):
             "max_tps": 0,
             "min_tps": 0,
             "average_tps": 0
+        }
+    
+    # Check if the first sample contains an error message
+    if len(samples) == 1 and 'error' in samples[0]:
+        logger.warning(f"Performance samples contain error: {samples[0]['error']}")
+        return {
+            "current_tps": 0,
+            "max_tps": 0,
+            "min_tps": 0,
+            "average_tps": 0,
+            "error": samples[0]['error'],
+            "endpoints_tried": samples[0].get('endpoints_tried', 0),
+            "timestamp": samples[0].get('timestamp', 0)
         }
     
     # Extract TPS values
@@ -1562,3 +1848,137 @@ def process_block_production(block_production):
         "skipped_slots": skipped_slots,
         "skipped_slot_percentage": round(skipped_slot_percentage, 2)
     }
+
+@router.get("/network-status", response_model=Dict[str, Any])
+async def get_network_status():
+    """
+    Get comprehensive information about the Solana network status.
+    
+    Returns:
+        Dict with network status information including:
+        - node_count: Total number of nodes
+        - active_nodes: Number of active nodes
+        - delinquent_nodes: Number of delinquent nodes
+        - version_distribution: Distribution of node versions
+        - feature_set_distribution: Distribution of feature sets
+        - stake_distribution: Distribution of stake among validators
+        - errors: Any errors encountered during data collection
+        - status: Overall network status (healthy, degraded, or unhealthy)
+    """
+    try:
+        solana_query = SolanaQuery()
+        network_status = await solana_query.get_network_status()
+        return network_status
+    except Exception as e:
+        logging.error(f"Error in network status endpoint: {str(e)}", exc_info=True)
+        return {
+            "status": "error",
+            "message": f"Failed to retrieve network status: {str(e)}",
+            "timestamp": datetime.now().isoformat()
+        }
+
+@router.get("/enhanced-network-status", response_model=Dict[str, Any], tags=["solana"])
+async def get_enhanced_network_status(
+    refresh: bool = False,
+):
+    """
+    Get enhanced network status with robust error handling and comprehensive metrics.
+    
+    This endpoint provides detailed information about the Solana network status,
+    including node counts, version distribution, feature set distribution, and stake distribution.
+    It includes robust error handling and will attempt multiple fallback mechanisms to ensure
+    that some data is always returned, even in error conditions.
+    
+    Args:
+        refresh: Whether to force a refresh of the cached data
+        
+    Returns:
+        Dict with network status information
+    """
+    # Initialize result structure
+    result = {
+        "status": "unknown",
+        "data_source": "unknown",
+        "timestamp": datetime.now().isoformat(),
+        "execution_time_ms": 0,
+        "errors": [],
+        "node_count": 0,
+        "active_nodes": 0,
+        "delinquent_nodes": 0,
+        "version_distribution": {},
+        "feature_set_distribution": {},
+        "stake_distribution": {}
+    }
+    
+    # Track all errors for comprehensive error reporting
+    all_errors = []
+    
+    # Track execution time
+    start_time = time.time()
+    logging.info("Retrieving enhanced network status")
+    
+    # Define fallback function
+    async def _try_fallback_network_status(result_dict, errors_list):
+        try:
+            logger.info("Attempting fallback network status retrieval using RPCNodeExtractor")
+            extractor = RPCNodeExtractor()
+            fallback_data = await extractor.get_network_status()
+            
+            # Update result with fallback data
+            result_dict.update(fallback_data)
+            result_dict["data_source"] = "fallback_rpc_node_extractor"
+            
+            # Add a note about using fallback
+            if "notes" not in result_dict:
+                result_dict["notes"] = []
+            result_dict["notes"].append("Used fallback mechanism due to primary method failure")
+            
+            logger.info("Successfully retrieved network status using fallback method")
+        except Exception as e:
+            logger.error(f"Error in fallback network status method: {str(e)}", exc_info=True)
+            errors_list.append({
+                'source': 'fallback_method',
+                'error': str(e),
+                'traceback': traceback.format_exc()
+            })
+    
+    # Try primary method first
+    try:
+        # Use cached connection pool if available
+        pool = await get_connection_pool()
+        query_handler = SolanaQueryHandler(connection_pool=pool)
+        
+        # Get network status
+        network_status = await query_handler.get_network_status()
+        
+        # Update result with network status data
+        if network_status:
+            result.update(network_status)
+            result["data_source"] = "primary_solana_query_handler"
+        else:
+            # If primary method returns None or empty data, try fallback
+            await _try_fallback_network_status(result, all_errors)
+    except Exception as e:
+        logger.error(f"Error in primary network status method: {str(e)}", exc_info=True)
+        all_errors.append({
+            'source': 'primary_method',
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        })
+        
+        # Try fallback method
+        await _try_fallback_network_status(result, all_errors)
+    
+    # Calculate execution time
+    end_time = time.time()
+    execution_time_ms = int((end_time - start_time) * 1000)
+    result["execution_time_ms"] = execution_time_ms
+    
+    # Add all collected errors to the result
+    if all_errors:
+        result["errors"] = all_errors
+    
+    # Cache the result
+    cache_data("enhanced_network_status", result, NETWORK_STATUS_CACHE_TTL)
+    
+    return result

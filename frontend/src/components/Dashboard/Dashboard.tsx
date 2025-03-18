@@ -25,8 +25,6 @@ import RPCNodesCard from './RPCNodesCard';
 import PumpTokensCard from './PumpTokensCard';
 import PerformanceMetricsCard from './PerformanceMetricsCard';
 import HistoricalDataCard from './HistoricalDataCard';
-import PumpFunTopPerformersCard from './PumpFunTopPerformersCard';
-import PumpFunKingOfTheHillCard from './PumpFunKingOfTheHillCard';
 
 const Dashboard: React.FC = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
@@ -129,8 +127,6 @@ const Dashboard: React.FC = () => {
         <PumpTokensCard />
         <PerformanceMetricsCard />
         <HistoricalDataCard />
-        <PumpFunTopPerformersCard />
-        <PumpFunKingOfTheHillCard includeNsfw={true} />
       </Grid>
     </Box>
   );

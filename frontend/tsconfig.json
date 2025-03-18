@@ -22,7 +22,13 @@
     
     /* Type Definitions */
     "typeRoots": ["./node_modules/@types", "./src"],
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "hooks/*": ["hooks/*"],
+      "pages/*": ["pages/*"],
+      "hooks": ["hooks/index"],
+      "pages": ["pages/index"]
+    }
   },
   "include": ["src", "src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

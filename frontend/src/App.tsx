@@ -19,10 +19,20 @@ import TradingModule from './components/TradingModule'
 import PumpAnalytics from './components/PumpAnalytics'
 import CLIDocumentation from './components/CLIDocumentation'
 import DashboardContainer from './components/DashboardContainer'
+import SolanaMonitorPage from './pages/SolanaMonitorPage'
 import { SolanaWalletContextProvider } from './wallet/WalletContext'
 import { WalletConnection } from './wallet/WalletConnection'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      cacheTime: 10 * 60 * 1000, // 10 minutes
+      retry: 1,
+    },
+  },
+})
 
 function App() {
   return (
@@ -51,6 +61,7 @@ function App() {
                         <Tab>Birdeye</Tab>
                         <Tab>Pump.fun Trading</Tab>
                         <Tab>CLI</Tab>
+                        <Tab>Solana Monitor</Tab>
                       </TabList>
 
                       <TabPanels>
@@ -72,6 +83,9 @@ function App() {
                         <TabPanel>
                           <CLIDocumentation />
                         </TabPanel>
+                        <TabPanel>
+                          <SolanaMonitorPage />
+                        </TabPanel>
                       </TabPanels>
                     </Tabs>
                   </VStack>
@@ -80,6 +94,7 @@ function App() {
               <Route path="/pump-analytics" element={<PumpAnalytics />} />
               <Route path="/cli" element={<CLIDocumentation />} />
               <Route path="/dashboard" element={<DashboardContainer />} />
+              <Route path="/solana-monitor" element={<SolanaMonitorPage />} />
             </Routes>
           </Router>
         </ChakraProvider>

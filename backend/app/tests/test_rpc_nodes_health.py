@@ -25,7 +25,7 @@ import logging
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from app.config import HELIUS_API_KEY
-from app.utils.solana_rpc import KNOWN_RPC_PROVIDERS, FALLBACK_RPC_ENDPOINTS
+from app.utils.solana_rpc_constants import KNOWN_RPC_PROVIDERS, FALLBACK_RPC_ENDPOINTS
 
 # Configure logging
 logging.basicConfig(

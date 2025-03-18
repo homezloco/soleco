@@ -70,6 +70,22 @@ class ValidationError(SolanaError):
     """Raised when data validation fails."""
     pass
 
+class MethodNotSupportedError(RPCError):
+    """Raised when an RPC method is not supported by an endpoint."""
+    pass
+
+class SimulationError(RPCError):
+    """Raised when transaction simulation fails."""
+    pass
+
+class BlockNotAvailableError(RetryableError):
+    """Raised when a requested block is not available."""
+    pass
+
+class NoClientsAvailableError(RPCError):
+    """Raised when no clients are available in the connection pool."""
+    pass
+
 # Public exports
 __all__ = [
     'SolanaError',
@@ -88,5 +104,9 @@ __all__ = [
     'SlotSkippedError',
     'ConnectionError',
     'TimeoutError',
-    'ValidationError'
+    'ValidationError',
+    'MethodNotSupportedError',
+    'SimulationError',
+    'BlockNotAvailableError',
+    'NoClientsAvailableError'
 ]

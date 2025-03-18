@@ -6,7 +6,8 @@ import inspect
 from typing import Any, Dict, Optional
 import logging
 from typing import Dict, Any
-from .solana_rpc import get_connection_pool, NodeUnhealthyError
+from .solana_rpc import get_connection_pool
+from .solana_error import NodeUnhealthyError
 from .solana_query import SolanaQueryHandler
 from .handlers import (
     TokenHandler,

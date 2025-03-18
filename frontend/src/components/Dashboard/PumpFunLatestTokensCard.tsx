@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Box,
   Card,
@@ -40,7 +40,7 @@ const PumpFunLatestTokensCard: React.FC = () => {
   const queryClient = useQueryClient();
   const { data, isLoading, error, isError } = useQuery(
     'pumpfun-latest-tokens',
-    () => pumpFunApi.getLatestTokens(10),
+    () => pumpFunApi.getLatestTokens(10, true),
     { 
       refetchInterval: 30000, // Refresh every 30 seconds
       retry: 2,
@@ -51,15 +51,39 @@ const PumpFunLatestTokensCard: React.FC = () => {
     }
   );
 
+  // Filter out any duplicate tokens by mint address
+  const uniqueTokens = useMemo(() => {
+    if (!Array.isArray(data)) return [];
+    
+    const seenMints = new Set<string>();
+    return data.filter(token => {
+      if (!token.mint) return false;
+      if (seenMints.has(token.mint)) return false;
+      seenMints.add(token.mint);
+      return true;
+    });
+  }, [data]);
+
   const handleRetry = () => {
-    queryClient.invalidateQueries('pumpfun-latest-tokens');
+    // Force refresh by passing true as the refresh parameter
+    queryClient.fetchQuery('pumpfun-latest-tokens', () => 
+      pumpFunApi.getLatestTokens(10, true)
+    );
   };
 
   if (isLoading) {
     return (
       <Card>
-        <CardHeader>
+        <CardHeader display="flex" justifyContent="space-between" alignItems="center">
           <Heading size="md">Latest Tokens</Heading>
+          <Button 
+            size="sm" 
+            colorScheme="blue" 
+            onClick={handleRetry}
+            isLoading={isLoading}
+          >
+            Refresh
+          </Button>
         </CardHeader>
         <CardBody>
           <Flex justify="center" align="center" h="300px">
@@ -76,18 +100,26 @@ const PumpFunLatestTokensCard: React.FC = () => {
     
     return (
       <Card>
-        <CardHeader>
+        <CardHeader display="flex" justifyContent="space-between" alignItems="center">
           <Heading size="md">Latest Tokens</Heading>
+          <Button 
+            size="sm" 
+            colorScheme="blue" 
+            onClick={handleRetry}
+            isLoading={isLoading}
+          >
+            Refresh
+          </Button>
         </CardHeader>
         <CardBody>
           <Box textAlign="center" py={4}>
             <Text color="red.500" mb={3}>
               {isRateLimitError 
-                ? 'Pump.fun API rate limit exceeded. Please try again later.' 
+                ? 'Backend API rate limit exceeded. Please try again later.' 
                 : 'Error loading latest tokens'}
             </Text>
             <Text fontSize="sm" color="gray.500" mb={4}>
-              The Pump.fun API may be experiencing issues or rate limiting.
+              Our backend API may be experiencing issues or rate limiting.
             </Text>
             <Button 
               colorScheme="blue" 
@@ -104,8 +136,16 @@ const PumpFunLatestTokensCard: React.FC = () => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader display="flex" justifyContent="space-between" alignItems="center">
         <Heading size="md">Latest Pump.fun Tokens</Heading>
+        <Button 
+          size="sm" 
+          colorScheme="blue" 
+          onClick={handleRetry}
+          isLoading={isLoading}
+        >
+          Refresh
+        </Button>
       </CardHeader>
       <CardBody overflowX="auto">
         <Table variant="simple" size="sm">
@@ -118,7 +158,7 @@ const PumpFunLatestTokensCard: React.FC = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {Array.isArray(data) ? data.map((token: PumpFunToken, index: number) => (
+            {Array.isArray(uniqueTokens) ? uniqueTokens.map((token: PumpFunToken, index: number) => (
               <Tr key={`${token.mint}-${index}`}>
                 <Td>
                   <Flex align="center">

@@ -1,0 +1,130 @@
+[
+  {
+    "endpoint": "https://api.mainnet-beta.solana.com",
+    "status": "good",
+    "response_times": {
+      "getHealth": 0.5945875644683838,
+      "getVersion": 0.18763232231140137,
+      "getSlot": 0.18626928329467773,
+      "getBlockHeight": 0.18687963485717773,
+      "getRecentBlockhash": 0.35910987854003906
+    },
+    "errors": [
+      "getRecentBlockhash: No result in response"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": true,
+      "getVersion": true,
+      "getSlot": true,
+      "getBlockHeight": true,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 0.3634748840332031,
+    "api_key_required": false
+  },
+  {
+    "endpoint": "https://api.quicknode.com/solana/YOUR-API-KEY",
+    "status": "down",
+    "response_times": {
+      "getHealth": 1.690276861190796,
+      "getVersion": 0.4249298572540283,
+      "getSlot": 0.42216992378234863,
+      "getBlockHeight": 0.41718053817749023,
+      "getRecentBlockhash": 0.41756463050842285
+    },
+    "errors": [
+      "getHealth: HTTP 404",
+      "getVersion: HTTP 404",
+      "getSlot: HTTP 404",
+      "getBlockHeight: HTTP 404",
+      "getRecentBlockhash: HTTP 404"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": false,
+      "getVersion": false,
+      "getSlot": false,
+      "getBlockHeight": false,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 1.3488487243652343,
+    "api_key_required": false
+  },
+  {
+    "endpoint": "https://solana-mainnet.g.alchemy.com/v2/YOUR-API-KEY",
+    "status": "down",
+    "response_times": {
+      "getHealth": 1.5568807125091553,
+      "getVersion": 1.1149108409881592,
+      "getSlot": 1.1105351448059082,
+      "getBlockHeight": 1.1253376007080078,
+      "getRecentBlockhash": 1.1164264678955078
+    },
+    "errors": [
+      "getHealth: HTTP 401 - Likely requires API key",
+      "getVersion: HTTP 401 - Likely requires API key",
+      "getSlot: HTTP 401 - Likely requires API key",
+      "getBlockHeight: HTTP 401 - Likely requires API key",
+      "getRecentBlockhash: HTTP 401 - Likely requires API key"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": false,
+      "getVersion": false,
+      "getSlot": false,
+      "getBlockHeight": false,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 2.409636306762695,
+    "api_key_required": true
+  },
+  {
+    "endpoint": [
+      "https://mainnet.helius-rpc.com/?api-key=your_helius_api_key"
+    ],
+    "status": "down",
+    "response_times": {},
+    "errors": [
+      "getHealth: Constructor parameter should be str",
+      "getVersion: Constructor parameter should be str",
+      "getSlot: Constructor parameter should be str",
+      "getBlockHeight: Constructor parameter should be str",
+      "getRecentBlockhash: Constructor parameter should be str"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": false,
+      "getVersion": false,
+      "getSlot": false,
+      "getBlockHeight": false,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 1998.0,
+    "api_key_required": false
+  },
+  {
+    "endpoint": [
+      "https://api.mainnet-beta.solana.com"
+    ],
+    "status": "down",
+    "response_times": {},
+    "errors": [
+      "getHealth: Constructor parameter should be str",
+      "getVersion: Constructor parameter should be str",
+      "getSlot: Constructor parameter should be str",
+      "getBlockHeight: Constructor parameter should be str",
+      "getRecentBlockhash: Constructor parameter should be str"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": false,
+      "getVersion": false,
+      "getSlot": false,
+      "getBlockHeight": false,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 1998.0,
+    "api_key_required": false
+  }
+]

@@ -10,9 +10,13 @@ from typing import Dict, Any
 load_dotenv()
 
 # API Keys
-HELIUS_API_KEY = os.getenv('HELIUS_API_KEY', '5ae2cbab-8c38-40da-ac12-37e11f4bcb70')
-EXTRNODE_RPC_URL = os.getenv('EXTRNODE_RPC_URL', 'https://solana-mainnet.rpc.extrnode.com/263ca64a-8b54-4a16-84e9-886654ce0fd6')
-ALCHEMY_RPC_URL = os.getenv('ALCHEMY_RPC_URL', 'https://solana-mainnet.g.alchemy.com/v2/mljAm3MtzwYNL7whoPUoAh_4vevjZO8x')
+HELIUS_API_KEY = os.getenv('HELIUS_API_KEY')
+EXTRNODE_RPC_URL = os.getenv('EXTRNODE_RPC_URL')
+ALCHEMY_RPC_URL = os.getenv('ALCHEMY_RPC_URL')
+ANKR_API_KEY = os.getenv('ANKR_API_KEY')
+
+# Updated Helius URL format - they might have changed their URL structure
+HELIUS_RPC_URL = os.getenv('HELIUS_RPC_URL', f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}")
 
 # RPC Configuration
 DEFAULT_TIMEOUT = 30.0  # seconds
@@ -62,23 +66,13 @@ class Constants:
 
 # Config class for compatibility
 class Config:
-    """
-    Configuration class for application settings.
-    """
+    """Configuration class for application settings."""
     DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
     ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
-    
-    # API Settings
     API_VERSION = "1.0.0"
     API_TITLE = "Soleco API"
     API_DESCRIPTION = "A comprehensive blockchain analytics and data extraction API"
-    
-    # Default RPC Settings
-    DEFAULT_RPC_URL = ALCHEMY_RPC_URL
-    BACKUP_RPC_URLS = [EXTRNODE_RPC_URL]
-    
-    # Rate Limiting
+    DEFAULT_RPC_URL = HELIUS_RPC_URL
+    BACKUP_RPC_URLS = [ALCHEMY_RPC_URL, EXTRNODE_RPC_URL]
     RATE_CONFIG = RATE_CONFIG
-    
-    # External APIs
-    PUMPFUN_API_URL = os.getenv('PUMPFUN_API_URL', 'https://api.pump.fun')
+    PUMPFUN_API_URL = os.getenv('PUMPFUN_API_URL', 'https://api.pump.fun/api')  # Updated to include /api path

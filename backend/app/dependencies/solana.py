@@ -26,7 +26,8 @@ async def get_query_handler() -> SolanaQueryHandler:
         # Get connection pool
         pool = await get_connection_pool()
         if not pool._initialized:
-            await pool.initialize()
+            from app.utils.solana_rpc import DEFAULT_RPC_ENDPOINTS
+            await pool.initialize(DEFAULT_RPC_ENDPOINTS)
             
         # Create query handler
         _query_handler = SolanaQueryHandler(pool)

@@ -1,13 +1,13 @@
 [
   {
-    "endpoint": "https://api.devnet.solana.com",
+    "endpoint": "https://api.mainnet-beta.solana.com",
     "status": "good",
     "response_times": {
-      "getHealth": 0.39664435386657715,
-      "getVersion": 0.03668856620788574,
-      "getSlot": 0.0355832576751709,
-      "getBlockHeight": 0.035703182220458984,
-      "getRecentBlockhash": 0.036470651626586914
+      "getHealth": 0.6144125461578369,
+      "getVersion": 0.18663525581359863,
+      "getSlot": 0.18447303771972656,
+      "getBlockHeight": 0.18666338920593262,
+      "getRecentBlockhash": 0.35938525199890137
     },
     "errors": [
       "getRecentBlockhash: No result in response"
@@ -20,71 +20,25 @@
       "getBlockHeight": true,
       "getRecentBlockhash": false
     },
-    "overall_score": 0.12986160278320313,
+    "overall_score": 0.3675766754150391,
     "api_key_required": false
   },
   {
-    "endpoint": "https://mainnet.helius-rpc.com/?api-key=5ae2cbab-8c38-40da-ac12-37e11f4bcb70",
-    "status": "good",
-    "response_times": {
-      "getHealth": 0.1646735668182373,
-      "getVersion": 0.6609292030334473,
-      "getSlot": 0.5782499313354492,
-      "getBlockHeight": 0.3124120235443115,
-      "getRecentBlockhash": 0.024040937423706055
-    },
-    "errors": [
-      "getRecentBlockhash: HTTP 410"
-    ],
-    "rate_limits": {},
-    "methods_supported": {
-      "getHealth": true,
-      "getVersion": true,
-      "getSlot": true,
-      "getBlockHeight": true,
-      "getRecentBlockhash": false
-    },
-    "overall_score": 0.4176733589172363,
-    "api_key_required": false
-  },
-  {
-    "endpoint": "https://api.testnet.solana.com",
-    "status": "good",
-    "response_times": {
-      "getHealth": 0.8231446743011475,
-      "getVersion": 0.22852635383605957,
-      "getSlot": 0.27164292335510254,
-      "getBlockHeight": 0.2779414653778076,
-      "getRecentBlockhash": 0.2559680938720703
-    },
-    "errors": [
-      "getRecentBlockhash: No result in response"
-    ],
-    "rate_limits": {},
-    "methods_supported": {
-      "getHealth": true,
-      "getVersion": true,
-      "getSlot": true,
-      "getBlockHeight": true,
-      "getRecentBlockhash": false
-    },
-    "overall_score": 0.445733642578125,
-    "api_key_required": false
-  },
-  {
-    "endpoint": "https://rpc.ankr.com/solana",
+    "endpoint": "https://api.quicknode.com/solana/YOUR-API-KEY",
     "status": "down",
     "response_times": {
-      "getSlot": 0.7183499336242676,
-      "getBlockHeight": 0.22248578071594238,
-      "getRecentBlockhash": 0.22654318809509277
+      "getHealth": 1.6976439952850342,
+      "getVersion": 0.4242408275604248,
+      "getSlot": 0.41922879219055176,
+      "getBlockHeight": 0.4203169345855713,
+      "getRecentBlockhash": 0.4202463626861572
     },
     "errors": [
-      "getHealth: Timeout",
-      "getVersion: Timeout",
-      "getSlot: No result in response",
-      "getBlockHeight: No result in response",
-      "getRecentBlockhash: No result in response"
+      "getHealth: HTTP 404",
+      "getVersion: HTTP 404",
+      "getSlot: HTTP 404",
+      "getBlockHeight: HTTP 404",
+      "getRecentBlockhash: HTTP 404"
     ],
     "rate_limits": {},
     "methods_supported": {
@@ -94,43 +48,73 @@
       "getBlockHeight": false,
       "getRecentBlockhash": false
     },
-    "overall_score": 0.7782526016235352,
+    "overall_score": 1.3526707649230958,
     "api_key_required": false
   },
   {
-    "endpoint": "https://api.mainnet-beta.solana.com",
-    "status": "partial",
+    "endpoint": "https://solana-mainnet.g.alchemy.com/v2/YOUR-API-KEY",
+    "status": "down",
     "response_times": {
-      "getBlockHeight": 0.5629892349243164,
-      "getRecentBlockhash": 0.36084747314453125
+      "getHealth": 1.8774802684783936,
+      "getVersion": 1.488692283630371,
+      "getSlot": 1.0948817729949951,
+      "getBlockHeight": 1.1940767765045166,
+      "getRecentBlockhash": 1.1034936904907227
     },
     "errors": [
-      "getHealth: Timeout",
-      "getVersion: Timeout",
-      "getSlot: Timeout",
-      "getRecentBlockhash: No result in response"
+      "getHealth: HTTP 401 - Likely requires API key",
+      "getVersion: HTTP 401 - Likely requires API key",
+      "getSlot: HTTP 401 - Likely requires API key",
+      "getBlockHeight: HTTP 401 - Likely requires API key",
+      "getRecentBlockhash: HTTP 401 - Likely requires API key"
     ],
     "rate_limits": {},
     "methods_supported": {
       "getHealth": false,
       "getVersion": false,
       "getSlot": false,
-      "getBlockHeight": true,
+      "getBlockHeight": false,
       "getRecentBlockhash": false
     },
-    "overall_score": 0.831453037261963,
-    "api_key_required": false
+    "overall_score": 2.7034499168396,
+    "api_key_required": true
   },
   {
-    "endpoint": "https://solana.public-rpc.com",
+    "endpoint": [
+      "https://mainnet.helius-rpc.com/?api-key=your_helius_api_key"
+    ],
     "status": "down",
     "response_times": {},
     "errors": [
-      "getHealth: Timeout",
-      "getVersion: Cannot connect to host solana.public-rpc.com:443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1000)')]",
-      "getSlot: Timeout",
-      "getBlockHeight: Cannot connect to host solana.public-rpc.com:443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1000)')]",
-      "getRecentBlockhash: Timeout"
+      "getHealth: Constructor parameter should be str",
+      "getVersion: Constructor parameter should be str",
+      "getSlot: Constructor parameter should be str",
+      "getBlockHeight: Constructor parameter should be str",
+      "getRecentBlockhash: Constructor parameter should be str"
+    ],
+    "rate_limits": {},
+    "methods_supported": {
+      "getHealth": false,
+      "getVersion": false,
+      "getSlot": false,
+      "getBlockHeight": false,
+      "getRecentBlockhash": false
+    },
+    "overall_score": 1998.0,
+    "api_key_required": false
+  },
+  {
+    "endpoint": [
+      "https://api.mainnet-beta.solana.com"
+    ],
+    "status": "down",
+    "response_times": {},
+    "errors": [
+      "getHealth: Constructor parameter should be str",
+      "getVersion: Constructor parameter should be str",
+      "getSlot: Constructor parameter should be str",
+      "getBlockHeight: Constructor parameter should be str",
+      "getRecentBlockhash: Constructor parameter should be str"
     ],
     "rate_limits": {},
     "methods_supported": {
