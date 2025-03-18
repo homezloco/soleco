@@ -79,9 +79,10 @@ class MintResponseHandler(ResponseHandler):
         return False
 
     def _is_valid_mint_address(self, address: str) -> bool:
+        BASE58_CHARS = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
         try:
-            # Basic validation for Solana addresses
-            return len(address) == 44 and all(c.isalnum() for c in address)
+            # Validate length and base58 characters
+            return len(address) == 44 and all(c in BASE58_CHARS for c in address)
         except:
             return False
 
