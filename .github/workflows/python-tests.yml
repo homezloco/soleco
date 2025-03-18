@@ -23,4 +23,4 @@ jobs:
         pip install pytest pytest-cov
     - name: Run tests
       run: |
-        PYTHONPATH=$PYTHONPATH:. pytest tests --cov=app --cov-report=xml
+        PYTHONPATH=$PYTHONPATH:. backend/pytest tests --cov=app --cov-report=xml
