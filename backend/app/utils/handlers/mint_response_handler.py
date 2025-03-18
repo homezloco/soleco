@@ -2,16 +2,25 @@
 Handler for processing mint-related responses from Solana RPC.
 """
 
-from typing import Dict, Optional, Set
+from typing import Dict, Optional, Set, List
 from collections import defaultdict
-
-from app.utils.solana_response import ResponseHandler, SolanaResponseManager
+from app.utils.base_response_handler import ResponseHandler, SolanaResponseManager
 
 class MintResponseHandler(ResponseHandler):
     """Handler for mint-related responses"""
     
+    SYSTEM_ADDRESSES = {
+        'token_program': 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+        'associated_token': 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+        'metadata_program': 'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s',
+        'system_program': '11111111111111111111111111111111'
+    }
+
     def __init__(self, response_manager: Optional[SolanaResponseManager] = None):
         super().__init__(response_manager)
+        self.mint_addresses = set()
+        self.processed_addresses = set()
+        self.metadata_addresses = set()
         self.mint_stats = {
             "total_mints": 0,
             "unique_minters": set(),
@@ -68,3 +77,69 @@ class MintResponseHandler(ResponseHandler):
             if "decimals" in inst and inst["decimals"] == 0:
                 return True
         return False
+
+    def _is_valid_mint_address(self, address: str) -> bool:
+        try:
+            # Basic validation for Solana addresses
+            return len(address) == 44 and all(c.isalnum() for c in address)
+        except:
+            return False
+
+    def _process_instruction(self, instruction: Dict, account_keys: List[str]) -> Dict:
+        """Process a single instruction"""
+        program_id = account_keys[instruction['programIdIndex']]
+        
+        # Process based on program ID
+        if program_id == self.SYSTEM_ADDRESSES['token_program']:
+            return self._process_token_instruction(instruction, account_keys)
+        elif program_id == self.SYSTEM_ADDRESSES['associated_token']:
+            return self._process_associated_token_instruction(instruction, account_keys)
+        elif program_id == self.SYSTEM_ADDRESSES['metadata_program']:
+            return self._process_metadata_instruction(instruction, account_keys)
+        
+        return {}
+
+    def _process_token_instruction(self, instruction: Dict, account_keys: List[str]) -> Dict:
+        """Process a token program instruction"""
+        parsed = instruction.get('parsed', {})
+        info = parsed.get('info', {})
+        mint = info.get('mint')
+        if mint:
+            self.mint_addresses.add(mint)
+            self.processed_addresses.add(mint)
+        return {
+            'mint': mint,
+            'mint_authority': info.get('mintAuthority'),
+            'program': self.SYSTEM_ADDRESSES['token_program']
+        }
+
+    def _process_associated_token_instruction(self, instruction: Dict, account_keys: List[str]) -> Dict:
+        """Process an associated token program instruction"""
+        parsed = instruction.get('parsed', {})
+        info = parsed.get('info', {})
+        mint = info.get('mint')
+        if mint:
+            self.mint_addresses.add(mint)
+            self.processed_addresses.add(mint)
+        return {
+            'mint': mint,
+            'program': self.SYSTEM_ADDRESSES['associated_token']
+        }
+
+    def _process_metadata_instruction(self, instruction: Dict, account_keys: List[str]) -> Dict:
+        """Process a metadata program instruction"""
+        parsed = instruction.get('parsed', {})
+        info = parsed.get('info', {})
+        mint = info.get('mint')
+        metadata = info.get('metadata')
+        if mint:
+            self.mint_addresses.add(mint)
+            self.processed_addresses.add(mint)
+        if metadata:
+            self.metadata_addresses.add(metadata)
+            self.processed_addresses.add(metadata)
+        return {
+            'mint': mint,
+            'metadata': metadata,
+            'program': self.SYSTEM_ADDRESSES['metadata_program']
+        }
