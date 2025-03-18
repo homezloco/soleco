@@ -107,6 +107,6 @@ def test_process_metadata_instruction():
     
     # Verify mint and metadata addresses were found
     assert mint_address in handler.mint_addresses
-    assert metadata_address in handler.mint_addresses
+    assert metadata_address in handler.metadata_addresses
     assert mint_address in handler.processed_addresses
     assert metadata_address in handler.processed_addresses

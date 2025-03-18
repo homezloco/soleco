@@ -12,14 +12,16 @@ email-validator==2.1.0
 
 # Solana and Blockchain Dependencies
 solana==0.36.1
-solders==0.23.0
+solders<0.24.0,>=0.23.0
 base58==2.1.1
 pynacl==1.5.0  # Updated from nacl for signature verification
 
 # Web3 and Crypto
 requests==2.31.0
-web3==6.11.1
-eth_typing==5.2.0
+web3==6.17.0
+eth_typing==4.1.0
+websockets<11.0,>=9.0
+toolz<0.12.0,>=0.11.2
 python-jose==3.3.0
 cryptography==42.0.2
 

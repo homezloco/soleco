@@ -6,7 +6,7 @@ This module provides query handlers and utilities for fetching and processing So
 import asyncio
 import logging
 import uuid
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Any, Dict, List, Optional, Set, Union, TypeVar
 from dataclasses import dataclass
 from datetime import datetime
 from tenacity import (
@@ -37,259 +37,12 @@ from .solana_types import (
 from .handlers.base_handler import BaseHandler
 from .handlers.token_handler import TokenHandler
 from .handlers.program_handler import ProgramHandler
+from .base_response_handler import ResponseHandler, SolanaResponseManager
+from .handlers.mint_response_handler import MintResponseHandler
 
 logger = logging.getLogger(__name__)
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s: %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-
-class QueryBatchStats:
-    """Statistics for query batches."""
-    
-    def __init__(self):
-        self.total_queries = 0
-        self.successful_queries = 0
-        self.failed_queries = 0
-        self.skipped_queries = 0
-        self.rate_limited_queries = 0
-        self.error_types: Dict[str, int] = {}
-        self.total_processed = 0
-        self.large_transfers = 0
-        self.inner_instructions = 0
-        self.unique_programs = 0
-        
-    def increment_total(self):
-        self.total_queries += 1
-        
-    def increment_success(self):
-        self.successful_queries += 1
-        
-    def increment_failure(self):
-        self.failed_queries += 1
-        
-    def increment_skipped(self):
-        self.skipped_queries += 1
-        
-    def increment_rate_limited(self):
-        self.rate_limited_queries += 1
-        
-    def record_error(self, error_type: str):
-        if error_type not in self.error_types:
-            self.error_types[error_type] = 0
-        self.error_types[error_type] += 1
-        
-    def get_current(self) -> Dict[str, Any]:
-        return {
-            "total": self.total_queries,
-            "successful": self.successful_queries,
-            "failed": self.failed_queries,
-            "skipped": self.skipped_queries,
-            "rate_limited": self.rate_limited_queries,
-            "error_types": self.error_types,
-            "total_processed": self.total_processed,
-            "large_transfers": self.large_transfers,
-            "inner_instructions": self.inner_instructions,
-            "unique_programs": self.unique_programs
-        }
-
-class SolanaResponseManager:
-    """Manager for handling Solana RPC responses with comprehensive error handling."""
-    
-    def __init__(self, config: EndpointConfig):
-        self.config = config
-        self.stats = QueryBatchStats()
-        
-        # Initialize handlers
-        from .handlers.base_handler import BaseHandler
-        from .handlers.token_handler import TokenHandler
-        from .handlers.program_handler import ProgramHandler
-        
-        self.base_handler = BaseHandler()
-        self.token_handler = TokenHandler()
-        self.program_handler = ProgramHandler()
-        self.mint_handler = MintHandler()
-    
-    async def handle_response(self, response: Dict[str, Any]) -> Any:
-        """
-        Handle a raw RPC response with error checking
-        
-        Args:
-            response: Raw RPC response
-            
-        Returns:
-            Processed response data
-            
-        Raises:
-            RPCError: If response contains an error
-        """
-        if not response:
-            raise RPCError("Empty response")
-            
-        if "error" in response:
-            error = response["error"]
-            error_code = error.get("code", -1)
-            error_message = error.get("message", "Unknown error")
-            
-            if error_code == -32007:  # Slot skipped
-                raise SlotSkippedError(f"Slot was skipped: {error_message}")
-            elif error_code == -32004:  # Node is behind
-                raise NodeBehindError(f"Node is behind: {error_message}")
-            elif error_code == -32009:  # Transaction simulation failed
-                raise SimulationError(f"Transaction simulation failed: {error_message}")
-            elif error_code == -32008:  # Missing blocks
-                raise MissingBlocksError(f"Missing blocks: {error_message}")
-            else:
-                raise RPCError(f"RPC error {error_code}: {error_message}")
-                
-        if "result" not in response:
-            # Handle raw response format
-            if isinstance(response, (dict, list)):
-                return await self.process_result(response)
-            raise RPCError("Invalid response format")
-            
-        return await self.process_result(response["result"])
-        
-    async def process_result(self, result: Any) -> Any:
-        """Process the result portion of the response"""
-        if result is None:
-            return None
-            
-        # Handle list results
-        if isinstance(result, list):
-            processed = []
-            for item in result:
-                processed.append(await self.process_result(item))
-            return processed
-            
-        # For block data, use base handler
-        if isinstance(result, dict) and ("transactions" in result or "blockhash" in result):
-            return await self.base_handler.process_result(result)
-            
-        # Delegate to appropriate handler based on result type
-        if isinstance(result, dict):
-            if "mint" in result:
-                return await self.mint_handler.process_result(result)
-            elif "token" in result:
-                return await self.token_handler.process_result(result)
-            elif "program" in result:
-                return await self.program_handler.process_result(result)
-                
-        # Return raw result if no handler matches
-        return result
-
-class ResponseHandler:
-    """Base class for handling Solana RPC responses"""
-    
-    def __init__(self, response_manager: SolanaResponseManager):
-        self.response_manager = response_manager
-        self.stats = QueryBatchStats()
-        
-    async def handle_response(self, response: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Handle a raw RPC response
-        
-        Args:
-            response: The raw RPC response
-            
-        Returns:
-            Processed result
-        """
-        try:
-            if not response or not isinstance(response, dict):
-                logger.warning("Invalid response format")
-                self.stats.increment_failure()
-                return {
-                    "success": False,
-                    "error": "Invalid response format",
-                    "data": None,
-                    "statistics": self.stats.get_current()
-                }
-
-            # Process the result
-            result = await self.process_result(response)
-            
-            # Update statistics
-            if result.get("success", False):
-                self.stats.increment_success()
-            else:
-                self.stats.increment_failure()
-                if result.get("error"):
-                    self.stats.record_error(result["error"])
-
-            return result
-
-        except Exception as e:
-            error_msg = f"Error in handle_response: {str(e)}"
-            logger.error(error_msg)
-            self.stats.increment_failure()
-            self.stats.record_error(type(e).__name__)
-            return {
-                "success": False,
-                "error": error_msg,
-                "data": None,
-                "statistics": self.stats.get_current()
-            }
-
-    async def process_result(self, result: Any) -> Dict[str, Any]:
-        """
-        Process the result portion of the response.
-        
-        Args:
-            result: The result to process
-            
-        Returns:
-            Processed result
-        """
-        try:
-            # Validate result format
-            if not result or not isinstance(result, dict):
-                logger.warning("Invalid result format")
-                return {
-                    "success": False,
-                    "error": "Invalid result format",
-                    "data": None,
-                    "statistics": self.stats.get_current()
-                }
-
-            # Extract block data
-            block_data = result.get('result', {})
-            if not isinstance(block_data, dict):
-                logger.warning("Invalid block data format")
-                return {
-                    "success": False,
-                    "error": "Invalid block data format",
-                    "data": None,
-                    "statistics": self.stats.get_current()
-                }
-
-            # Update statistics
-            self.stats.increment_total()
-            self.stats.increment_success()
-            
-            # Process block data
-            return {
-                "success": True,
-                "slot": block_data.get('slot', 0),
-                "timestamp": block_data.get('blockTime', int(time.time())),
-                "data": block_data,
-                "statistics": self.stats.get_current()
-            }
-
-        except Exception as e:
-            error_msg = f"Error processing result: {str(e)}"
-            logger.error(error_msg)
-            self.stats.increment_failure()
-            self.stats.record_error(error_msg)
-            return {
-                "success": False,
-                "error": error_msg,
-                "data": None,
-                "statistics": self.stats.get_current()
-            }
+T = TypeVar('T')
 
 class MintHandler(ResponseHandler):
     """Handler for mint-related responses with enhanced error handling"""
@@ -381,6 +134,55 @@ class MintHandler(ResponseHandler):
                     "error_counts": dict(self.error_counts)
                 }
             }
+
+class QueryBatchStats:
+    """Statistics for query batches."""
+    
+    def __init__(self):
+        self.total_queries = 0
+        self.successful_queries = 0
+        self.failed_queries = 0
+        self.skipped_queries = 0
+        self.rate_limited_queries = 0
+        self.error_types: Dict[str, int] = {}
+        self.total_processed = 0
+        self.large_transfers = 0
+        self.inner_instructions = 0
+        self.unique_programs = 0
+        
+    def increment_total(self):
+        self.total_queries += 1
+        
+    def increment_success(self):
+        self.successful_queries += 1
+        
+    def increment_failure(self):
+        self.failed_queries += 1
+        
+    def increment_skipped(self):
+        self.skipped_queries += 1
+        
+    def increment_rate_limited(self):
+        self.rate_limited_queries += 1
+        
+    def record_error(self, error_type: str):
+        if error_type not in self.error_types:
+            self.error_types[error_type] = 0
+        self.error_types[error_type] += 1
+        
+    def get_current(self) -> Dict[str, Any]:
+        return {
+            "total": self.total_queries,
+            "successful": self.successful_queries,
+            "failed": self.failed_queries,
+            "skipped": self.skipped_queries,
+            "rate_limited": self.rate_limited_queries,
+            "error_types": self.error_types,
+            "total_processed": self.total_processed,
+            "large_transfers": self.large_transfers,
+            "inner_instructions": self.inner_instructions,
+            "unique_programs": self.unique_programs
+        }
 
 class SolanaQueryHandler:
     """Handler for Solana blockchain queries."""
@@ -1470,3 +1272,19 @@ class SolanaQueryHandler:
                 "success": False,
                 "error": str(e)
             }
+
+logger = logging.getLogger(__name__)
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s: %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
+__all__ = [
+    'MintResponseHandler',
+    'MintHandler',
+    'QueryBatchStats',
+    'SolanaQueryHandler'
+]
