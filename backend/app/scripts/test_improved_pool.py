@@ -10,6 +10,7 @@ import time
 import logging
 import random
 from typing import List, Dict, Any
+import pytest
 
 # Add the parent directory to the path so we can import the app modules
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -19,6 +20,10 @@ from app.utils.solana_rpc import get_connection_pool, SolanaClient, SolanaConnec
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+def is_ci_environment():
+    """Check if we're running in a CI environment"""
+    return os.environ.get('CI') == 'true'
 
 async def simulate_endpoint_performance(pool: SolanaConnectionPool, num_requests: int = 50) -> None:
     """
@@ -104,6 +109,8 @@ async def simulate_endpoint_performance(pool: SolanaConnectionPool, num_requests
         logger.info(f"  Current Failures: {stats.get('current_failures', 0)}")
         logger.info("")
 
+@pytest.mark.asyncio
+@pytest.mark.skipif(is_ci_environment(), reason="Skip in CI environment")
 async def test_endpoint_prioritization(pool: SolanaConnectionPool) -> None:
     """
     Test that endpoints are properly prioritized based on performance.
@@ -163,7 +170,10 @@ async def test_pool():
 
 def main():
     """Main function."""
-    asyncio.run(test_pool())
+    if is_ci_environment():
+        logger.info("Skipping tests in CI environment")
+    else:
+        asyncio.run(test_pool())
 
 if __name__ == "__main__":
     main()

@@ -5,7 +5,8 @@ from typing import Dict, Any, Optional, List, Tuple
 import logging
 from datetime import datetime, timezone, timedelta
 import asyncio
-from ..solana_response import ResponseHandler
+# Import from response_base instead
+from ..response_base import ResponseHandler
 import traceback
 
 logger = logging.getLogger(__name__)

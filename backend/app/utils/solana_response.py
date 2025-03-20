@@ -37,152 +37,12 @@ from .solana_types import (
 from .handlers.base_handler import BaseHandler
 from .handlers.token_handler import TokenHandler
 from .handlers.program_handler import ProgramHandler
-from .base_response_handler import ResponseHandler, SolanaResponseManager
 from .handlers.mint_response_handler import MintResponseHandler
+from .response_base import ResponseHandler, SolanaResponseManager
 
 logger = logging.getLogger(__name__)
 
 T = TypeVar('T')
-
-class MintHandler(ResponseHandler):
-    """Handler for mint-related responses with enhanced error handling"""
-    
-    def __init__(self, response_manager: Optional[SolanaResponseManager] = None):
-        """Initialize with optional response manager"""
-        super().__init__(response_manager)
-        self.error_counts = defaultdict(int)
-        self.start_time = None
-        
-    async def process_result(self, result: Any) -> Dict[str, Any]:
-        """Process mint transaction result with comprehensive error handling"""
-        try:
-            if not result or not isinstance(result, dict):
-                logger.warning("Invalid mint result format")
-                return {
-                    "success": False,
-                    "error": "Invalid mint result format",
-                    "mint_addresses": [],
-                    "statistics": self.stats.get_current()
-                }
-
-            # Extract block data
-            block_data = result.get('result', {})
-            if not isinstance(block_data, dict):
-                logger.warning("Invalid mint block data format")
-                return {
-                    "success": False,
-                    "error": "Invalid mint block data format",
-                    "mint_addresses": [],
-                    "statistics": self.stats.get_current()
-                }
-
-            # Process transactions
-            transactions = block_data.get('transactions', [])
-            if not transactions:
-                logger.debug("No transactions found in block")
-                return {
-                    "success": True,
-                    "mint_addresses": [],
-                    "statistics": self.stats.get_current()
-                }
-
-            # Track mint addresses and statistics
-            mint_addresses = []
-            for tx in transactions:
-                try:
-                    # Process transaction
-                    mint_info = await self._process_transaction(tx)
-                    if mint_info.get('mint_address'):
-                        mint_addresses.append(mint_info['mint_address'])
-                        
-                    # Update statistics
-                    self.stats.total_processed += 1
-                    if mint_info.get('inner_instructions', 0) > 0:
-                        self.stats.inner_instructions += mint_info['inner_instructions']
-                    
-                except Exception as tx_error:
-                    error_type = type(tx_error).__name__
-                    self.error_counts[error_type] += 1
-                    logger.warning(f"Error processing transaction: {str(tx_error)}")
-
-            # Update statistics
-            self.stats.increment_total()
-            self.stats.increment_success()
-            
-            return {
-                "success": True,
-                "slot": block_data.get('slot', 0),
-                "timestamp": block_data.get('blockTime', int(time.time())),
-                "mint_addresses": mint_addresses,
-                "statistics": {
-                    **self.stats.get_current(),
-                    "error_counts": dict(self.error_counts)
-                }
-            }
-
-        except Exception as e:
-            error_msg = f"Error processing mint result: {str(e)}"
-            logger.error(error_msg)
-            self.stats.increment_failure()
-            self.stats.record_error(error_msg)
-            return {
-                "success": False,
-                "error": error_msg,
-                "mint_addresses": [],
-                "statistics": {
-                    **self.stats.get_current(),
-                    "error_counts": dict(self.error_counts)
-                }
-            }
-
-class QueryBatchStats:
-    """Statistics for query batches."""
-    
-    def __init__(self):
-        self.total_queries = 0
-        self.successful_queries = 0
-        self.failed_queries = 0
-        self.skipped_queries = 0
-        self.rate_limited_queries = 0
-        self.error_types: Dict[str, int] = {}
-        self.total_processed = 0
-        self.large_transfers = 0
-        self.inner_instructions = 0
-        self.unique_programs = 0
-        
-    def increment_total(self):
-        self.total_queries += 1
-        
-    def increment_success(self):
-        self.successful_queries += 1
-        
-    def increment_failure(self):
-        self.failed_queries += 1
-        
-    def increment_skipped(self):
-        self.skipped_queries += 1
-        
-    def increment_rate_limited(self):
-        self.rate_limited_queries += 1
-        
-    def record_error(self, error_type: str):
-        if error_type not in self.error_types:
-            self.error_types[error_type] = 0
-        self.error_types[error_type] += 1
-        
-    def get_current(self) -> Dict[str, Any]:
-        return {
-            "total": self.total_queries,
-            "successful": self.successful_queries,
-            "failed": self.failed_queries,
-            "skipped": self.skipped_queries,
-            "rate_limited": self.rate_limited_queries,
-            "error_types": self.error_types,
-            "total_processed": self.total_processed,
-            "large_transfers": self.large_transfers,
-            "inner_instructions": self.inner_instructions,
-            "unique_programs": self.unique_programs
-        }
 
 class SolanaQueryHandler:
     """Handler for Solana blockchain queries."""
@@ -209,7 +69,7 @@ class SolanaQueryHandler:
         self.base_handler = BaseHandler()
         self.token_handler = TokenHandler()
         self.program_handler = ProgramHandler()
-        self.mint_handler = MintHandler()
+        self.mint_handler = MintHandler(self.response_manager)
         
     async def get_signatures_for_address(
         self,
@@ -1273,6 +1133,146 @@ class SolanaQueryHandler:
                 "error": str(e)
             }
 
+class QueryBatchStats:
+    """Statistics for query batches."""
+    
+    def __init__(self):
+        self.total_queries = 0
+        self.successful_queries = 0
+        self.failed_queries = 0
+        self.skipped_queries = 0
+        self.rate_limited_queries = 0
+        self.error_types: Dict[str, int] = {}
+        self.total_processed = 0
+        self.large_transfers = 0
+        self.inner_instructions = 0
+        self.unique_programs = 0
+        
+    def increment_total(self):
+        self.total_queries += 1
+        
+    def increment_success(self):
+        self.successful_queries += 1
+        
+    def increment_failure(self):
+        self.failed_queries += 1
+        
+    def increment_skipped(self):
+        self.skipped_queries += 1
+        
+    def increment_rate_limited(self):
+        self.rate_limited_queries += 1
+        
+    def record_error(self, error_type: str):
+        if error_type not in self.error_types:
+            self.error_types[error_type] = 0
+        self.error_types[error_type] += 1
+        
+    def get_current(self) -> Dict[str, Any]:
+        return {
+            "total": self.total_queries,
+            "successful": self.successful_queries,
+            "failed": self.failed_queries,
+            "skipped": self.skipped_queries,
+            "rate_limited": self.rate_limited_queries,
+            "error_types": self.error_types,
+            "total_processed": self.total_processed,
+            "large_transfers": self.large_transfers,
+            "inner_instructions": self.inner_instructions,
+            "unique_programs": self.unique_programs
+        }
+
+class MintHandler(ResponseHandler):
+    """Handler for mint-related responses with enhanced error handling"""
+    
+    def __init__(self, response_manager: Optional[SolanaResponseManager] = None):
+        """Initialize with optional response manager"""
+        super().__init__(response_manager)
+        self.error_counts = defaultdict(int)
+        self.start_time = None
+        
+    async def process_result(self, result: Any) -> Dict[str, Any]:
+        """Process mint transaction result with comprehensive error handling"""
+        try:
+            if not result or not isinstance(result, dict):
+                logger.warning("Invalid mint result format")
+                return {
+                    "success": False,
+                    "error": "Invalid mint result format",
+                    "mint_addresses": [],
+                    "statistics": self.stats.get_current()
+                }
+
+            # Extract block data
+            block_data = result.get('result', {})
+            if not isinstance(block_data, dict):
+                logger.warning("Invalid mint block data format")
+                return {
+                    "success": False,
+                    "error": "Invalid mint block data format",
+                    "mint_addresses": [],
+                    "statistics": self.stats.get_current()
+                }
+
+            # Process transactions
+            transactions = block_data.get('transactions', [])
+            if not transactions:
+                logger.debug("No transactions found in block")
+                return {
+                    "success": True,
+                    "mint_addresses": [],
+                    "statistics": self.stats.get_current()
+                }
+
+            # Track mint addresses and statistics
+            mint_addresses = []
+            for tx in transactions:
+                try:
+                    # Process transaction
+                    mint_info = await self._process_transaction(tx)
+                    if mint_info.get('mint_address'):
+                        mint_addresses.append(mint_info['mint_address'])
+                        
+                    # Update statistics
+                    self.stats.total_processed += 1
+                    if mint_info.get('inner_instructions', 0) > 0:
+                        self.stats.inner_instructions += mint_info['inner_instructions']
+                    
+                except Exception as tx_error:
+                    error_type = type(tx_error).__name__
+                    self.error_counts[error_type] += 1
+                    logger.warning(f"Error processing transaction: {str(tx_error)}")
+
+            # Update statistics
+            self.stats.increment_total()
+            self.stats.increment_success()
+            
+            return {
+                "success": True,
+                "slot": block_data.get('slot', 0),
+                "timestamp": block_data.get('blockTime', int(time.time())),
+                "mint_addresses": mint_addresses,
+                "statistics": {
+                    **self.stats.get_current(),
+                    "error_counts": dict(self.error_counts)
+                }
+            }
+
+        except Exception as e:
+            error_msg = f"Error processing mint result: {str(e)}"
+            logger.error(error_msg)
+            self.stats.increment_failure()
+            self.stats.record_error(error_msg)
+            return {
+                "success": False,
+                "error": error_msg,
+                "mint_addresses": [],
+                "statistics": {
+                    **self.stats.get_current(),
+                    "error_counts": dict(self.error_counts)
+                }
+            }
+
 logger = logging.getLogger(__name__)
 
 # Configure logging
@@ -1286,5 +1286,7 @@ __all__ = [
     'MintResponseHandler',
     'MintHandler',
     'QueryBatchStats',
-    'SolanaQueryHandler'
+    'SolanaQueryHandler',
+    'SolanaResponseManager',
+    'ResponseHandler'
 ]

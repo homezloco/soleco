@@ -9,13 +9,14 @@ import time
 import sys
 import os
 from typing import Dict, Any
+import pytest
 
 # Add the parent directory to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(os.path.dirname(current_dir))
+parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-from backend.app.utils.solana_rpc import SolanaClient
+from app.utils.solana_rpc import SolanaClient
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -23,6 +24,11 @@ logger = logging.getLogger(__name__)
 
 # The endpoint to test
 TEST_ENDPOINT = "https://api.mainnet-beta.solana.com"
+
+# Check if we're running in a CI environment
+def is_ci_environment():
+    """Check if we're running in a CI environment"""
+    return os.environ.get('CI') == 'true'
 
 async def test_with_timeout(timeout: float) -> Dict[str, Any]:
     """
@@ -100,7 +106,7 @@ async def test_with_timeout(timeout: float) -> Dict[str, Any]:
             except Exception as e:
                 logger.warning(f"Error closing client: {str(e)}")
 
-async def main():
+async def run_tests():
     """Test the endpoint with different timeout settings."""
     logger.info(f"Starting individual endpoint test for {TEST_ENDPOINT}")
     
@@ -117,5 +123,13 @@ async def main():
     
     logger.info("Tests completed")
 
+@pytest.mark.asyncio
+@pytest.mark.skipif(is_ci_environment(), reason="Skip in CI environment to avoid long-running tests")
+async def test_single_endpoint():
+    """Pytest test function for testing a single endpoint."""
+    # Just test with a single timeout for pytest
+    result = await test_with_timeout(10.0)
+    assert result["success"] == True, f"Endpoint test failed: {result['error']}"
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(run_tests())

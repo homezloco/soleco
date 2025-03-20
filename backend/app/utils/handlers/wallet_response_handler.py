@@ -5,7 +5,7 @@ Handler for processing wallet-related responses from Solana RPC.
 from typing import Dict, Optional, Set
 from collections import defaultdict
 
-from app.utils.base_response_handler import ResponseHandler, SolanaResponseManager
+from app.utils.response_base import ResponseHandler, SolanaResponseManager
 
 class WalletResponseHandler(ResponseHandler):
     """Handler for wallet-related responses"""

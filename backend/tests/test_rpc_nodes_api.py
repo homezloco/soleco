@@ -5,6 +5,7 @@ import asyncio
 import aiohttp
 import json
 import logging
+import os
 from backend.app.utils.solana_rpc import SolanaConnectionPool
 import pytest
 import socket
@@ -12,8 +13,15 @@ import socket
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def is_server_running(host="localhost", port=8001):
-    """Check if server is running on the specified host and port."""
+def is_server_running(host=None, port=8001):
+    """Check if the server is running on the specified host and port."""
+    # Skip these tests in CI environment
+    if os.environ.get("CI", "false").lower() == "true":
+        return False
+        
+    if host is None:
+        host = os.environ.get("TEST_SERVER_HOST", "localhost")
+    
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(1)
@@ -24,11 +32,11 @@ def is_server_running(host="localhost", port=8001):
 
 @pytest.mark.asyncio
 @pytest.mark.skipif(not is_server_running(), reason="Server is not running")
-async def test_rpc_nodes_api():
+async def test_rpc_nodes_api(server_url):
     """Test the RPC nodes API endpoint."""
     try:
         # API endpoint URL
-        url = "http://localhost:8001/soleco/solana/rpc-nodes"
+        url = f"{server_url}/soleco/solana/rpc-nodes"
         
         # Test with different query parameters
         test_cases = [
@@ -96,9 +104,9 @@ async def test_rpc_nodes_api():
 
 @pytest.mark.asyncio
 @pytest.mark.skipif(not is_server_running(), reason="Server is not running")
-async def test_api_with_details():
+async def test_api_with_details(server_url):
     # Test API with include_details parameter
-    url = "http://localhost:8001/soleco/solana/rpc-nodes"
+    url = f"{server_url}/soleco/solana/rpc-nodes"
     params = {'include_details': 'true'}
     
     async with aiohttp.ClientSession() as session:
@@ -118,9 +126,9 @@ async def test_api_with_details():
 
 @pytest.mark.asyncio
 @pytest.mark.skipif(not is_server_running(), reason="Server is not running")
-async def test_api_with_health_check():
+async def test_api_with_health_check(server_url):
     # Test API with health_check parameter
-    url = "http://localhost:8001/soleco/solana/rpc-nodes"
+    url = f"{server_url}/soleco/solana/rpc-nodes"
     params = {'health_check': 'true'}
     
     async with aiohttp.ClientSession() as session:

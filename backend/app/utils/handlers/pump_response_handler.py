@@ -5,7 +5,7 @@ Handler for processing pump detection responses from Solana RPC.
 from typing import Dict, Optional, List
 from collections import defaultdict
 
-from app.utils.base_response_handler import ResponseHandler, SolanaResponseManager
+from app.utils.response_base import ResponseHandler, SolanaResponseManager
 
 class PumpResponseHandler(ResponseHandler):
     """Handler for pump detection responses"""

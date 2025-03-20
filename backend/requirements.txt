@@ -42,5 +42,7 @@ sqlalchemy[asyncio]==2.0.25  # Added for async database operations
 redis==5.0.1  # Added for Redis cache support
 
 # Testing
-pytest_xprocess==1.0.2
+pytest-xprocess==1.0.2
 pytest-asyncio==0.23.5
+pytest-mock==3.14.0
+pytest-timeout==2.3.1
