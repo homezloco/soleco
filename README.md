@@ -2,7 +2,16 @@
 
 ## 📖 Overview
 
-A comprehensive API aggregator for the Solana ecosystem, integrating multiple protocols including Jupiter, Raydium, Birdeye, Meteora, and more.
+Soleco is a comprehensive analytics and monitoring platform for the Solana blockchain ecosystem. It serves as a robust API aggregator, integrating multiple protocols including Jupiter, Raydium, Birdeye, Helius, SHYFT, Moralis, RugCheck, Pump, and DEX Screener.
+
+### Key Features
+
+- **Robust Solana RPC Management**: Intelligent connection pooling with automatic health checks, endpoint rotation, and fallback mechanisms
+- **Network Monitoring**: Real-time Solana network status, performance metrics, and validator analytics
+- **Token Intelligence**: Track new token mints, analyze "pump" tokens, and monitor token performance
+- **Multi-Protocol Integration**: Unified API interface for accessing diverse Solana ecosystem data
+- **Advanced Caching System**: Efficient SQLite-based caching with configurable TTL values
+- **Multi-Platform Accessibility**: Web dashboard, CLI tool, and API endpoints
 
 ## Project Structure
 
@@ -13,7 +22,11 @@ soleco/
 │   │   ├── routers/
 │   │   │   ├── jupiter.py
 │   │   │   ├── raydium.py
-│   │   │   ├── birdeye.py
+│   │   │   ├── solana.py
+│   │   │   └── ...
+│   │   ├── utils/
+│   │   │   ├── solana_connection.py
+│   │   │   ├── solana_query.py
 │   │   │   └── ...
 │   │   └── main.py
 │   └── requirements.txt
@@ -30,9 +43,12 @@ soleco/
     │   ├── api/
     │   │   └── client.ts
     │   ├── components/
+    │   │   ├── Solana/
+    │   │   │   ├── NetworkStatusCard.tsx
+    │   │   │   ├── PerformanceMetricsCard.tsx
+    │   │   │   └── RpcNodesCard.tsx
     │   │   ├── JupiterPanel.tsx
-    │   │   ├── RaydiumPanel.tsx
-    │   │   └── BirdeyePanel.tsx
+    │   │   └── ...
     │   └── App.tsx
     └── package.json
 ```
@@ -47,18 +63,18 @@ python -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 ```
 
-3. Install dependencies
+2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Set up environment variables
+3. Set up environment variables
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
 ```
 
-5. Run the application
+4. Run the application
 ```bash
 uvicorn app.main:app --reload
 ```
@@ -91,13 +107,6 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 - [Discord Community](https://discord.gg/your-discord)
 - [Twitter](https://twitter.com/soleco)
 - [GitHub Discussions](https://github.com/yourusername/soleco/discussions)
-
-## 📊 Roadmap
-
-- [ ] Implement more API integrations
-- [ ] Develop frontend dashboard
-- [ ] Add advanced analytics features
-- [ ] Implement user authentication
 
 ## 📝 License
 

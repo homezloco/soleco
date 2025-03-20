@@ -122,3 +122,15 @@
 2025-03-20 19:20:21 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
 2025-03-20 19:20:21 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
 2025-03-20 19:20:21 - solana.connection - INFO - Connection pool initialized with 1 clients
+2025-03-20 19:30:55 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-20 19:30:55 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-20 19:30:55 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-20 19:30:55 - solana.connection - INFO - Connection pool initialized with 1 clients
+2025-03-20 19:33:17 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-20 19:33:18 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-20 19:33:18 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-20 19:33:18 - solana.connection - INFO - Connection pool initialized with 1 clients
+2025-03-20 19:35:12 - solana.connection - INFO - Initializing Solana RPC connection pool...
+2025-03-20 19:35:12 - solana.connection - INFO - Successfully connected to https://api.mainnet-beta.solana.com
+2025-03-20 19:35:12 - solana.connection - INFO - Successfully connected to endpoint: https://api.mainnet-beta.solana.com (SSL verify: True)
+2025-03-20 19:35:12 - solana.connection - INFO - Connection pool initialized with 1 clients
