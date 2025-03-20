@@ -734,3 +734,82 @@ def create_slot_batches(start_slot: int, end_slot: int, batch_size: int = DEFAUL
     """Create batches of slots for parallel processing."""
     slots = list(range(start_slot, end_slot + 1))
     return [slots[i:i + batch_size] for i in range(0, len(slots), batch_size)]
+
+# Health monitoring helpers
+async def get_endpoints_health() -> List[Dict[str, Any]]:
+    """Get health status of all RPC endpoints"""
+    from .solana_connection import get_connection_pool
+    connection_pool = await get_connection_pool()
+    return await connection_pool.get_endpoint_health()
+
+async def get_endpoint_health_detail(endpoint: str) -> Dict[str, Any]:
+    """Get detailed health status for specific endpoint"""
+    from .solana_connection import get_connection_pool
+    connection_pool = await get_connection_pool()
+    return await connection_pool.get_endpoint_health_detail(endpoint)
+
+# RPC pool management helpers
+async def get_rpc_pool_status() -> Dict[str, Any]:
+    """Get current RPC pool status"""
+    from .solana_connection import get_connection_pool
+    connection_pool = await get_connection_pool()
+    return await connection_pool.get_pool_status()
+
+async def rotate_rpc_endpoint() -> Dict[str, Any]:
+    """Force rotation to next endpoint"""
+    from .solana_connection import get_connection_pool
+    connection_pool = await get_connection_pool()
+    return await connection_pool.rotate_endpoint()
+
+async def get_rpc_endpoints() -> List[Dict[str, Any]]:
+    """List available endpoints"""
+    from .solana_connection import get_connection_pool
+    connection_pool = await get_connection_pool()
+    return connection_pool.get_endpoints()
+
+# Network performance metrics helpers
+async def get_tps_metrics() -> Dict[str, Any]:
+    """Get current transactions per second"""
+    from .solana_query import SolanaQueryHandler
+    from .cache.database_cache import get_database_cache
+    
+    cache = await get_database_cache()
+    handler = SolanaQueryHandler(cache=cache)  # Fix: Pass cache as a keyword argument
+    return await handler.get_tps()
+
+async def get_block_time_metrics() -> Dict[str, Any]:
+    """Get average block time"""
+    from .solana_query import SolanaQueryHandler
+    from .cache.database_cache import get_database_cache
+    
+    cache = await get_database_cache()
+    handler = SolanaQueryHandler(cache=cache)  # Fix: Pass cache as a keyword argument
+    return await handler.get_block_time()
+
+# Advanced analytics helpers
+async def get_token_mints_analytics() -> Dict[str, Any]:
+    """Get analytics for new token mints"""
+    from .solana_query import SolanaQueryHandler
+    from .cache.database_cache import get_database_cache
+    
+    cache = await get_database_cache()
+    handler = SolanaQueryHandler(cache=cache)  # Fix: Pass cache as a keyword argument
+    return await handler.get_token_mints_analytics()
+
+async def get_pump_token_data() -> Dict[str, Any]:
+    """Get pump token tracking data"""
+    from .solana_query import SolanaQueryHandler
+    from .cache.database_cache import get_database_cache
+    
+    cache = await get_database_cache()
+    handler = SolanaQueryHandler(cache=cache)  # Fix: Pass cache as a keyword argument
+    return await handler.get_pump_token_data()
+
+async def get_dex_activity_data() -> Dict[str, Any]:
+    """Get DEX trading activity"""
+    from .solana_query import SolanaQueryHandler
+    from .cache.database_cache import get_database_cache
+    
+    cache = await get_database_cache()
+    handler = SolanaQueryHandler(cache=cache)  # Fix: Pass cache as a keyword argument
+    return await handler.get_dex_activity()

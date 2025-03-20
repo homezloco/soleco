@@ -598,7 +598,6 @@ def get_recent_blocks(client=None, **kwargs):
 
 # Create FastAPI router
 router = APIRouter(
-    prefix="/solana",
     tags=["Soleco"],
     responses={404: {"description": "Not found"}},
 )
@@ -1154,23 +1153,20 @@ async def get_rpc_nodes(
     include_details: bool = Query(False, description="Include detailed information for each RPC node"),
     health_check: bool = Query(False, description="Perform health checks on a sample of RPC nodes"),
     include_all: bool = Query(False, description="Include all discovered RPC nodes, even those that may be unreliable"),
-    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
-    use_enhanced_extractor: bool = Query(True, description="Use enhanced RPC node extractor with improved error handling")
+    refresh: bool = Query(False, description="Force refresh from Solana RPC")
 ):
     """
     Get a list of available Solana RPC nodes
     - Optionally includes detailed information about each node
     - Can perform health checks on a sample of nodes
     - Provides version distribution statistics
-    - Can use enhanced extractor with improved error handling and reliability
     """
     try:
         # Create cache key based on parameters
         params = {
             "include_details": include_details,
             "health_check": health_check,
-            "include_all": include_all,
-            "use_enhanced_extractor": use_enhanced_extractor
+            "include_all": include_all
         }
         
         # Try to get from cache if not forcing refresh
@@ -1191,11 +1187,11 @@ async def get_rpc_nodes(
                 }
         
         # Extract RPC nodes
-        logger.info(f"Creating RPCNodeExtractor and extracting RPC nodes (enhanced mode: {use_enhanced_extractor})")
+        logger.info(f"Creating RPCNodeExtractor and extracting RPC nodes")
         start_time = time.time()
         
         try:
-            extractor = RPCNodeExtractor(solana_query_handler, use_enhanced_mode=use_enhanced_extractor)
+            extractor = RPCNodeExtractor(solana_query_handler)
             
             # Configure health check setting
             extractor.check_health = health_check
@@ -1204,7 +1200,7 @@ async def get_rpc_nodes(
             all_nodes_result = await extractor.get_all_rpc_nodes()
             
             # In enhanced mode, we continue even if there are errors
-            if not use_enhanced_extractor and all_nodes_result.get("status") != "success":
+            if not all_nodes_result.get("status") == "success":
                 error_msg = all_nodes_result.get("error", "Unknown error retrieving cluster nodes")
                 logger.error(f"Failed to get RPC nodes: {error_msg}")
                 execution_time_ms = int((time.time() - start_time) * 1000)
@@ -1222,11 +1218,11 @@ async def get_rpc_nodes(
             logger.info(f"Extracted {len(rpc_nodes)} RPC nodes in {extraction_time:.2f} seconds")
             
             # Get any errors that were collected during extraction
-            extraction_errors = extractor.get_errors() if use_enhanced_extractor else []
+            extraction_errors = extractor.get_errors()
             
         except Exception as extract_error:
             logger.error(f"Error during RPC node extraction: {str(extract_error)}", exc_info=True)
-            execution_time_ms = int((time.time() - start_time) * 1000)
+            execution_time_ms = int((time.time() - (start_time if 'start_time' in locals() else time.time())) * 1000)
             
             return {
                 "status": "error",
@@ -1294,8 +1290,8 @@ async def get_rpc_nodes(
         if health_stats:
             result.update(health_stats)
         
-        # Add errors if using enhanced extractor and errors were found
-        if use_enhanced_extractor and extraction_errors:
+        # Add errors if there were any during extraction
+        if extraction_errors:
             result["errors"] = extraction_errors
         
         # Add detailed node info if requested
@@ -1411,7 +1407,7 @@ async def get_filtered_rpc_stats():
     Returns:
         Dict: Detailed statistics about each endpoint and summary metrics, with Helius endpoints and private endpoints filtered out
     """
-    from app.utils.solana_rpc import get_connection_pool
+    from ..utils.solana_rpc import get_connection_pool
     import logging
     
     # Get or create the connection pool
@@ -1509,7 +1505,7 @@ async def get_network_status_v2(
     
     Returns a JSON object containing:
     
-    - **status**: Overall network health status (healthy, degraded, error)
+    - **status**: Overall network health status (healthy, degraded, or unhealthy)
     - **errors**: Any errors encountered during data collection
     - **timestamp**: When the data was retrieved
     - **network_summary**: Summary statistics including:
@@ -2023,3 +2019,66 @@ async def get_token_info(
             "error": str(e),
             "traceback": traceback.format_exc()
         }
+
+@router.get('/health/endpoints', response_model=List[Dict[str, Any]], tags=["solana", "health"])
+async def get_endpoints_health_status():
+    """Get health status of all RPC endpoints"""
+    from ..utils.solana_helpers import get_endpoints_health
+    return await get_endpoints_health()
+
+@router.get('/health/endpoints/{endpoint}', response_model=Dict[str, Any], tags=["solana", "health"])
+async def get_endpoint_health_detail(endpoint: str):
+    """Get detailed health status for specific endpoint"""
+    from ..utils.solana_helpers import get_endpoint_health_detail
+    return await get_endpoint_health_detail(endpoint)
+
+# RPC pool management endpoints
+@router.get("/rpc-pool/status", response_model=Dict[str, Any], tags=["solana", "rpc"])
+async def get_rpc_pool_status_endpoint():
+    """Get current RPC pool status"""
+    from ..utils.solana_helpers import get_rpc_pool_status
+    return await get_rpc_pool_status()
+
+@router.post("/rpc-pool/rotate", response_model=Dict[str, Any], tags=["solana", "rpc"])
+async def rotate_rpc_endpoint_endpoint():
+    """Force rotation to next endpoint"""
+    from ..utils.solana_helpers import rotate_rpc_endpoint
+    return await rotate_rpc_endpoint()
+
+@router.get("/rpc-pool/endpoints", response_model=List[Dict[str, Any]], tags=["solana", "rpc"])
+async def get_available_endpoints_endpoint():
+    """List available endpoints"""
+    from ..utils.solana_helpers import get_rpc_endpoints
+    return await get_rpc_endpoints()
+
+# Network performance metrics endpoints
+@router.get("/metrics/tps", response_model=Dict[str, Any], tags=["solana", "metrics"])
+async def get_tps_metrics_endpoint():
+    """Get current transactions per second"""
+    from ..utils.solana_helpers import get_tps_metrics
+    return await get_tps_metrics()
+
+@router.get("/metrics/blocktime", response_model=Dict[str, Any], tags=["solana", "metrics"])
+async def get_block_time_metrics_endpoint():
+    """Get average block time"""
+    from ..utils.solana_helpers import get_block_time_metrics
+    return await get_block_time_metrics()
+
+# Advanced analytics endpoints
+@router.get("/analytics/token-mints", response_model=Dict[str, Any], tags=["solana", "analytics"])
+async def get_token_mints_analytics_endpoint():
+    """Get analytics for new token mints"""
+    from ..utils.solana_helpers import get_token_mints_analytics
+    return await get_token_mints_analytics()
+
+@router.get("/analytics/pump-tokens", response_model=Dict[str, Any], tags=["solana", "analytics"])
+async def get_pump_token_data_endpoint():
+    """Get pump token tracking data"""
+    from ..utils.solana_helpers import get_pump_token_data
+    return await get_pump_token_data()
+
+@router.get("/analytics/dex-activity", response_model=Dict[str, Any], tags=["solana", "analytics"])
+async def get_dex_activity_data_endpoint():
+    """Get DEX trading activity"""
+    from ..utils.solana_helpers import get_dex_activity_data
+    return await get_dex_activity_data()

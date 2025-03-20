@@ -1,17 +1,29 @@
 from typing import Dict, Any, Optional
 import asyncio
 from redis.asyncio import Redis
+import logging
+
+logger = logging.getLogger(__name__)
 
 class DatabaseCache:
     def __init__(self):
         self._cache: Dict[str, Any] = {}
         self._redis: Optional[Redis] = None
+        try:
+            self._redis = Redis(host='localhost', port=6379)
+            # Test connection
+            asyncio.get_event_loop().run_until_complete(self._redis.ping())
+        except Exception as e:
+            logger.warning(f'Redis connection failed: {e}. Using in-memory cache only')
+            self._redis = None
 
     async def get(self, key: str) -> Optional[Dict[str, Any]]:
         return self._cache.get(key)
 
-    async def set(self, key: str, data: Dict[str, Any]) -> None:
+    async def set(self, key: str, data: Dict[str, Any], ttl: Optional[int] = None) -> None:
         self._cache[key] = data
+        if self._redis and ttl:
+            await self._redis.set(key, data, ex=ttl)
 
     async def get_cached_data(self, cache_key: str, params: Dict[str, Any], ttl: int) -> Dict[str, Any]:
         key = self._generate_cache_key(cache_key, params)
@@ -27,8 +39,14 @@ class DatabaseCache:
             del self._cache[key]
 
     async def close(self):
+        """Close all resources and clean up"""
         if self._redis:
-            await self._redis.aclose()
+            try:
+                await self._redis.aclose()
+            except Exception as e:
+                logger.error(f"Error closing Redis client: {e}")
+        self._redis = None
+        self._cache.clear()
 
     async def get_client(self) -> Redis:
         if not self._redis:
@@ -53,3 +71,9 @@ class DatabaseCache:
     def _generate_cache_key(self, cache_key: str, params: Dict[str, Any]) -> str:
         param_str = '&'.join(f'{k}={v}' for k, v in sorted(params.items()))
         return f'{cache_key}?{param_str}'
+
+async def get_database_cache() -> DatabaseCache:
+    """Get an initialized database cache instance"""
+    cache = DatabaseCache()
+    await cache.get_client()  # Initialize Redis client
+    return cache

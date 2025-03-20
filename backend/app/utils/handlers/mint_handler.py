@@ -22,9 +22,11 @@ class MintHandler(BaseHandler):
         'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'   # Token 2022
     }
 
-    def __init__(self):
+    def __init__(self, response_manager=None, cache_manager=None):
         """Initialize the mint handler"""
         super().__init__()
+        self.response_manager = response_manager
+        self.cache_manager = cache_manager
         self.instruction_handler = InstructionHandler()
         self.processed_mints = set()
         self.stats = {

@@ -1735,6 +1735,281 @@ class SolanaQueryHandler:
             
             return ([], client)
 
+    async def get_tps(self) -> Dict[str, Any]:
+        """Get current transactions per second metrics"""
+        await self.ensure_initialized()
+        
+        # Try to get from cache first
+        cache_key = "solana:tps:metrics"
+        cached = await self.cache.get(cache_key)
+        if cached:
+            return cached
+            
+        try:
+            # Get recent performance samples
+            recent_performance = await self.get_recent_performance()
+            
+            # Calculate TPS from samples
+            tps_stats = self._calculate_tps_statistics(recent_performance)
+            
+            # Add timestamp
+            tps_stats["timestamp"] = datetime.datetime.now(pytz.utc).isoformat()
+            
+            # Cache the result (short TTL)
+            await self.cache.set(cache_key, tps_stats, ttl=60)  # 1 minute TTL
+            
+            return tps_stats
+            
+        except Exception as e:
+            logger.error(f"Error getting TPS metrics: {str(e)}")
+            return {
+                "error": str(e),
+                "timestamp": datetime.datetime.now(pytz.utc).isoformat()
+            }
+            
+    def _calculate_tps_statistics(self, performance_samples: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Calculate TPS statistics from performance samples"""
+        if not performance_samples:
+            return {
+                "current_tps": 0,
+                "max_tps": 0,
+                "avg_tps": 0,
+                "min_tps": 0,
+                "samples_count": 0
+            }
+            
+        # Extract TPS values
+        tps_values = []
+        for sample in performance_samples:
+            if "numTransactions" in sample and "samplePeriodSecs" in sample:
+                num_tx = sample["numTransactions"]
+                period_secs = sample["samplePeriodSecs"]
+                if period_secs > 0:
+                    tps = num_tx / period_secs
+                    tps_values.append(tps)
+                    
+        if not tps_values:
+            return {
+                "current_tps": 0,
+                "max_tps": 0,
+                "avg_tps": 0,
+                "min_tps": 0,
+                "samples_count": len(performance_samples)
+            }
+            
+        # Calculate statistics
+        current_tps = tps_values[0] if tps_values else 0
+        max_tps = max(tps_values) if tps_values else 0
+        avg_tps = sum(tps_values) / len(tps_values) if tps_values else 0
+        min_tps = min(tps_values) if tps_values else 0
+        
+        return {
+            "current_tps": round(current_tps, 2),
+            "max_tps": round(max_tps, 2),
+            "avg_tps": round(avg_tps, 2),
+            "min_tps": round(min_tps, 2),
+            "samples_count": len(tps_values)
+        }
+        
+    async def get_block_time(self) -> Dict[str, Any]:
+        """Get average block time metrics"""
+        await self.ensure_initialized()
+        
+        # Try to get from cache first
+        cache_key = "solana:blocktime:metrics"
+        cached = await self.cache.get(cache_key)
+        if cached:
+            return cached
+            
+        try:
+            # Get recent performance samples
+            recent_performance = await self.get_recent_performance()
+            
+            # Calculate block time from samples
+            block_time_stats = self._calculate_block_time_statistics(recent_performance)
+            
+            # Add timestamp
+            block_time_stats["timestamp"] = datetime.datetime.now(pytz.utc).isoformat()
+            
+            # Cache the result (short TTL)
+            await self.cache.set(cache_key, block_time_stats, ttl=60)  # 1 minute TTL
+            
+            return block_time_stats
+            
+        except Exception as e:
+            logger.error(f"Error getting block time metrics: {str(e)}")
+            return {
+                "error": str(e),
+                "timestamp": datetime.datetime.now(pytz.utc).isoformat()
+            }
+            
+    def _calculate_block_time_statistics(self, performance_samples: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Calculate block time statistics from performance samples"""
+        if not performance_samples:
+            return {
+                "current_block_time_ms": 0,
+                "max_block_time_ms": 0,
+                "avg_block_time_ms": 0,
+                "min_block_time_ms": 0,
+                "samples_count": 0
+            }
+            
+        # Extract block time values
+        block_time_values = []
+        for sample in performance_samples:
+            if "numSlots" in sample and "samplePeriodSecs" in sample:
+                num_slots = sample["numSlots"]
+                period_secs = sample["samplePeriodSecs"]
+                if num_slots > 0:
+                    # Calculate average block time in milliseconds
+                    block_time_ms = (period_secs / num_slots) * 1000
+                    block_time_values.append(block_time_ms)
+                    
+        if not block_time_values:
+            return {
+                "current_block_time_ms": 0,
+                "max_block_time_ms": 0,
+                "avg_block_time_ms": 0,
+                "min_block_time_ms": 0,
+                "samples_count": len(performance_samples)
+            }
+            
+        # Calculate statistics
+        current_block_time = block_time_values[0] if block_time_values else 0
+        max_block_time = max(block_time_values) if block_time_values else 0
+        avg_block_time = sum(block_time_values) / len(block_time_values) if block_time_values else 0
+        min_block_time = min(block_time_values) if block_time_values else 0
+        
+        return {
+            "current_block_time_ms": round(current_block_time, 2),
+            "max_block_time_ms": round(max_block_time, 2),
+            "avg_block_time_ms": round(avg_block_time, 2),
+            "min_block_time_ms": round(min_block_time, 2),
+            "samples_count": len(block_time_values)
+        }
+        
+    async def get_token_mints_analytics(self) -> List[Dict[str, Any]]:
+        """Get analytics for new token mints"""
+        await self.ensure_initialized()
+        
+        # Try to get from cache first
+        cache_key = "solana:token:mints:analytics"
+        cached = await self.cache.get(cache_key)
+        if cached:
+            return cached
+            
+        try:
+            # Get recent token mints from the mint handler
+            from .handlers.mint_handler import MintHandler
+            mint_handler = MintHandler(self.connection_pool, self.cache)
+            recent_mints = await mint_handler.get_recent_mints(limit=50)
+            
+            # Add timestamp
+            result = {
+                "mints": recent_mints,
+                "count": len(recent_mints),
+                "timestamp": datetime.datetime.now(pytz.utc).isoformat()
+            }
+            
+            # Cache the result
+            await self.cache.set(cache_key, result, ttl=300)  # 5 minute TTL
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error getting token mints analytics: {str(e)}")
+            return {
+                "error": str(e),
+                "mints": [],
+                "count": 0,
+                "timestamp": datetime.datetime.now(pytz.utc).isoformat()
+            }
+            
+    async def get_pump_token_data(self) -> List[Dict[str, Any]]:
+        """Get pump token tracking data"""
+        await self.ensure_initialized()
+        
+        # Try to get from cache first
+        cache_key = "solana:pump:tokens"
+        cached = await self.cache.get(cache_key)
+        if cached:
+            return cached
+            
+        try:
+            # Get pump token data from the pump handler
+            from .handlers.pump_handler import PumpHandler
+            pump_handler = PumpHandler(self.connection_pool, self.cache)
+            pump_tokens = await pump_handler.get_pump_tokens(limit=50)
+            
+            # Add timestamp
+            result = {
+                "tokens": pump_tokens,
+                "count": len(pump_tokens),
+                "timestamp": datetime.datetime.now(pytz.utc).isoformat()
+            }
+            
+            # Cache the result
+            await self.cache.set(cache_key, result, ttl=300)  # 5 minute TTL
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error getting pump token data: {str(e)}")
+            return {
+                "error": str(e),
+                "tokens": [],
+                "count": 0,
+                "timestamp": datetime.datetime.now(pytz.utc).isoformat()
+            }
+            
+    async def get_dex_activity(self) -> Dict[str, Any]:
+        """Get DEX trading activity"""
+        await self.ensure_initialized()
+        
+        # Try to get from cache first
+        cache_key = "solana:dex:activity"
+        cached = await self.cache.get(cache_key)
+        if cached:
+            return cached
+            
+        try:
+            # Get DEX activity data
+            # This would typically involve querying various DEXes like Jupiter, Raydium, etc.
+            # For now, we'll return a placeholder implementation
+            
+            result = {
+                "dexes": [
+                    {
+                        "name": "Jupiter",
+                        "volume_24h": 0,
+                        "trades_24h": 0
+                    },
+                    {
+                        "name": "Raydium",
+                        "volume_24h": 0,
+                        "trades_24h": 0
+                    }
+                ],
+                "total_volume_24h": 0,
+                "total_trades_24h": 0,
+                "timestamp": datetime.datetime.now(pytz.utc).isoformat()
+            }
+            
+            # Cache the result
+            await self.cache.set(cache_key, result, ttl=300)  # 5 minute TTL
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error getting DEX activity: {str(e)}")
+            return {
+                "error": str(e),
+                "dexes": [],
+                "total_volume_24h": 0,
+                "total_trades_24h": 0,
+                "timestamp": datetime.datetime.now(pytz.utc).isoformat()
+            }
+        
 from .handlers.pump_handler import PumpHandler
 from .handlers.nft_handler import NFTHandler
 from .handlers.instruction_handler import InstructionHandler

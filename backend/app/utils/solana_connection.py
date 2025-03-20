@@ -8,6 +8,8 @@ from solana.rpc.async_api import AsyncClient
 from .solana_error import RPCError
 from .logging_config import setup_logging
 from .solana_ssl_config import should_bypass_ssl_verification
+import time
+from datetime import datetime
 
 # Configure logging
 logger = setup_logging('solana.connection')
@@ -191,6 +193,213 @@ class SolanaConnectionPool:
         
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.close()
+
+    async def get_endpoint_health(self) -> List[Dict[str, Any]]:
+        """Get health status of all RPC endpoints"""
+        if not self._initialized:
+            await self.initialize()
+            
+        results = []
+        for endpoint in self.endpoints:
+            try:
+                # Create a temporary client to test the endpoint
+                ssl_verify = self._get_endpoint_ssl_setting(endpoint)
+                from .solana_rpc import SolanaClient
+                client = SolanaClient(
+                    endpoint=endpoint,
+                    timeout=5.0,  # Short timeout for health check
+                    max_retries=1,
+                    retry_delay=0.5,
+                    ssl_verify=ssl_verify
+                )
+                
+                # Test the endpoint
+                await client.connect()
+                start_time = time.time()
+                health = await client.get_health()
+                latency = time.time() - start_time
+                
+                # Get version info
+                version_info = await client.get_version()
+                
+                # Add to results
+                results.append({
+                    "endpoint": endpoint,
+                    "status": "healthy" if health == "ok" else health,
+                    "latency_ms": round(latency * 1000, 2),
+                    "version": version_info.get("solana-core", "unknown"),
+                    "feature_set": version_info.get("feature-set", "unknown"),
+                    "ssl_verify": ssl_verify,
+                    "timestamp": datetime.now().isoformat()
+                })
+                
+                # Close the client
+                await client.close()
+                
+            except Exception as e:
+                results.append({
+                    "endpoint": endpoint,
+                    "status": "error",
+                    "error": str(e),
+                    "ssl_verify": self._get_endpoint_ssl_setting(endpoint),
+                    "timestamp": datetime.now().isoformat()
+                })
+                
+        # Sort by status (healthy first) and then by latency
+        results.sort(key=lambda x: (0 if x.get("status") == "healthy" else 1, 
+                                   x.get("latency_ms", float("inf"))))
+        
+        return results
+        
+    async def get_endpoint_health_detail(self, endpoint: str) -> Dict[str, Any]:
+        """Get detailed health status for specific endpoint"""
+        if not endpoint in self.endpoints:
+            return {
+                "endpoint": endpoint,
+                "status": "error",
+                "error": "Endpoint not in pool",
+                "timestamp": datetime.now().isoformat()
+            }
+            
+        try:
+            # Create a temporary client to test the endpoint
+            ssl_verify = self._get_endpoint_ssl_setting(endpoint)
+            from .solana_rpc import SolanaClient
+            client = SolanaClient(
+                endpoint=endpoint,
+                timeout=10.0,
+                max_retries=1,
+                retry_delay=0.5,
+                ssl_verify=ssl_verify
+            )
+            
+            # Connect and get basic info
+            await client.connect()
+            result = {
+                "endpoint": endpoint,
+                "ssl_verify": ssl_verify,
+                "timestamp": datetime.now().isoformat(),
+                "tests": {}
+            }
+            
+            # Test health
+            start_time = time.time()
+            health = await client.get_health()
+            latency = time.time() - start_time
+            result["status"] = "healthy" if health == "ok" else health
+            result["latency_ms"] = round(latency * 1000, 2)
+            result["tests"]["health"] = {
+                "status": "success" if health == "ok" else "error",
+                "latency_ms": round(latency * 1000, 2),
+                "result": health
+            }
+            
+            # Test version
+            try:
+                start_time = time.time()
+                version = await client.get_version()
+                latency = time.time() - start_time
+                result["version"] = version.get("solana-core", "unknown")
+                result["feature_set"] = version.get("feature-set", "unknown")
+                result["tests"]["version"] = {
+                    "status": "success",
+                    "latency_ms": round(latency * 1000, 2),
+                    "result": version
+                }
+            except Exception as e:
+                result["tests"]["version"] = {
+                    "status": "error",
+                    "error": str(e)
+                }
+                
+            # Test slot
+            try:
+                start_time = time.time()
+                slot = await client.get_slot()
+                latency = time.time() - start_time
+                result["slot"] = slot
+                result["tests"]["slot"] = {
+                    "status": "success",
+                    "latency_ms": round(latency * 1000, 2),
+                    "result": slot
+                }
+            except Exception as e:
+                result["tests"]["slot"] = {
+                    "status": "error",
+                    "error": str(e)
+                }
+                
+            # Test block production
+            try:
+                start_time = time.time()
+                block_production = await client.get_block_production()
+                latency = time.time() - start_time
+                result["tests"]["block_production"] = {
+                    "status": "success",
+                    "latency_ms": round(latency * 1000, 2),
+                    "result": "supported"
+                }
+            except Exception as e:
+                result["tests"]["block_production"] = {
+                    "status": "error",
+                    "error": str(e),
+                    "result": "not supported" if "Method not found" in str(e) else "error"
+                }
+                
+            # Close the client
+            await client.close()
+            
+            return result
+            
+        except Exception as e:
+            return {
+                "endpoint": endpoint,
+                "status": "error",
+                "error": str(e),
+                "timestamp": datetime.now().isoformat()
+            }
+            
+    async def get_pool_status(self) -> Dict[str, Any]:
+        """Get current RPC pool status"""
+        if not self._initialized:
+            await self.initialize()
+            
+        return {
+            "initialized": self._initialized,
+            "pool_size": len(self._pool),
+            "endpoints": self.endpoints,
+            "current_index": self._current_client_index,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    async def rotate_endpoint(self) -> Dict[str, Any]:
+        """Force rotation to next endpoint"""
+        if not self._initialized:
+            await self.initialize()
+            
+        async with self._pool_lock:
+            old_index = self._current_client_index
+            self._current_client_index = (self._current_client_index + 1) % len(self._pool)
+            
+            return {
+                "success": True,
+                "previous_index": old_index,
+                "new_index": self._current_client_index,
+                "previous_endpoint": self.endpoints[old_index] if old_index < len(self.endpoints) else None,
+                "new_endpoint": self.endpoints[self._current_client_index] if self._current_client_index < len(self.endpoints) else None,
+                "timestamp": datetime.now().isoformat()
+            }
+            
+    def get_endpoints(self) -> List[Dict[str, Any]]:
+        """List available endpoints"""
+        return [
+            {
+                "endpoint": endpoint,
+                "ssl_verify": self._get_endpoint_ssl_setting(endpoint),
+                "index": i
+            }
+            for i, endpoint in enumerate(self.endpoints)
+        ]
 
 # Global connection pool instance
 _connection_pool: Optional[SolanaConnectionPool] = None

@@ -16,8 +16,16 @@ logger = setup_logging('solana.response.pump')
 class PumpHandler(BaseHandler):
     """Handler for detecting pump tokens"""
     
-    def __init__(self):
+    def __init__(self, response_manager=None, cache_manager=None):
         super().__init__()
+        self.response_manager = response_manager
+        self.cache_manager = cache_manager
+        self.processed_pumps = set()
+        self.stats = {
+            'total_pumps': 0,
+            'active_pumps': 0,
+            'errors': []
+        }
         self.VELOCITY_THRESHOLD = 5  # Minimum transactions in short time
         self.TIME_WINDOW = 3600     # Time window in seconds (1 hour)
         self.HOLDER_THRESHOLD = 3   # Minimum number of holders
