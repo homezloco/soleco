@@ -56,6 +56,9 @@ async def test_with_timeout(timeout: float) -> Dict[str, Any]:
         # Create a client for this endpoint
         client = SolanaClient(endpoint=TEST_ENDPOINT, timeout=timeout)
         
+        # Connect to the endpoint
+        await client.connect()
+        
         logger.info(f"Testing endpoint {TEST_ENDPOINT} with timeout {timeout}s")
         
         # Test basic methods with timeout

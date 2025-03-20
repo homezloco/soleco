@@ -27,10 +27,15 @@ class SolanaConnectionPool:
         max_retries: int = 3,
         retry_delay: float = 1.0,
         timeout: float = 20.0,
-        ssl_verify: bool = True
+        ssl_verify: bool = True,
+        endpoint: str = None
     ):
         """Initialize the connection pool"""
-        self.endpoints = endpoints
+        # Handle both endpoint and endpoints parameters for backward compatibility
+        if endpoint is not None:
+            self.endpoints = [endpoint]
+        else:
+            self.endpoints = endpoints
         self.pool_size = pool_size
         self.max_retries = max_retries
         self.retry_delay = retry_delay
