@@ -1153,20 +1153,34 @@ async def get_rpc_nodes(
     include_details: bool = Query(False, description="Include detailed information for each RPC node"),
     health_check: bool = Query(False, description="Perform health checks on a sample of RPC nodes"),
     include_all: bool = Query(False, description="Include all discovered RPC nodes, even those that may be unreliable"),
+<<<<<<< HEAD
     refresh: bool = Query(False, description="Force refresh from Solana RPC")
+=======
+    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
+    use_enhanced_extractor: bool = Query(True, description="Use enhanced RPC node extractor with improved error handling")
+>>>>>>> origin/main
 ):
     """
     Get a list of available Solana RPC nodes
     - Optionally includes detailed information about each node
     - Can perform health checks on a sample of nodes
     - Provides version distribution statistics
+<<<<<<< HEAD
+=======
+    - Can use enhanced extractor with improved error handling and reliability
+>>>>>>> origin/main
     """
     try:
         # Create cache key based on parameters
         params = {
             "include_details": include_details,
             "health_check": health_check,
+<<<<<<< HEAD
             "include_all": include_all
+=======
+            "include_all": include_all,
+            "use_enhanced_extractor": use_enhanced_extractor
+>>>>>>> origin/main
         }
         
         # Try to get from cache if not forcing refresh
@@ -1187,11 +1201,19 @@ async def get_rpc_nodes(
                 }
         
         # Extract RPC nodes
+<<<<<<< HEAD
         logger.info(f"Creating RPCNodeExtractor and extracting RPC nodes")
         start_time = time.time()
         
         try:
             extractor = RPCNodeExtractor(solana_query_handler)
+=======
+        logger.info(f"Creating RPCNodeExtractor and extracting RPC nodes (enhanced mode: {use_enhanced_extractor})")
+        start_time = time.time()
+        
+        try:
+            extractor = RPCNodeExtractor(solana_query_handler, use_enhanced_mode=use_enhanced_extractor)
+>>>>>>> origin/main
             
             # Configure health check setting
             extractor.check_health = health_check
@@ -1200,7 +1222,11 @@ async def get_rpc_nodes(
             all_nodes_result = await extractor.get_all_rpc_nodes()
             
             # In enhanced mode, we continue even if there are errors
+<<<<<<< HEAD
             if not all_nodes_result.get("status") == "success":
+=======
+            if not use_enhanced_extractor and all_nodes_result.get("status") != "success":
+>>>>>>> origin/main
                 error_msg = all_nodes_result.get("error", "Unknown error retrieving cluster nodes")
                 logger.error(f"Failed to get RPC nodes: {error_msg}")
                 execution_time_ms = int((time.time() - start_time) * 1000)
@@ -1218,11 +1244,19 @@ async def get_rpc_nodes(
             logger.info(f"Extracted {len(rpc_nodes)} RPC nodes in {extraction_time:.2f} seconds")
             
             # Get any errors that were collected during extraction
+<<<<<<< HEAD
             extraction_errors = extractor.get_errors()
             
         except Exception as extract_error:
             logger.error(f"Error during RPC node extraction: {str(extract_error)}", exc_info=True)
             execution_time_ms = int((time.time() - (start_time if 'start_time' in locals() else time.time())) * 1000)
+=======
+            extraction_errors = extractor.get_errors() if use_enhanced_extractor else []
+            
+        except Exception as extract_error:
+            logger.error(f"Error during RPC node extraction: {str(extract_error)}", exc_info=True)
+            execution_time_ms = int((time.time() - start_time) * 1000)
+>>>>>>> origin/main
             
             return {
                 "status": "error",
@@ -1290,8 +1324,13 @@ async def get_rpc_nodes(
         if health_stats:
             result.update(health_stats)
         
+<<<<<<< HEAD
         # Add errors if there were any during extraction
         if extraction_errors:
+=======
+        # Add errors if using enhanced extractor and errors were found
+        if use_enhanced_extractor and extraction_errors:
+>>>>>>> origin/main
             result["errors"] = extraction_errors
         
         # Add detailed node info if requested
@@ -2019,6 +2058,7 @@ async def get_token_info(
             "error": str(e),
             "traceback": traceback.format_exc()
         }
+<<<<<<< HEAD
 
 @router.get('/health/endpoints', response_model=List[Dict[str, Any]], tags=["solana", "health"])
 async def get_endpoints_health_status():
@@ -2082,3 +2122,5 @@ async def get_dex_activity_data_endpoint():
     """Get DEX trading activity"""
     from ..utils.solana_helpers import get_dex_activity_data
     return await get_dex_activity_data()
+=======
+>>>>>>> origin/main

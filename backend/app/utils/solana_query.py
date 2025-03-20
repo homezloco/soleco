@@ -1735,6 +1735,7 @@ class SolanaQueryHandler:
             
             return ([], client)
 
+<<<<<<< HEAD
     async def get_tps(self) -> Dict[str, Any]:
         """Get current transactions per second metrics"""
         await self.ensure_initialized()
@@ -2010,6 +2011,8 @@ class SolanaQueryHandler:
                 "timestamp": datetime.datetime.now(pytz.utc).isoformat()
             }
         
+=======
+>>>>>>> origin/main
 from .handlers.pump_handler import PumpHandler
 from .handlers.nft_handler import NFTHandler
 from .handlers.instruction_handler import InstructionHandler
