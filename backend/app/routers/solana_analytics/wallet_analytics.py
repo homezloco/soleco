@@ -224,7 +224,13 @@ class WalletAnalytics:
                 detail=f"Failed to analyze wallet activity: {str(e)}"
             )
 
-wallet_analytics = WalletAnalytics(SolanaQueryHandler(get_connection_pool()))
+wallet_analytics = None
+
+@router.on_event("startup")
+async def startup_event():
+    global wallet_analytics
+    connection_pool = await get_connection_pool()
+    wallet_analytics = WalletAnalytics(SolanaQueryHandler(connection_pool))
 
 @router.get("/activity/{wallet_address}")
 async def get_wallet_activity(

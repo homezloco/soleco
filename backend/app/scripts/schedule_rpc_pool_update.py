@@ -127,14 +127,12 @@ async def scheduled_update(interval_hours: float, max_test: int, max_endpoints: 
     jitter_factor = 0.1  # 10% jitter
     
     try:
-        # Run an initial update immediately
-        logger.info("Running initial RPC pool update")
-        try:
-            await update_rpc_pool(max_test, max_endpoints)
-            logger.info("Initial RPC pool update completed successfully")
-        except Exception as e:
-            logger.error(f"Error during initial RPC pool update: {str(e)}")
-            logger.exception(e)
+        # Schedule the initial update to run asynchronously instead of blocking
+        logger.info("Scheduling initial RPC pool update to run in background")
+        asyncio.create_task(
+            run_initial_update(max_test, max_endpoints),
+            name="initial_rpc_pool_update"
+        )
         
         # Main update loop
         while True:
@@ -179,7 +177,22 @@ async def scheduled_update(interval_hours: float, max_test: int, max_endpoints: 
     except Exception as e:
         logger.error(f"Fatal error in RPC pool update scheduler: {str(e)}")
         logger.exception(e)
-        raise
+
+async def run_initial_update(max_test: int, max_endpoints: int):
+    """
+    Run the initial RPC pool update as a separate task.
+    
+    Args:
+        max_test: Maximum number of endpoints to test
+        max_endpoints: Maximum number of endpoints to keep in the pool
+    """
+    try:
+        logger.info("Running initial RPC pool update in background task")
+        await update_rpc_pool(max_test, max_endpoints)
+        logger.info("Initial RPC pool update completed successfully")
+    except Exception as e:
+        logger.error(f"Error during initial RPC pool update: {str(e)}")
+        logger.exception(e)
 
 async def start_scheduler(interval_hours: float = 12.0, 
                           health_check_interval: float = 1.0,

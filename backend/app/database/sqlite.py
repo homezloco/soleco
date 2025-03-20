@@ -10,6 +10,8 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Union
 from pathlib import Path
 import asyncio
+import time
+from datetime import timezone
 
 # Configure logging
 logger = logging.getLogger("app.database.sqlite")
@@ -29,8 +31,9 @@ class DatabaseCache:
     """
     def __init__(self):
         """Initialize the database connection and create tables if they don't exist."""
-        # We'll initialize connections on demand in each thread
-        pass
+        self.db_path = DB_FILE
+        self._cache = {}
+        self._lock = asyncio.Lock()
         
     def __del__(self):
         """Ensure connection is closed when object is destroyed."""
@@ -302,6 +305,15 @@ class DatabaseCache:
         except Exception as e:
             logger.error(f"Error caching data for {key}: {e}")
             return False
+    
+    def update_cache(self, key: str, value: dict) -> None:
+        if 'refresh' in key:
+            value['timestamp'] = datetime.now(timezone.utc).isoformat()
+        with self._get_connection()[0] as conn:
+            conn.execute(
+                'INSERT OR REPLACE INTO cache (endpoint, data, params, timestamp, ttl) VALUES (?, ?, ?, ?, ?)',
+                (key, json.dumps(value), None, value['timestamp'], 300)
+            )
     
     def store_network_status(self, status: str, data: Dict[str, Any]) -> bool:
         """
@@ -736,6 +748,48 @@ class DatabaseCache:
         except Exception as e:
             logger.error(f"Error getting performance metrics history: {e}")
             return []
+    
+    async def clear_cache(self, key: str):
+        """Clear the cache for a specific key.
+
+        Args:
+            key: The key to clear from the cache.
+        """
+        async with self._lock:
+            if key in self._cache:
+                del self._cache[key]
+
+    async def set_cache(self, key: str, value: Any, ttl: int = 300) -> None:
+        """
+        Set a value in the cache with a TTL.
+
+        Args:
+            key: Cache key
+            value: Value to cache
+            ttl: Time to live in seconds (default: 300)
+        """
+        expiration = time.time() + ttl
+        value['timestamp'] = datetime.now(timezone.utc).isoformat()
+        async with self._lock:
+            self._cache[key] = (value, expiration)
+
+    async def get_cache(self, key: str) -> Optional[Any]:
+        """
+        Get a value from the cache.
+
+        Args:
+            key: Cache key
+
+        Returns:
+            The cached value, or None if it does not exist or has expired.
+        """
+        async with self._lock:
+            if key in self._cache:
+                value, expiration = self._cache[key]
+                if time.time() < expiration:
+                    return value
+                del self._cache[key]
+        return None
 
 # Create a singleton instance
 db_cache = DatabaseCache()

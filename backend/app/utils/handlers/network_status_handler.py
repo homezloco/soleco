@@ -5,7 +5,6 @@ from typing import Dict, Any, Optional, List, Tuple
 import logging
 from datetime import datetime, timezone, timedelta
 import asyncio
-from ..solana_query import SolanaQueryHandler
 from ..solana_response import ResponseHandler
 import traceback
 
@@ -14,15 +13,17 @@ logger = logging.getLogger(__name__)
 class NetworkStatusHandler:
     """Handles network status analysis and monitoring."""
     
-    def __init__(self, solana_query: SolanaQueryHandler):
+    DEFAULT_TIMEOUT = 30.0  # Increase timeout from 20 to 30 seconds
+    
+    def __init__(self, solana_query=None):
         """
         Initialize the network status handler.
         
         Args:
-            solana_query: SolanaQueryHandler instance for blockchain queries
+            solana_query: Optional SolanaQueryHandler instance for blockchain queries
         """
         self.solana_query = solana_query
-        self.timeout = 10.0  # Increased timeout for slower endpoints
+        self.timeout = self.DEFAULT_TIMEOUT  # Use the default timeout
         self.cache = {}
         self.cache_ttl = {
             'nodes': timedelta(minutes=5),
@@ -33,6 +34,13 @@ class NetworkStatusHandler:
         }
         self.cached_status = None
         self.last_updated = None
+        
+    async def ensure_solana_query_initialized(self):
+        """Ensure SolanaQueryHandler is initialized."""
+        if self.solana_query is None:
+            from ..solana_query import SolanaQueryHandler
+            self.solana_query = SolanaQueryHandler()
+            await self.solana_query.initialize()
         
     def _is_cache_valid(self, key: str) -> bool:
         """Check if cached data is still valid."""
@@ -118,6 +126,7 @@ class NetworkStatusHandler:
             Dict containing performance metrics data
         """
         try:
+            await self.ensure_solana_query_initialized()
             # Get performance samples
             performance_coro = self.solana_query.get_recent_performance()
             _, performance_data = await self._get_data_with_timeout(performance_coro, 'performance')
@@ -167,15 +176,6 @@ class NetworkStatusHandler:
             }
             
     async def get_comprehensive_status(self, summary_only: bool = False) -> Dict[str, Any]:
-        """
-        Get comprehensive network status including nodes, version, epoch info, and performance.
-        
-        Args:
-            summary_only: If True, only return summary information without detailed node data
-            
-        Returns:
-            Dict containing detailed network status information
-        """
         status_data = {
             'status': 'initializing',
             'errors': [],
@@ -183,6 +183,7 @@ class NetworkStatusHandler:
         }
         
         try:
+            await self.ensure_solana_query_initialized()
             # Create the coroutines - ensure each is properly awaited
             nodes_coro = self.solana_query.get_cluster_nodes()
             version_coro = self.solana_query.get_version()
@@ -201,82 +202,25 @@ class NetworkStatusHandler:
             
             results = await asyncio.gather(*tasks, return_exceptions=True)
             
-            # Initialize default values for all sections
-            status_data['network_summary'] = {
-                'total_nodes': 0,
-                'rpc_nodes_available': 0,
-                'rpc_availability_percentage': 0,
-                'latest_version': 'unknown',
-                'current_epoch': 0,
-                'epoch_progress': 0,
-                'slot_height': 0,
-                'average_slot_time_ms': 0,
-                'transactions_per_second': 0
-            }
-            
-            # Only include detailed sections if not summary_only
-            if not summary_only:
-                status_data['cluster_nodes'] = {
-                    'total_nodes': 0,
-                    'nodes': []
-                }
-                
-                status_data['version_info'] = {
-                    'solana_core': 'unknown',
-                    'feature_set': 0
-                }
-                
-                status_data['epoch_info'] = {
-                    'epoch': 0,
-                    'slot_index': 0,
-                    'slots_in_epoch': 0,
-                    'absolute_slot': 0,
-                    'block_height': 0
-                }
-                
-                status_data['performance_metrics'] = {
-                    'num_blocks': 0,
-                    'num_slots': 0,
-                    'num_transactions': 0,
-                    'sample_period_secs': 0
-                }
-                
-                status_data['stake_distribution'] = {
-                    'total_active_stake': 0,
-                    'total_delinquent_stake': 0,
-                    'stake_health_percentage': 0,
-                    'active_validators': 0,
-                    'delinquent_validators': 0
-                }
-            
             # Process results
             for i, (name, result) in enumerate(zip(['nodes', 'version', 'epoch', 'performance', 'stakes'], results)):
                 if isinstance(result, tuple):
-                    # Normal result from _get_data_with_timeout
                     _, data = result
                     if data is None:
                         status_data['errors'].append({name: 'Failed to retrieve data'})
                         continue
                 elif isinstance(result, Exception):
-                    # Handle exception from gather
                     logger.error(f"Error in {name} task: {str(result)}")
                     status_data['errors'].append({name: f'Task error: {str(result)}'})
                     continue
-                else:
-                    logger.error(f"Unexpected result type for {name}: {type(result)}")
-                    status_data['errors'].append({name: f'Unexpected result type'})
-                    continue
-                    
+                
                 try:
                     if name == "nodes":
                         nodes_info = self._process_cluster_nodes(data)
-                        if not summary_only:
-                            status_data['cluster_nodes'] = {
-                                'total_nodes': len(nodes_info),
-                                'nodes': nodes_info
-                            }
-                        # Add network summary
-                        status_data['network_summary'] = self._generate_network_summary(nodes_info)
+                        status_data['cluster_nodes'] = {
+                            'total_nodes': len(nodes_info),
+                            'nodes': nodes_info
+                        }
                     elif name == "version":
                         status_data['version_info'] = data
                     elif name == "epoch":
@@ -284,11 +228,7 @@ class NetworkStatusHandler:
                     elif name == "performance":
                         status_data['performance_metrics'] = self._process_performance_metrics(data)
                     elif name == "stakes":
-                        stake_info = self._process_stake_info(data)
-                        if 'cluster_nodes' in status_data:
-                            status_data['cluster_nodes']['stake_distribution'] = stake_info
-                        else:
-                            status_data['stake_distribution'] = stake_info
+                        status_data['stake_distribution'] = self._process_stake_info(data)
                 except Exception as e:
                     logger.error(f"Error processing {name} data: {str(e)}")
                     status_data['errors'].append({name: f'Failed to process data: {str(e)}'})
@@ -297,7 +237,7 @@ class NetworkStatusHandler:
             error_count = len(status_data['errors'])
             if error_count == 0:
                 status_data['status'] = 'healthy'
-            elif error_count <= 2:  # Allow some non-critical failures
+            elif error_count <= 2:
                 status_data['status'] = 'degraded'
             else:
                 status_data['status'] = 'error'
@@ -307,92 +247,30 @@ class NetworkStatusHandler:
         except Exception as e:
             error_msg = f"Critical error in network status: {str(e)}"
             logger.error(error_msg)
-            logger.exception(e)  # Log full stack trace
+            logger.exception(e)
             return {
                 'status': 'error',
                 'error': error_msg,
                 'timestamp': self._get_current_timestamp()
             }
-    
-    async def get_network_status(self, summary_only: bool = False) -> Dict[str, Any]:
-        """
-        Get the current network status.
-        
-        Args:
-            summary_only: If True, return only summary information without detailed node lists
-            
-        Returns:
-            Dict with network status information
-        """
-        try:
-            # Check if we have cached data
-            if self.cached_status and (datetime.now() - self.last_updated) < self.cache_ttl['nodes']:
-                logging.info("Using cached network status")
-                return self._get_summary_if_needed(self.cached_status, summary_only)
-                
-            # Initialize the status dict
-            status = {
-                "status": "unknown",
-                "message": "",
-                "last_updated": datetime.now().isoformat(),
-                "metrics": {
-                    "total_nodes": 0,
-                    "active_nodes": 0,
-                    "inactive_nodes": 0,
-                    "delinquent_nodes": 0,
-                    "version_distribution": {},
-                    "feature_set_distribution": {},
-                    "stake_distribution": {}
-                },
-                "errors": []
-            }
-            
-            # Set up a timeout for the entire operation
-            try:
-                # Use asyncio.wait_for with a more aggressive timeout
-                await asyncio.wait_for(
-                    self._gather_network_status_data_parallel(status),
-                    timeout=8.0  # Reduced timeout for faster response
-                )
-            except asyncio.TimeoutError:
-                logging.warning("Network status data gathering timed out after 8 seconds")
-                status["status"] = "degraded"
-                status["message"] = "Data gathering timed out"
-                status["errors"].append({
-                    "type": "timeout",
-                    "message": "Network status data gathering timed out after 8 seconds",
-                    "timestamp": datetime.now().isoformat()
-                })
-                
-            # Update cache even if we had a timeout
-            self.cached_status = status
-            self.last_updated = datetime.now()
-            
-            return self._get_summary_if_needed(status, summary_only)
-            
-        except Exception as e:
-            logging.error(f"Error getting network status: {str(e)}", exc_info=True)
-            return {
-                "status": "error",
-                "message": f"Error getting network status: {str(e)}",
-                "last_updated": datetime.now().isoformat(),
-                "metrics": {
-                    "total_nodes": 0,
-                    "active_nodes": 0,
-                    "inactive_nodes": 0,
-                    "delinquent_nodes": 0,
-                    "version_distribution": {},
-                    "feature_set_distribution": {},
-                    "stake_distribution": {}
-                },
-                "errors": [{
-                    "type": "network_status_error",
-                    "message": str(e),
-                    "traceback": traceback.format_exc(),
-                    "timestamp": datetime.now().isoformat()
-                }]
-            }
-            
+
+    async def get_network_status(self, summary_only: bool = False, refresh: bool = False) -> dict:
+        # Check cache first if not forcing refresh
+        if not refresh:
+            cached_status = self.cached_status
+            if cached_status:
+                return cached_status
+
+        # Get fresh status
+        status = await self.get_comprehensive_status(summary_only)
+        if not summary_only:
+            status['timestamp'] = datetime.now(timezone.utc).isoformat()
+
+        # Update cache
+        self.cached_status = status
+
+        return self._get_summary_if_needed(status, summary_only)
+
     def _get_summary_if_needed(self, status: Dict[str, Any], summary_only: bool) -> Dict[str, Any]:
         """Return a summary version of the status if requested."""
         if summary_only:
@@ -429,10 +307,11 @@ class NetworkStatusHandler:
     async def _gather_cluster_nodes_data(self, status: Dict[str, Any]) -> None:
         """Gather cluster nodes data with timeout."""
         try:
+            await self.ensure_solana_query_initialized()
             # Set a shorter timeout for this specific operation
             nodes = await asyncio.wait_for(
                 self.solana_query.get_cluster_nodes(),
-                timeout=5.0  # 5 second timeout for cluster nodes
+                timeout=self.DEFAULT_TIMEOUT  # Use the default timeout
             )
             
             if not nodes or len(nodes) == 0:
@@ -510,12 +389,12 @@ class NetworkStatusHandler:
                 })
                 
         except asyncio.TimeoutError:
-            logging.warning("Cluster nodes data gathering timed out after 5 seconds")
+            logging.warning("Cluster nodes data gathering timed out after {} seconds".format(self.DEFAULT_TIMEOUT))
             status["status"] = "degraded"
             status["message"] = "Cluster nodes data gathering timed out"
             status["errors"].append({
                 "type": "timeout",
-                "message": "Cluster nodes data gathering timed out after 5 seconds",
+                "message": "Cluster nodes data gathering timed out after {} seconds".format(self.DEFAULT_TIMEOUT),
                 "timestamp": datetime.now().isoformat()
             })
             
@@ -549,10 +428,11 @@ class NetworkStatusHandler:
     async def _gather_vote_accounts_data(self, status: Dict[str, Any]) -> None:
         """Gather vote accounts data with timeout."""
         try:
+            await self.ensure_solana_query_initialized()
             # Set a shorter timeout for this specific operation
             vote_accounts = await asyncio.wait_for(
                 self.solana_query.get_vote_accounts(),
-                timeout=4.0  # 4 second timeout for vote accounts
+                timeout=self.DEFAULT_TIMEOUT  # Use the default timeout
             )
             
             if vote_accounts and "current" in vote_accounts and "delinquent" in vote_accounts:
@@ -622,10 +502,11 @@ class NetworkStatusHandler:
     async def _gather_epoch_info_data(self, status: Dict[str, Any]) -> None:
         """Gather epoch info data with timeout."""
         try:
+            await self.ensure_solana_query_initialized()
             # Set a shorter timeout for this specific operation
             epoch_info = await asyncio.wait_for(
                 self.solana_query.get_epoch_info(),
-                timeout=3.0  # 3 second timeout for epoch info
+                timeout=self.DEFAULT_TIMEOUT  # Use the default timeout
             )
             
             if epoch_info:
@@ -654,10 +535,11 @@ class NetworkStatusHandler:
     async def _gather_performance_data(self, status: Dict[str, Any]) -> None:
         """Gather performance data with timeout."""
         try:
+            await self.ensure_solana_query_initialized()
             # Set a shorter timeout for this specific operation
             performance = await asyncio.wait_for(
                 self.solana_query.get_recent_performance(),
-                timeout=3.0  # 3 second timeout for performance data
+                timeout=self.DEFAULT_TIMEOUT  # Use the default timeout
             )
             
             if performance:

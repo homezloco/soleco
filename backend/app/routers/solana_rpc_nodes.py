@@ -18,6 +18,8 @@ from ..utils.handlers.rpc_node_extractor import RPCNodeExtractor
 from ..utils.solana_connection_pool import rpc_nodes_cache
 from ..utils.solana_rpc_constants import KNOWN_RPC_PROVIDERS, SOLANA_OFFICIAL_ENDPOINTS
 from ..config import HELIUS_API_KEY
+from datetime import datetime
+import pytz
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -375,128 +377,101 @@ async def get_rpc_nodes(
     prioritize_clean_urls: bool = Query(True, description="Prioritize clean URLs over IPs"),
     include_well_known: bool = Query(True, description="Include well-known RPC providers"),
     max_conversions: int = Query(10, description="Maximum number of IP to hostname conversions to perform"),
-    request: Request = None
-):
+    request: Request = None,
+    refresh: bool = Query(False, description="Force refresh the cache")
+) -> Dict[str, Any]:
     """
     Get available Solana RPC nodes.
-    
-    Args:
-        include_details: Whether to include detailed information for each RPC node
-        health_check: Whether to perform health checks on a sample of RPC nodes
-        skip_dns_lookup: Whether to skip DNS lookup for IP addresses
-        include_raw_urls: Whether to include raw RPC URLs in the response
-        prioritize_clean_urls: Whether to prioritize clean URLs over IPs
-        include_well_known: Whether to include well-known RPC providers
-        max_conversions: Maximum number of IP to hostname conversions to perform
-        request: FastAPI request object
-        
-    Returns:
-        Dict[str, Any]: A dictionary containing the list of RPC nodes and additional metadata.
     """
-    start_time = time.time()
-    client_ip = request.client.host if request else "unknown"
-    logger.info(f"RPC nodes request from {client_ip} with params: details={include_details}, health={health_check}")
-    
-    # Create a cache key based on the parameters
-    cache_key = f"rpc_nodes_{include_details}_{health_check}_{skip_dns_lookup}_{include_raw_urls}_{prioritize_clean_urls}_{include_well_known}_{max_conversions}"
-    
-    # Check cache first
-    cached_result = rpc_nodes_cache.get(cache_key)
-    if cached_result:
-        logger.info(f"Returning cached RPC nodes data (age: {time.time() - cached_result.get('cache_timestamp', 0):.1f}s)")
-        return cached_result
-    
-    try:
-        # Initialize handlers if needed
-        await initialize_handlers()
-        
-        # Get RPC nodes
-        result = await rpc_node_extractor.get_all_rpc_nodes()
-        
-        # Check for errors
-        if result.get("status") != "success":
-            error_msg = result.get("error", "Unknown error fetching RPC nodes")
-            logger.error(f"Error fetching RPC nodes: {error_msg}")
-            return {
-                "status": "error",
-                "error": error_msg,
-                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-                "execution_time_ms": int((time.time() - start_time) * 1000)
-            }
-        
-        # Extract RPC URLs
-        rpc_urls = []
-        if "rpc_nodes" in result:
-            for node in result["rpc_nodes"]:
-                if "rpc_endpoint" in node and node["rpc_endpoint"]:
-                    rpc_urls.append(node["rpc_endpoint"])
-        
-        logger.info(f"Found {len(rpc_urls)} RPC URLs")
-        
-        # Convert IP addresses to hostnames if needed
-        converted_urls = []
-        conversion_stats = {
-            "attempted": 0,
-            "successful": 0,
-            "failed": 0,
-            "skipped": 0
-        }
-        
-        if not skip_dns_lookup:
-            converted_urls, conversion_stats = await convert_ips_to_hostnames(rpc_urls, max_conversions)
-        
-        # Add well-known RPC endpoints if requested
-        well_known_urls = []
-        solana_official_urls = []
-        
-        if include_well_known:
-            # Get well-known RPC endpoints from Soleco
-            well_known_urls = [url for url in list(KNOWN_RPC_PROVIDERS.values()) if url]
-            
-            # Get official Solana endpoints
-            solana_official_urls = SOLANA_OFFICIAL_ENDPOINTS
-        
-        # Prepare the response
-        response = {
-            "status": "success",
-            "total_nodes": len(result.get("rpc_nodes", [])),
-            "version_distribution": result.get("version_distribution", {}),
-            "well_known_rpc_urls": well_known_urls,
-            "solana_official_urls": solana_official_urls,
-            "conversion_stats": conversion_stats,
-            "cache_timestamp": time.time()  # Add timestamp for cache age calculation
-        }
-        
-        # Include raw RPC URLs if requested
-        if include_raw_urls:
-            response["raw_rpc_urls"] = rpc_urls
-        
-        # Include converted URLs if available
-        if converted_urls:
-            response["converted_rpc_urls"] = converted_urls
-        
-        # Include detailed information if requested
-        if include_details:
-            response["rpc_nodes"] = result.get("rpc_nodes", [])
-        
-        # Add timestamp and execution time
-        response["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        response["execution_time_ms"] = int((time.time() - start_time) * 1000)
-        
-        # Cache the result
-        rpc_nodes_cache.set(cache_key, response)
-        logger.info(f"RPC nodes data cached with key: {cache_key}")
-        
-        return response
-    except Exception as e:
-        logger.error(f"Error processing RPC nodes request: {str(e)}")
-        logger.exception(e)
+    await initialize_handlers()
+
+    # Get cached data if not forcing refresh
+    if not refresh:
+        cached_data = rpc_nodes_cache.get("rpc-nodes")
+        if cached_data:
+            return cached_data
+
+    # Get RPC nodes data
+    result = await rpc_node_extractor.get_all_rpc_nodes(
+        include_details=include_details,
+        health_check=health_check,
+        skip_dns_lookup=skip_dns_lookup,
+        include_raw_urls=include_raw_urls,
+        prioritize_clean_urls=prioritize_clean_urls,
+        include_well_known=include_well_known,
+        max_conversions=max_conversions
+    )
+
+    # Check for errors
+    if result.get("status") != "success":
+        error_msg = result.get("error", "Unknown error fetching RPC nodes")
+        logger.error(f"Error fetching RPC nodes: {error_msg}")
         return {
             "status": "error",
-            "error": f"Failed to process RPC nodes request: {str(e)}",
-            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-            "execution_time_ms": int((time.time() - start_time) * 1000)
+            "error": error_msg,
+            "timestamp": datetime.now(pytz.utc).isoformat(),
+            "execution_time_ms": int((time.time() - time.time()) * 1000)
         }
+
+    # Extract RPC URLs
+    rpc_urls = []
+    if "rpc_nodes" in result:
+        for node in result["rpc_nodes"]:
+            if "rpc_endpoint" in node and node["rpc_endpoint"]:
+                rpc_urls.append(node["rpc_endpoint"])
+
+    logger.info(f"Found {len(rpc_urls)} RPC URLs")
+
+    # Convert IP addresses to hostnames if needed
+    converted_urls = []
+    conversion_stats = {
+        "attempted": 0,
+        "successful": 0,
+        "failed": 0,
+        "skipped": 0
+    }
+
+    if not skip_dns_lookup:
+        converted_urls, conversion_stats = await convert_ips_to_hostnames(rpc_urls, max_conversions)
+
+    # Add well-known RPC endpoints if requested
+    well_known_urls = []
+    solana_official_urls = []
+
+    if include_well_known:
+        # Get well-known RPC endpoints from Soleco
+        well_known_urls = [url for url in list(KNOWN_RPC_PROVIDERS.values()) if url]
+
+        # Get official Solana endpoints
+        solana_official_urls = SOLANA_OFFICIAL_ENDPOINTS
+
+    # Prepare the response
+    response = {
+        "status": "success",
+        "total_nodes": len(result.get("rpc_nodes", [])),
+        "version_distribution": result.get("version_distribution", {}),
+        "well_known_rpc_urls": well_known_urls,
+        "solana_official_urls": solana_official_urls,
+        "conversion_stats": conversion_stats,
+        "timestamp": datetime.now(pytz.utc).isoformat()
+    }
+
+    # Include raw RPC URLs if requested
+    if include_raw_urls:
+        response["raw_rpc_urls"] = rpc_urls
+
+    # Include converted URLs if available
+    if converted_urls:
+        response["converted_rpc_urls"] = converted_urls
+
+    # Include detailed information if requested
+    if include_details:
+        response["rpc_nodes"] = result.get("rpc_nodes", [])
+
+    # Update cache
+    rpc_nodes_cache.set("rpc-nodes", response)
+
+    return response
 
 @router.get("/rpc/stats")
 async def get_rpc_stats():

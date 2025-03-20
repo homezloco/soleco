@@ -11,6 +11,8 @@ import json
 from ..solana_query import SolanaQueryHandler
 import time
 import traceback
+from app.database.sqlite import db_cache
+from app.constants.cache import CACHE_KEY_RPC_NODES
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +31,8 @@ class RPCNodeExtractor:
         self.timeout = 5.0  # Timeout for RPC health checks
         self.check_health = True  # Perform health checks on RPC nodes
         self.use_enhanced_mode = use_enhanced_mode
+        self.cache_enabled = True
+        self.cache_ttl = 300  # Cache for 5 minutes
         self._errors = []  # List to store errors encountered during extraction
         
     def get_errors(self) -> List[Dict[str, str]]:
@@ -56,13 +60,42 @@ class RPCNodeExtractor:
             })
             logger.warning(f"Error in {source}: {message}")
     
-    async def get_all_rpc_nodes(self) -> Dict[str, Any]:
+    async def get_all_rpc_nodes(
+        self,
+        include_details: bool = False,
+        health_check: bool = False,
+        skip_dns_lookup: bool = False,
+        include_raw_urls: bool = True,
+        prioritize_clean_urls: bool = True,
+        include_well_known: bool = True,
+        max_conversions: int = 10
+    ) -> Dict[str, Any]:
         """
         Extract all available RPC nodes from the Solana network.
+        
+        Args:
+            include_details: Whether to include detailed information for each RPC node
+            health_check: Whether to perform health checks on a sample of RPC nodes
+            skip_dns_lookup: Whether to skip DNS lookup for IP addresses
+            include_raw_urls: Whether to include raw RPC URLs in the response
+            prioritize_clean_urls: Whether to prioritize clean URLs over IPs
+            include_well_known: Whether to include well-known RPC providers
+            max_conversions: Maximum number of IP to hostname conversions to perform
         
         Returns:
             Dict containing RPC node information and statistics
         """
+        # Check cache first
+        if self.cache_enabled:
+            cached_nodes = await db_cache.get_cache(CACHE_KEY_RPC_NODES)
+            if cached_nodes:
+                return {
+                    "status": "success",
+                    "nodes": cached_nodes,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "cached": True
+                }
+
         try:
             # Get cluster nodes
             logger.info("Attempting to get cluster nodes from Solana network")
@@ -108,7 +141,7 @@ class RPCNodeExtractor:
                     except Exception as fallback_error:
                         logger.error(f"Fallback method failed: {str(fallback_error)}", exc_info=True)
                         self._add_error("fallback_get_cluster_nodes", str(fallback_error))
-            
+        
             # Process nodes response
             if nodes is not None:
                 # Check if the response is a list (expected format)
@@ -122,15 +155,44 @@ class RPCNodeExtractor:
                             logger.warning(f"Skipping non-dict node: {type(node)}")
                             self._add_error("node_validation", f"Non-dict node found: {type(node)}")
                             continue
-                            
+                        
                         if 'pubkey' not in node:
                             logger.warning("Skipping node without pubkey")
                             self._add_error("node_validation", "Node without pubkey found")
                             continue
-                            
-                        valid_nodes.append(node)
+                        
+                        # Add basic node info
+                        node_data = {
+                            'pubkey': node['pubkey'],
+                            'rpc_endpoint': node.get('rpc', None)
+                        }
+                        
+                        # Add detailed info if requested
+                        if include_details:
+                            node_data.update({
+                                'version': node.get('version', None),
+                                'gossip': node.get('gossip', None),
+                                'tpu': node.get('tpu', None),
+                                'feature_set': node.get('feature_set', None),
+                                'shred_version': node.get('shred_version', None)
+                            })
+                        
+                        # Perform health check if requested
+                        if health_check and node_data['rpc_endpoint']:
+                            try:
+                                health_status = await self._check_node_health(node_data['rpc_endpoint'])
+                                node_data['health'] = health_status
+                            except Exception as health_error:
+                                logger.warning(f"Failed to check health for node {node_data['pubkey']}: {str(health_error)}")
+                                node_data['health'] = 'unknown'
+                        
+                        valid_nodes.append(node_data)
                     
                     logger.info(f"Found {len(valid_nodes)} valid nodes out of {len(nodes)} total nodes")
+                    
+                    # Cache the nodes if caching is enabled
+                    if self.cache_enabled and valid_nodes:
+                        db_cache.set_cache(CACHE_KEY_RPC_NODES, valid_nodes, self.cache_ttl)
                     
                     return {
                         "status": "success",
@@ -459,17 +521,15 @@ class RPCNodeExtractor:
             processed_nodes = []
             for node in rpc_nodes:
                 if not isinstance(node, dict):
-                    logger.warning(f"Skipping non-dict node: {type(node)}")
-                    self._add_error("node_processing", f"Non-dict node found: {type(node)}")
                     continue
-                
+                    
                 # Extract node information
                 try:
                     pubkey = node.get('pubkey', '')
                     version = node.get('version', 'unknown')
-                    feature_set = node.get('featureSet', 0)
+                    feature_set = node.get('feature_set', 0)
                     gossip = node.get('gossip', '')
-                    shred_version = node.get('shredVersion', 0)
+                    shred_version = node.get('shred_version', 0)
                     
                     # Extract RPC endpoint if available
                     rpc_endpoint = None
@@ -614,81 +674,38 @@ class RPCNodeExtractor:
         
         return health_results
         
-    async def _check_node_health(self, rpc_endpoint: str) -> Dict[str, Any]:
+    async def _check_node_health(self, endpoint: str) -> Dict[str, Any]:
         """
-        Check the health of a single RPC node.
+        Check the health status of an RPC node.
         
         Args:
-            rpc_endpoint: RPC endpoint URL
-            
-        Returns:
-            Dictionary with health information
-        """
-        start_time = time.time()
-        result = {
-            "healthy": False,
-            "endpoint": rpc_endpoint
-        }
+            endpoint: The RPC endpoint to check
         
+        Returns:
+            Health status as a dictionary
+        """
         try:
-            # Create a client with a short timeout
-            timeout = aiohttp.ClientTimeout(total=5)  # 5 second timeout
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                # Create the JSON-RPC request
-                payload = {
-                    "jsonrpc": "2.0",
-                    "id": 1,
-                    "method": "getHealth",
-                    "params": []
-                }
+            # Create a connection to the node
+            async with httpx.AsyncClient(timeout=5.0) as client:
+                # Make a simple getHealth request
+                response = await client.post(
+                    endpoint,
+                    json={
+                        "jsonrpc": "2.0",
+                        "id": 1,
+                        "method": "getHealth"
+                    }
+                )
                 
-                # Make the request
-                async with session.post(rpc_endpoint, json=payload) as response:
-                    # Calculate response time
-                    response_time_ms = (time.time() - start_time) * 1000
-                    result["response_time_ms"] = round(response_time_ms, 2)
-                    
-                    # Check if the response is OK
-                    if response.status != 200:
-                        result["error"] = f"HTTP error {response.status}"
-                        logger.warning(f"Health check failed for {rpc_endpoint}: HTTP {response.status}")
-                        return result
-                    
-                    # Parse the response
-                    response_data = await response.json()
-                    
-                    # Check for JSON-RPC error
-                    if "error" in response_data:
-                        error_message = response_data["error"].get("message", "Unknown JSON-RPC error")
-                        result["error"] = f"JSON-RPC error: {error_message}"
-                        logger.warning(f"Health check failed for {rpc_endpoint}: {error_message}")
-                        return result
-                    
-                    # Check the result
-                    health_status = response_data.get("result", "")
-                    if health_status == "ok":
-                        result["healthy"] = True
-                        logger.debug(f"Health check passed for {rpc_endpoint} in {response_time_ms:.2f}ms")
-                    else:
-                        result["error"] = f"Unexpected health status: {health_status}"
-                        logger.warning(f"Health check failed for {rpc_endpoint}: Unexpected status {health_status}")
-                    
-                    return result
-                    
-        except asyncio.TimeoutError:
-            result["error"] = "Timeout"
-            logger.warning(f"Health check timed out for {rpc_endpoint}")
-            return result
-            
-        except aiohttp.ClientError as e:
-            result["error"] = f"Connection error: {str(e)}"
-            logger.warning(f"Health check connection error for {rpc_endpoint}: {str(e)}")
-            return result
-            
+                if response.status_code == 200:
+                    result = response.json()
+                    if result.get("result") == "ok":
+                        return {"healthy": True}
+                    return {"healthy": False}
+                return {"healthy": False}
         except Exception as e:
-            result["error"] = f"Unexpected error: {str(e)}"
-            logger.error(f"Unexpected error during health check for {rpc_endpoint}: {str(e)}")
-            return result
+            logger.warning(f"Health check failed for {endpoint}: {str(e)}")
+            return {"healthy": False, "error": str(e)}
     
     def _get_current_timestamp(self) -> str:
         """Get current UTC timestamp in ISO format."""

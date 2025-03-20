@@ -3,13 +3,12 @@ Solana query module for handling blockchain data queries.
 This module provides query handlers and utilities for fetching and processing Solana blockchain data.
 """
 
-from typing import Any, Dict, List, Optional, Union, Tuple
-from datetime import datetime, timedelta
+from typing import Optional, Dict, Any, List, Union
 import asyncio
-import time
-import json
 import logging
-import traceback
+from dataclasses import dataclass
+import datetime
+import pytz
 
 from tenacity import (
     retry,
@@ -24,6 +23,10 @@ from solders.transaction import Transaction
 from solders.rpc.responses import *
 from solders.commitment_config import CommitmentConfig
 
+from solana.rpc.async_api import AsyncClient
+import httpx
+
+from ..utils.cache.database_cache import DatabaseCache
 from .solana_rpc import SolanaConnectionPool, get_connection_pool, SolanaClient
 from .solana_helpers import (
     transform_transaction_data,
@@ -46,63 +49,71 @@ from .solana_error import (
     RetryableError,
     MethodNotSupportedError
 )
-from .handlers.base_handler import BaseHandler
-from .handlers.mint_handler import MintHandler
-from .handlers.pump_handler import PumpHandler
-from .handlers.nft_handler import NFTHandler
-from .handlers.instruction_handler import InstructionHandler
-from .handlers.block_handler import BlockHandler
 
 logger = logging.getLogger(__name__)
 
 class SolanaQueryHandler:
     """Handles Solana blockchain queries with connection pooling and error handling."""
     
-    def __init__(self, connection_pool=None):
+    def __init__(self, cache: DatabaseCache):
         """
         Initialize the query handler.
         
         Args:
-            connection_pool: Optional connection pool, will create new one if not provided
+            cache: Database cache instance
         """
-        self.connection_pool = connection_pool
+        self.cache = cache
+        self.connection_pool = SolanaConnectionPool()
         self.initialized = False
         
     async def ensure_initialized(self):
-        """Ensure the handler is initialized."""
-        if not self.initialized:
+        """Ensure the handler is initialized with proper error handling."""
+        if self.initialized:
+            return
+
+        try:
+            logger.info("Initializing SolanaQueryHandler...")
+            
+            # Initialize connection pool
             if not self.connection_pool:
+                logger.debug("Creating new connection pool")
                 self.connection_pool = await get_connection_pool()
             
-            # Check if the connection pool is already initialized
-            if hasattr(self.connection_pool, '_initialized') and self.connection_pool._initialized:
-                self.initialized = True
-                return
-                
-            # Initialize the connection pool
+            # Attempt initialization with different approaches
             try:
-                # First try without arguments (newer implementation)
+                logger.debug("Attempting standard initialization")
                 await self.connection_pool.initialize()
             except TypeError as e:
-                # If it fails with TypeError, it might be the older implementation that requires endpoints
                 if "missing 1 required positional argument: 'endpoints'" in str(e):
-                    logger.info("Connection pool requires endpoints argument, using alternative initialization")
-                    # Get endpoints from the pool or use defaults
-                    if hasattr(self.connection_pool, 'endpoints') and self.connection_pool.endpoints:
-                        await self.connection_pool.initialize(self.connection_pool.endpoints)
-                    else:
+                    logger.debug("Using alternative initialization with endpoints")
+                    endpoints = getattr(self.connection_pool, 'endpoints', None)
+                    if not endpoints:
                         from app.utils.solana_rpc import DEFAULT_RPC_ENDPOINTS
-                        await self.connection_pool.initialize(DEFAULT_RPC_ENDPOINTS)
+                        endpoints = DEFAULT_RPC_ENDPOINTS
+                    await self.connection_pool.initialize(endpoints)
                 else:
-                    # If it's a different TypeError, re-raise it
                     raise
-            
+                    
+            # Verify connection pool is ready
+            if not hasattr(self.connection_pool, '_initialized') or not self.connection_pool._initialized:
+                raise RuntimeError("Connection pool failed to initialize")
+                
             self.initialized = True
+            logger.info("SolanaQueryHandler initialized successfully")
+            
+        except Exception as e:
+            logger.error(f"Failed to initialize SolanaQueryHandler: {str(e)}")
+            logger.exception(e)  # Log full stack trace
+            self.initialized = False
+            raise
             
     async def initialize(self):
         """Initialize the handler and its components."""
         await self.ensure_initialized()
         try:
+            # Import BaseHandler locally to avoid circular imports
+            from .handlers.base_handler import BaseHandler
+
             # Initialize handlers
             self.handlers = {
                 'base': BaseHandler(),
@@ -117,6 +128,7 @@ class SolanaQueryHandler:
             
         except Exception as e:
             logger.error(f"Error initializing SolanaQueryHandler: {str(e)}")
+            logger.exception(e)  # Log full stack trace
             raise
             
     async def _retry_with_backoff(self, func, *args, **kwargs):
@@ -293,7 +305,7 @@ class SolanaQueryHandler:
             "errors": []
         }
         
-        start_time = time.time()
+        start_time = datetime.datetime.now(pytz.utc)
         logger.info(f"Starting batch processing for {len(slots)} slots")
         
         try:
@@ -339,7 +351,7 @@ class SolanaQueryHandler:
                     stats["errors"].append(str(e))
                     
             # Calculate total processing time
-            stats["processing_time_ms"] = int((time.time() - start_time) * 1000)
+            stats["processing_time_ms"] = int((datetime.datetime.now(pytz.utc) - start_time).total_seconds() * 1000)
             logger.info(f"Finished batch processing. Time: {stats['processing_time_ms']}ms, "
                        f"Processed: {stats['processed_blocks']}, "
                        f"Empty: {stats['empty_blocks']}, "
@@ -409,7 +421,7 @@ class SolanaQueryHandler:
                 "errors": []
             }
             
-            start_time = time.time()
+            start_time = datetime.datetime.now(pytz.utc)
             
             # Process slots in batches
             current_slot = start_slot
@@ -443,7 +455,7 @@ class SolanaQueryHandler:
                 current_slot = batch_end - 1
                 
             # Calculate total processing time
-            stats["processing_time_ms"] = int((time.time() - start_time) * 1000)
+            stats["processing_time_ms"] = int((datetime.datetime.now(pytz.utc) - start_time).total_seconds() * 1000)
             logger.info(f"Finished processing blocks. Total time: {stats['processing_time_ms']}ms")
             
             return {
@@ -454,6 +466,7 @@ class SolanaQueryHandler:
             
         except Exception as e:
             logger.error(f"Error in process_blocks: {str(e)}")
+            logger.exception(e)  # Log full stack trace
             return {
                 "success": False,
                 "error": str(e)
@@ -491,6 +504,7 @@ class SolanaQueryHandler:
             
         except Exception as e:
             logger.error(f"Error analyzing blocks: {str(e)}")
+            logger.exception(e)  # Log full stack trace
             raise
 
     async def get_mints_from_recent_blocks(self, num_blocks: int = 10) -> Dict[str, Any]:
@@ -540,6 +554,7 @@ class SolanaQueryHandler:
 
         except Exception as e:
             logger.error(f"Error getting mints from recent blocks: {str(e)}")
+            logger.exception(e)  # Log full stack trace
             raise RPCError(f"Failed to get mints from recent blocks: {str(e)}")
 
     async def get_signatures_for_address(
@@ -618,14 +633,15 @@ class SolanaQueryHandler:
             return {}
         except Exception as e:
             logging.error(f"Error getting vote accounts: {str(e)}")
+            logging.exception(e)  # Log full stack trace
             return {}
 
-    async def get_cluster_nodes(self) -> List[Dict[str, Any]]:
+    async def get_cluster_nodes(self) -> Dict[str, Any]:
         """
         Get information about all the nodes participating in the cluster.
         
         Returns:
-            List of node information or empty list on error
+            Dict with total_rpc_nodes, nodes, errors, and timestamp
         """
         # Ensure the handler is initialized
         await self.ensure_initialized()
@@ -704,14 +720,19 @@ class SolanaQueryHandler:
                                 logging.info(f"Successfully retrieved {len(nodes)} cluster nodes from {success_client.endpoint}")
                                 
                                 # Return the nodes
-                                return nodes
+                                return {
+                                    'total_rpc_nodes': len(nodes),
+                                    'nodes': nodes,
+                                    'errors': all_errors,
+                                    'timestamp': datetime.datetime.now(pytz.utc).isoformat()
+                                }
                             else:
                                 logging.warning(f"Task completed but returned empty nodes list from {success_client.endpoint}")
                                 all_errors.append({
                                     'endpoint': success_client.endpoint,
                                     'error': 'Empty nodes list returned',
                                     'type': 'EmptyResponse',
-                                    'timestamp': datetime.now().isoformat()
+                                    'timestamp': datetime.datetime.now(pytz.utc).isoformat()
                                 })
                                 
                                 # Release the client
@@ -725,7 +746,7 @@ class SolanaQueryHandler:
                             'error': str(e),
                             'type': type(e).__name__,
                             'stack': traceback.format_exc(),
-                            'timestamp': datetime.now().isoformat()
+                            'timestamp': datetime.datetime.now(pytz.utc).isoformat()
                         })
                 
                 # Release any remaining clients
@@ -768,14 +789,19 @@ class SolanaQueryHandler:
                             'shredVersion': node.get('shred_version', 0)
                         })
                     
-                    return formatted_nodes
+                    return {
+                        'total_rpc_nodes': len(formatted_nodes),
+                        'nodes': formatted_nodes,
+                        'errors': all_errors,
+                        'timestamp': datetime.datetime.now(pytz.utc).isoformat()
+                    }
                 else:
                     logging.error("RPCNodeExtractor fallback returned empty nodes list")
                     all_errors.append({
                         'endpoint': 'RPCNodeExtractor',
                         'error': 'Empty nodes list returned',
                         'type': 'EmptyResponse',
-                        'timestamp': datetime.now().isoformat()
+                        'timestamp': datetime.datetime.now(pytz.utc).isoformat()
                     })
                     
             except asyncio.TimeoutError:
@@ -784,7 +810,7 @@ class SolanaQueryHandler:
                     'endpoint': 'RPCNodeExtractor',
                     'error': 'Timeout after 4 seconds',
                     'type': 'TimeoutError',
-                    'timestamp': datetime.now().isoformat()
+                    'timestamp': datetime.datetime.now(pytz.utc).isoformat()
                 })
             except Exception as fallback_error:
                 logging.error(f"Fallback RPCNodeExtractor also failed: {str(fallback_error)}", exc_info=True)
@@ -793,14 +819,19 @@ class SolanaQueryHandler:
                     'error': str(fallback_error),
                     'type': type(fallback_error).__name__,
                     'stack': traceback.format_exc(),
-                    'timestamp': datetime.now().isoformat()
+                    'timestamp': datetime.datetime.now(pytz.utc).isoformat()
                 })
             
             # Log all errors for diagnostics
             logging.error(f"All attempts to get cluster nodes failed. Errors: {json.dumps(all_errors)}")
             
-            # Return empty list as last resort
-            return []
+            # Return empty result with error information
+            return {
+                'total_rpc_nodes': 0,
+                'nodes': [],
+                'errors': all_errors,
+                'timestamp': datetime.datetime.now(pytz.utc).isoformat()
+            }
                 
         except Exception as e:
             logging.error(f"Error getting cluster nodes: {str(e)}", exc_info=True)
@@ -808,10 +839,15 @@ class SolanaQueryHandler:
                 'error': str(e),
                 'type': type(e).__name__,
                 'stack': traceback.format_exc(),
-                'timestamp': datetime.now().isoformat()
+                'timestamp': datetime.datetime.now(pytz.utc).isoformat()
             })
             logging.error(f"Final error details: {json.dumps(all_errors)}")
-            return []
+            return {
+                'total_rpc_nodes': 0,
+                'nodes': [],
+                'errors': all_errors,
+                'timestamp': datetime.datetime.now(pytz.utc).isoformat()
+            }
 
     async def get_version(self) -> Dict[str, Any]:
         """Get the version of the node."""
@@ -828,6 +864,7 @@ class SolanaQueryHandler:
             return {}
         except Exception as e:
             logging.error(f"Error getting version: {str(e)}")
+            logging.exception(e)  # Log full stack trace
             return {}
 
     async def get_epoch_info(self) -> Dict[str, Any]:
@@ -845,6 +882,7 @@ class SolanaQueryHandler:
             return {}
         except Exception as e:
             logging.error(f"Error getting epoch info: {str(e)}")
+            logging.exception(e)  # Log full stack trace
             return {}
 
     async def get_recent_performance(self) -> List[Dict[str, Any]]:
@@ -941,7 +979,7 @@ class SolanaQueryHandler:
                         # Continue to try another endpoint
                     else:
                         logging.error(f"Error getting performance samples from {endpoint}: {str(e)}")
-                        logging.exception(e)
+                        logging.exception(e)  # Log full stack trace
                         other_error_count += 1
             
             # If we still don't have data, try other endpoints
@@ -1133,7 +1171,7 @@ class SolanaQueryHandler:
                         not_supported_count += 1
                     else:
                         logging.error(f"Error getting block production from Helius: {str(e)}")
-                        logging.exception(e)
+                        logging.exception(e)  # Log full stack trace
                         other_error_count += 1
             
             # Then try other endpoints
@@ -1290,7 +1328,7 @@ class SolanaQueryHandler:
             'stake_distribution': {},
             'errors': [],
             'status': 'unknown',
-            'timestamp': datetime.now().isoformat()
+            'timestamp': datetime.datetime.now(pytz.utc).isoformat()
         }
         
         try:
@@ -1301,19 +1339,19 @@ class SolanaQueryHandler:
                 result['errors'].append({
                     'source': 'get_cluster_nodes',
                     'error': 'Failed to retrieve cluster nodes',
-                    'timestamp': datetime.now().isoformat()
+                    'timestamp': datetime.datetime.now(pytz.utc).isoformat()
                 })
                 result['status'] = 'degraded'
                 return result
                 
             # Process node information
-            result['node_count'] = len(nodes)
+            result['node_count'] = len(nodes.get('nodes', []))
             
             # Track version and feature set distribution
             version_counts = {}
             feature_set_counts = {}
             
-            for node in nodes:
+            for node in nodes.get('nodes', []):
                 # Count active vs delinquent nodes
                 if node.get('delinquent', False):
                     result['delinquent_nodes'] += 1
@@ -1405,7 +1443,7 @@ class SolanaQueryHandler:
                     result['errors'].append({
                         'source': 'get_vote_accounts',
                         'error': 'Failed to retrieve vote accounts',
-                        'timestamp': datetime.now().isoformat()
+                        'timestamp': datetime.datetime.now(pytz.utc).isoformat()
                     })
                     
             except Exception as vote_error:
@@ -1414,7 +1452,7 @@ class SolanaQueryHandler:
                     'source': 'get_vote_accounts',
                     'error': str(vote_error),
                     'type': type(vote_error).__name__,
-                    'timestamp': datetime.now().isoformat()
+                    'timestamp': datetime.datetime.now(pytz.utc).isoformat()
                 })
                 
             # Determine overall network status
@@ -1457,7 +1495,7 @@ class SolanaQueryHandler:
                     result['errors'].append({
                         'source': 'get_recent_performance',
                         'error': 'Failed to retrieve performance samples',
-                        'timestamp': datetime.now().isoformat()
+                        'timestamp': datetime.datetime.now(pytz.utc).isoformat()
                     })
                     
             except Exception as perf_error:
@@ -1466,7 +1504,7 @@ class SolanaQueryHandler:
                     'source': 'get_recent_performance',
                     'error': str(perf_error),
                     'type': type(perf_error).__name__,
-                    'timestamp': datetime.now().isoformat()
+                    'timestamp': datetime.datetime.now(pytz.utc).isoformat()
                 })
                 
             return result
@@ -1478,10 +1516,65 @@ class SolanaQueryHandler:
                 'error': str(e),
                 'type': type(e).__name__,
                 'stack': traceback.format_exc(),
-                'timestamp': datetime.now().isoformat()
+                'timestamp': datetime.datetime.now(pytz.utc).isoformat()
             })
             result['status'] = 'unhealthy'
             return result
+
+    async def get_token_info(self, token_address: str) -> Dict[str, Any]:
+        """
+        Get token information from the Solana blockchain.
+
+        Args:
+            token_address: The token address to query
+
+        Returns:
+            Dictionary containing token information
+        """
+        client = None
+        try:
+            # First check cache
+            cached = await self.get_cached_token_info(token_address)
+            if cached:
+                return cached
+
+            # Get client from connection pool
+            client = await self.connection_pool.get_client()
+            if not isinstance(client, (AsyncClient, httpx.AsyncClient)):
+                raise ValueError('Invalid client type')
+
+            # Try to get token info from RPC
+            response = await client.get_token_account_balance(token_address)
+            result = response['result']['value']
+
+            # Cache the result
+            await self.cache.set(f'token_info_{token_address}', result)
+
+            return result
+        except Exception as e:
+            logger.error(f'Error getting token info for {token_address}: {str(e)}')
+            logger.exception(e)  # Log full stack trace
+            raise
+        finally:
+            if client:
+                await self.connection_pool.release(client)
+
+    async def get_cached_token_info(self, token_address: str) -> Optional[Dict[str, Any]]:
+        """
+        Get cached token information if available
+
+        Args:
+            token_address: The token address to query
+
+        Returns:
+            Cached token information or None if not found
+        """
+        return await self.cache.get(f'token_info_{token_address}')
+
+    async def clear_token_cache(self) -> None:
+        """Clear the token info cache."""
+        if hasattr(self, '_token_cache'):
+            self._token_cache.clear()
 
     async def _get_cluster_nodes_from_client(self, client):
         """
@@ -1641,3 +1734,9 @@ class SolanaQueryHandler:
                     logging.error(f"Error adding endpoint to SSL bypass: {str(ssl_config_error)}")
             
             return ([], client)
+
+from .handlers.pump_handler import PumpHandler
+from .handlers.nft_handler import NFTHandler
+from .handlers.instruction_handler import InstructionHandler
+from .handlers.mint_handler import MintHandler
+from .handlers.block_handler import BlockHandler

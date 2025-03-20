@@ -9,6 +9,8 @@ from typing import Dict, Any, Optional, List
 from solana.rpc.async_api import AsyncClient
 import time
 import functools
+import aiohttp
+import sys
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -70,32 +72,37 @@ mint_analytics_cache = SimpleCache(ttl_seconds=60)
 class SolanaConnectionPool:
     """Pool of Solana RPC connections with fallback support"""
     
-    def __init__(self):
+    # Class-level default endpoints
+    DEFAULT_RPC_ENDPOINTS = [
+        {"url": "https://api.mainnet-beta.solana.com", "name": "Solana Mainnet"},
+        {"url": "https://rpc.ankr.com/solana", "name": "Ankr"}
+    ]
+    
+    def __init__(self, endpoint=None):
         """Initialize the connection pool"""
-        # Base endpoints
-        base_endpoints = [
-            {"url": "https://api.mainnet-beta.solana.com", "name": "Solana Mainnet"},
-            {"url": "https://rpc.ankr.com/solana", "name": "Ankr"}
-        ]
-        
-        # Always prioritize Helius if API key is available
-        if HELIUS_API_KEY:
-            helius_endpoint = {"url": f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}", "name": "Helius"}
-            self.rpc_endpoints = [helius_endpoint] + base_endpoints
+        # If specific endpoint provided, use only that
+        if endpoint is not None:
+            if isinstance(endpoint, str):
+                self.rpc_endpoints = [{'url': endpoint, 'name': 'Custom Endpoint'}]
+            else:
+                self.rpc_endpoints = endpoint
         else:
-            self.rpc_endpoints = base_endpoints.copy()
+            self.rpc_endpoints = self.DEFAULT_RPC_ENDPOINTS
             
-        # Add top performing endpoints as fallbacks
-        top_performing_endpoints = [
-            {"url": "http://173.231.14.98:8899", "name": "Fast RPC 1"},
-            {"url": "http://107.182.163.194:8899", "name": "Fast RPC 2"},
-            {"url": "http://66.45.229.34:8899", "name": "Fast RPC 3"},
-            {"url": "http://38.58.176.230:8899", "name": "Fast RPC 4"},
-            {"url": "http://147.75.198.219:8899", "name": "Fast RPC 5"}
-        ]
-        
-        # Add top performing endpoints to the list
-        self.rpc_endpoints.extend(top_performing_endpoints)
+            # Always prioritize Helius if API key is available
+            if HELIUS_API_KEY:
+                helius_endpoint = {"url": f"https://mainnet.helius-rpc.com/?api-key={HELIUS_API_KEY}", "name": "Helius"}
+                self.rpc_endpoints = [helius_endpoint] + self.rpc_endpoints
+            
+            # Add top performing endpoints as fallbacks
+            top_performing_endpoints = [
+                {"url": "http://173.231.14.98:8899", "name": "Fast RPC 1"},
+                {"url": "http://107.182.163.194:8899", "name": "Fast RPC 2"},
+                {"url": "http://66.45.229.34:8899", "name": "Fast RPC 3"},
+                {"url": "http://38.58.176.230:8899", "name": "Fast RPC 4"},
+                {"url": "http://147.75.198.219:8899", "name": "Fast RPC 5"}
+            ]
+            self.rpc_endpoints.extend(top_performing_endpoints)
         
         # Initialize client dictionary and tracking variables
         self.clients: Dict[str, AsyncClient] = {}
@@ -107,15 +114,49 @@ class SolanaConnectionPool:
         """Initialize connections to all endpoints"""
         if endpoints is None:
             endpoints = self.rpc_endpoints
-            
+
         if self._initialized:
             return
-            
+
+        # Validate endpoints
+        if not isinstance(endpoints, (list, tuple)):
+            raise ValueError('Endpoints must be a list or tuple')
+
+        valid_endpoints = []
         for endpoint in endpoints:
+            if isinstance(endpoint, str):
+                if not endpoint.startswith(('http://', 'https://')):
+                    raise ValueError(f'Invalid endpoint protocol: {endpoint}')
+                if len(endpoint) < 10:  # Minimum length check
+                    raise ValueError(f'Endpoint too short: {endpoint}')
+                if not any(c.isalpha() for c in endpoint):
+                    raise ValueError(f'Endpoint must contain at least one letter: {endpoint}')
+                valid_endpoints.append({'url': endpoint, 'name': 'Custom Endpoint'})
+            elif isinstance(endpoint, dict) and 'url' in endpoint:
+                url = endpoint['url']
+                if not url.startswith(('http://', 'https://')):
+                    raise ValueError(f'Invalid endpoint protocol: {url}')
+                if len(url) < 10:
+                    raise ValueError(f'Endpoint too short: {url}')
+                if not any(c.isalpha() for c in url):
+                    raise ValueError(f'Endpoint must contain at least one letter: {url}')
+                valid_endpoints.append(endpoint)
+            else:
+                raise ValueError(f'Invalid endpoint format: {endpoint}')
+
+        if not valid_endpoints:
+            raise ValueError('No valid endpoints provided')
+
+        for endpoint in valid_endpoints:
             url = endpoint["url"]
             name = endpoint["name"]
-            
-            # Initialize stats for this endpoint
+
+            # Skip if endpoint has failed too many times
+            if url in self.endpoint_stats and self.endpoint_stats[url]["failure_count"] > 3:
+                logger.warning(f"Skipping {name} due to repeated failures")
+                continue
+
+            # Initialize stats
             self.endpoint_stats[url] = {
                 "success_count": 0,
                 "failure_count": 0,
@@ -123,33 +164,39 @@ class SolanaConnectionPool:
                 "last_latency": 0,
                 "last_success": None
             }
-            
-            try:
-                client = AsyncClient(url)
-                # Test connection and measure latency
-                import time
-                start_time = time.time()
-                await client.get_version()
-                latency = time.time() - start_time
-                
-                # Store client and update stats
-                self.clients[url] = client
-                self.endpoint_stats[url]["avg_latency"] = latency
-                self.endpoint_stats[url]["last_latency"] = latency
-                self.endpoint_stats[url]["success_count"] = 1
-                self.endpoint_stats[url]["last_success"] = time.time()
-                
-                logger.info(f"Successfully connected to {name} (latency: {latency:.3f}s)")
-            except Exception as e:
-                logger.error(f"Failed to connect to {name}: {str(e)}")
-                self.endpoint_stats[url]["failure_count"] = 1
-                
+
+            for attempt in range(3):  # Retry up to 3 times
+                try:
+                    client = AsyncClient(url, timeout=10.0)  # Increased timeout
+                    # Test connection with timeout
+                    start_time = time.time()
+                    await asyncio.wait_for(client.get_version(), timeout=10.0)  # Increased timeout
+                    latency = time.time() - start_time
+
+                    self.clients[url] = client
+                    self.endpoint_stats[url]["avg_latency"] = latency
+                    self.endpoint_stats[url]["last_latency"] = latency
+                    self.endpoint_stats[url]["success_count"] = 1
+                    self.endpoint_stats[url]["last_success"] = time.time()
+
+                    logger.info(f"Successfully connected to {name} (latency: {latency:.3f}s)")
+                    break
+                except Exception as e:
+                    logger.error(f"Attempt {attempt + 1} failed to connect to {name}: {str(e)}")
+                    self.endpoint_stats[url]["failure_count"] += 1
+                    if attempt == 2:  # Last attempt failed
+                        logger.error(f"Failed to connect to {name} after 3 attempts")
+                    await asyncio.sleep(1)  # Wait before retry
+
         if not self.clients:
             raise ConnectionError("Failed to connect to any RPC endpoint")
-            
-        # Sort endpoints by latency for initial prioritization
+
         self._sort_endpoints_by_performance()
         self._initialized = True
+        
+    async def initialize_with_defaults(self):
+        """Initialize the pool with default endpoints"""
+        await self.initialize(self.DEFAULT_RPC_ENDPOINTS)
         
     def _sort_endpoints_by_performance(self):
         """Sort endpoints by performance (success rate and latency)"""
@@ -415,7 +462,64 @@ class SolanaConnectionPool:
         
         return url
         
-    def get_rpc_stats(self):
+    async def get_slot(self, timeout: Optional[float] = None) -> int:
+        """
+        Get the current slot from the RPC endpoint.
+
+        Args:
+            timeout: Optional timeout in seconds
+
+        Returns:
+            int: Current slot number
+        """
+        client = await self.get_client()
+        try:
+            slot_resp = await client.get_slot()
+            return slot_resp.value
+        finally:
+            await self.release_client(client)
+
+    async def get_version(self) -> dict:
+        """
+        Get the Solana version from the RPC endpoint.
+
+        Returns:
+            dict: Version information from the RPC endpoint
+        """
+        client = await self.get_client()
+        try:
+            version = await client.get_version()
+            version_str = str(version)
+            # Extract version number from string like 'GetVersionResp(RpcVersionInfo(2.1.11))'
+            version_num = version_str.split('(')[-1].rstrip(')')
+            return {
+                'result': {
+                    'solana-core': version_num,
+                    'feature-set': version.feature_set if hasattr(version, 'feature_set') else None,
+                    'protocol-version': version.protocol_version if hasattr(version, 'protocol_version') else None
+                }
+            }
+        finally:
+            await self.release_client(client)
+
+    async def get_block_height(self) -> int:
+        """
+        Get the current block height from the RPC endpoint.
+
+        Returns:
+            int: Current block height
+        """
+        client = await self.get_client()
+        try:
+            response = await client.get_block_height()
+            return response.value
+        finally:
+            await self.release_client(client)
+
+    async def release_client(self, client):
+        pass
+
+    async def get_rpc_stats(self):
         """
         Get detailed statistics about RPC endpoint performance.
         
@@ -449,7 +553,7 @@ class SolanaConnectionPool:
             # Skip Helius endpoints for security (API key protection)
             if "helius" in url.lower():
                 continue
-            
+                
             # Skip endpoints without stats
             if url not in self.endpoint_stats:
                 continue
@@ -618,3 +722,12 @@ class SolanaConnectionPool:
                 "overall_success_rate": round(total_success / max(total_success + total_failures, 1) * 100, 2)
             }
         }
+
+_connection_pool = None
+
+async def get_connection_pool() -> SolanaConnectionPool:
+    global _connection_pool
+    if _connection_pool is None:
+        _connection_pool = SolanaConnectionPool()
+        await _connection_pool.initialize_with_defaults()
+    return _connection_pool
