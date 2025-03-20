@@ -39,10 +39,8 @@ from app.utils.solana_error import (
     BlockNotAvailableError
 )
 from app.utils.solana_rpc_constants import DEFAULT_RPC_ENDPOINTS, KNOWN_RPC_PROVIDERS
-from app.tests.test_discovered_rpc_nodes import (
+from tests.test_discovered_rpc_nodes import (
     fetch_rpc_nodes,
-    test_endpoint_with_both_protocols,
-    test_multiple_endpoints,
     WELL_KNOWN_ENDPOINTS,
     PREVIOUSLY_WORKING_ENDPOINTS
 )
@@ -468,38 +466,33 @@ async def discover_validator_endpoints(
         except Exception as e:
             logger.debug(f"Error closing client: {str(e)}")
 
-async def test_endpoint(endpoint: str, timeout: float = 10.0, ssl_verify: bool = False) -> Dict[str, Any]:
+async def test_endpoint(endpoint: str, timeout: float = 10.0) -> Dict[str, Any]:
     """
-    Test an RPC endpoint for functionality and performance.
+    Test a specific RPC endpoint.
     
     Args:
-        endpoint: RPC endpoint URL to test
-        timeout: Timeout in seconds for RPC calls
-        ssl_verify: Whether to verify SSL certificates
+        endpoint: The RPC endpoint to test
+        timeout: The timeout for the request in seconds
         
     Returns:
-        Dictionary with test results
+        Dict[str, Any]: Test results including status, latency, and other metrics.
     """
+    start_time = time.time()
     result = {
         "endpoint": endpoint,
-        "status": "failed",
-        "latency": float('inf'),
-        "version": "unknown",
-        "slot": 0,
+        "status": "error",
         "tests_passed": 0,
         "tests_total": 0,
-        "error": None,
-        "timestamp": datetime.now().isoformat(),
-        "ssl_verified": ssl_verify,
         "persistent_failures": 0,
+        "latency": 0.0,
         "last_failure_reason": None
     }
     
-    # Skip testing if endpoint is invalid
-    if not isinstance(endpoint, str) or not endpoint.startswith(("http://", "https://")) or len(endpoint) < 10:
-        result["error"] = f"Invalid endpoint format: {endpoint}"
+    # Skip invalid endpoints
+    if not isinstance(endpoint, str) or not endpoint.startswith(("http://", "https://")):
+        result["last_failure_reason"] = "Invalid endpoint format"
         return result
-        
+    
     # Check if this endpoint has an API key
     has_api_key = "api-key" in endpoint.lower()
     
@@ -507,13 +500,12 @@ async def test_endpoint(endpoint: str, timeout: float = 10.0, ssl_verify: bool =
     if has_api_key:
         # Only allow Helius API key with Helius endpoints
         if "api-key" in endpoint.lower() and "helius" not in endpoint.lower():
-            result["error"] = "API key can only be used with its specific service"
+            result["last_failure_reason"] = "API key can only be used with its specific service"
             return result
         
         # For non-Helius endpoints, ensure they don't have any API key in the URL
         if HELIUS_API_KEY in endpoint and "helius" not in endpoint.lower():
-            # Remove the API key from the URL
-            result["error"] = "Helius API key cannot be used with non-Helius endpoints"
+            result["last_failure_reason"] = "Helius API key cannot be used with non-Helius endpoints"
             return result
     
     # Determine if this is likely a validator endpoint (IP address or non-standard port)
@@ -527,18 +519,17 @@ async def test_endpoint(endpoint: str, timeout: float = 10.0, ssl_verify: bool =
         timeout = min(timeout, 5.0)
     
     # Check if this endpoint should bypass SSL verification
+    ssl_verify = True
     try:
         from app.utils.solana_ssl_config import should_bypass_ssl_verification
         bypass_ssl = should_bypass_ssl_verification(endpoint)
         if bypass_ssl:
             ssl_verify = False
-            result["ssl_verified"] = False
             logger.info(f"Bypassing SSL verification for endpoint: {endpoint}")
     except ImportError:
         logger.warning("Could not import solana_ssl_config, using default SSL settings")
     
     client = None
-    start_time = time.time()
     
     try:
         # Create client with appropriate SSL settings
@@ -550,63 +541,54 @@ async def test_endpoint(endpoint: str, timeout: float = 10.0, ssl_verify: bool =
         
         # Test getHealth - most basic test that almost all nodes support
         try:
-            health = await client.get_health()
-            if health == "ok":
+            # Use _make_rpc_call which handles connection internally
+            health_result = await client._make_rpc_call("getHealth", [])
+            if health_result.get("result") == "ok":
                 result["tests_passed"] += 1
                 logger.info(f"Endpoint {endpoint} health check passed")
-            result["tests_total"] += 1
+            else:
+                logger.warning(f"Endpoint {endpoint} health check failed: {health_result}")
+                result["last_failure_reason"] = f"Health check failed: {health_result}"
+                result["persistent_failures"] += 1
         except Exception as e:
-            error_msg = str(e)
-            logger.warning(f"Endpoint {endpoint} failed getHealth: {error_msg}")
-            result["last_failure_reason"] = f"getHealth: {error_msg}"
+            logger.warning(f"Health check failed for {endpoint}: {str(e)}")
+            result["last_failure_reason"] = f"Health check failed: {str(e)}"
             result["persistent_failures"] += 1
-            result["tests_total"] += 1
-            
+        result["tests_total"] += 1
+        
         # Test getVersion
         try:
-            version_info = await client.get_version()
-            if version_info and "solana-core" in version_info:
-                result["version"] = version_info["solana-core"]
+            # Use _make_rpc_call which handles connection internally
+            version_result = await client._make_rpc_call("getVersion", [])
+            if version_result and "result" in version_result and "solana-core" in version_result["result"]:
                 result["tests_passed"] += 1
-                logger.info(f"Endpoint {endpoint} returned version: {result['version']}")
-            result["tests_total"] += 1
+                logger.info(f"Endpoint {endpoint} successfully returned version info")
+            else:
+                logger.warning(f"Endpoint {endpoint} failed to return valid version info")
+                result["last_failure_reason"] = "Failed to return valid version info"
+                result["persistent_failures"] += 1
         except Exception as e:
-            error_msg = str(e)
-            logger.warning(f"Endpoint {endpoint} failed getVersion: {error_msg}")
-            result["last_failure_reason"] = f"getVersion: {error_msg}"
+            logger.warning(f"Version check failed for {endpoint}: {str(e)}")
+            result["last_failure_reason"] = f"Version check failed: {str(e)}"
             result["persistent_failures"] += 1
-            result["tests_total"] += 1
-            
-        # Test getSlot
-        try:
-            slot = await client.get_slot()
-            if slot and isinstance(slot, int):
-                result["slot"] = slot
-                result["tests_passed"] += 1
-                logger.info(f"Endpoint {endpoint} returned slot: {result['slot']}")
-            result["tests_total"] += 1
-        except Exception as e:
-            error_msg = str(e)
-            logger.warning(f"Endpoint {endpoint} failed getSlot: {error_msg}")
-            result["last_failure_reason"] = f"getSlot: {error_msg}"
-            result["persistent_failures"] += 1
-            result["tests_total"] += 1
-            
-        # Test getLatestBlockhash or getRecentBlockhash - try the newer method first
-        blockhash_test_passed = False
+        result["tests_total"] += 1
         
-        # First try getLatestBlockhash (newer method)
+        # Test getLatestBlockhash or getRecentBlockhash
+        blockhash_test_passed = False
         try:
-            blockhash_info = await client.get_latest_blockhash("processed")
-            if blockhash_info and "blockhash" in blockhash_info and "lastValidBlockHeight" in blockhash_info:
-                result["tests_passed"] += 1
-                blockhash_test_passed = True
-                logger.info(f"Endpoint {endpoint} successfully returned latest blockhash with lastValidBlockHeight")
-            elif blockhash_info and "blockhash" in blockhash_info:
-                # Still pass if we have a blockhash but no lastValidBlockHeight
-                result["tests_passed"] += 1
-                blockhash_test_passed = True
-                logger.info(f"Endpoint {endpoint} successfully returned latest blockhash (without lastValidBlockHeight)")
+            # Use _make_rpc_call which handles connection internally
+            blockhash_result = await client._make_rpc_call("getLatestBlockhash", [{"commitment": "processed"}])
+            if blockhash_result and "result" in blockhash_result:
+                blockhash_info = blockhash_result["result"]
+                if blockhash_info and "blockhash" in blockhash_info and "lastValidBlockHeight" in blockhash_info:
+                    result["tests_passed"] += 1
+                    blockhash_test_passed = True
+                    logger.info(f"Endpoint {endpoint} successfully returned latest blockhash with lastValidBlockHeight")
+                elif blockhash_info and "blockhash" in blockhash_info:
+                    # Still pass if we have a blockhash but no lastValidBlockHeight
+                    result["tests_passed"] += 1
+                    blockhash_test_passed = True
+                    logger.info(f"Endpoint {endpoint} successfully returned latest blockhash (without lastValidBlockHeight)")
             result["tests_total"] += 1
         except Exception as e:
             error_msg = str(e)
@@ -615,16 +597,19 @@ async def test_endpoint(endpoint: str, timeout: float = 10.0, ssl_verify: bool =
             # If getLatestBlockhash failed, try the deprecated getRecentBlockhash as fallback
             if not blockhash_test_passed:
                 try:
-                    blockhash_info = await client.get_recent_blockhash("processed")
-                    if blockhash_info and "blockhash" in blockhash_info and "lastValidBlockHeight" in blockhash_info:
-                        result["tests_passed"] += 1
-                        blockhash_test_passed = True
-                        logger.info(f"Endpoint {endpoint} successfully returned recent blockhash with lastValidBlockHeight (deprecated method)")
-                    elif blockhash_info and "blockhash" in blockhash_info:
-                        # Still pass if we have a blockhash but no lastValidBlockHeight (older nodes)
-                        result["tests_passed"] += 1
-                        blockhash_test_passed = True
-                        logger.info(f"Endpoint {endpoint} successfully returned recent blockhash (deprecated method, without lastValidBlockHeight)")
+                    # Use _make_rpc_call which handles connection internally
+                    blockhash_result = await client._make_rpc_call("getRecentBlockhash", [{"commitment": "processed"}])
+                    if blockhash_result and "result" in blockhash_result:
+                        blockhash_info = blockhash_result["result"]
+                        if blockhash_info and "blockhash" in blockhash_info and "lastValidBlockHeight" in blockhash_info:
+                            result["tests_passed"] += 1
+                            blockhash_test_passed = True
+                            logger.info(f"Endpoint {endpoint} successfully returned recent blockhash with lastValidBlockHeight (deprecated method)")
+                        elif blockhash_info and "blockhash" in blockhash_info:
+                            # Still pass if we have a blockhash but no lastValidBlockHeight (older nodes)
+                            result["tests_passed"] += 1
+                            blockhash_test_passed = True
+                            logger.info(f"Endpoint {endpoint} successfully returned recent blockhash (deprecated method, without lastValidBlockHeight)")
                     result["tests_total"] += 1
                 except Exception as e2:
                     error_msg = str(e2)
@@ -636,7 +621,7 @@ async def test_endpoint(endpoint: str, timeout: float = 10.0, ssl_verify: bool =
                 result["last_failure_reason"] = f"getLatestBlockhash: {error_msg}"
                 result["persistent_failures"] += 1
                 result["tests_total"] += 1
-            
+        
         # Calculate latency
         result["latency"] = time.time() - start_time
         
@@ -649,27 +634,15 @@ async def test_endpoint(endpoint: str, timeout: float = 10.0, ssl_verify: bool =
             try:
                 from app.utils.solana_ssl_config import add_ssl_bypass_endpoint
                 add_ssl_bypass_endpoint(endpoint)
-                logger.info(f"Added {endpoint} to SSL bypass list due to SSL errors")
             except ImportError:
-                logger.warning("Could not import solana_ssl_config to add endpoint to bypass list")
-        
+                logger.warning("Could not import solana_ssl_config to add SSL bypass")
+                
         return result
     except Exception as e:
         error_msg = str(e)
-        result["error"] = error_msg
-        result["last_failure_reason"] = f"Connection: {error_msg}"
-        result["persistent_failures"] += 1
         logger.error(f"Error testing endpoint {endpoint}: {error_msg}")
-        
-        # If we have SSL errors, add the endpoint to the bypass list
-        if "SSL" in error_msg:
-            try:
-                from app.utils.solana_ssl_config import add_ssl_bypass_endpoint
-                add_ssl_bypass_endpoint(endpoint)
-                logger.info(f"Added {endpoint} to SSL bypass list due to SSL errors")
-            except ImportError:
-                logger.warning("Could not import solana_ssl_config to add endpoint to bypass list")
-                
+        result["last_failure_reason"] = error_msg
+        result["latency"] = time.time() - start_time
         return result
     finally:
         # Ensure client is closed
@@ -677,7 +650,7 @@ async def test_endpoint(endpoint: str, timeout: float = 10.0, ssl_verify: bool =
             try:
                 await client.close()
             except Exception as e:
-                logger.debug(f"Error closing client: {str(e)}")
+                logger.error(f"Error closing client for {endpoint}: {str(e)}")
 
 async def test_rpc_endpoints(endpoints: List[str], max_test: int = 50, parallel: int = 10) -> List[Dict[str, Any]]:
     """
@@ -722,16 +695,20 @@ async def test_rpc_endpoints(endpoints: List[str], max_test: int = 50, parallel:
         logger.info(f"Limiting to {max_test} endpoints for testing")
         formatted_endpoints = formatted_endpoints[:max_test]
     
-    # Test endpoints using test_multiple_endpoints
+    # Test endpoints using our own implementation
     logger.info(f"Testing {len(formatted_endpoints)} endpoints with a maximum of {parallel} parallel tests")
-    results = await test_multiple_endpoints(formatted_endpoints, timeout=10.0)
+    tasks = [test_endpoint(endpoint) for endpoint in formatted_endpoints]
+    results = await asyncio.gather(*tasks, return_exceptions=True)
     
     # Extract successful endpoints
-    successful_endpoints = results["successful"]
+    successful_endpoints = []
+    for result in results:
+        if isinstance(result, dict) and result.get("status") == "success":
+            successful_endpoints.append(result)
     
     # Log results
     logger.info(f"Successfully tested {len(successful_endpoints)} out of {len(formatted_endpoints)} endpoints")
-    logger.info(f"Success rate: {results['success_rate']:.2f}%")
+    logger.info(f"Success rate: {(len(successful_endpoints) / len(formatted_endpoints)) * 100:.2f}%")
     
     return successful_endpoints
 
@@ -784,51 +761,104 @@ async def update_connection_pool(endpoints: List[str], max_test: int, max_endpoi
         logger.exception(e)
         return False
 
-async def main():
+async def update_rpc_pool(max_test: int = 50, max_endpoints: int = 10, quick_mode: bool = False) -> bool:
     """
-    Main function to update the RPC connection pool.
+    Update the RPC pool with the best performing endpoints.
     
-    This function discovers and tests RPC endpoints, then updates the connection pool
-    with the best performing endpoints.
+    Args:
+        max_test: Maximum number of endpoints to test
+        max_endpoints: Maximum number of endpoints to keep in the pool
+        quick_mode: If True, only test well-known endpoints
+        
+    Returns:
+        True if the pool was updated, False otherwise
     """
-    parser = argparse.ArgumentParser(description="Update the Solana RPC connection pool")
-    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging")
-    parser.add_argument("--quick", "-q", action="store_true", help="Quick mode (skip validator endpoint discovery)")
-    parser.add_argument("--max-test", "-m", type=int, default=50, help="Maximum number of endpoints to test")
-    parser.add_argument("--max-endpoints", "-e", type=int, default=15, help="Maximum number of endpoints to include in the pool")
-    parser.add_argument("--parallel", "-p", type=int, default=10, help="Maximum number of parallel tests")
-    parser.add_argument("--no-ssl-verify", action="store_true", help="Disable SSL certificate verification")
-    args = parser.parse_args()
-    
-    # Set up logging
-    setup_logging(args.verbose)
-    
-    # Start time
-    start_time = time.time()
-    logger.info("Starting RPC pool update...")
-    
     try:
-        # Discover RPC nodes
-        endpoints = await discover_rpc_nodes(quick_mode=args.quick)
-        
-        # Test RPC endpoints
-        test_results = await test_rpc_endpoints(endpoints, max_test=args.max_test, parallel=args.parallel)
-        
-        # Update connection pool
-        selected_endpoints = await update_connection_pool(
-            test_results, 
-            max_test=args.max_test,
-            max_endpoints=args.max_endpoints
+        # Use a timeout for the entire update process
+        return await asyncio.wait_for(
+            _update_rpc_pool_impl(max_test, max_endpoints, quick_mode),
+            timeout=120.0  # 2 minute timeout for the entire update process
         )
-        
-        # Log completion
-        elapsed_time = time.time() - start_time
-        logger.info(f"RPC pool update completed in {elapsed_time:.2f} seconds")
-        logger.info(f"Updated pool with {len(selected_endpoints)} endpoints")
-        
+    except asyncio.TimeoutError:
+        logger.warning("RPC pool update timed out after 120 seconds")
+        return False
     except Exception as e:
         logger.error(f"Error updating RPC pool: {str(e)}")
         logger.exception(e)
+        return False
+
+async def _update_rpc_pool_impl(max_test: int = 50, max_endpoints: int = 10, quick_mode: bool = False) -> bool:
+    """
+    Implementation of the RPC pool update process.
+    
+    Args:
+        max_test: Maximum number of endpoints to test
+        max_endpoints: Maximum number of endpoints to keep in the pool
+        quick_mode: If True, only test well-known endpoints
+        
+    Returns:
+        True if the pool was updated, False otherwise
+    """
+    # Discover RPC nodes
+    endpoints = await discover_rpc_nodes(quick_mode=quick_mode)
+    
+    # Test RPC endpoints
+    test_results = await test_rpc_endpoints(endpoints, max_test)
+    
+    # Update connection pool
+    selected_endpoints = await update_connection_pool(
+        test_results, 
+        max_test=max_test,
+        max_endpoints=max_endpoints
+    )
+    
+    # Log completion
+    logger.info(f"RPC pool update completed")
+    logger.info(f"Updated pool with {len(selected_endpoints)} endpoints")
+    
+    return selected_endpoints
+
+async def main():
+    """
+    Main function to update the RPC connection pool.
+    """
+    import argparse
+    
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description="Update the Solana RPC connection pool")
+    parser.add_argument("--max-test", type=int, default=50, help="Maximum number of endpoints to test")
+    parser.add_argument("--max-endpoints", type=int, default=10, help="Maximum number of endpoints to keep in the pool")
+    parser.add_argument("--parallel", type=int, default=10, help="Maximum number of parallel tests")
+    parser.add_argument("--quick", action="store_true", help="Only test well-known endpoints")
+    args = parser.parse_args()
+    
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    
+    # Log startup
+    logger.info("Starting RPC pool update...")
+    
+    try:
+        # Update RPC pool
+        success = await update_rpc_pool(
+            max_test=args.max_test,
+            max_endpoints=args.max_endpoints,
+            quick_mode=args.quick
+        )
+        
+        # Log completion
+        if success:
+            logger.info("RPC pool update completed successfully")
+        else:
+            logger.warning("RPC pool update completed with issues")
+            
+    except Exception as e:
+        logger.error(f"Error updating RPC pool: {str(e)}")
+        logger.exception(e)
+        sys.exit(1)
 
 if __name__ == "__main__":
     asyncio.run(main())

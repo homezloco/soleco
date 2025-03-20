@@ -62,9 +62,14 @@ class ProgramResponseHandler(SolanaResponseManager):
 
 class ProgramAnalytics:
     def __init__(self):
-        self.connection_pool = get_connection_pool()
-        self.query_handler = SolanaQueryHandler(self.connection_pool)
+        self.connection_pool = None
+        self.query_handler = None
         self.response_handler = ProgramResponseHandler()
+    
+    async def initialize(self):
+        if self.connection_pool is None:
+            self.connection_pool = await get_connection_pool()
+            self.query_handler = SolanaQueryHandler(self.connection_pool)
 
     async def analyze_program_activity(
         self,
@@ -144,6 +149,10 @@ class ProgramAnalytics:
             raise HTTPException(status_code=500, detail=str(e))
 
 program_analytics = ProgramAnalytics()
+
+@router.on_event("startup")
+async def startup_event():
+    await program_analytics.initialize()
 
 @router.get("/analyze/{program_id}")
 async def analyze_program(

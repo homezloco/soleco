@@ -11,7 +11,8 @@ import time
 import logging
 import json
 import asyncio
-from datetime import datetime, timezone
+from datetime import datetime
+import pytz
 from collections import defaultdict
 
 from ..utils.solana_rpc import (
@@ -28,7 +29,8 @@ from ..database.sqlite import db_cache
 from ..constants.cache import (
     NETWORK_STATUS_CACHE_TTL,
     PERFORMANCE_METRICS_CACHE_TTL,
-    RPC_NODES_CACHE_TTL
+    RPC_NODES_CACHE_TTL,
+    TOKEN_INFO_CACHE_TTL
 )
 
 # Configure logging
@@ -677,10 +679,17 @@ async def initialize_handlers():
         logger.error(f"Unexpected error during handler initialization: {str(e)}", exc_info=True)
         return False
 
+from fastapi import Depends
+from app.utils.cache.database_cache import DatabaseCache
+
+def get_db_cache() -> DatabaseCache:
+    return DatabaseCache()
+
 @router.get("/network/status", summary="Solana Network Status")
 async def get_network_status(
     summary_only: bool = Query(False, description="Return only the network summary without detailed node information"),
-    refresh: bool = Query(False, description="Force refresh from Solana RPC")
+    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
+    db_cache: DatabaseCache = Depends(get_db_cache)
 ):
     """
     Retrieve comprehensive Solana network status with robust error handling.
@@ -711,7 +720,7 @@ async def get_network_status(
                 return {
                     "status": "error",
                     "error": "Failed to initialize network status handler",
-                    "timestamp": datetime.now(timezone.utc).isoformat()
+                    "timestamp": datetime.now(pytz.utc).isoformat()
                 }
         
         # Get comprehensive network status
@@ -726,88 +735,38 @@ async def get_network_status(
         return {
             "status": "error",
             "error": str(e),
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(pytz.utc).isoformat(),
             "traceback": traceback.format_exc()
         }
 
-@router.get("/token/{token_address}", summary="Get SPL Token Information")
+@router.get("/token/{token_address}", response_model=Dict[str, Any])
 async def get_token_info(
-    token_address: str = Path(..., description="SPL Token contract address"),
-    wallet_address: Optional[str] = Query(None, description="Wallet address to check token balance"),
-    refresh: bool = Query(False, description="Force refresh from Solana RPC")
+    token_address: str,
+    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
+    db_cache: DatabaseCache = Depends(get_db_cache)
 ):
-    """
-    Retrieve comprehensive SPL Token information with robust error handling
+    params = {"token_address": token_address}
+    cache_key = f"token_info:{token_address}"
     
-    Args:
-        token_address: Contract address of the token
-        wallet_address: Optional wallet address to check balance
-        refresh: Force refresh from Solana RPC
+    if not refresh:
+        cached = await db_cache.get(cache_key)
+        if cached:
+            return cached
     
-    Returns:
-        Dict: Detailed token information
-    """
     try:
-        # Create cache key based on parameters
-        params = {
-            "token_address": token_address,
-            "wallet_address": wallet_address
-        }
-        
-        # Try to get from cache if not forcing refresh
-        if not refresh:
-            cached_data = db_cache.get_cached_data("token-info", params, TOKEN_INFO_CACHE_TTL)
-            if cached_data:
-                logging.info(f"Retrieved token info for {token_address} from cache")
-                return cached_data
-        
-        # Initialize handlers if needed
         if solana_query_handler is None:
-            initialization_success = await initialize_handlers()
-            if not initialization_success or solana_query_handler is None:
-                return {
-                    "status": "error",
-                    "error": "Failed to initialize Solana query handler",
-                    "timestamp": datetime.now(timezone.utc).isoformat()
-                }
-        
-        # Validate addresses
-        try:
-            token_pubkey = Pubkey.from_string(token_address)
-            wallet_pubkey = Pubkey.from_string(wallet_address) if wallet_address else None
-        except Exception as e:
-            return {
-                "status": "error",
-                "error": "Invalid address format",
-                "details": str(e),
-                "timestamp": datetime.now(timezone.utc).isoformat()
-            }
-        
-        # Get token info
-        token_info = await solana_query_handler.get_token_info(token_pubkey)
-        
-        # Get wallet balance if requested
-        if wallet_pubkey:
-            balance = await solana_query_handler.get_token_balance(wallet_pubkey, token_pubkey)
-            token_info["wallet_balance"] = balance
-        
-        # Format the result
-        result = {
-            "status": "success",
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "token_info": token_info
+            await initialize_handlers()
+        token_info = await solana_query_handler.get_token_info(token_address)
+        response = {
+            "token_info": token_info,
+            "timestamp": datetime.now(pytz.utc).isoformat()
         }
-        
-        # Cache the response
-        db_cache.cache_data("token-info", result, params, TOKEN_INFO_CACHE_TTL)
-        
-        return result
+        await db_cache.set(cache_key, response)
+        return response
     except Exception as e:
-        logger.error(f"Error retrieving token info: {str(e)}", exc_info=True)
+        logger.error(f"Error getting token info for {token_address}: {str(e)}", exc_info=True)
         return {
-            "status": "error",
             "error": str(e),
-            "timestamp": datetime.now(timezone.utc).isoformat(),
             "traceback": traceback.format_exc()
         }
 
@@ -848,7 +807,7 @@ async def simulate_transaction(
             'error': 'Transaction simulation failed',
             'details': str(e),
             'traceback': traceback.format_exc(),
-            'timestamp': datetime.now(timezone.utc).isoformat()
+            'timestamp': datetime.now(pytz.utc).isoformat()
         }
 
 @router.get("/wallet/{wallet_address}", summary="Analyze Solana Wallet")
@@ -966,7 +925,7 @@ async def analyze_wallet(
             detail={
                 'error': 'Failed to analyze wallet',
                 'message': str(e),
-                'timestamp': datetime.now(timezone.utc).isoformat()
+                'timestamp': datetime.now(pytz.utc).isoformat()
             }
         )
 
@@ -1006,7 +965,7 @@ async def get_system_resources():
         return {
             'error': 'System resources retrieval failed',
             'details': str(e),
-            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'timestamp': datetime.now(pytz.utc).isoformat(),
             'traceback': traceback.format_exc()
         }
 
@@ -1036,7 +995,7 @@ async def get_performance_metrics(
                 return {
                     "status": "error",
                     "error": "Failed to initialize Solana query handler",
-                    "timestamp": datetime.now(timezone.utc).isoformat()
+                    "timestamp": datetime.now(pytz.utc).isoformat()
                 }
         
         # Get performance samples using the handler's method
@@ -1158,7 +1117,7 @@ async def get_performance_metrics(
         # Prepare response
         response = {
             "status": "success",
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(pytz.utc).isoformat(),
             "performance_samples": performance_stats,
             "block_production": block_stats
         }
@@ -1186,7 +1145,7 @@ async def get_performance_metrics(
         return {
             "status": "error",
             "error": str(e),
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(pytz.utc).isoformat(),
             "traceback": traceback.format_exc()
         }
 
@@ -1228,7 +1187,7 @@ async def get_rpc_nodes(
                 return {
                     "status": "error",
                     "error": "Failed to initialize Solana query handler",
-                    "timestamp": datetime.now(timezone.utc).isoformat()
+                    "timestamp": datetime.now(pytz.utc).isoformat()
                 }
         
         # Extract RPC nodes
@@ -1253,7 +1212,7 @@ async def get_rpc_nodes(
                 return {
                     "status": "error",
                     "error": error_msg,
-                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "timestamp": datetime.now(pytz.utc).isoformat(),
                     "execution_time_ms": execution_time_ms
                 }
             
@@ -1272,19 +1231,19 @@ async def get_rpc_nodes(
             return {
                 "status": "error",
                 "error": f"Error extracting RPC nodes: {str(extract_error)}",
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "timestamp": datetime.now(pytz.utc).isoformat(),
                 "execution_time_ms": execution_time_ms
             }
         
         # Check if we got any nodes
         if not rpc_nodes:
             logger.warning("No RPC nodes were extracted")
-            execution_time_ms = int((time.time() - start_time) * 1000)
+            execution_time_ms = int((time.time() - (start_time if 'start_time' in locals() else time.time())) * 1000)
             
             return {
                 "status": "warning",
                 "message": "No RPC nodes were found",
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "timestamp": datetime.now(pytz.utc).isoformat(),
                 "execution_time_ms": execution_time_ms
             }
         
@@ -1325,7 +1284,7 @@ async def get_rpc_nodes(
         # Prepare result
         result = {
             "status": "success",
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "timestamp": datetime.now(pytz.utc).isoformat(),
             "total_rpc_nodes": total_nodes,
             "version_distribution": version_distribution,
             "execution_time_ms": int(extraction_time * 1000)
@@ -1377,7 +1336,7 @@ async def get_rpc_nodes(
         return {
             "status": "error",
             "error": f"Failed to retrieve cluster nodes: {str(e)}",
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "timestamp": datetime.now(pytz.utc).isoformat(),
             "execution_time_ms": int((time.time() - (start_time if 'start_time' in locals() else time.time())) * 1000)
         }
 
@@ -1412,7 +1371,7 @@ async def retrieve_recent_blocks(limit: int = 10) -> Dict[str, Any]:
             detail={
                 'error': 'Failed to retrieve recent blocks',
                 'message': str(e),
-                'timestamp': datetime.now(timezone.utc).isoformat()
+                'timestamp': datetime.now(pytz.utc).isoformat()
             }
         )
 
@@ -1519,7 +1478,7 @@ async def test_fallback_endpoint():
             "endpoint": endpoint,
             "result": result,
             "latency": client.average_latency(),
-            "timestamp": datetime.now(timezone.utc).isoformat()
+            "timestamp": datetime.now(pytz.utc).isoformat()
         }
     except Exception as e:
         # Update the stats for this endpoint
@@ -1528,7 +1487,7 @@ async def test_fallback_endpoint():
         return {
             "endpoint": endpoint,
             "error": str(e),
-            "timestamp": datetime.now(timezone.utc).isoformat()
+            "timestamp": datetime.now(pytz.utc).isoformat()
         }
     finally:
         # Close the client
@@ -1583,7 +1542,7 @@ async def get_network_status_v2(
             return {
                 "status": "error",
                 "error": "Failed to initialize network status handler",
-                "timestamp": datetime.now(timezone.utc).isoformat()
+                "timestamp": datetime.now(pytz.utc).isoformat()
             }
         network_status = await network_handler.get_network_status(summary_only=summary_only)
         
@@ -1597,7 +1556,7 @@ async def get_network_status_v2(
         return {
             "status": "error",
             "error": str(e),
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(pytz.utc).isoformat(),
             "traceback": traceback.format_exc()
         }
 
@@ -1646,7 +1605,7 @@ async def get_rpc_nodes_v2(
             return {
                 "status": "error",
                 "error": "Failed to initialize Solana query handler",
-                "timestamp": datetime.now(timezone.utc).isoformat()
+                "timestamp": datetime.now(pytz.utc).isoformat()
             }
         
         # Extract RPC nodes
@@ -1662,7 +1621,7 @@ async def get_rpc_nodes_v2(
             rpc_nodes_data = {
                 "status": "warning",
                 "message": "No cluster nodes returned from Solana network. Using default endpoints.",
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(pytz.utc).isoformat(),
                 "rpc_nodes": [{"endpoint": url, "is_default": True} for url in DEFAULT_RPC_ENDPOINTS]
             }
         
@@ -1701,7 +1660,7 @@ async def get_rpc_nodes_v2(
                     node['health_check'] = {
                         'status': 'healthy' if 'result' in slot_response else 'error',
                         'response_time_ms': round(response_time * 1000, 2),
-                        'timestamp': datetime.now(timezone.utc).isoformat()
+                        'timestamp': datetime.now(pytz.utc).isoformat()
                     }
                     
                     # Close the temporary client
@@ -1711,7 +1670,7 @@ async def get_rpc_nodes_v2(
                     node['health_check'] = {
                         'status': 'error',
                         'error': str(e),
-                        'timestamp': datetime.now(timezone.utc).isoformat()
+                        'timestamp': datetime.now(pytz.utc).isoformat()
                     }
         
         # Include detailed information if requested
@@ -1751,13 +1710,13 @@ async def get_rpc_nodes_v2(
                 "status": "error",
                 "error": "Coroutine error detected. This is likely due to an async function not being properly awaited.",
                 "details": error_msg,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(pytz.utc).isoformat(),
                 "rpc_nodes": []
             }
         return {
             "status": "error",
             "error": str(e),
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(pytz.utc).isoformat(),
             "traceback": traceback.format_exc(),
             "rpc_nodes": []
         }
@@ -1874,7 +1833,7 @@ async def get_network_status():
         return {
             "status": "error",
             "message": f"Failed to retrieve network status: {str(e)}",
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now(pytz.utc).isoformat()
         }
 
 @router.get("/enhanced-network-status", response_model=Dict[str, Any], tags=["solana"])
@@ -1899,7 +1858,7 @@ async def get_enhanced_network_status(
     result = {
         "status": "unknown",
         "data_source": "unknown",
-        "timestamp": datetime.now().isoformat(),
+        "timestamp": datetime.now(pytz.utc).isoformat(),
         "execution_time_ms": 0,
         "errors": [],
         "node_count": 0,
@@ -1982,3 +1941,85 @@ async def get_enhanced_network_status(
     cache_data("enhanced_network_status", result, NETWORK_STATUS_CACHE_TTL)
     
     return result
+
+@router.get("/token/{token_address}", response_model=Dict[str, Any])
+async def get_token_info(
+    token_address: str,
+    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
+    db_cache: DatabaseCache = Depends(get_db_cache)
+):
+    params = {"token_address": token_address}
+    cache_key = f"token_info:{token_address}"
+    
+    if not refresh:
+        cached = await db_cache.get(cache_key)
+        if cached:
+            return cached
+    
+    token_info = await get_token_info_from_rpc(token_address)
+    response = {
+        "token_info": token_info,
+        "timestamp": datetime.now(pytz.utc).isoformat()
+    }
+    await db_cache.set(cache_key, response)
+    return response
+
+@router.get("/token/{token_address}", response_model=Dict[str, Any])
+async def get_token_info(
+    token_address: str,
+    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
+    db_cache: DatabaseCache = Depends(get_db_cache)
+):
+    params = {"token_address": token_address}
+
+    if not refresh:
+        cached_data = await db_cache.get_cached_data("token-info", params, TOKEN_INFO_CACHE_TTL)
+        if cached_data:
+            return cached_data
+
+    try:
+        if solana_query_handler is None:
+            await initialize_handlers()
+        token_info = await solana_query_handler.get_token_info(token_address)
+        response = {
+            "token_info": token_info,
+            "timestamp": datetime.now(pytz.utc).isoformat()
+        }
+        await db_cache.set_cached_data("token-info", params, response)
+        return response
+    except Exception as e:
+        logger.error(f"Error getting token info for {token_address}: {str(e)}", exc_info=True)
+        return {
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }
+
+@router.get("/token/{token_address}", response_model=Dict[str, Any])
+async def get_token_info(
+    token_address: str,
+    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
+    db_cache: DatabaseCache = Depends(get_db_cache)
+):
+    params = {"token_address": token_address}
+
+    if not refresh:
+        cached_data = await db_cache.get_cached_data("token-info", params, TOKEN_INFO_CACHE_TTL)
+        if cached_data:
+            return cached_data
+
+    try:
+        if solana_query_handler is None:
+            await initialize_handlers()
+        token_info = await solana_query_handler.get_token_info(token_address)
+        response = {
+            "token_info": token_info,
+            "timestamp": datetime.now(pytz.utc).isoformat()
+        }
+        await db_cache.set_cached_data("token-info", params, response)
+        return response
+    except Exception as e:
+        logger.error(f"Error getting token info for {token_address}: {str(e)}", exc_info=True)
+        return {
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }

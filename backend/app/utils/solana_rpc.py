@@ -801,6 +801,13 @@ class SolanaClient:
 class SolanaConnectionPool:
     """Pool of Solana RPC clients with enhanced connection management."""
     
+    DEFAULT_RPC_ENDPOINTS = [
+        "https://api.mainnet-beta.solana.com",
+        "https://api.rpcpool.com",
+        "https://rpc.ankr.com/solana",
+        "https://solana-api.everstake.one"
+    ]
+
     def __init__(
         self, 
         endpoints: Optional[List[str]] = None,
@@ -940,6 +947,10 @@ class SolanaConnectionPool:
                 
             self._initialized = True
             logger.info(f"Connection pool initialized with {len(self._pool)} clients")
+    
+    async def initialize_with_defaults(self):
+        """Initialize the pool with default endpoints"""
+        await self.initialize(self.DEFAULT_RPC_ENDPOINTS)
     
     async def close(self):
         """Close all clients and cleanup resources"""
@@ -1721,8 +1732,7 @@ async def get_connection_pool() -> SolanaConnectionPool:
                 ssl_verify=True,
                 connector_args=None
             )
-            # The constructor will create a task to initialize the pool
-            # No need to call initialize here as it will be called by the task
+            await _connection_pool.initialize(DEFAULT_RPC_ENDPOINTS)  # Initialize the pool
             logger.info("Created new connection pool")
         except Exception as e:
             logger.error(f"Error creating connection pool: {str(e)}")
@@ -1944,3 +1954,9 @@ async def safe_rpc_call_async(method, client=None, params=None, max_retries=3, r
             "timestamp": time.time()
         }
     }
+
+class SolanaQueryHandler:
+    async def clear_token_cache(self) -> None:
+        """Clear the token info cache."""
+        if hasattr(self, '_token_cache'):
+            self._token_cache.clear()

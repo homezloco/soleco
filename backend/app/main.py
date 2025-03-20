@@ -2,7 +2,7 @@
 FastAPI application main module.
 """
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Query, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_client import make_asgi_app
 import asyncio
@@ -26,6 +26,8 @@ from app.routers.shyft import router as shyft_router
 from app.routers.cli import router as cli_router
 from app.routers.wallet import router as wallet_router
 from app.routers.analytics import router as analytics_router
+from app.routers.solana import router as solana_router
+from app.routers.solana_token import router as solana_token_router
 
 from app.utils.solana_rpc import get_connection_pool, DEFAULT_RPC_ENDPOINTS
 from app.dependencies.solana import get_query_handler
@@ -33,6 +35,8 @@ from app.utils.logging_config import setup_logging
 from app.database.middleware import CacheMiddleware
 from app.tasks.pump_data_collector import run_data_collection
 from app.scripts.schedule_rpc_pool_update import start_scheduler as start_rpc_pool_scheduler
+from app.utils.solana_query import SolanaQueryHandler
+from app.utils.cache.database_cache import DatabaseCache
 
 # Configure logging
 logger = setup_logging('app.main')
@@ -42,6 +46,10 @@ scheduler = AsyncIOScheduler()
 
 # Store background tasks
 background_tasks = []
+
+async def _test_connection_pool(pool):
+    async with await pool.acquire() as client:
+        logger.info("Connection pool test successful")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -54,21 +62,42 @@ async def lifespan(app: FastAPI):
     
     try:
         # Initialize connection pool
+        logger.info("Initializing connection pool...")
         pool = await get_connection_pool()
         if not pool._initialized:
+            logger.info("Connection pool not initialized, initializing now...")
             await pool.initialize(DEFAULT_RPC_ENDPOINTS)
+            logger.info("Connection pool initialized")
+        else:
+            logger.info("Connection pool already initialized")
             
         # Initialize shared query handler
+        logger.info("Initializing shared query handler...")
         query_handler = await get_query_handler()
         await query_handler.initialize()
+        logger.info("Shared query handler initialized")
         
         # Test connection
-        async with await pool.acquire() as client:
+        logger.info("Testing connection pool...")
+        try:
+            # Use asyncio.wait_for to add a timeout to the connection test
+            await asyncio.wait_for(
+                _test_connection_pool(pool),
+                timeout=10.0  # 10 second timeout for the connection test
+            )
             logger.info("Connection pool test successful")
+        except asyncio.TimeoutError:
+            logger.warning("Connection pool test timed out after 10 seconds, continuing anyway")
+        except Exception as e:
+            logger.error(f"Connection pool test failed: {str(e)}")
+            logger.exception(e)
+            logger.warning("Continuing startup despite connection pool test failure")
         
         # Schedule background tasks
+        logger.info("Scheduling background tasks...")
         try:
             # Schedule pump data collection
+            logger.info("Scheduling pump data collection...")
             async def run_task():
                 await run_data_collection()
                 
@@ -79,8 +108,10 @@ async def lifespan(app: FastAPI):
                 name="Pump.fun Data Collector",
                 replace_existing=True
             )
+            logger.info("Pump data collection scheduled")
             
             # Start the scheduler
+            logger.info("Starting scheduler...")
             scheduler.start()
             logger.info("Scheduled background tasks started")
             
@@ -88,10 +119,12 @@ async def lifespan(app: FastAPI):
             logger.info("Starting RPC pool update scheduler")
             try:
                 # Configure scheduler logging
+                logger.info("Configuring scheduler logging...")
                 scheduler_logger = logging.getLogger('app.scripts.schedule_rpc_pool_update')
                 scheduler_logger.setLevel(logging.DEBUG)
                 
                 # Create a file handler for detailed scheduler logs
+                logger.info("Creating file handler for scheduler logs...")
                 os.makedirs('logs', exist_ok=True)  # Ensure logs directory exists
                 scheduler_file_handler = logging.FileHandler('logs/rpc_scheduler_detailed.log')
                 scheduler_file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
@@ -103,6 +136,7 @@ async def lifespan(app: FastAPI):
                 # Start the scheduler
                 logger.info("Calling start_rpc_pool_scheduler")
                 try:
+                    logger.info("About to call start_rpc_pool_scheduler with parameters: interval_hours=12.0, health_check_interval=1.0, max_test=50, max_endpoints=10")
                     rpc_pool_task = await start_rpc_pool_scheduler(
                         interval_hours=12.0,           # Full update every 12 hours
                         health_check_interval=1.0,     # Health check every 1 hour
@@ -114,10 +148,12 @@ async def lifespan(app: FastAPI):
                     if rpc_pool_task is None:
                         logger.error("start_rpc_pool_scheduler returned None instead of a task")
                     else:
+                        logger.info("Adding RPC pool task to background_tasks list")
                         background_tasks.append(rpc_pool_task)
                         logger.info("RPC pool update scheduler started successfully")
                         
                         # Check if the task is still running after a short delay
+                        logger.info("Waiting 2 seconds to check if task is still running...")
                         await asyncio.sleep(2)
                         if rpc_pool_task.done():
                             if rpc_pool_task.exception():
@@ -130,11 +166,27 @@ async def lifespan(app: FastAPI):
                     logger.error(f"Error in start_rpc_pool_scheduler: {str(e)}")
                     logger.exception(e)
                     
-                    # Try a direct update as a fallback
-                    logger.info("Attempting direct RPC pool update as fallback")
-                    from app.scripts.schedule_rpc_pool_update import update_rpc_pool
-                    await update_rpc_pool(max_test=50, max_endpoints=10)
-                    logger.info("Direct RPC pool update completed")
+                    # Create a background task for the direct update instead of blocking
+                    logger.info("Scheduling direct RPC pool update as background task")
+                    from app.scripts.update_rpc_pool import update_rpc_pool
+                    
+                    async def run_direct_update():
+                        try:
+                            logger.info("Starting direct RPC pool update")
+                            await update_rpc_pool(max_test=50, max_endpoints=10)
+                            logger.info("Direct RPC pool update completed")
+                        except Exception as e:
+                            logger.error(f"Error in direct RPC pool update: {str(e)}")
+                            logger.exception(e)
+                    
+                    logger.info("Creating direct update task")
+                    direct_update_task = asyncio.create_task(
+                        run_direct_update(),
+                        name="direct_rpc_pool_update"
+                    )
+                    logger.info("Adding direct update task to background_tasks list")
+                    background_tasks.append(direct_update_task)
+                    logger.info("Direct RPC pool update scheduled as background task")
                     
             except Exception as e:
                 logger.error(f"Error starting RPC pool scheduler: {str(e)}")
@@ -142,8 +194,12 @@ async def lifespan(app: FastAPI):
         
         except Exception as e:
             logger.error(f"Error starting scheduler: {str(e)}")
+            logger.exception(e)
         
+        # Ensure we yield control back to Uvicorn
+        logger.info("About to yield control to Uvicorn")
         yield
+        logger.info("Control returned from Uvicorn, server startup complete")
     except Exception as e:
         logger.error(f"Error during startup: {str(e)}")
         raise
@@ -165,6 +221,10 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             logger.error(f"Error shutting down scheduler: {str(e)}")
         logger.info("Application shutdown complete")
+
+async def get_solana_query_handler() -> SolanaQueryHandler:
+    cache = DatabaseCache()
+    return SolanaQueryHandler(cache)
 
 # Create FastAPI app
 app = FastAPI(
@@ -329,8 +389,30 @@ async def update_rpc_pool_endpoint(max_test: int = 20, max_endpoints: int = 10, 
         logger.exception(e)
         return {"status": "error", "message": f"Error updating RPC pool: {str(e)}"}
 
-# Include API router in app with proper prefix
-app.include_router(api_router)
+# Include API routers
+app.include_router(soleco_router, prefix="/soleco")
+app.include_router(diagnostics_router, prefix="/diagnostics")
+app.include_router(pumpfun_router, prefix="/pump")
+app.include_router(pump_trending_router, prefix="/pump/trending")
+app.include_router(jupiter_router, prefix="/jupiter")
+app.include_router(dexscreener_router, prefix="/dexscreener")
+app.include_router(helius_router, prefix="/helius")
+app.include_router(moralis_router, prefix="/moralis")
+app.include_router(raydium_router, prefix="/raydium")
+app.include_router(rugcheck_router, prefix="/rugcheck")
+app.include_router(shyft_router, prefix="/shyft")
+app.include_router(cli_router, prefix="/cli")
+app.include_router(wallet_router, prefix="/wallet")
+app.include_router(analytics_router, prefix="/analytics")
+app.include_router(solana_router, prefix="/solana")
+app.include_router(solana_token_router, prefix="/solana/token")
+
+@app.get("/api/v1/soleco/solana/token-info")
+async def get_token_info(
+    token_address: str = Query(..., description="The token address to get info for"),
+    handler: SolanaQueryHandler = Depends(get_solana_query_handler)
+):
+    return await handler.get_token_info(token_address)
 
 @app.get("/", tags=["Root"])
 async def root():

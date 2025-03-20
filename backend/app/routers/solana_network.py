@@ -7,6 +7,7 @@ import asyncio
 import traceback
 from fastapi import APIRouter, Query, HTTPException
 from datetime import datetime
+import pytz
 
 from ..utils.solana_rpc import get_connection_pool
 from ..utils.solana_query import SolanaQueryHandler
@@ -87,99 +88,22 @@ async def get_network_status(
             return cached_data
     
     try:
-        # Set a timeout for the entire operation
-        try:
-            # Get network status from handler with timeout
-            status_data = await asyncio.wait_for(
-                network_status_handler.get_network_status(summary_only=summary_only),
-                timeout=10.0  # 10 second timeout for the entire operation
-            )
-            
-            # Cache the result
-            cache_key = f"network_status:{summary_only}"
-            await db_cache.set(cache_key, status_data, ttl=NETWORK_STATUS_CACHE_TTL)
-            
-            logger.info(f"Successfully retrieved and cached network status (summary_only={summary_only})")
-            return status_data
-            
-        except asyncio.TimeoutError:
-            logger.error("Network status endpoint timed out after 10 seconds")
-            
-            # Try to get cached data as fallback, even if refresh was requested
-            cache_key = f"network_status:{summary_only}"
-            cached_data = await db_cache.get(cache_key)
-            
-            if cached_data:
-                logger.info("Returning cached data due to timeout")
-                # Add error information to the cached data
-                if "errors" not in cached_data:
-                    cached_data["errors"] = []
-                    
-                cached_data["errors"].append({
-                    "type": "timeout",
-                    "message": "Request timed out, returning cached data",
-                    "timestamp": datetime.now().isoformat()
-                })
-                
-                # Update status to indicate degraded service
-                cached_data["status"] = "degraded"
-                cached_data["message"] = "Data retrieval timed out, showing cached data"
-                
-                return cached_data
-            else:
-                # No cached data available, return error
-                logger.error("No cached data available after timeout")
-                return {
-                    "status": "error",
-                    "message": "Network status retrieval timed out and no cached data available",
-                    "timestamp": datetime.now().isoformat(),
-                    "errors": [{
-                        "type": "timeout",
-                        "message": "Network status endpoint timed out after 10 seconds",
-                        "timestamp": datetime.now().isoformat()
-                    }]
-                }
-                
-    except Exception as e:
-        logger.error(f"Error getting network status: {str(e)}", exc_info=True)
-        
-        # Try to get cached data as fallback
-        try:
-            cache_key = f"network_status:{summary_only}"
-            cached_data = await db_cache.get(cache_key)
-            
-            if cached_data:
-                logger.info("Returning cached data due to error")
-                # Add error information to the cached data
-                if "errors" not in cached_data:
-                    cached_data["errors"] = []
-                    
-                cached_data["errors"].append({
-                    "type": "retrieval_error",
-                    "message": f"Error retrieving fresh data: {str(e)}",
-                    "timestamp": datetime.now().isoformat()
-                })
-                
-                # Update status to indicate degraded service
-                cached_data["status"] = "degraded"
-                cached_data["message"] = "Error retrieving fresh data, showing cached data"
-                
-                return cached_data
-        except Exception as cache_error:
-            logger.error(f"Error accessing cache after primary error: {str(cache_error)}")
-            
-        # If we get here, both the primary request and cache fallback failed
-        return {
-            "status": "error",
-            "message": f"Error retrieving network status: {str(e)}",
-            "timestamp": datetime.now().isoformat(),
-            "errors": [{
-                "type": "network_status_error",
-                "message": str(e),
-                "traceback": traceback.format_exc(),
-                "timestamp": datetime.now().isoformat()
-            }]
+        status_data = await network_status_handler.get_network_status(summary_only=summary_only)
+        status_data["timestamp"] = datetime.now(pytz.utc).isoformat()
+
+        response = {
+            "network_status": status_data,
+            "timestamp": datetime.now(pytz.utc).isoformat()
         }
+
+        if not refresh:
+            cache_key = f"network_status:{summary_only}"
+            await db_cache.set(cache_key, response, ttl=NETWORK_STATUS_CACHE_TTL)
+
+        return response
+    except Exception as e:
+        logger.error(f"Error getting network status: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/performance/metrics", response_model=Dict[str, Any])
@@ -212,10 +136,16 @@ async def get_performance_metrics(
         # Get performance metrics from handler
         metrics_data = await network_status_handler.get_performance_metrics()
         
-        # Cache the result
-        await db_cache.set("performance_metrics", metrics_data, ttl=PERFORMANCE_METRICS_CACHE_TTL)
+        # Add current timestamp
+        response = {
+            "performance_metrics": metrics_data,
+            "timestamp": datetime.now(pytz.utc).isoformat()
+        }
         
-        return metrics_data
+        # Cache the result
+        await db_cache.set("performance_metrics", response, ttl=PERFORMANCE_METRICS_CACHE_TTL)
+        
+        return response
     except Exception as e:
         logger.error(f"Error getting performance metrics: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to retrieve performance metrics: {str(e)}")
