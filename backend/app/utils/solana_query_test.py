@@ -16,7 +16,8 @@ from fastapi import Depends
 
 from .solana_rpc import SolanaConnectionPool
 from .solana_errors import RetryableError, RPCError
-from .solana_response import SolanaResponseHandler, MintResponseHandler
+from .response_base import ResponseHandler
+from .handlers.mint_response_handler import MintResponseHandler
 
 logger = logging.getLogger(__name__)
 

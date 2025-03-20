@@ -47,5 +47,6 @@ def well_known_endpoints():
     ]
 
 @pytest.fixture
-def test_server_url():
-    return "http://localhost:8001"
+def server_url():
+    """Return the URL of the server to test against."""
+    return os.environ.get("TEST_SERVER_URL", "http://localhost:8001")

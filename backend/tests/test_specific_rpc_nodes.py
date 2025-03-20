@@ -4,7 +4,8 @@ Test for specific Solana RPC endpoints with both HTTP and HTTPS
 import asyncio
 import logging
 import time
-from backend.app.utils.solana_connection_pool import SolanaConnectionPool
+import os
+from app.utils.solana_connection import SolanaConnectionPool
 import pytest
 
 logging.basicConfig(level=logging.INFO)
@@ -147,6 +148,7 @@ async def test_multiple_endpoints(endpoints: list, well_known_endpoints: list, t
     }
 
 @pytest.mark.asyncio
+@pytest.mark.skipif(os.environ.get('CI') == 'true', reason="Skip tests in CI environment")
 async def test_rpc_endpoint():
     # Test a single RPC endpoint
     endpoint = 'api.mainnet-beta.solana.com'
@@ -161,6 +163,7 @@ async def test_rpc_endpoint():
         await client.close()
 
 @pytest.mark.asyncio
+@pytest.mark.skipif(os.environ.get('CI') == 'true', reason="Skip tests in CI environment")
 async def test_endpoint_with_both_protocols():
     # Test endpoint with both HTTP and HTTPS
     endpoint = 'api.mainnet-beta.solana.com'
@@ -182,6 +185,7 @@ async def test_endpoint_with_both_protocols():
         await http_client.close()
 
 @pytest.mark.asyncio
+@pytest.mark.skipif(os.environ.get('CI') == 'true', reason="Skip tests in CI environment")
 async def test_multiple_endpoints():
     # Test multiple endpoints
     endpoints = [
