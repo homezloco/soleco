@@ -25,6 +25,15 @@ def is_ci_environment():
     """Check if we're running in a CI environment"""
     return os.environ.get('CI') == 'true'
 
+@pytest.fixture
+async def connection_pool():
+    """Fixture to provide a connection pool for tests"""
+    pool = await get_connection_pool()
+    try:
+        yield pool
+    finally:
+        await pool.close()
+
 async def simulate_endpoint_performance(pool: SolanaConnectionPool, num_requests: int = 50) -> None:
     """
     Simulate endpoint performance by making multiple requests and tracking metrics.
@@ -111,33 +120,33 @@ async def simulate_endpoint_performance(pool: SolanaConnectionPool, num_requests
 
 @pytest.mark.asyncio
 @pytest.mark.skipif(is_ci_environment(), reason="Skip in CI environment")
-async def test_endpoint_prioritization(pool: SolanaConnectionPool) -> None:
+async def test_endpoint_prioritization(connection_pool: SolanaConnectionPool) -> None:
     """
     Test that endpoints are properly prioritized based on performance.
     
     Args:
-        pool: The connection pool to test
+        connection_pool: The connection pool to test
     """
     # First, simulate some endpoint performance to build up metrics
-    await simulate_endpoint_performance(pool, num_requests=30)
+    await simulate_endpoint_performance(connection_pool, num_requests=30)
     
     # Get the current endpoint order
-    original_endpoints = pool.endpoints.copy()
+    original_endpoints = connection_pool.endpoints.copy()
     logger.info("\nOriginal endpoint order:")
     for i, endpoint in enumerate(original_endpoints[:5]):
         logger.info(f"  {i+1}. {endpoint}")
     
     # Sort endpoints by performance
-    sorted_endpoints = await pool.sort_endpoints_by_performance()
+    sorted_endpoints = await connection_pool.sort_endpoints_by_performance()
     logger.info("\nSorted endpoint order:")
     for i, endpoint in enumerate(sorted_endpoints[:5]):
         logger.info(f"  {i+1}. {endpoint}")
     
     # Update the pool with the sorted endpoints
-    await pool.update_endpoints(sorted_endpoints)
+    await connection_pool.update_endpoints(sorted_endpoints)
     
     # Get the new endpoint order
-    new_endpoints = pool.endpoints.copy()
+    new_endpoints = connection_pool.endpoints.copy()
     logger.info("\nNew endpoint order after update:")
     for i, endpoint in enumerate(new_endpoints[:5]):
         logger.info(f"  {i+1}. {endpoint}")
