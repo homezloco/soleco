@@ -32,6 +32,13 @@ from ..constants.cache import (
     RPC_NODES_CACHE_TTL,
     TOKEN_INFO_CACHE_TTL
 )
+from ..utils.cache import DatabaseCache
+from ..utils.solana_helpers import (
+    validate_address,
+    parse_transaction,
+    calculate_fees,
+    serialize_solana_object
+)
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -51,10 +58,10 @@ RPC_ENDPOINTS = [
 def safe_serialize(obj):
     """
     Safely serialize complex Solders objects to JSON-compatible format
-    
+
     Args:
         obj: Any object to be serialized
-    
+
     Returns:
         JSON-serializable representation of the object
     """
@@ -62,115 +69,44 @@ def safe_serialize(obj):
         # Handle specific Solders types
         if hasattr(obj, 'to_json') and callable(obj.to_json):
             return obj.to_json()
-        
+
         if hasattr(obj, '__str__'):
             return str(obj)
-        
+
         # Handle hash and other complex types
         if hasattr(obj, 'bytes'):
             # Convert byte arrays to hex strings for readability
             return obj.bytes.hex()
-        
+
         # Convert byte arrays to hex strings
         if isinstance(obj, bytes):
             return obj.hex()
-        
+
         # Convert byte lists to hex strings
         if isinstance(obj, list) and all(isinstance(x, int) and 0 <= x <= 255 for x in obj):
             return bytes(obj).hex()
-        
+
         # Recursively handle nested objects
         if isinstance(obj, (list, tuple)):
             return [safe_serialize(item) for item in obj]
-        
+
         if isinstance(obj, dict):
             return {k: safe_serialize(v) for k, v in obj.items()}
-        
+
         # Fallback to string representation
         return str(obj)
-    
+
     except Exception as e:
         print(f"Serialization error for {type(obj)}: {e}")
-        return str(obj)
-
-def serialize_solana_object(obj):
-    """
-    Convert Solana-specific objects to JSON-serializable dictionaries
-    
-    Args:
-        obj: Solana response object
-    
-    Returns:
-        Dict or primitive: JSON-serializable representation of the object
-    """
-    try:
-        # Handle coroutines (this should not happen with safe_rpc_call_async, but just in case)
-        if asyncio.iscoroutine(obj):
-            logger.warning(f"serialize_solana_object received a coroutine: {obj}")
-            return {"error": "Received coroutine instead of result. This is likely a bug."}
-            
-        # Handle None
-        if obj is None:
-            return None
-            
-        # Handle primitives
-        if isinstance(obj, (str, int, float, bool)):
-            return obj
-            
-        # Handle lists
-        if isinstance(obj, (list, tuple)):
-            return [serialize_solana_object(item) for item in obj]
-            
-        # Handle dictionaries
-        if isinstance(obj, dict):
-            return {k: serialize_solana_object(v) for k, v in obj.items()}
-            
-        # Handle Pubkey
-        if hasattr(obj, 'to_base58'):
-            try:
-                return obj.to_base58().decode('utf-8')
-            except Exception as e:
-                logger.error(f"Error converting Pubkey to base58: {str(e)}")
-                return str(obj)
-                
-        # Handle objects with __dict__ attribute (convert to dict)
-        if hasattr(obj, '__dict__'):
-            # Some objects have circular references, so we need to be careful
-            try:
-                return {k: serialize_solana_object(v) for k, v in obj.__dict__.items() 
-                        if not k.startswith('_') and not callable(v)}
-            except Exception as e:
-                logger.error(f"Error serializing object with __dict__: {str(e)}")
-                return str(obj)
-                
-        # Handle objects with to_json or to_dict methods
-        if hasattr(obj, 'to_json'):
-            try:
-                return obj.to_json()
-            except Exception as e:
-                logger.error(f"Error calling to_json: {str(e)}")
-                
-        if hasattr(obj, 'to_dict'):
-            try:
-                return obj.to_dict()
-            except Exception as e:
-                logger.error(f"Error calling to_dict: {str(e)}")
-                
-        # Handle objects with __str__ method
-        return str(obj)
-        
-    except Exception as e:
-        logger.error(f"Error in serialize_solana_object: {str(e)}")
-        logger.error(traceback.format_exc())
         return str(obj)
 
 def serialize_cluster_nodes(nodes):
     """
     Convert Solana cluster nodes to a more readable and structured format
-    
+
     Args:
         nodes: List of RpcContactInfo objects
-    
+
     Returns:
         List of dictionaries with parsed node information
     """
@@ -199,16 +135,16 @@ def serialize_cluster_nodes(nodes):
         except Exception as e:
             # Fallback to string representation if parsing fails
             parsed_nodes.append(str(node))
-    
+
     return parsed_nodes
 
 def convert_block_to_dict(block_response):
     """
     Convert Solders block response to a concise, JSON-serializable dictionary
-    
+
     Args:
         block_response: Solana block response object
-    
+
     Returns:
         Compact serializable block dictionary
     """
@@ -220,16 +156,16 @@ def convert_block_to_dict(block_response):
             block_data = block_response.result
         else:
             block_data = block_response
-        
+
         # Safely get block time, use current time as fallback
         block_time = getattr(block_data, 'block_time', None)
         if block_time is None:
             block_time = int(time.time())
-        
+
         # Ensure block time is a reasonable timestamp
         if block_time > int(time.time()) * 2:  # If timestamp seems unrealistic
             block_time = int(time.time())
-        
+
         # Extract key block information
         serializable_block = {
             'block_number': getattr(block_data, 'block_height', 'N/A'),
@@ -242,12 +178,12 @@ def convert_block_to_dict(block_response):
                 'failed_transactions': 0
             }
         }
-        
+
         # Try to extract transactions
         try:
             transactions = getattr(block_data, 'transactions', [])
             serializable_block['transaction_count'] = len(transactions)
-            
+
             # More robust transaction status checking
             def check_transaction_status(tx):
                 try:
@@ -256,28 +192,28 @@ def convert_block_to_dict(block_response):
                     return status.lower() in ['success', 'ok', 'confirmed']
                 except:
                     return False
-            
+
             # Summarize transaction status
             transaction_summary = {
                 'total_transactions': len(transactions),
                 'success_transactions': sum(1 for tx in transactions if check_transaction_status(tx)),
                 'failed_transactions': sum(1 for tx in transactions if not check_transaction_status(tx))
             }
-            
+
             serializable_block['summary'] = transaction_summary
-            
+
             # Optionally, include first few transaction signatures for reference
             serializable_block['sample_transactions'] = [
-                safe_serialize(tx.transaction.signatures[0]) 
-                for tx in transactions[:3] 
+                safe_serialize(tx.transaction.signatures[0])
+                for tx in transactions[:3]
                 if hasattr(tx, 'transaction')
             ]
-        
+
         except Exception as tx_error:
             print(f"Error extracting transactions: {tx_error}")
-        
+
         return serializable_block
-    
+
     except Exception as conversion_error:
         print(f"Error converting block to dict: {conversion_error}")
         return {
@@ -288,22 +224,22 @@ def convert_block_to_dict(block_response):
 async def create_robust_client() -> SolanaClient:
     """
     Create a Solana RPC client with robust configuration and full method support
-    
+
     Returns:
         SolanaClient: Our custom Solana RPC client
     """
     try:
         # Get the connection pool
         pool = await get_connection_pool()
-        
+
         # Get a client from the pool
         client = await pool.get_client()
         if not client:
             raise ConnectionError("No healthy Solana RPC clients available")
-            
+
         logger.info(f"Successfully connected to Solana RPC at {client.endpoint}")
         return client
-        
+
     except Exception as e:
         logger.error(f"Error creating Solana client: {str(e)}")
         raise
@@ -312,13 +248,13 @@ def safe_rpc_call(client, method, *args, **kwargs):
     """
     Safely execute RPC calls with comprehensive error handling and serialization.
     Note: This function is not async-safe. For async methods, use safe_rpc_call_async instead.
-    
+
     Args:
         client: Solana RPC client
         method: RPC method to call
         *args: Positional arguments for the method
         **kwargs: Keyword arguments for the method
-    
+
     Returns:
         Dict: Comprehensive result or error information
     """
@@ -336,10 +272,10 @@ def safe_rpc_call(client, method, *args, **kwargs):
                     converted_args.append(arg)
             else:
                 converted_args.append(arg)
-        
+
         # Dynamically call the method
         method_func = getattr(client, method)
-        
+
         # Check if the method is a coroutine function (async)
         if asyncio.iscoroutinefunction(method_func):
             # This is an async method that needs to be awaited
@@ -352,7 +288,7 @@ def safe_rpc_call(client, method, *args, **kwargs):
         else:
             # Regular synchronous method
             result = method_func(*converted_args, **kwargs)
-            
+
             # Check if the result is a coroutine (some methods might return coroutines even if not marked as async)
             if asyncio.iscoroutine(result):
                 logger.warning(f"Method {method} returned a coroutine but was called with safe_rpc_call. Use safe_rpc_call_async instead.")
@@ -361,10 +297,10 @@ def safe_rpc_call(client, method, *args, **kwargs):
                     'error': f"Method {method} returned a coroutine but was called with safe_rpc_call. Use safe_rpc_call_async instead.",
                     'method': method
                 }
-            
+
             # Serialize the result
             serialized_result = serialize_solana_object(result)
-            
+
             return {
                 'success': True,
                 'result': serialized_result,
@@ -387,13 +323,13 @@ async def safe_rpc_call_async(client, method, *args, **kwargs):
     """
     Safely execute async RPC calls with comprehensive error handling and serialization.
     This version properly awaits coroutines.
-    
+
     Args:
         client: Solana RPC client
         method: RPC method to call
         *args: Positional arguments for the method
         **kwargs: Keyword arguments for the method
-    
+
     Returns:
         Dict: Comprehensive result or error information
     """
@@ -409,7 +345,7 @@ async def safe_rpc_call_async(client, method, *args, **kwargs):
                     processed_args.append(arg)
             else:
                 processed_args.append(arg)
-        
+
         # Get the method from the client
         method_to_call = getattr(client, method, None)
         if not method_to_call:
@@ -419,23 +355,23 @@ async def safe_rpc_call_async(client, method, *args, **kwargs):
                 'error': f"Method {method} not found on client",
                 'method': method
             }
-        
+
         # Call the method and await the result
         logger.debug(f"Calling {method} with args: {processed_args}, kwargs: {kwargs}")
         result = await method_to_call(*processed_args, **kwargs)
-        
+
         # Log the response type and structure for debugging
         logger.debug(f"Response from {method} is of type {type(result)}")
         if isinstance(result, dict):
             logger.debug(f"Keys in response: {list(result.keys())}")
-        
+
         # Serialize the result
         serialized_result = serialize_solana_object(result)
-        
+
         # Calculate and log execution time
         execution_time = time.time() - start_time
         logger.debug(f"RPC call {method} completed in {execution_time:.2f}s")
-        
+
         return {
             'success': True,
             'result': serialized_result,
@@ -447,7 +383,7 @@ async def safe_rpc_call_async(client, method, *args, **kwargs):
         error_msg = f"Error in safe_rpc_call_async for method {method}: {str(e)}"
         logger.error(error_msg)
         logger.error(traceback.format_exc())
-        
+
         # Return structured error information
         return {
             'success': False,
@@ -467,7 +403,7 @@ def patch_proxy_initialization():
         import solana.rpc.providers.http
         import httpx
         import functools
-        
+
         def strip_proxy_kwargs(func):
             """
             Decorator to remove proxy-related arguments from any method
@@ -479,29 +415,29 @@ def patch_proxy_initialization():
                 kwargs.pop('proxies', None)
                 kwargs.pop('http_proxy', None)
                 kwargs.pop('https_proxy', None)
-                
+
                 # Remove any other potential proxy arguments
                 kwargs = {k: v for k, v in kwargs.items() 
                           if not any(proxy_key in k.lower() for proxy_key in ['proxy', 'proxies'])}
-                
+
                 return func(*args, **kwargs)
             return wrapper
-        
+
         # Patch Client initialization methods
         original_client_init = httpx.Client.__init__
         httpx.Client.__init__ = strip_proxy_kwargs(original_client_init)
-        
+
         # Patch Solana HTTP Provider initialization
         original_http_provider_init = solana.rpc.providers.http.HTTPProvider.__init__
         solana.rpc.providers.http.HTTPProvider.__init__ = strip_proxy_kwargs(original_http_provider_init)
-        
+
         # Patch Solana Client initialization
         original_solana_client_init = solana.rpc.api.Client.__init__
         solana.rpc.api.Client.__init__ = strip_proxy_kwargs(original_solana_client_init)
-        
+
         print("Successfully applied comprehensive proxy removal monkey patch")
         return True
-    
+
     except Exception as e:
         print(f"Error applying proxy removal monkey patch: {e}")
         return False
@@ -509,11 +445,11 @@ def patch_proxy_initialization():
 def safe_get_block(client, block_number):
     """
     Safely retrieve a block with multiple fallback strategies
-    
+
     Args:
         client: Solana RPC client
         block_number: Block number to retrieve
-    
+
     Returns:
         Serializable block data or None
     """
@@ -524,27 +460,27 @@ def safe_get_block(client, block_number):
             block_number, 
             max_supported_transaction_version=0
         ),
-        
+
         # Strategy 2: Remove transaction_details argument
         lambda: client.get_block(block_number, transaction_details=None)
     ]
-    
+
     # Try each strategy
     for strategy in retrieval_strategies:
         try:
             block_resp = strategy()
-            
+
             # Convert Solders response to serializable dict
             block = convert_block_to_dict(block_resp)
-            
+
             # Validate block
             if block:
                 print(f"Successfully retrieved block {block_number}")
                 return block
-        
+
         except Exception as e:
             print(f"Block retrieval strategy failed: {e}")
-    
+
     # Final fallback
     print(f"All block retrieval strategies failed for block {block_number}")
     return None
@@ -552,11 +488,11 @@ def safe_get_block(client, block_number):
 def get_recent_blocks(client=None, **kwargs):
     """
     Retrieve recent blocks with robust error handling and data optimization
-    
+
     Args:
         client: Solana RPC client
         **kwargs: Additional keyword arguments including 'limit'
-    
+
     Returns:
         List of recent blocks with minimal, essential information
     """
@@ -564,34 +500,34 @@ def get_recent_blocks(client=None, **kwargs):
         # Extract client and limit from kwargs
         if client is None:
             client = kwargs.get('client')
-        
+
         # Default limit to 10 if not provided
         limit = kwargs.get('limit', 10)
-        
+
         # Validate client
         if client is None:
             raise ValueError("No Solana RPC client provided")
-        
+
         # Get current slot to determine block range
         current_slot = client.get_slot()
-        
+
         # Calculate block range
         blocks = []
         for offset in range(limit):
             block_number = current_slot - offset
-            
+
             # Attempt to retrieve block
             block = safe_get_block(client, block_number)
-            
+
             if block is not None:
                 blocks.append(block)
-            
+
             # Stop if we've reached the desired limit
             if len(blocks) >= limit:
                 break
-        
+
         return blocks
-    
+
     except Exception as e:
         print(f"Error retrieving recent blocks: {e}")
         return []
@@ -611,10 +547,10 @@ rpc_node_extractor = None
 async def initialize_handlers():
     """Initialize connection pool and handlers."""
     global solana_query_handler, response_handler, network_handler, rpc_node_extractor
-    
+
     try:
         logger.info("Initializing Solana handlers")
-        
+
         # Get connection pool with error handling
         try:
             connection_pool = await get_connection_pool()
@@ -624,7 +560,7 @@ async def initialize_handlers():
         except Exception as pool_error:
             logger.error(f"Error getting connection pool: {str(pool_error)}", exc_info=True)
             return False
-        
+
         # Initialize the SolanaQueryHandler
         try:
             solana_query_handler = SolanaQueryHandler(connection_pool)
@@ -635,7 +571,7 @@ async def initialize_handlers():
         except Exception as query_error:
             logger.error(f"Error initializing SolanaQueryHandler: {str(query_error)}", exc_info=True)
             return False
-        
+
         # Create an EndpointConfig for the response manager
         from ..utils.solana_types import EndpointConfig
         default_endpoint_config = EndpointConfig(
@@ -645,9 +581,10 @@ async def initialize_handlers():
             max_retries=3,
             retry_delay=1.0
         )
-        
+
         # Create a SolanaResponseManager with the config
         try:
+            from ..utils.solana_response import SolanaResponseManager, ResponseHandler
             response_manager = SolanaResponseManager(default_endpoint_config)
             # Initialize the ResponseHandler with the manager
             response_handler = ResponseHandler(response_manager)
@@ -655,15 +592,16 @@ async def initialize_handlers():
         except Exception as response_error:
             logger.error(f"Error initializing ResponseHandler: {str(response_error)}", exc_info=True)
             return False
-        
+
         # Initialize the NetworkStatusHandler
         try:
+            from ..utils.solana_status import NetworkStatusHandler
             network_handler = NetworkStatusHandler(solana_query_handler)
             logger.info("NetworkStatusHandler initialized successfully")
         except Exception as network_error:
             logger.error(f"Error initializing NetworkStatusHandler: {str(network_error)}", exc_info=True)
             return False
-        
+
         # Initialize the RPCNodeExtractor
         try:
             rpc_node_extractor = RPCNodeExtractor(solana_query_handler)
@@ -671,7 +609,7 @@ async def initialize_handlers():
         except Exception as extractor_error:
             logger.error(f"Error initializing RPCNodeExtractor: {str(extractor_error)}", exc_info=True)
             return False
-        
+
         logger.info("All Solana handlers initialized successfully")
         return True
     except Exception as e:
@@ -692,10 +630,10 @@ async def get_network_status(
 ):
     """
     Retrieve comprehensive Solana network status with robust error handling.
-    
+
     This endpoint provides a detailed overview of the current Solana network status,
     including health, node information, version distribution, and performance metrics.
-    
+
     - **summary_only**: When true, returns only summary information without the detailed node list
     - **refresh**: When true, forces a refresh from the Solana RPC instead of using cached data
     """
@@ -704,14 +642,14 @@ async def get_network_status(
         params = {
             "summary_only": summary_only
         }
-        
+
         # Try to get from cache if not forcing refresh
         if not refresh:
             cached_data = db_cache.get_cached_data("network-status", params, NETWORK_STATUS_CACHE_TTL)
             if cached_data:
                 logging.info("Retrieved network status from cache")
                 return cached_data
-        
+
         # Initialize handlers if needed
         if network_handler is None:
             initialization_success = await initialize_handlers()
@@ -721,13 +659,13 @@ async def get_network_status(
                     "error": "Failed to initialize network status handler",
                     "timestamp": datetime.now(pytz.utc).isoformat()
                 }
-        
+
         # Get comprehensive network status
         result = await network_handler.get_comprehensive_status(summary_only=summary_only)
-        
+
         # Cache the response
         db_cache.cache_data("network-status", result, params, NETWORK_STATUS_CACHE_TTL)
-        
+
         return result
     except Exception as e:
         logger.error(f"Error retrieving network status: {str(e)}", exc_info=True)
@@ -745,13 +683,12 @@ async def get_token_info(
     db_cache: DatabaseCache = Depends(get_db_cache)
 ):
     params = {"token_address": token_address}
-    cache_key = f"token_info:{token_address}"
-    
+
     if not refresh:
-        cached = await db_cache.get(cache_key)
-        if cached:
-            return cached
-    
+        cached_data = await db_cache.get_cached_data("token-info", params, TOKEN_INFO_CACHE_TTL)
+        if cached_data:
+            return cached_data
+
     try:
         if solana_query_handler is None:
             await initialize_handlers()
@@ -760,7 +697,7 @@ async def get_token_info(
             "token_info": token_info,
             "timestamp": datetime.now(pytz.utc).isoformat()
         }
-        await db_cache.set(cache_key, response)
+        await db_cache.set_cached_data("token-info", params, response)
         return response
     except Exception as e:
         logger.error(f"Error getting token info for {token_address}: {str(e)}", exc_info=True)
@@ -787,13 +724,13 @@ async def simulate_transaction(
         async with await pool.acquire() as client:
             from_pubkey = Pubkey.from_string(from_address)
             to_pubkey = Pubkey.from_string(to_address)
-            
+
             # Create a mock transaction for simulation
             transaction = Transaction()
             # Add transaction instructions (simplified example)
-            
+
             simulation_result = await safe_rpc_call_async(client, 'simulate_transaction', transaction)
-        
+
             return {
                 "from": from_address,
                 "to": to_address,
@@ -822,30 +759,30 @@ async def analyze_wallet(
     try:
         # Get connection pool
         pool = await get_connection_pool()
-        
+
         # Create query handler
         query_handler = solana_query_handler or SolanaQueryHandler(pool)
-        
+
         # Get wallet transactions
         transactions = await query_handler.get_signatures_for_address(
             address=wallet_address,
             limit=100
         )
-        
+
         # Get token program transactions
         token_txs = await query_handler.get_program_transactions(
             program_id=TOKEN_PROGRAM_ID,
             address=wallet_address,
             limit=100
         )
-        
+
         # Get Token2022 program transactions
         token2022_txs = await query_handler.get_program_transactions(
             program_id=TOKEN_2022_PROGRAM_ID,
             address=wallet_address,
             limit=100
         )
-        
+
         # Process wallet info
         wallet_info = {
             'address': wallet_address,
@@ -854,46 +791,46 @@ async def analyze_wallet(
             'last_activity': None,
             'program_interactions': defaultdict(int)
         }
-        
+
         # Process regular transactions
         for tx in transactions:
             signature = tx.get('signature', '')
             block_time = tx.get('blockTime', 0)
-            
+
             wallet_info['transactions'].append({
                 'signature': signature,
                 'block_time': block_time,
                 'type': 'regular'
             })
-            
+
             # Update last activity
             if not wallet_info['last_activity'] or block_time > wallet_info['last_activity']:
                 wallet_info['last_activity'] = block_time
-                
+
         # Process token transactions
         for tx in token_txs:
             signature = tx.get('transaction', {}).get('signatures', [''])[0]
             block_time = tx.get('blockTime', 0)
-            
+
             wallet_info['transactions'].append({
                 'signature': signature,
                 'block_time': block_time,
                 'type': 'token'
             })
             wallet_info['program_interactions']['token'] += 1
-            
+
         # Process Token2022 transactions
         for tx in token2022_txs:
             signature = tx.get('transaction', {}).get('signatures', [''])[0]
             block_time = tx.get('blockTime', 0)
-            
+
             wallet_info['transactions'].append({
                 'signature': signature,
                 'block_time': block_time,
                 'type': 'token2022'
             })
             wallet_info['program_interactions']['token2022'] += 1
-            
+
         # Get SOL balance
         try:
             balance = await pool.get_client().get_balance(wallet_address)
@@ -901,13 +838,13 @@ async def analyze_wallet(
         except Exception as e:
             logger.warning(f"Failed to get SOL balance: {str(e)}")
             wallet_info['sol_balance'] = None
-            
+
         # Sort transactions by block time
         wallet_info['transactions'].sort(key=lambda x: x['block_time'], reverse=True)
-        
+
         # Log query stats
         query_handler.stats.log_summary()
-        
+
         return {
             'wallet_info': wallet_info,
             'query_stats': {
@@ -916,7 +853,7 @@ async def analyze_wallet(
                 'error_breakdown': dict(query_handler.stats.error_counts)
             }
         }
-        
+
     except Exception as e:
         logger.error(f"Error analyzing wallet: {str(e)}")
         raise HTTPException(
@@ -945,7 +882,7 @@ async def get_system_resources():
             clock_sysvar = "SysvarC1ock11111111111111111111111111111111"
             epoch_schedule_sysvar = "SysvarEpochSchedu1e111111111111111111111111"
             rent_sysvar = "SysvarRent111111111111111111111111111111111"
-            
+
             # Retrieve Sysvar account info
             system_resources = {
                 "system_program_id": system_program_id,
@@ -956,9 +893,9 @@ async def get_system_resources():
                 },
                 "epoch_info": await safe_rpc_call_async(client, 'get_epoch_info')
             }
-            
+
             return system_resources
-    
+
     except Exception as e:
         logger.error(f"System resources retrieval failed: {str(e)}")
         return {
@@ -996,7 +933,7 @@ async def get_performance_metrics(
                     "error": "Failed to initialize Solana query handler",
                     "timestamp": datetime.now(pytz.utc).isoformat()
                 }
-        
+
         # Get performance samples using the handler's method
         try:
             performance_samples = await solana_query_handler.get_recent_performance()
@@ -1004,7 +941,7 @@ async def get_performance_metrics(
         except Exception as e:
             logger.error(f"Error getting performance samples: {str(e)}", exc_info=True)
             performance_samples = []
-        
+
         # Get block production data
         block_production_response = None
         try:
@@ -1016,7 +953,7 @@ async def get_performance_metrics(
             block_production_response = {
                 "error": str(e)
             }
-        
+
         # Process performance samples
         performance_stats = {}
         if performance_samples and len(performance_samples) > 0:
@@ -1061,7 +998,7 @@ async def get_performance_metrics(
                     "samples_analyzed": 0,
                     "exception": str(e)
                 }
-        
+
         # Process block production
         block_stats = {}
         try:
@@ -1082,7 +1019,7 @@ async def get_performance_metrics(
                         }
                 elif 'result' in block_production_response and isinstance(block_production_response['result'], dict):
                     value = block_production_response.get('result', {}).get('value', {})
-                    
+
                     if value:
                         # Extract block production stats
                         block_stats = {
@@ -1112,7 +1049,7 @@ async def get_performance_metrics(
             block_stats = {
                 "error": str(e)
             }
-        
+
         # Prepare response
         response = {
             "status": "success",
@@ -1120,24 +1057,24 @@ async def get_performance_metrics(
             "performance_samples": performance_stats,
             "block_production": block_stats
         }
-        
+
         # Add a status message if both performance samples and block production have errors
         if (isinstance(performance_stats, dict) and 'error' in performance_stats and 
             isinstance(block_stats, dict) and 'error' in block_stats):
             response["status_message"] = "Limited data available: Some Solana RPC methods are not supported by the available endpoints"
-            
+
             # Log this situation for monitoring
             logger.warning(
                 f"Limited performance data available: Performance samples error: {performance_stats.get('error')}, "
                 f"Block production error: {block_stats.get('error')}"
             )
-        
+
         # Cache the response
         try:
             db_cache.cache_data("performance-metrics", response, None, PERFORMANCE_METRICS_CACHE_TTL)
         except Exception as e:
             logger.error(f"Error caching performance metrics: {str(e)}", exc_info=True)
-        
+
         return response
     except Exception as e:
         logger.error(f"Error retrieving performance metrics: {str(e)}", exc_info=True)
@@ -1153,43 +1090,32 @@ async def get_rpc_nodes(
     include_details: bool = Query(False, description="Include detailed information for each RPC node"),
     health_check: bool = Query(False, description="Perform health checks on a sample of RPC nodes"),
     include_all: bool = Query(False, description="Include all discovered RPC nodes, even those that may be unreliable"),
-<<<<<<< HEAD
-    refresh: bool = Query(False, description="Force refresh from Solana RPC")
-=======
     refresh: bool = Query(False, description="Force refresh from Solana RPC"),
     use_enhanced_extractor: bool = Query(True, description="Use enhanced RPC node extractor with improved error handling")
->>>>>>> origin/main
 ):
     """
     Get a list of available Solana RPC nodes
     - Optionally includes detailed information about each node
     - Can perform health checks on a sample of nodes
     - Provides version distribution statistics
-<<<<<<< HEAD
-=======
     - Can use enhanced extractor with improved error handling and reliability
->>>>>>> origin/main
     """
     try:
         # Create cache key based on parameters
         params = {
             "include_details": include_details,
             "health_check": health_check,
-<<<<<<< HEAD
-            "include_all": include_all
-=======
             "include_all": include_all,
             "use_enhanced_extractor": use_enhanced_extractor
->>>>>>> origin/main
         }
-        
+
         # Try to get from cache if not forcing refresh
         if not refresh:
             cached_data = db_cache.get_cached_data("rpc-nodes", params, RPC_NODES_CACHE_TTL)
             if cached_data:
                 logging.info("Retrieved RPC nodes from cache")
                 return cached_data
-        
+
         # Initialize handlers if needed
         if solana_query_handler is None:
             initialization_success = await initialize_handlers()
@@ -1199,94 +1125,69 @@ async def get_rpc_nodes(
                     "error": "Failed to initialize Solana query handler",
                     "timestamp": datetime.now(pytz.utc).isoformat()
                 }
-        
+
         # Extract RPC nodes
-<<<<<<< HEAD
-        logger.info(f"Creating RPCNodeExtractor and extracting RPC nodes")
-        start_time = time.time()
-        
-        try:
-            extractor = RPCNodeExtractor(solana_query_handler)
-=======
         logger.info(f"Creating RPCNodeExtractor and extracting RPC nodes (enhanced mode: {use_enhanced_extractor})")
         start_time = time.time()
-        
+
         try:
             extractor = RPCNodeExtractor(solana_query_handler, use_enhanced_mode=use_enhanced_extractor)
->>>>>>> origin/main
-            
             # Configure health check setting
             extractor.check_health = health_check
-            
             # Get all RPC nodes first to check for errors
             all_nodes_result = await extractor.get_all_rpc_nodes()
-            
             # In enhanced mode, we continue even if there are errors
-<<<<<<< HEAD
-            if not all_nodes_result.get("status") == "success":
-=======
             if not use_enhanced_extractor and all_nodes_result.get("status") != "success":
->>>>>>> origin/main
                 error_msg = all_nodes_result.get("error", "Unknown error retrieving cluster nodes")
                 logger.error(f"Failed to get RPC nodes: {error_msg}")
                 execution_time_ms = int((time.time() - start_time) * 1000)
-                
+
                 return {
                     "status": "error",
                     "error": error_msg,
                     "timestamp": datetime.now(pytz.utc).isoformat(),
                     "execution_time_ms": execution_time_ms
                 }
-            
+
             # Extract RPC nodes
             rpc_nodes = await extractor.extract_rpc_nodes(include_all=include_all)
             extraction_time = time.time() - start_time
             logger.info(f"Extracted {len(rpc_nodes)} RPC nodes in {extraction_time:.2f} seconds")
-            
+
             # Get any errors that were collected during extraction
-<<<<<<< HEAD
-            extraction_errors = extractor.get_errors()
-            
-        except Exception as extract_error:
-            logger.error(f"Error during RPC node extraction: {str(extract_error)}", exc_info=True)
-            execution_time_ms = int((time.time() - (start_time if 'start_time' in locals() else time.time())) * 1000)
-=======
             extraction_errors = extractor.get_errors() if use_enhanced_extractor else []
-            
+
         except Exception as extract_error:
             logger.error(f"Error during RPC node extraction: {str(extract_error)}", exc_info=True)
             execution_time_ms = int((time.time() - start_time) * 1000)
->>>>>>> origin/main
-            
             return {
                 "status": "error",
                 "error": f"Error extracting RPC nodes: {str(extract_error)}",
                 "timestamp": datetime.now(pytz.utc).isoformat(),
                 "execution_time_ms": execution_time_ms
             }
-        
+
         # Check if we got any nodes
         if not rpc_nodes:
             logger.warning("No RPC nodes were extracted")
-            execution_time_ms = int((time.time() - (start_time if 'start_time' in locals() else time.time())) * 1000)
-            
+            execution_time_ms = int((time.time() - start_time) * 1000)
             return {
                 "status": "warning",
                 "message": "No RPC nodes were found",
                 "timestamp": datetime.now(pytz.utc).isoformat(),
                 "execution_time_ms": execution_time_ms
             }
-        
+
         # Count version distribution
         version_counts = {}
         for node in rpc_nodes:
             version = node.get("version", "unknown")
             version_counts[version] = version_counts.get(version, 0) + 1
-        
+
         # Sort versions by count
         sorted_versions = sorted(version_counts.items(), key=lambda x: x[1], reverse=True)
         top_versions = sorted_versions[:5]  # Top 5 versions
-        
+
         # Calculate version percentages
         total_nodes = len(rpc_nodes)
         version_distribution = [
@@ -1297,7 +1198,7 @@ async def get_rpc_nodes(
             }
             for version, count in top_versions
         ]
-        
+
         # Calculate health statistics if health check was performed
         health_stats = {}
         if health_check:
@@ -1310,7 +1211,7 @@ async def get_rpc_nodes(
                     "health_sample_size": health_sample_size,
                     "estimated_health_percentage": estimated_health_percentage
                 }
-        
+
         # Prepare result
         result = {
             "status": "success",
@@ -1319,20 +1220,15 @@ async def get_rpc_nodes(
             "version_distribution": version_distribution,
             "execution_time_ms": int(extraction_time * 1000)
         }
-        
+
         # Add health statistics if available
         if health_stats:
             result.update(health_stats)
-        
-<<<<<<< HEAD
-        # Add errors if there were any during extraction
-        if extraction_errors:
-=======
+
         # Add errors if using enhanced extractor and errors were found
         if use_enhanced_extractor and extraction_errors:
->>>>>>> origin/main
             result["errors"] = extraction_errors
-        
+
         # Add detailed node info if requested
         if include_details:
             # Sanitize node information to ensure it's JSON serializable
@@ -1346,414 +1242,30 @@ async def get_rpc_nodes(
                     "gossip": node.get("gossip", ""),
                     "shred_version": node.get("shred_version", 0)
                 }
-                
                 # Add health information if available
                 if "health" in node:
                     sanitized_node["health"] = node["health"]
                     if not node["health"] and "health_error" in node:
                         sanitized_node["health_error"] = node["health_error"]
-                
                 sanitized_nodes.append(sanitized_node)
-            
             result["rpc_nodes"] = sanitized_nodes
-        
+
         # Cache the response
         try:
-            # Make sure we're storing a JSON serializable object
             db_cache.cache_data("rpc-nodes", result, params, RPC_NODES_CACHE_TTL)
             logger.info("Cached RPC nodes data")
         except Exception as cache_error:
             logger.error(f"Error caching RPC nodes data: {str(cache_error)}")
-        
+
         return result
     except Exception as e:
         logger.error(f"Error retrieving RPC nodes: {str(e)}", exc_info=True)
+        execution_time_ms = int((time.time() - start_time) * 1000) if "start_time" in locals() else 0
         return {
             "status": "error",
             "error": f"Failed to retrieve cluster nodes: {str(e)}",
             "timestamp": datetime.now(pytz.utc).isoformat(),
-            "execution_time_ms": int((time.time() - (start_time if 'start_time' in locals() else time.time())) * 1000)
-        }
-
-@router.get("/blocks/recent", summary="Retrieve Recent Solana Blocks")
-async def retrieve_recent_blocks(limit: int = 10) -> Dict[str, Any]:
-    """
-    Retrieve recent Solana blocks
-    
-    Args:
-        limit: Number of recent blocks to retrieve (default: 10)
-    
-    Returns:
-        List of recent blocks with minimal, essential information
-    """
-    try:
-        # Get connection pool
-        connection_pool = await get_connection_pool()
-        
-        # Create a temporary query handler if needed
-        query_handler = solana_query_handler or SolanaQueryHandler(connection_pool)
-        
-        # Get recent blocks
-        blocks = await query_handler.get_recent_blocks(limit)
-        
-        # Process response
-        resp_handler = response_handler or ResponseHandler()
-        return resp_handler.process_blocks_response(blocks)
-    except Exception as e:
-        logger.error(f"Error retrieving recent blocks: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail={
-                'error': 'Failed to retrieve recent blocks',
-                'message': str(e),
-                'timestamp': datetime.now(pytz.utc).isoformat()
-            }
-        )
-
-@router.get("/rpc/stats", response_model=Dict[str, Any], tags=["solana"])
-async def get_rpc_stats():
-    """
-    Get detailed statistics about RPC endpoint performance.
-    
-    This endpoint provides detailed statistics about all RPC endpoints, including private endpoints with API keys.
-    For a filtered view that excludes private endpoints, use the /network/solana/rpc/filtered-stats endpoint.
-    
-    Returns:
-        Dict: Detailed statistics about each endpoint and summary metrics
-    """
-    from app.utils.solana_connection_pool import SolanaConnectionPool
-    
-    # Get or create the connection pool
-    pool = SolanaConnectionPool()
-    
-    # Initialize the pool if not already initialized
-    if not pool._initialized:
-        await pool.initialize(DEFAULT_RPC_ENDPOINTS)
-        
-    # Get the stats
-    stats = pool.get_rpc_stats()
-    
-    return stats
-
-@router.get("/network/solana/rpc/filtered-stats", response_model=Dict[str, Any], tags=["solana"])
-async def get_filtered_rpc_stats():
-    """
-    Get detailed statistics about RPC endpoint performance, excluding Helius endpoints and private endpoints with API keys.
-    
-    This endpoint provides the same information as the /rpc/stats endpoint but filters out
-    any private endpoints with API keys for security reasons.
-    
-    Returns:
-        Dict: Detailed statistics about each endpoint and summary metrics, with Helius endpoints and private endpoints filtered out
-    """
-    from ..utils.solana_rpc import get_connection_pool
-    import logging
-    
-    # Get or create the connection pool
-    pool = await get_connection_pool()
-    
-    # Initialize the pool if not already initialized
-    if not pool._initialized:
-        await pool.initialize(DEFAULT_RPC_ENDPOINTS)
-        
-    # Get the filtered stats directly from the connection pool
-    stats = pool.get_filtered_rpc_stats()
-    
-    return stats
-
-@router.get("/network/solana/rpc/test-fallback", response_model=Dict[str, Any], tags=["solana"])
-async def test_fallback_endpoint():
-    """
-    Test endpoint that forces the use of a non-Helius fallback endpoint.
-    
-    This is for testing purposes only, to ensure that non-Helius endpoints are working correctly.
-    
-    Returns:
-        Dict: Result of the RPC call using a non-Helius endpoint
-    """
-    from app.utils.solana_rpc import get_connection_pool, SolanaClient
-    import logging
-    import random
-    
-    # Get or create the connection pool
-    pool = await get_connection_pool()
-    
-    # Initialize the pool if not already initialized
-    if not pool._initialized:
-        await pool.initialize(DEFAULT_RPC_ENDPOINTS)
-    
-    # Get a list of non-Helius endpoints
-    non_helius_endpoints = [ep for ep in pool.endpoints if "helius" not in ep.lower()]
-    
-    if not non_helius_endpoints:
-        return {"error": "No non-Helius endpoints available"}
-    
-    # Choose a random non-Helius endpoint
-    endpoint = random.choice(non_helius_endpoints)
-    
-    # Create a client for this endpoint
-    client = SolanaClient(
-        endpoint=endpoint,
-        timeout=pool.timeout,
-        max_retries=pool.max_retries,
-        retry_delay=pool.retry_delay
-    )
-    
-    try:
-        # Connect to the endpoint
-        await client.connect()
-        
-        # Make a simple RPC call
-        result = await client.get_version()
-        
-        # Update the stats for this endpoint
-        pool._update_endpoint_stats(endpoint, success=True, latency=client.average_latency())
-        
-        return {
-            "endpoint": endpoint,
-            "result": result,
-            "latency": client.average_latency(),
-            "timestamp": datetime.now(pytz.utc).isoformat()
-        }
-    except Exception as e:
-        # Update the stats for this endpoint
-        pool._update_endpoint_stats(endpoint, success=False)
-        
-        return {
-            "endpoint": endpoint,
-            "error": str(e),
-            "timestamp": datetime.now(pytz.utc).isoformat()
-        }
-    finally:
-        # Close the client
-        await client.close()
-
-@router.get("/network/status-v2", response_model=Dict[str, Any])
-async def get_network_status_v2(
-    summary_only: bool = Query(False, description="Return only the network summary without detailed node information"),
-    refresh: bool = Query(False, description="Force refresh from Solana RPC")
-):
-    """
-    Retrieve comprehensive Solana network status with robust error handling.
-    
-    This endpoint provides a detailed overview of the current Solana network status,
-    including health, node information, version distribution, and performance metrics.
-    
-    - **summary_only**: When true, returns only summary information without the detailed node list
-    - **refresh**: When true, forces a refresh from the Solana RPC instead of using cached data
-    
-    Returns a JSON object containing:
-    
-    - **status**: Overall network health status (healthy, degraded, or unhealthy)
-    - **errors**: Any errors encountered during data collection
-    - **timestamp**: When the data was retrieved
-    - **network_summary**: Summary statistics including:
-      - **total_nodes**: Total number of nodes in the network
-      - **rpc_nodes_available**: Number of nodes providing RPC services
-      - **rpc_availability_percentage**: Percentage of nodes providing RPC services
-      - **latest_version**: Latest Solana version detected in the network
-      - **nodes_on_latest_version_percentage**: Percentage of nodes on the latest version
-      - **version_distribution**: Distribution of node versions (top 5)
-      - **total_versions_in_use**: Total number of different versions in use
-      - **total_feature_sets_in_use**: Total number of different feature sets in use
-    - **cluster_nodes**: Information about cluster nodes
-    - **network_version**: Current network version information
-    - **epoch_info**: Current epoch information
-    - **performance_metrics**: Network performance metrics
-    """
-    try:
-        # Check if we have cached data and refresh is not requested
-        cache_key = f"network_status_{summary_only}"
-        if not refresh:
-            cached_data = db_cache.get(cache_key)
-            if cached_data:
-                logger.info(f"Using cached network status data (cache key: {cache_key})")
-                return json.loads(cached_data)
-        
-        # Get network status
-        status_handler = NetworkStatusHandler()
-        initialization_success = await initialize_handlers()
-        if not initialization_success or network_handler is None:
-            return {
-                "status": "error",
-                "error": "Failed to initialize network status handler",
-                "timestamp": datetime.now(pytz.utc).isoformat()
-            }
-        network_status = await network_handler.get_network_status(summary_only=summary_only)
-        
-        # Cache the result
-        db_cache.set(cache_key, json.dumps(network_status), NETWORK_STATUS_CACHE_TTL)
-        
-        return network_status
-    except Exception as e:
-        logger.error(f"Error getting network status: {str(e)}")
-        traceback.print_exc()
-        return {
-            "status": "error",
-            "error": str(e),
-            "timestamp": datetime.now(pytz.utc).isoformat(),
-            "traceback": traceback.format_exc()
-        }
-
-@router.get("/network/rpc-nodes-v2", response_model=Dict[str, Any])
-async def get_rpc_nodes_v2(
-    include_details: bool = Query(False, description="Include detailed information for each RPC node"),
-    health_check: bool = Query(False, description="Perform health checks on a sample of RPC nodes"),
-    include_all: bool = Query(False, description="Include all discovered RPC nodes, even those that may be unreliable"),
-    refresh: bool = Query(False, description="Force refresh from Solana RPC")
-):
-    """
-    Get a list of available Solana RPC nodes
-    - Optionally includes detailed information about each node
-    - Can perform health checks on a sample of nodes
-    - Provides version distribution statistics
-    """
-    try:
-        # Check if we have cached data and refresh is not requested
-        cache_key = f"rpc_nodes_{include_details}_{health_check}_{include_all}"
-        if not refresh:
-            cached_data = db_cache.get(cache_key)
-            if cached_data:
-                logger.info(f"Using cached RPC nodes data (cache key: {cache_key})")
-                try:
-                    # Check if the cached data is a coroutine
-                    if asyncio.iscoroutine(cached_data):
-                        logger.warning("Cached data is a coroutine, awaiting it")
-                        cached_data = await cached_data
-                    
-                    # Try to parse the cached data
-                    if isinstance(cached_data, str):
-                        return json.loads(cached_data)
-                    elif isinstance(cached_data, dict):
-                        return cached_data
-                    else:
-                        logger.warning(f"Unexpected cached data type: {type(cached_data)}, ignoring cache")
-                except Exception as cache_error:
-                    logger.error(f"Error processing cached data: {str(cache_error)}")
-                    logger.warning("Ignoring cache due to error")
-        
-        # Initialize SolanaQueryHandler
-        from app.utils.solana_query import SolanaQueryHandler
-        query_handler = SolanaQueryHandler()
-        initialization_success = await initialize_handlers()
-        if not initialization_success or solana_query_handler is None:
-            return {
-                "status": "error",
-                "error": "Failed to initialize Solana query handler",
-                "timestamp": datetime.now(pytz.utc).isoformat()
-            }
-        
-        # Extract RPC nodes
-        from app.utils.handlers.rpc_node_extractor import RPCNodeExtractor
-        extractor = RPCNodeExtractor(query_handler)
-        rpc_nodes_data = await extractor.get_all_rpc_nodes()
-        
-        # Check if we got valid data
-        if not rpc_nodes_data or not isinstance(rpc_nodes_data, dict) or 'rpc_nodes' not in rpc_nodes_data or not rpc_nodes_data['rpc_nodes']:
-            logger.warning("No RPC nodes data returned from extractor")
-            # Return default endpoints as a fallback
-            from app.utils.solana_rpc_constants import DEFAULT_RPC_ENDPOINTS
-            rpc_nodes_data = {
-                "status": "warning",
-                "message": "No cluster nodes returned from Solana network. Using default endpoints.",
-                "timestamp": datetime.now(pytz.utc).isoformat(),
-                "rpc_nodes": [{"endpoint": url, "is_default": True} for url in DEFAULT_RPC_ENDPOINTS]
-            }
-        
-        # Ensure proper serialization of the response data
-        from app.utils.solana_helpers import serialize_solana_object
-        rpc_nodes_data = serialize_solana_object(rpc_nodes_data)
-        
-        # If include_all is False, filter out potentially unreliable nodes
-        if not include_all and 'rpc_nodes' in rpc_nodes_data:
-            # Filter to only include nodes with specific criteria
-            filtered_nodes = [
-                node for node in rpc_nodes_data['rpc_nodes']
-                if node.get('feature_set', 0) > 0  # Must have a valid feature set
-            ]
-            rpc_nodes_data['rpc_nodes'] = filtered_nodes
-            rpc_nodes_data['total_nodes'] = len(filtered_nodes)
-        
-        # Perform health checks if requested
-        if health_check and 'rpc_nodes' in rpc_nodes_data:
-            # Only check a sample of nodes to avoid overloading
-            sample_size = min(5, len(rpc_nodes_data['rpc_nodes']))
-            sample_nodes = random.sample(rpc_nodes_data['rpc_nodes'], sample_size) if rpc_nodes_data['rpc_nodes'] else []
-            
-            # Check health of sample nodes
-            for node in sample_nodes:
-                try:
-                    endpoint = node['rpc_endpoint']
-                    # Create a temporary client for this endpoint
-                    temp_client = SolanaClient(endpoint=endpoint, timeout=5)
-                    # Simple health check - get slot
-                    start_time = time.time()
-                    slot_response = await temp_client.get_slot()
-                    response_time = time.time() - start_time
-                    
-                    # Update node with health info
-                    node['health_check'] = {
-                        'status': 'healthy' if 'result' in slot_response else 'error',
-                        'response_time_ms': round(response_time * 1000, 2),
-                        'timestamp': datetime.now(pytz.utc).isoformat()
-                    }
-                    
-                    # Close the temporary client
-                    await temp_client.close()
-                except Exception as e:
-                    # Mark node as unhealthy
-                    node['health_check'] = {
-                        'status': 'error',
-                        'error': str(e),
-                        'timestamp': datetime.now(pytz.utc).isoformat()
-                    }
-        
-        # Include detailed information if requested
-        if not include_details and 'rpc_nodes' in rpc_nodes_data:
-            # Simplify the response by only including essential fields
-            simplified_nodes = []
-            for node in rpc_nodes_data['rpc_nodes']:
-                simplified_node = {
-                    'rpc_endpoint': node['rpc_endpoint'],
-                    'version': node.get('version', 'unknown')
-                }
-                if health_check and 'health_check' in node:
-                    simplified_node['health_check'] = node['health_check']
-                simplified_nodes.append(simplified_node)
-            rpc_nodes_data['rpc_nodes'] = simplified_nodes
-        
-        # Cache the result
-        try:
-            # Make sure we're storing a JSON serializable object
-            if isinstance(rpc_nodes_data, dict):
-                cache_data = json.dumps(rpc_nodes_data)
-                await db_cache.set(cache_key, cache_data, RPC_NODES_CACHE_TTL)
-                logger.info(f"Cached RPC nodes data (cache key: {cache_key})")
-            else:
-                logger.warning(f"Cannot cache data of type {type(rpc_nodes_data)}")
-        except Exception as cache_error:
-            logger.error(f"Error caching RPC nodes data: {str(cache_error)}")
-        
-        return rpc_nodes_data
-    except Exception as e:
-        logger.error(f"Error getting RPC nodes: {str(e)}")
-        traceback.print_exc()
-        error_msg = str(e)
-        if "coroutine" in error_msg:
-            logger.error("Detected coroutine error. Ensure all async functions are properly awaited.")
-            return {
-                "status": "error",
-                "error": "Coroutine error detected. This is likely due to an async function not being properly awaited.",
-                "details": error_msg,
-                "timestamp": datetime.now(pytz.utc).isoformat(),
-                "rpc_nodes": []
-            }
-        return {
-            "status": "error",
-            "error": str(e),
-            "timestamp": datetime.now(pytz.utc).isoformat(),
-            "traceback": traceback.format_exc(),
-            "rpc_nodes": []
+            "execution_time_ms": execution_time_ms
         }
 
 def calculate_tps_statistics(samples):
@@ -1765,7 +1277,7 @@ def calculate_tps_statistics(samples):
             "min_tps": 0,
             "average_tps": 0
         }
-    
+
     # Check if the first sample contains an error message
     if len(samples) == 1 and 'error' in samples[0]:
         logger.warning(f"Performance samples contain error: {samples[0]['error']}")
@@ -1778,7 +1290,7 @@ def calculate_tps_statistics(samples):
             "endpoints_tried": samples[0].get('endpoints_tried', 0),
             "timestamp": samples[0].get('timestamp', 0)
         }
-    
+
     # Extract TPS values
     tps_values = []
     for sample in samples:
@@ -1787,7 +1299,7 @@ def calculate_tps_statistics(samples):
         if sample_period_secs > 0:
             tps = num_transactions / sample_period_secs
             tps_values.append(tps)
-    
+
     if not tps_values:
         return {
             "current_tps": 0,
@@ -1795,7 +1307,7 @@ def calculate_tps_statistics(samples):
             "min_tps": 0,
             "average_tps": 0
         }
-    
+
     return {
         "current_tps": round(tps_values[0], 2),
         "max_tps": round(max(tps_values), 2),
@@ -1815,24 +1327,24 @@ def process_block_production(block_production):
             "skipped_slots": 0,
             "skipped_slot_percentage": 0
         }
-    
+
     result = block_production.get("result", {})
     value = result.get("value", {})
-    
+
     # Extract statistics
     total_slots = 0
     leader_slots = 0
     blocks_produced = 0
-    
+
     by_identity = value.get("byIdentity", {})
     for identity, stats in by_identity.items():
         leader_slots += stats[0]
         blocks_produced += stats[1]
-    
+
     total_slots = value.get("range", {}).get("totalSlots", 0)
     skipped_slots = leader_slots - blocks_produced
     skipped_slot_percentage = (skipped_slots / leader_slots * 100) if leader_slots > 0 else 0
-    
+
     return {
         "total_blocks": blocks_produced,
         "total_slots": total_slots,
@@ -1844,10 +1356,10 @@ def process_block_production(block_production):
     }
 
 @router.get("/network-status", response_model=Dict[str, Any])
-async def get_network_status():
+async def get_network_status_endpoint():
     """
     Get comprehensive information about the Solana network status.
-    
+
     Returns:
         Dict with network status information including:
         - node_count: Total number of nodes
@@ -1860,6 +1372,7 @@ async def get_network_status():
         - status: Overall network status (healthy, degraded, or unhealthy)
     """
     try:
+        from ..utils.solana_query import SolanaQuery
         solana_query = SolanaQuery()
         network_status = await solana_query.get_network_status()
         return network_status
@@ -1877,15 +1390,15 @@ async def get_enhanced_network_status(
 ):
     """
     Get enhanced network status with robust error handling and comprehensive metrics.
-    
+
     This endpoint provides detailed information about the Solana network status,
     including node counts, version distribution, feature set distribution, and stake distribution.
     It includes robust error handling and will attempt multiple fallback mechanisms to ensure
     that some data is always returned, even in error conditions.
-    
+
     Args:
         refresh: Whether to force a refresh of the cached data
-        
+
     Returns:
         Dict with network status information
     """
@@ -1903,30 +1416,30 @@ async def get_enhanced_network_status(
         "feature_set_distribution": {},
         "stake_distribution": {}
     }
-    
+
     # Track all errors for comprehensive error reporting
     all_errors = []
-    
+
     # Track execution time
     start_time = time.time()
     logging.info("Retrieving enhanced network status")
-    
+
     # Define fallback function
     async def _try_fallback_network_status(result_dict, errors_list):
         try:
             logger.info("Attempting fallback network status retrieval using RPCNodeExtractor")
             extractor = RPCNodeExtractor()
             fallback_data = await extractor.get_network_status()
-            
+
             # Update result with fallback data
             result_dict.update(fallback_data)
             result_dict["data_source"] = "fallback_rpc_node_extractor"
-            
+
             # Add a note about using fallback
             if "notes" not in result_dict:
                 result_dict["notes"] = []
             result_dict["notes"].append("Used fallback mechanism due to primary method failure")
-            
+
             logger.info("Successfully retrieved network status using fallback method")
         except Exception as e:
             logger.error(f"Error in fallback network status method: {str(e)}", exc_info=True)
@@ -1935,16 +1448,16 @@ async def get_enhanced_network_status(
                 'error': str(e),
                 'traceback': traceback.format_exc()
             })
-    
+
     # Try primary method first
     try:
         # Use cached connection pool if available
         pool = await get_connection_pool()
         query_handler = SolanaQueryHandler(connection_pool=pool)
-        
+
         # Get network status
         network_status = await query_handler.get_network_status()
-        
+
         # Update result with network status data
         if network_status:
             result.update(network_status)
@@ -1959,106 +1472,24 @@ async def get_enhanced_network_status(
             'error': str(e),
             'traceback': traceback.format_exc()
         })
-        
+
         # Try fallback method
         await _try_fallback_network_status(result, all_errors)
-    
+
     # Calculate execution time
     end_time = time.time()
     execution_time_ms = int((end_time - start_time) * 1000)
     result["execution_time_ms"] = execution_time_ms
-    
+
     # Add all collected errors to the result
     if all_errors:
         result["errors"] = all_errors
-    
+
     # Cache the result
+    from ..utils.cache import cache_data
     cache_data("enhanced_network_status", result, NETWORK_STATUS_CACHE_TTL)
-    
+
     return result
-
-@router.get("/token/{token_address}", response_model=Dict[str, Any])
-async def get_token_info(
-    token_address: str,
-    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
-    db_cache: DatabaseCache = Depends(get_db_cache)
-):
-    params = {"token_address": token_address}
-    cache_key = f"token_info:{token_address}"
-    
-    if not refresh:
-        cached = await db_cache.get(cache_key)
-        if cached:
-            return cached
-    
-    token_info = await get_token_info_from_rpc(token_address)
-    response = {
-        "token_info": token_info,
-        "timestamp": datetime.now(pytz.utc).isoformat()
-    }
-    await db_cache.set(cache_key, response)
-    return response
-
-@router.get("/token/{token_address}", response_model=Dict[str, Any])
-async def get_token_info(
-    token_address: str,
-    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
-    db_cache: DatabaseCache = Depends(get_db_cache)
-):
-    params = {"token_address": token_address}
-
-    if not refresh:
-        cached_data = await db_cache.get_cached_data("token-info", params, TOKEN_INFO_CACHE_TTL)
-        if cached_data:
-            return cached_data
-
-    try:
-        if solana_query_handler is None:
-            await initialize_handlers()
-        token_info = await solana_query_handler.get_token_info(token_address)
-        response = {
-            "token_info": token_info,
-            "timestamp": datetime.now(pytz.utc).isoformat()
-        }
-        await db_cache.set_cached_data("token-info", params, response)
-        return response
-    except Exception as e:
-        logger.error(f"Error getting token info for {token_address}: {str(e)}", exc_info=True)
-        return {
-            "error": str(e),
-            "traceback": traceback.format_exc()
-        }
-
-@router.get("/token/{token_address}", response_model=Dict[str, Any])
-async def get_token_info(
-    token_address: str,
-    refresh: bool = Query(False, description="Force refresh from Solana RPC"),
-    db_cache: DatabaseCache = Depends(get_db_cache)
-):
-    params = {"token_address": token_address}
-
-    if not refresh:
-        cached_data = await db_cache.get_cached_data("token-info", params, TOKEN_INFO_CACHE_TTL)
-        if cached_data:
-            return cached_data
-
-    try:
-        if solana_query_handler is None:
-            await initialize_handlers()
-        token_info = await solana_query_handler.get_token_info(token_address)
-        response = {
-            "token_info": token_info,
-            "timestamp": datetime.now(pytz.utc).isoformat()
-        }
-        await db_cache.set_cached_data("token-info", params, response)
-        return response
-    except Exception as e:
-        logger.error(f"Error getting token info for {token_address}: {str(e)}", exc_info=True)
-        return {
-            "error": str(e),
-            "traceback": traceback.format_exc()
-        }
-<<<<<<< HEAD
 
 @router.get('/health/endpoints', response_model=List[Dict[str, Any]], tags=["solana", "health"])
 async def get_endpoints_health_status():
@@ -2122,5 +1553,3 @@ async def get_dex_activity_data_endpoint():
     """Get DEX trading activity"""
     from ..utils.solana_helpers import get_dex_activity_data
     return await get_dex_activity_data()
-=======
->>>>>>> origin/main
