@@ -741,3 +741,6 @@
 2025-03-20 19:11:56 - app.dependencies.solana - INFO - Created and initialized shared SolanaQueryHandler instance
 2025-03-20 19:18:16 - app.dependencies.solana - INFO - Created and initialized shared SolanaQueryHandler instance
 2025-03-20 19:20:56 - app.dependencies.solana - INFO - Created and initialized shared SolanaQueryHandler instance
+2025-03-20 19:27:56 - app.dependencies.solana - INFO - Created and initialized shared SolanaQueryHandler instance
+2025-03-20 19:30:31 - app.dependencies.solana - INFO - Created and initialized shared SolanaQueryHandler instance
+2025-03-20 19:33:09 - app.dependencies.solana - INFO - Created and initialized shared SolanaQueryHandler instance
