@@ -38,6 +38,7 @@ prometheus-client==0.19.0
 
 # Async Database Support
 sqlalchemy[asyncio]==2.0.25  # Added for async database operations
+redis==5.0.1  # Added for Redis cache support
 
 # Testing
 pytest_xprocess==1.0.2
