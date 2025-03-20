@@ -3,7 +3,7 @@ Solana query module for handling blockchain data queries.
 This module provides query handlers and utilities for fetching and processing Solana blockchain data.
 """
 
-from typing import Optional, Dict, Any, List, Union
+from typing import Optional, Dict, Any, List, Union, TYPE_CHECKING
 import asyncio
 import logging
 from dataclasses import dataclass
@@ -17,7 +17,11 @@ from tenacity import (
     retry_if_exception_type,
     before_sleep_log
 )
-
+from app.utils.handlers.pump_handler import PumpHandler
+from app.utils.handlers.nft_handler import NFTHandler
+from app.utils.handlers.instruction_handler import InstructionHandler
+from app.utils.handlers.block_handler import BlockHandler
+from app.utils.handlers.mint_handler import MintHandler
 from solders.pubkey import Pubkey
 from solders.transaction import Transaction
 from solders.rpc.responses import *
@@ -26,7 +30,7 @@ from solders.commitment_config import CommitmentConfig
 from solana.rpc.async_api import AsyncClient
 import httpx
 
-from ..utils.cache.database_cache import DatabaseCache
+from ..utils.cache import DatabaseCache
 from .solana_rpc import SolanaConnectionPool, get_connection_pool, SolanaClient
 from .solana_helpers import (
     transform_transaction_data,
@@ -49,6 +53,13 @@ from .solana_error import (
     RetryableError,
     MethodNotSupportedError
 )
+
+# Forward declarations for type hints
+if TYPE_CHECKING:
+    from app.utils.handlers.pump_handler import PumpHandler
+    from app.utils.handlers.nft_handler import NFTHandler
+    from app.utils.handlers.instruction_handler import InstructionHandler
+    from app.utils.handlers.block_handler import BlockHandler
 
 logger = logging.getLogger(__name__)
 
@@ -1735,7 +1746,6 @@ class SolanaQueryHandler:
             
             return ([], client)
 
-<<<<<<< HEAD
     async def get_tps(self) -> Dict[str, Any]:
         """Get current transactions per second metrics"""
         await self.ensure_initialized()
@@ -2011,10 +2021,35 @@ class SolanaQueryHandler:
                 "timestamp": datetime.datetime.now(pytz.utc).isoformat()
             }
         
-=======
->>>>>>> origin/main
-from .handlers.pump_handler import PumpHandler
-from .handlers.nft_handler import NFTHandler
-from .handlers.instruction_handler import InstructionHandler
-from .handlers.mint_handler import MintHandler
-from .handlers.block_handler import BlockHandler
+    async def get_tps(self) -> Dict[str, Any]:
+        """Get current transactions per second metrics"""
+        await self.ensure_initialized()
+        
+        # Try to get from cache first
+        cache_key = "solana:tps:metrics"
+        cached = await self.cache.get(cache_key)
+        if cached:
+            return cached
+            
+        try:
+            # Get recent performance samples
+            recent_performance = await self.get_recent_performance()
+            
+            # Calculate TPS from samples
+            tps_stats = self._calculate_tps_statistics(recent_performance)
+            
+            # Add timestamp
+            tps_stats["timestamp"] = datetime.datetime.now(pytz.utc).isoformat()
+            
+            # Cache the result (short TTL)
+            await self.cache.set(cache_key, tps_stats, ttl=60)  # 1 minute TTL
+            
+            return tps_stats
+            
+        except Exception as e:
+            logger.error(f"Error getting TPS metrics: {str(e)}")
+            return {
+                "error": str(e),
+                "timestamp": datetime.datetime.now(pytz.utc).isoformat()
+            }
+            

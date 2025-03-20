@@ -813,3 +813,105 @@ async def get_dex_activity_data() -> Dict[str, Any]:
     cache = await get_database_cache()
     handler = SolanaQueryHandler(cache=cache)  # Fix: Pass cache as a keyword argument
     return await handler.get_dex_activity()
+
+def validate_address(address: str) -> bool:
+    """
+    Validate if a string is a valid Solana address.
+    
+    Args:
+        address: The address to validate
+        
+    Returns:
+        bool: True if the address is valid
+    """
+    try:
+        # Try to create a Pubkey object from the address
+        Pubkey.from_string(address)
+        return True
+    except Exception as e:
+        logger.debug(f"Invalid address: {address}, error: {str(e)}")
+        return False
+
+def parse_transaction(tx_data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Parse a transaction into a standardized format.
+    
+    Args:
+        tx_data: Raw transaction data
+        
+    Returns:
+        Dict: Standardized transaction data
+    """
+    try:
+        result = {
+            "transaction_id": tx_data.get("signature", ""),
+            "block_time": tx_data.get("blockTime", 0),
+            "slot": tx_data.get("slot", 0),
+            "fee": tx_data.get("meta", {}).get("fee", 0),
+            "status": "success" if tx_data.get("meta", {}).get("err") is None else "error",
+            "instructions": []
+        }
+        
+        # Extract instructions
+        if "transaction" in tx_data and "message" in tx_data["transaction"]:
+            message = tx_data["transaction"]["message"]
+            instructions = message.get("instructions", [])
+            
+            for idx, instr in enumerate(instructions):
+                program_idx = instr.get("programIdIndex", 0)
+                program_id = message.get("accountKeys", [])[program_idx] if program_idx < len(message.get("accountKeys", [])) else None
+                
+                instruction_data = {
+                    "program_id": program_id,
+                    "accounts": [message.get("accountKeys", [])[i] for i in instr.get("accounts", [])],
+                    "data": instr.get("data", "")
+                }
+                
+                result["instructions"].append(instruction_data)
+        
+        return result
+    except Exception as e:
+        logger.error(f"Error parsing transaction: {str(e)}")
+        return {"error": str(e), "raw_data": tx_data}
+
+def calculate_fees(tx_data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Calculate fees and other transaction costs.
+    
+    Args:
+        tx_data: Transaction data
+        
+    Returns:
+        Dict: Fee information
+    """
+    try:
+        meta = tx_data.get("meta", {})
+        fee = meta.get("fee", 0)
+        
+        # Calculate compute units if available
+        compute_units_consumed = 0
+        compute_units_price = 0
+        
+        # Look for compute budget instructions
+        if "transaction" in tx_data and "message" in tx_data["transaction"]:
+            message = tx_data["transaction"]["message"]
+            instructions = message.get("instructions", [])
+            
+            for instr in instructions:
+                program_idx = instr.get("programIdIndex", 0)
+                program_id = message.get("accountKeys", [])[program_idx] if program_idx < len(message.get("accountKeys", [])) else None
+                
+                # Check if this is a compute budget instruction
+                if program_id == "ComputeBudget111111111111111111111111111111":
+                    # This is a simplified check - in a real implementation you would decode the instruction data
+                    compute_units_price = 1  # Placeholder
+        
+        return {
+            "fee": fee,
+            "compute_units_consumed": compute_units_consumed,
+            "compute_units_price": compute_units_price,
+            "total_cost": fee
+        }
+    except Exception as e:
+        logger.error(f"Error calculating fees: {str(e)}")
+        return {"error": str(e), "fee": 0}
