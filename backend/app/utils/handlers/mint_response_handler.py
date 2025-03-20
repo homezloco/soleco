@@ -5,6 +5,7 @@ Handler for processing mint-related responses from Solana RPC.
 from typing import Dict, Optional, Set, List
 from collections import defaultdict
 from app.utils.response_base import ResponseHandler, SolanaResponseManager
+import base58
 
 class MintResponseHandler(ResponseHandler):
     """Handler for mint-related responses"""
@@ -79,12 +80,14 @@ class MintResponseHandler(ResponseHandler):
         return False
 
     def _is_valid_mint_address(self, address: str) -> bool:
-        BASE58_CHARS = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-        if not isinstance(address, str):
+        if not isinstance(address, str) or not address:
+            return False
+        # Exclude known program addresses
+        if address in self.SYSTEM_ADDRESSES.values():
             return False
         try:
-            # Validate length and base58 characters
-            return len(address) == 44 and all(c in BASE58_CHARS for c in address)
+            decoded = base58.b58decode(address)
+            return len(decoded) == 32
         except Exception:
             return False
 
