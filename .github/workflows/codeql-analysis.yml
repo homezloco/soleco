@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'python', 'javascript' ]
+        language: [ 'javascript', 'python' ]
 
     steps:
     - name: Checkout repository
@@ -31,16 +31,20 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
+        queries: +security-and-quality, .github/codeql/custom-queries
         config-file: .github/codeql/codeql-config.yml
-        init: no-default-setup
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
         output: ../results
-        upload: always
+        upload: true
         cleanup-level: brutal
         skip-queries: false
         checkout_path: ${{ github.workspace }}
         upload-database: true
         wait-for-processing: true
+        category: "/language:${{ matrix.language }}"
