@@ -1,18 +1,14 @@
-import python
-
 /**
- * @name Example Query
- * @description Example CodeQL query for Python
- * @kind problem
- * @problem.severity warning
- * @id python/example
+ * @name SQL Injection Detection
+ * @description Detects potential SQL injection vulnerabilities in Python code
+ * @kind path-problem
+ * @problem.severity error
+ * @precision high
+ * @id python/sql-injection
  */
 
-from Function f
-where f.getName() = "example"
-select f, "This is an example function"
-
-from DataFlow::PathGraph
+import python
+import semmle.python.dataflow.TaintTracking
 
 class SqlInjection extends TaintTracking::Configuration {
   SqlInjection() {
