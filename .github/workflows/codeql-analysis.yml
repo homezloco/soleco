@@ -44,4 +44,3 @@ jobs:
         checkout_path: ${{ github.workspace }}
         upload-database: true
         wait-for-processing: true
-        analyze: no-default-setup
