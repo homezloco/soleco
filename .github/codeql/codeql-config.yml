@@ -31,6 +31,7 @@ languages:
   - javascript
 
 queries:
+  - uses: security-and-quality
   - uses: ./.github/codeql/custom-queries/python/example.ql
     with:
       packs: security-extended
