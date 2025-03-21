@@ -26,6 +26,12 @@ jobs:
       with:
         languages: 'python'
 
+    - name: Change to backend directory
+      run: cd backend
+
+    - name: Verify requirements.txt exists
+      run: test -f requirements.txt
+
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
