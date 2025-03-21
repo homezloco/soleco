@@ -33,6 +33,7 @@ jobs:
         config-file: .github/codeql/codeql-config.yml
         # Disable the default setup to allow advanced configurations
         init: no-default-setup
+        languages: python,javascript
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
