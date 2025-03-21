@@ -39,7 +39,6 @@ jobs:
         output: ../results
         upload: always
         cleanup-level: brutal
-        add-snippets: false
         skip-queries: false
         checkout_path: ${{ github.workspace }}
         upload-database: true
