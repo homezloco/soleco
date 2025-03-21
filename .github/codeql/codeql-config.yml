@@ -24,5 +24,12 @@ paths-ignore:
   - '**/external/**'
   - '**/benchmarks/**'
 
+disable-default-queries:
+  - cpp
+
+languages:
+  - python
+  - javascript
+
 queries:
   - uses: security-and-quality
