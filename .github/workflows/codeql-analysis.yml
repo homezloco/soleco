@@ -24,27 +24,27 @@ jobs:
         language: [ 'javascript', 'python' ]
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: ${{ matrix.language }}
-        queries: '+security-and-quality, custom-queries-python'
-        config-file: .github/codeql/codeql-config.yml
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: '+security-and-quality, custom-queries-python'
+          config-file: .github/codeql/codeql-config.yml
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
-      with:
-        output: ../results
-        upload: true
-        cleanup-level: brutal
-        skip-queries: false
-        checkout_path: ${{ github.workspace }}
-        upload-database: true
-        wait-for-processing: true
-        category: "/language:${{ matrix.language }}"
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          output: ../results
+          upload: true
+          cleanup-level: brutal
+          skip-queries: false
+          checkout_path: ${{ github.workspace }}
+          upload-database: true
+          wait-for-processing: true
+          category: "/language:${{ matrix.language }}"
