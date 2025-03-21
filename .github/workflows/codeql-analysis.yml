@@ -24,10 +24,8 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
-        config-file: ./.github/codeql/codeql-config.yml
         languages: 'python'
         queries: security-extended,security-and-quality
-        disable-default-queries: true
 
     - name: Change to backend directory
       run: cd backend
