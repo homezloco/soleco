@@ -34,7 +34,7 @@ languages:
 queries:
   - uses: security-and-quality
   - uses: security-extended
-  - uses: ./custom-queries/python
+  - uses: ./.github/codeql/custom-queries/python
     with:
       packs: security-extended
   - uses: ./custom-queries/javascript/security.ql
