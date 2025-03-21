@@ -25,15 +25,22 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
+        languages: ${{ matrix.language }}
         config-file: .github/codeql/codeql-config.yml
-        # Disable the default setup to allow advanced configurations
-        init: no-default-setup
-        languages: python,javascript
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
+      with:
+        output: ../results
+        upload: always
+        cleanup-level: brutal
+        add-snippets: false
+        skip-queries: false
+        checkout_path: ${{ github.workspace }}
+        upload-database: true
+        wait-for-processing: true
