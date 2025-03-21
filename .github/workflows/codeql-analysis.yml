@@ -23,20 +23,6 @@ jobs:
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
-      with:
-        languages: 'python'
-        queries: security-extended,security-and-quality
-
-    - name: Change to backend directory
-      run: cd backend
-
-    - name: Verify backend/requirements.txt exists
-      run: test -f backend/requirements.txt
-
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r backend/requirements.txt
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
