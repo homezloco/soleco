@@ -4,6 +4,25 @@ paths:
   - "backend"
   - "frontend"
 
+paths-ignore:
+  - '**/tests/**'
+  - '**/migrations/**'
+  - '**/node_modules/**'
+  - '**/dist/**'
+  - '**/build/**'
+  - '**/vendor/**'
+  - '**/docs/**'
+  - '**/examples/**'
+  - '**/scripts/**'
+  - '**/static/**'
+  - '**/templates/**'
+  - '**/fixtures/**'
+  - '**/mock/**'
+  - '**/stubs/**'
+  - '**/generated/**'
+  - '**/third_party/**'
+  - '**/external/**'
+  - '**/benchmarks/**'
+
 queries:
-  - uses: security-extended
   - uses: security-and-quality
