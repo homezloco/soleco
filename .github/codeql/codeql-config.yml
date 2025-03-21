@@ -24,11 +24,13 @@ paths-ignore:
   - '**/external/**'
   - '**/benchmarks/**'
 
-disable-default-queries: false
+disable-default-queries: true
 
 languages:
   - python
   - javascript
 
 queries:
-  - uses: security-and-quality
+  - uses: ./.github/codeql/custom-queries/python
+    with:
+      packs: security-extended
