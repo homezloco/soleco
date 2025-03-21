@@ -25,10 +25,7 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: 'python'
-        disable-default-queries: true
-        queries: +
-          security-extended
-          security-and-quality
+        queries: security-extended,security-and-quality
 
     - name: Change to backend directory
       run: cd backend
