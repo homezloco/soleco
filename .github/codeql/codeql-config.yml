@@ -34,10 +34,10 @@ languages:
 queries:
   - uses: security-and-quality
   - uses: security-extended
-  - uses: ./.github/codeql/custom-queries/python/example.ql
+  - uses: ./custom-queries/python/example.ql
     with:
       packs: security-extended
-  - uses: ./.github/codeql/custom-queries/javascript/security.ql
+  - uses: ./custom-queries/javascript/security.ql
     with:
       packs: security-extended
 
