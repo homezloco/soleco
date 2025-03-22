@@ -6,6 +6,6 @@
 
 import javascript
 
-from CallExpr call
-where call.getTarget().hasName("eval")
+from CallExpr call, Identifier id
+where call.getCallee() = id and id.getName() = "eval"
 select call, "Avoid using eval, as it may lead to security vulnerabilities."
