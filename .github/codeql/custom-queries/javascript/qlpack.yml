@@ -1,3 +1,5 @@
 name: javascript-custom-queries
 version: 0.0.1
 libraryPathDependencies: codeql-javascript
+queries:
+  - security.ql

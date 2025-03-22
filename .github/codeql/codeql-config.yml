@@ -31,16 +31,6 @@ languages:
   - python
   - javascript
 
-queries:
-  - uses: security-and-quality
-  - uses: security-extended
-  - uses: ./.github/codeql/custom-queries/python
-    with:
-      packs: security-extended
-  - uses: ./custom-queries/javascript/security.ql
-    with:
-      packs: security-extended
-
 severity:
   - error
   - warning
