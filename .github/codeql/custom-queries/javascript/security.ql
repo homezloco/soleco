@@ -1,5 +1,6 @@
 /**
  * @name Eval Call Detection
+ * @id js/eval-call-detection
  * @description Detects potential security issues caused by the use of eval in JavaScript.
  * @kind problem
  */

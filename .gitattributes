@@ -1,0 +1,14 @@
+# Specify language for specific files
+*.py linguist-language=Python
+*.ts linguist-language=TypeScript
+*.js linguist-language=JavaScript
+*.ps1 linguist-language=PowerShell
+*.bat linguist-language=Batchfile
+*.c linguist-language=C
+*.css linguist-language=CSS
+*.html linguist-language=HTML
+*.sh linguist-language=Shell
+
+# Ignore specific files from being counted
+*.roff linguist-detect=false
+*.man linguist-detect=false
