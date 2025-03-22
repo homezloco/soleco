@@ -5,7 +5,8 @@
  */
 
 import javascript
+import semmle.javascript.dataflow.TaintTracking
 
-from DataFlow::PathGraph path
+from TaintTracking::PathGraph path
 
 select path, "Potential security issue found"
