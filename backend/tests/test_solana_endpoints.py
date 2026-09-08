@@ -14,7 +14,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 # Import the FastAPI app
 from app.main import app
 
-async def test_solana_endpoints():
+async def check_solana_endpoints():
     """Test all Solana endpoints"""
     print("Testing Solana endpoints...")
     
@@ -64,4 +64,4 @@ async def test_solana_endpoints():
         print("\nAll tests completed.")
 
 if __name__ == "__main__":
-    asyncio.run(test_solana_endpoints())
+    asyncio.run(check_solana_endpoints())
