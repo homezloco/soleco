@@ -26,7 +26,7 @@ eth_typing==4.1.0
 websockets<11.0,>=9.0
 toolz<0.12.0,>=0.11.2
 python-jose==3.3.0
-cryptography==42.0.2
+cryptography==50.0.1
 
 # Retry and Resilience
 tenacity==8.2.3
