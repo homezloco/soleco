@@ -1,15 +1,15 @@
 # Core Web Framework
-fastapi==0.109.0
+fastapi==0.141.1
 uvicorn==0.25.0
-pydantic==2.6.1
+pydantic==2.9.2
 httpx==0.27.0
-starlette==0.35.0
+starlette==1.6.0
 
 # Async HTTP Client
-aiohttp==3.9.2
+aiohttp==3.14.3
 
 # Environment Management
-python-dotenv==1.0.0
+python-dotenv==1.2.2
 email-validator==2.1.0
 pytz==2024.1  # Added for timezone support
 
@@ -17,15 +17,15 @@ pytz==2024.1  # Added for timezone support
 solana==0.36.1
 solders<0.24.0,>=0.23.0
 base58==2.1.1
-pynacl==1.5.0  # Updated from nacl for signature verification
+pynacl==1.6.2  # Updated from nacl for signature verification
 
 # Web3 and Crypto
-requests==2.31.0
-web3==6.17.0
-eth_typing==4.1.0
+requests==2.33.0
+web3==7.15.0
+eth_typing>=5.0.0
 websockets<11.0,>=9.0
 toolz<0.12.0,>=0.11.2
-python-jose==3.3.0
+python-jose==3.4.0
 cryptography==50.0.1
 
 # Retry and Resilience
